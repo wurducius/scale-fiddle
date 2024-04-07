@@ -51,6 +51,22 @@ const upKeys = 24;
 const downKeys = 12;
 // ------------------
 
+const parseScala = (line: string) => {
+  if (line.startsWith(".")) {
+    return Math.pow(periodFreq, Number(line.replace(".", "")) / 1200);
+  } else if (line.includes("/")) {
+    const split = line.split("/");
+    return Number(Number(split[0]) / Number(split[1]));
+  } else if (line.includes(",")) {
+    return Number(line.replace(",", "."));
+  } else if (line.includes("\\")) {
+    const split = line.split("\\");
+    console.log(split, Math.pow(2, Number(split[0]) / Number(split[1])));
+    return Math.pow(2, Number(split[0]) / Number(split[1]));
+  }
+  return Number(line);
+};
+
 function mod(n: number, m: number) {
   return ((n % m) + m) % m;
 }
@@ -151,9 +167,7 @@ const getScaleLength = (scaleInput: string) => {
 
 const scaleToFreq = (scaleInput: string) => {
   const raw = scaleInput.split("\n");
-  const intervalMap = raw.map((tone) =>
-    Math.pow(periodFreq, Number(tone.replace(".", "")) / 1200)
-  );
+  const intervalMap = raw.map(parseScala);
 
   const freq: number[] = [];
   freq[downKeys] = baseFreq;
