@@ -24,6 +24,9 @@ const totalGain = 1;
 
 const organ = true;
 
+const waveformType = "custom";
+const customWaveformSine = [0, 0, 1, 1, 1];
+
 const attackCurve = "exponential";
 const decayCurve = "linear";
 const sustainCurve = "linear";
@@ -61,7 +64,6 @@ const parseScala = (line: string) => {
     return Number(line.replace(",", "."));
   } else if (line.includes("\\")) {
     const split = line.split("\\");
-    console.log(split, Math.pow(2, Number(split[0]) / Number(split[1])));
     return Math.pow(2, Number(split[0]) / Number(split[1]));
   }
   return Number(line);
@@ -88,6 +90,10 @@ const mainGainNode = audioContext.createGain();
 mainGainNode.connect(audioContext.destination);
 mainGainNode.gain.value = totalGain;
 
+const sineTerms = new Float32Array(customWaveformSine);
+const cosineTerms = new Float32Array(sineTerms.length);
+const customWaveform = audioContext.createPeriodicWave(cosineTerms, sineTerms);
+
 const defaultScale =
   ".100\n.200\n.300\n.400\n.500\n.600\n.700\n.800\n.900\n.1000\n.1100\n.1200";
 
@@ -99,7 +105,12 @@ function playTone(freq: number) {
 
   const t = audioContext.currentTime;
 
-  osc.type = "sine";
+  if (waveformType === "custom") {
+    osc.setPeriodicWave(customWaveform);
+  } else {
+    osc.type = waveformType;
+  }
+
   osc.frequency.value = freq;
 
   gain.gain.value = 0;
