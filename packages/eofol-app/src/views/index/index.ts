@@ -144,6 +144,11 @@ document.body.onmouseup = function () {
   mouseDown = false;
 };
 
+const getScaleLength = (scaleInput: string) => {
+  const raw = scaleInput.split("\n");
+  return raw.length;
+};
+
 const scaleToFreq = (scaleInput: string) => {
   const raw = scaleInput.split("\n");
   const intervalMap = raw.map((tone) =>
@@ -156,7 +161,11 @@ const scaleToFreq = (scaleInput: string) => {
   for (let i = 0; i < upKeys; i++) {
     freq[downKeys + i + 1] =
       baseFreq *
-      Math.pow(periodFreq, Math.floor(i / raw.length)) *
+      Math.pow(
+        periodFreq,
+        Math.floor(i / raw.length) -
+          (mod(raw.length + i - 1, raw.length) === raw.length - 1 ? 1 : 0)
+      ) *
       intervalMap[mod(raw.length + i - 1, raw.length)];
   }
 
@@ -180,7 +189,11 @@ const scaleToFreq = (scaleInput: string) => {
 
 defineBuiltinElement({
   tagName: "fiddle-keyboard",
-  initialState: { scaleInput: defaultScale, freq: scaleToFreq(defaultScale) },
+  initialState: {
+    scaleInput: defaultScale,
+    freq: scaleToFreq(defaultScale),
+    scaleLength: getScaleLength(defaultScale),
+  },
   render: (state, setState) => {
     console.log(state);
     return createElement("div", undefined, [
@@ -200,6 +213,7 @@ defineBuiltinElement({
                 ...state,
                 scaleInput: e.target.value,
                 freq: scaleToFreq(e.target.value),
+                scaleLength: getScaleLength(e.target.value),
               });
             },
           }
@@ -207,7 +221,7 @@ defineBuiltinElement({
       ),
       createElement(
         "div",
-        sx({ display: "flex" }),
+        sx({ display: "flex", flexWrap: "wrap-reverse" }),
         // @ts-ignore
         state.freq.map((val) =>
           createElement(
@@ -225,6 +239,8 @@ defineBuiltinElement({
                 cursor: "pointer",
                 userSelect: "none",
                 touchAction: "none",
+                // @ts-ignore
+                flex: `1 0 ${100 / (state.scaleLength * 1.1)}%`,
               }),
               sx(
                 { border: "2px solid pink", backgroundColor: "darkmagenta" },
