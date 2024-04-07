@@ -18,6 +18,41 @@ if (svgElement) {
   svgElement.src = svgPath;
 }
 
+// ------------------
+// @TODO
+const totalGain = 1;
+
+const organ = true;
+
+const attackCurve = "exponential";
+const decayCurve = "linear";
+const sustainCurve = "linear";
+const releaseCurve = "linear";
+
+const attackGain = 1;
+const decayGain = 0.9;
+const sustainGain = 0.7;
+
+const startGain = 0.001;
+const startTime = 0.001;
+const endGain = 0.001;
+const endTime = 0.001;
+
+const attackTime = 0.02;
+const decayTime = 0.02;
+const sustainTime = 0.02;
+const releaseTime = 0.1;
+const killTime = 0.01;
+// ------------------
+
+const getCurve = (shape: string | undefined) => {
+  if (shape == "exponential") {
+    return "exponentialRampToValueAtTime";
+  } else {
+    return "linearRampToValueAtTime";
+  }
+};
+
 const audioContext = new AudioContext();
 const oscList: Record<
   string,
@@ -25,14 +60,7 @@ const oscList: Record<
 > = {};
 const mainGainNode = audioContext.createGain();
 mainGainNode.connect(audioContext.destination);
-mainGainNode.gain.value = 1;
-
-// @TODO
-const attackTime = 0.02;
-const decayTime = 0.02;
-const sustainTime = 0.02;
-const releaseTime = 0.1;
-const killTime = 0.01;
+mainGainNode.gain.value = totalGain;
 
 const defaultScale =
   ".0\n.100\n.200\n.300\n.400\n.500\n.600\n.700\n.800\n.900\n.1000\n.1100\n.1200";
@@ -40,7 +68,6 @@ const defaultScale =
 function playTone(freq: number) {
   const osc = audioContext.createOscillator();
   const gain = audioContext.createGain();
-  // gain.gain.value = 0;
   osc.connect(gain);
   gain.connect(mainGainNode);
 
@@ -50,8 +77,28 @@ function playTone(freq: number) {
   osc.frequency.value = freq;
 
   gain.gain.value = 0;
-  gain.gain.linearRampToValueAtTime(1, t + attackTime);
-  gain.gain.setValueAtTime(1, t + attackTime);
+
+  gain.gain.linearRampToValueAtTime(startGain, t + startTime);
+
+  gain.gain[getCurve(attackCurve)](attackGain, t + attackTime);
+
+  gain.gain[getCurve(decayCurve)](decayGain, t + attackTime + decayTime);
+
+  gain.gain[getCurve(sustainCurve)](
+    sustainGain,
+    t + attackTime + decayTime + sustainTime
+  );
+
+  if (!organ) {
+    gain.gain[getCurve(releaseCurve)](
+      endGain,
+      t + attackTime + decayTime + sustainTime + releaseTime
+    );
+    gain.gain.linearRampToValueAtTime(
+      0,
+      t + attackTime + decayTime + sustainTime + releaseTime + endTime
+    );
+  }
 
   osc.start(t);
 
@@ -68,9 +115,13 @@ function releaseNote(freq: number) {
     console.log("release");
 
     gain.gain.cancelScheduledValues(t);
-    gain.gain.setValueAtTime(1, t);
-    gain.gain.linearRampToValueAtTime(0, t + releaseTime);
-    osc.stop(t + releaseTime + killTime);
+
+    gain.gain.setValueAtTime(gain.gain.value, t);
+    gain.gain[getCurve(releaseCurve)](endGain, t + releaseTime);
+
+    gain.gain.linearRampToValueAtTime(0, t + releaseTime + endTime);
+
+    osc.stop(t + releaseTime + endTime + killTime);
     // oscList[freq.toString()] = undefined;
   }
 }
