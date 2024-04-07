@@ -46,7 +46,14 @@ const killTime = 0.01;
 
 const baseFreq = 220;
 const periodFreq = 2;
+
+const upKeys = 24;
+const downKeys = 12;
 // ------------------
+
+function mod(n: number, m: number) {
+  return ((n % m) + m) % m;
+}
 
 const getCurve = (shape: string | undefined) => {
   if (shape == "exponential") {
@@ -139,11 +146,35 @@ document.body.onmouseup = function () {
 
 const scaleToFreq = (scaleInput: string) => {
   const raw = scaleInput.split("\n");
-  const freq = raw.map(
-    (tone) =>
-      Math.pow(periodFreq, Number(tone.replace(".", "")) / 1200) * baseFreq
+  const intervalMap = raw.map((tone) =>
+    Math.pow(periodFreq, Number(tone.replace(".", "")) / 1200)
   );
-  freq.push(baseFreq);
+
+  const freq: number[] = [];
+  freq[downKeys] = baseFreq;
+
+  for (let i = 0; i < upKeys; i++) {
+    freq[downKeys + i + 1] =
+      baseFreq *
+      Math.pow(periodFreq, Math.floor(i / raw.length)) *
+      intervalMap[mod(raw.length + i - 1, raw.length)];
+  }
+
+  for (let i = 1; i < downKeys + 2; i++) {
+    freq[i] =
+      baseFreq *
+      Math.pow(
+        periodFreq,
+        -(
+          1 +
+          (Math.floor(i / raw.length) +
+            (i === downKeys + 1 ? 1 : 0) +
+            (i === downKeys + 1 || i === downKeys ? -1 : 0))
+        )
+      ) *
+      intervalMap[mod(raw.length - i, raw.length)];
+  }
+
   return freq.sort((a, b) => a - b).map((tone) => tone.toFixed(1));
 };
 
