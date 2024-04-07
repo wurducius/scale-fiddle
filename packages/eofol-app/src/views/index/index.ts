@@ -236,6 +236,11 @@ defineBuiltinElement({
     scaleInput: defaultScale,
     freq: scaleToFreq(defaultScale),
     scaleLength: getScaleLength(defaultScale),
+    form: {
+      edo: {
+        N: 12,
+      },
+    },
   },
   render: (state, setState) => {
     // @ts-ignore
@@ -304,22 +309,100 @@ defineBuiltinElement({
         "div",
         undefined,
         createElement(
-          "textarea",
-          sx({ height: "200px" }), // @ts-ignore
-          state.scaleInput, // @ts-ignore
-          {},
-          {
-            // @ts-ignore
-            onchange: (e) => {
-              // @ts-ignore
-              setState({
-                ...state,
-                scaleInput: e.target.value,
-                freq: scaleToFreq(e.target.value),
-                scaleLength: getScaleLength(e.target.value),
-              });
-            },
-          }
+          "div",
+          sx({ display: "flex", justifyContent: "center" }),
+          [
+            createElement(
+              "div",
+              undefined,
+              [
+                createElement(
+                  "button",
+                  [sx({}, "hover")],
+                  "New scale",
+                  undefined,
+                  undefined
+                ),
+                createElement(
+                  "div",
+                  sx({ display: "none" }),
+                  createElement(
+                    "div",
+                    sx({
+                      display: "flex",
+                      flexDirection: "column",
+                      fontSize: "16px",
+                    }),
+                    [
+                      createElement(
+                        "button",
+                        undefined,
+                        "Equal temperament (EDO)",
+                        undefined,
+                        {
+                          // @ts-ignore
+                          onclick: () => {
+                            const content =
+                              document.getElementById("modal-edo");
+                            if (content) {
+                              content.setAttribute("style", "display: block;");
+                            }
+                          },
+                        }
+                      ),
+                      createElement(
+                        "button",
+                        undefined,
+                        "Moment of symmetry (MOS)"
+                      ),
+                    ]
+                  ),
+                  {
+                    id: "dropdown-new-scale-content",
+                  }
+                ),
+              ],
+              undefined,
+              {
+                // @ts-ignore
+                onmouseover: () => {
+                  const content = document.getElementById(
+                    "dropdown-new-scale-content"
+                  );
+                  if (content) {
+                    content.setAttribute("style", "display: block;");
+                  }
+                },
+                // @ts-ignore
+                onmouseleave: () => {
+                  const content = document.getElementById(
+                    "dropdown-new-scale-content"
+                  );
+                  if (content) {
+                    content.setAttribute("style", "display: none;");
+                  }
+                },
+              }
+            ),
+            createElement(
+              "textarea",
+              sx({ height: "200px" }), // @ts-ignore
+              state.scaleInput, // @ts-ignore
+              {},
+              {
+                // @ts-ignore
+                onchange: (e) => {
+                  // @ts-ignore
+                  setState({
+                    ...state,
+                    scaleInput: e.target.value,
+                    freq: scaleToFreq(e.target.value),
+                    scaleLength: getScaleLength(e.target.value),
+                  });
+                },
+              }
+            ),
+          ]
         )
       ),
       createElement(
@@ -343,7 +426,10 @@ defineBuiltinElement({
                 userSelect: "none",
                 touchAction: "none",
                 // @ts-ignore
-                flex: `1 0 ${100 / (state.scaleLength * 1.1)}%`,
+                flex: `1 0 ${
+                  // @ts-ignore
+                  (100 / state.scaleLength) * 0.9
+                }%`,
               }),
               sx(
                 { border: "2px solid pink", backgroundColor: "darkmagenta" },
@@ -381,6 +467,90 @@ defineBuiltinElement({
             }
           )
         )
+      ),
+      createElement(
+        "div",
+        sx({
+          display: "none",
+          position: "fixed",
+          zIndex: "1",
+          paddingTop: "100px",
+          left: 0,
+          top: 0,
+          width: "100%",
+          height: "100%",
+          overflow: "auto",
+          backgroundColor: "rgba(0,0,0,0.4)",
+        }),
+        [
+          createElement(
+            "div",
+            sx({
+              position: "relative",
+              padding: "64px",
+              width: "80%",
+              margin: "auto",
+              border: "2px solid grey",
+              backgroundColor: "#dddddd",
+            }),
+            [
+              createElement(
+                "div",
+                sx({ fontSize: "32px" }),
+                "Equal division of octave (EDO)"
+              ),
+              createElement("div", undefined, [
+                createElement("div", sx({ fontSize: "24px" }), "N"),
+                createElement(
+                  "input",
+                  undefined,
+                  undefined,
+                  {
+                    // @ts-ignore
+                    value: state.form.edo.N,
+                  },
+                  {
+                    // @ts-ignore
+                    onchange: (event) => {
+                      // @ts-ignore
+                      setState({
+                        ...state,
+                        // @ts-ignore
+                        form: { ...state.form, edo: { N: event.target.value } },
+                      });
+                    },
+                  }
+                ),
+              ]),
+              createElement("button", undefined, "Let's go", undefined, {
+                // @ts-ignore
+                onclick: () => {
+                  const result = Array.from({
+                    // @ts-ignore
+                    length: state.form.edo.N,
+                  }).reduce(
+                    (acc, next, i) =>
+                      acc +
+                      "." +
+                      // @ts-ignore
+                      ((i + 1) * 1200) / state.form.edo.N +
+                      // @ts-ignore
+                      (i + 1 === Number(state.form.edo.N) ? "" : "\n"),
+                    ""
+                  ) as string;
+                  // @ts-ignore
+                  setState({
+                    ...state,
+                    scaleInput: result,
+                    freq: scaleToFreq(result),
+                    scaleLength: getScaleLength(result),
+                  });
+                },
+              }),
+            ]
+          ),
+        ],
+        { id: "modal-edo" }
       ),
     ]);
   },
