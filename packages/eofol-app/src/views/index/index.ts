@@ -212,6 +212,24 @@ const scaleToFreq = (scaleInput: string) => {
   return freq.sort((a, b) => a - b).map((tone) => tone.toFixed(1));
 };
 
+const keysDown: Record<number, boolean | undefined> = {};
+
+const handleKeyDown = (event: any, freq: any, key: string, index: number) => {
+  if (event.key === key && !keysDown[index]) {
+    // @ts-ignore
+    playTone(freq[index]);
+    keysDown[index] = true;
+  }
+};
+
+const handleKeyUp = (event: any, freq: any, key: string, index: number) => {
+  if (event.key === key && keysDown[index]) {
+    // @ts-ignore
+    releaseNote(freq[index]);
+    keysDown[index] = false;
+  }
+};
+
 defineBuiltinElement({
   tagName: "fiddle-keyboard",
   initialState: {
@@ -220,7 +238,16 @@ defineBuiltinElement({
     scaleLength: getScaleLength(defaultScale),
   },
   render: (state, setState) => {
-    console.log(state);
+    document.onkeydown = (event) => {
+      // @ts-ignore
+      handleKeyDown(event, state.freq, "z", 24);
+    };
+
+    document.onkeyup = (event) => {
+      // @ts-ignore
+      handleKeyUp(event, state.freq, "z", 24);
+    };
+
     return createElement("div", undefined, [
       createElement(
         "div",
