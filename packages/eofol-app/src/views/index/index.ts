@@ -43,6 +43,9 @@ const decayTime = 0.02;
 const sustainTime = 0.02;
 const releaseTime = 0.1;
 const killTime = 0.01;
+
+const baseFreq = 220;
+const periodFreq = 2;
 // ------------------
 
 const getCurve = (shape: string | undefined) => {
@@ -63,7 +66,7 @@ mainGainNode.connect(audioContext.destination);
 mainGainNode.gain.value = totalGain;
 
 const defaultScale =
-  ".0\n.100\n.200\n.300\n.400\n.500\n.600\n.700\n.800\n.900\n.1000\n.1100\n.1200";
+  ".100\n.200\n.300\n.400\n.500\n.600\n.700\n.800\n.900\n.1000\n.1100\n.1200";
 
 function playTone(freq: number) {
   const osc = audioContext.createOscillator();
@@ -134,12 +137,15 @@ document.body.onmouseup = function () {
   mouseDown = false;
 };
 
-const scaleToFreq = (scaleInput: string) =>
-  scaleInput
-    .split("\n")
-    .map((tone) =>
-      (Math.pow(2, Number(tone.replace(".", "")) / 1200) * 220).toFixed(1)
-    );
+const scaleToFreq = (scaleInput: string) => {
+  const raw = scaleInput.split("\n");
+  const freq = raw.map(
+    (tone) =>
+      Math.pow(periodFreq, Number(tone.replace(".", "")) / 1200) * baseFreq
+  );
+  freq.push(baseFreq);
+  return freq.sort((a, b) => a - b).map((tone) => tone.toFixed(1));
+};
 
 defineBuiltinElement({
   tagName: "fiddle-keyboard",
