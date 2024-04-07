@@ -1,0 +1,31 @@
+#eofol {
+  color: magenta;
+  font-size: 48px;
+}
+
+.container {
+  margin: 16px 8px 16px 8px;
+  text-align: center;
+}
+
+.phi {
+  background-color: #278da6;
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+.eofol-button {
+  height: 40px;
+  padding: 0 16px;
+  background-color: rgb(144, 205, 244);
+  font-size: 16px;
+  color: rgb(26, 32, 44);
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.eofol-button:hover {
+  background-color: rgb(100, 161, 199);
+}
