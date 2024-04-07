@@ -19,28 +19,59 @@ if (svgElement) {
 }
 
 const audioContext = new AudioContext();
-const oscList: Record<string, OscillatorNode | undefined> = {};
+const oscList: Record<
+  string,
+  { osc: OscillatorNode; gain: GainNode } | undefined
+> = {};
 const mainGainNode = audioContext.createGain();
 mainGainNode.connect(audioContext.destination);
 mainGainNode.gain.value = 1;
+
+// @TODO
+const attackTime = 0.02;
+const decayTime = 0.02;
+const sustainTime = 0.02;
+const releaseTime = 0.1;
+const killTime = 0.01;
 
 const defaultScale =
   ".0\n.100\n.200\n.300\n.400\n.500\n.600\n.700\n.800\n.900\n.1000\n.1100\n.1200";
 
 function playTone(freq: number) {
   const osc = audioContext.createOscillator();
-  osc.connect(mainGainNode);
+  const gain = audioContext.createGain();
+  // gain.gain.value = 0;
+  osc.connect(gain);
+  gain.connect(mainGainNode);
+
+  const t = audioContext.currentTime;
+
   osc.type = "sine";
   osc.frequency.value = freq;
-  osc.start();
-  oscList[freq.toString()] = osc;
+
+  gain.gain.value = 0;
+  gain.gain.linearRampToValueAtTime(1, t + attackTime);
+  gain.gain.setValueAtTime(1, t + attackTime);
+
+  osc.start(t);
+
+  console.log("play");
+  oscList[freq.toString()] = { osc, gain };
 }
 
 function releaseNote(freq: number) {
-  const osc = oscList[freq.toString()];
-  if (osc) {
-    osc.stop();
-    oscList[freq.toString()] = undefined;
+  const item = oscList[freq.toString()];
+  if (item) {
+    const osc = item.osc;
+    const gain = item.gain;
+    const t = audioContext.currentTime;
+    console.log("release");
+
+    gain.gain.cancelScheduledValues(t);
+    gain.gain.setValueAtTime(1, t);
+    gain.gain.linearRampToValueAtTime(0, t + releaseTime);
+    osc.stop(t + releaseTime + killTime);
+    // oscList[freq.toString()] = undefined;
   }
 }
 
@@ -105,6 +136,7 @@ defineBuiltinElement({
                 alignItems: "center",
                 cursor: "pointer",
                 userSelect: "none",
+                touchAction: "none",
               }),
               sx(
                 { border: "2px solid pink", backgroundColor: "darkmagenta" },
@@ -138,6 +170,7 @@ defineBuiltinElement({
               onmouseleave: () => {
                 releaseNote(val);
               },
+              // @ts-ignore
             }
           )
         )
