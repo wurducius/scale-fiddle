@@ -142,6 +142,13 @@ const changeScaleMenu = (
         id: "dropdown-new-scale-content",
       }
     ),
+    createElement(
+      "button",
+      [sx({}, "hover")],
+      "Modify scale",
+      undefined,
+      undefined
+    ),
   ];
 };
 
@@ -149,10 +156,8 @@ const inputMenu = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
 ) =>
-  createElement(
-    "div",
-    undefined,
-    createElement("div", sx({ display: "flex", justifyContent: "center" }), [
+  createElement("div", sx({ display: "flex" }), [
+    createElement("div", sx({ flex: 1 }), [
       createElement(
         "div",
         undefined,
@@ -179,15 +184,15 @@ const inputMenu = (
           },
         }
       ),
-      scaleLibrary(state, setState),
-      createElement("div", undefined, [
-        createElement("p", undefined, "Scale library - multiple scales"),
-        createElement("p", undefined, "Modify scale"),
-        createElement("p", undefined, "Scale overview"),
-        createElement("p", undefined, "Tuning - base frequency"),
-      ]),
-    ])
-  );
+    ]),
+    createElement("div", sx({ flex: 1 }), scaleLibrary(state, setState)),
+    createElement("div", sx({ flex: 1 }), [
+      createElement("p", undefined, "Scale overview"),
+    ]),
+    createElement("div", sx({ flex: 1 }), [
+      createElement("p", undefined, "Tuning - base frequency"),
+    ]),
+  ]);
 
 const scaleLibrary = (
   state: FiddleState,
