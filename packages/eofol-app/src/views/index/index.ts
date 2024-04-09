@@ -147,7 +147,7 @@ const changeScaleMenu = (
     createElement("p", sx({ marginTop: "8px" }), "Select scale"),
     createElement(
       "select",
-      undefined,
+      sx({ width: "100%" }),
       // @ts-ignore
       state.scales.map((scale, index) =>
         createElement(
@@ -180,27 +180,31 @@ const changeScaleMenu = (
     ),
     createElement("p", sx({ marginTop: "8px" }), "Scale name"),
     createElement(
-      "input",
-      undefined,
-      undefined,
-      {
-        // @ts-ignore
-        value: state.scales[state.scaleIndex].name,
-      },
-      {
-        // @ts-ignore
-        onchange: (e) => {
+      "div",
+      sx({ display: "flex", flex: 1 }),
+      createElement(
+        "input",
+        sx({ width: "100%" }),
+        undefined,
+        {
           // @ts-ignore
-          const newScales = state.scales.map((scale, index) =>
-            // @ts-ignore
-            index === state.scaleIndex
-              ? { ...scale, name: e.target.value }
-              : scale
-          );
-          // @ts-ignore
-          setState({ ...state, scales: newScales });
+          value: state.scales[state.scaleIndex].name,
         },
-      }
+        {
+          // @ts-ignore
+          onchange: (e) => {
+            // @ts-ignore
+            const newScales = state.scales.map((scale, index) =>
+              // @ts-ignore
+              index === state.scaleIndex
+                ? { ...scale, name: e.target.value }
+                : scale
+            );
+            // @ts-ignore
+            setState({ ...state, scales: newScales });
+          },
+        }
+      )
     ),
     createElement(
       "button",
@@ -216,7 +220,11 @@ const changeScaleMenu = (
             scales: [
               // @ts-ignore
               ...state.scales,
-              { name: "New scale", scaleInput: defaultScale },
+              {
+                // @ts-ignore
+                name: "Scale #" + state.scales.length,
+                scaleInput: defaultScale,
+              },
             ],
             // @ts-ignore
             scaleIndex: state.scales.length,
