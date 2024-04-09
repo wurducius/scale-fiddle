@@ -152,11 +152,50 @@ const changeScaleMenu = (
   ];
 };
 
+const scaleOverview = (
+  state: FiddleState,
+  setState: undefined | ((nextState: FiddleState) => void)
+) => {
+  // @ts-ignore
+  const freq = state.freq;
+
+  return createElement("div", sx({ overflow: "auto", height: "100%" }), [
+    createElement(
+      "div",
+      sx({
+        display: "flex",
+        justifyContent: "space-between",
+        borderBottom: "2px solid fuchsia",
+        borderLeft: "2px solid fuchsia",
+        borderRight: "2px solid fuchsia",
+      }),
+      [
+        createElement("div", undefined, "Index"),
+        createElement("div", undefined, `Frequency`),
+        createElement("div", undefined, "Cents"),
+        createElement("div", undefined, "Ratio"),
+      ]
+    ),
+    ...freq.map((tone: string, index: number) =>
+      createElement(
+        "div",
+        sx({ display: "flex", justifyContent: "space-between" }),
+        [
+          createElement("div", undefined, index.toString()),
+          createElement("div", undefined, `${tone} Hz`),
+          createElement("div", undefined, "cent"),
+          createElement("div", undefined, "ratio"),
+        ]
+      )
+    ),
+  ]);
+};
+
 const inputMenu = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
 ) =>
-  createElement("div", sx({ display: "flex" }), [
+  createElement("div", sx({ display: "flex", height: "200px" }), [
     createElement("div", sx({ flex: 1 }), [
       createElement(
         "div",
@@ -186,9 +225,7 @@ const inputMenu = (
       ),
     ]),
     createElement("div", sx({ flex: 1 }), scaleLibrary(state, setState)),
-    createElement("div", sx({ flex: 1 }), [
-      createElement("p", undefined, "Scale overview"),
-    ]),
+    createElement("div", sx({ flex: 1 }), scaleOverview(state, setState)),
     createElement("div", sx({ flex: 1 }), [
       createElement("p", undefined, "Tuning - base frequency"),
     ]),
