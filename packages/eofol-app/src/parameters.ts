@@ -27,7 +27,7 @@ export const sustainTime = 0.02;
 export const releaseTime = 0.1;
 export const killTime = 0.01;
 
-export const baseFreq = 220;
+// export const baseFreq = 220;
 export const periodFreq = 2;
 
 export const upKeys = 24;

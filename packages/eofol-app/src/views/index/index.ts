@@ -1,11 +1,9 @@
 import { mapKeyboardKeys } from "../../keyboard-key-mapping";
 import {
-  baseFreq,
   decimalDigitsCent,
   decimalDigitsFreq,
   decimalDigitsFreqOnKeys,
   downKeys,
-  periodFreq,
   upKeys,
 } from "../../parameters";
 import "../../styles/base.css";
@@ -26,9 +24,9 @@ import {
   sy,
 } from "@eofol/eofol";
 
-const parseScala = (line: string) => {
+const parseScala = (state: FiddleStateImpl) => (line: string) => {
   if (line.includes(".")) {
-    return Math.pow(periodFreq, Number(line) / 1200);
+    return Math.pow(state.tuning.period, Number(line) / 1200);
   } else if (line.includes("/")) {
     const split = line.split("/");
     return Number(Number(split[0]) / Number(split[1]));
@@ -61,9 +59,13 @@ const getScaleLength = (scaleInput: string) => {
   return raw.length;
 };
 
-const scaleToFreq = (scaleInput: string) => {
+const scaleToFreq = (state: FiddleStateImpl) => {
+  const scaleInput = state.scaleInput;
+  const baseFreq = state.tuning.baseFreq;
+  const period = state.tuning.period;
+
   const raw = scaleInput.split("\n").filter(Boolean);
-  const intervalMap = raw.map(parseScala);
+  const intervalMap = raw.map(parseScala(state));
 
   const freq: number[] = [];
   freq[downKeys] = baseFreq;
@@ -72,7 +74,7 @@ const scaleToFreq = (scaleInput: string) => {
     freq[downKeys + i + 1] =
       baseFreq *
       Math.pow(
-        periodFreq,
+        period,
         Math.floor(i / raw.length) -
           (mod(raw.length + i - 1, raw.length) === raw.length - 1 ? 1 : 0)
       ) *
@@ -82,7 +84,7 @@ const scaleToFreq = (scaleInput: string) => {
   for (let i = 1; i < downKeys + 2; i++) {
     freq[i] =
       baseFreq *
-      Math.pow(periodFreq, -(1 + Math.floor((i - 1) / raw.length))) *
+      Math.pow(period, -(1 + Math.floor((i - 1) / raw.length))) *
       intervalMap[mod(raw.length - i, raw.length)];
   }
 
@@ -92,10 +94,10 @@ const scaleToFreq = (scaleInput: string) => {
     .filter(Boolean);
 };
 
-const updateScale = (newScale: string) => ({
-  scaleInput: newScale,
-  freq: scaleToFreq(newScale),
-  scaleLength: getScaleLength(newScale),
+const updateScale = (state: FiddleStateImpl) => ({
+  scaleInput: state.scaleInput,
+  freq: scaleToFreq(state),
+  scaleLength: getScaleLength(state.scaleInput),
 });
 
 const changeScaleMenu = (
@@ -215,9 +217,8 @@ const scaleTuning = (
             setState({
               ...state,
               tuning: { ...tuning, baseFreq: val },
+              recompute: true,
             });
-            // @ts-ignore
-            // setState({ ...state, ...updateScale(state.scaleInput) });
           }
         },
       }
@@ -237,6 +238,7 @@ const scaleTuning = (
             setState({
               ...state,
               tuning: { ...tuning, period: val },
+              recompute: true,
             });
           }
         },
@@ -298,10 +300,14 @@ const scaleLibrary = (
       {
         // @ts-ignore
         onchange: (e) => {
+          const nextState = {
+            ...state,
+            scaleInput: e.target.value,
+          } as FiddleStateImpl;
           // @ts-ignore
           setState({
-            ...state,
-            ...updateScale(e.target.value),
+            ...nextState,
+            ...updateScale(nextState),
           });
         },
       }
@@ -469,10 +475,14 @@ const formModal = (
                     (i + 1 === n ? "" : "\n")
                   );
                 }, "") + "";
+              const nextState = {
+                ...state,
+                scaleInput: result,
+              } as FiddleStateImpl;
               // @ts-ignore
               setState({
                 ...state,
-                ...updateScale(result),
+                ...updateScale(nextState),
               });
             },
           }),
@@ -482,14 +492,24 @@ const formModal = (
     { id: "modal-edo" }
   );
 
-type FiddleState =
-  | {
-      scaleInput: string;
-      freq: string[];
-      scaleLength: number;
-    }
-  | undefined
-  | {};
+type FiddleStateImpl = {
+  scaleInput: string;
+  freq: string[];
+  scaleLength: number;
+  tab: number;
+  tuning: {
+    baseFreq: number;
+    period: number;
+  };
+  form: {
+    edo: {
+      N: number;
+    };
+  };
+  recompute: boolean | undefined;
+};
+
+type FiddleState = FiddleStateImpl | undefined | {};
 
 const appbarButton = (
   label: string,
@@ -675,22 +695,42 @@ const aboutTab = (
   ];
 };
 
+const initialState = {
+  scaleInput: defaultScale,
+  tab: 0,
+  tuning: {
+    baseFreq: 220,
+    period: 2,
+  },
+  form: {
+    edo: {
+      N: 12,
+    },
+  },
+  recompute: false,
+} as FiddleStateImpl;
+
 defineBuiltinElement<FiddleState>({
   tagName: "fiddle-keyboard",
   initialState: {
-    ...updateScale(defaultScale),
-    tab: 0,
-    tuning: {
-      baseFreq: 220,
-      period: 2,
-    },
-    form: {
-      edo: {
-        N: 12,
-      },
-    },
+    ...initialState,
+    ...updateScale(initialState),
+  },
+  effect: (state, setState) => {
+    // @ts-ignore
+    const stateImpl = state as FiddleStateImpl;
+
+    if (stateImpl.recompute) {
+      // @ts-ignore
+      setState({
+        ...state,
+        recompute: false,
+        ...updateScale(stateImpl),
+      });
+    }
   },
   render: (state, setState) => {
+    console.log("(R) App");
     // @ts-ignore
     const freq = state.freq;
     // @ts-ignore
