@@ -213,26 +213,44 @@ const scaleToFreq = (scaleInput: string) => {
     .map((tone) => tone.toFixed(decimalDigitsFreq));
 };
 
+const flashKeyDown = (freq: string[], index: number) => {
+  document
+    .getElementById(`key-${freq[index]}`)
+    ?.setAttribute("class", "key-inactive key-active");
+};
+
+const flashKeyUp = (freq: string[], index: number) => {
+  document
+    .getElementById(`key-${freq[index]}`)
+    ?.setAttribute("class", "key-inactive " + keyActiveHoverStyle);
+};
+
 const keysDown: Record<number, boolean | undefined> = {};
 
-const handleKeyDown = (event: any, freq: any, key: string, index: number) => {
+const handleKeyDown = (
+  event: KeyboardEvent,
+  freq: string[],
+  key: string,
+  index: number
+) => {
   if (event.key === key && !keysDown[index]) {
     // @ts-ignore
     playTone(freq[index]);
-    document
-      .getElementById(`key-${freq[index]}`)
-      ?.setAttribute("class", "key-inactive key-active " + keyActiveHoverStyle);
+    flashKeyDown(freq, index);
     keysDown[index] = true;
   }
 };
 
-const handleKeyUp = (event: any, freq: any, key: string, index: number) => {
+const handleKeyUp = (
+  event: KeyboardEvent,
+  freq: string[],
+  key: string,
+  index: number
+) => {
   if (event.key === key && keysDown[index]) {
     // @ts-ignore
     releaseNote(freq[index]);
-    document
-      .getElementById(`key-${freq[index]}`)
-      ?.setAttribute("class", "key-inactive " + keyActiveHoverStyle);
+    flashKeyUp(freq, index);
     keysDown[index] = false;
   }
 };
@@ -346,7 +364,7 @@ const scaleInput = (
 sy({ border: "2px solid pink", backgroundColor: "darkmagenta" }, "key-active");
 
 const keyActiveHoverStyle = sx(
-  { border: "2px solid pink", backgroundColor: "darkmagenta" },
+  { border: "2px solid pink", backgroundColor: "#914a91" },
   "hover"
 );
 
@@ -355,7 +373,7 @@ const keys = (state: FiddleState) =>
     "div",
     sx({ display: "flex", flexWrap: "wrap-reverse" }),
     // @ts-ignore
-    state.freq.map((val) =>
+    state.freq.map((val, index) =>
       createElement(
         "div",
         [
@@ -387,26 +405,36 @@ const keys = (state: FiddleState) =>
         {
           // @ts-ignore
           onmousedown: () => {
+            // @ts-ignore
+            flashKeyDown(state.freq, index);
             playTone(val);
           },
           // @ts-ignore
           onmouseenter: (event) => {
             event.preventDefault();
             if (mouseDown) {
+              // @ts-ignore
+              flashKeyDown(state.freq, index);
               playTone(val);
             }
           },
           // @ts-ignore
           onmouseleave: (event) => {
             event.preventDefault();
+            // @ts-ignore
+            flashKeyUp(state.freq, index);
             releaseNote(val);
           },
           // @ts-ignore
           onmouseup: () => {
+            // @ts-ignore
+            flashKeyUp(state.freq, index);
             releaseNote(val);
           },
           // @ts-ignore
           onmouseleave: () => {
+            // @ts-ignore
+            flashKeyUp(state.freq, index);
             releaseNote(val);
           },
           // @ts-ignore
