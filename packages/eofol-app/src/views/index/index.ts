@@ -55,6 +55,12 @@ const upKeys = 24;
 const downKeys = 12;
 // ------------------
 
+const decimalDigitsFreq = 3;
+const decimalDigitsFreqOnKeys = 1;
+const decimalDigitsCent = 1;
+
+// ------------------
+
 const parseScala = (line: string) => {
   if (line.includes(".")) {
     return Math.pow(periodFreq, Number(line) / 1200);
@@ -202,7 +208,9 @@ const scaleToFreq = (scaleInput: string) => {
       intervalMap[mod(raw.length - i, raw.length)];
   }
 
-  return freq.sort((a, b) => a - b).map((tone) => tone.toFixed(1));
+  return freq
+    .sort((a, b) => a - b)
+    .map((tone) => tone.toFixed(decimalDigitsFreq));
 };
 
 const keysDown: Record<number, boolean | undefined> = {};
@@ -228,6 +236,12 @@ const handleKeyUp = (event: any, freq: any, key: string, index: number) => {
     keysDown[index] = false;
   }
 };
+
+const updateScale = (newScale: string) => ({
+  scaleInput: newScale,
+  freq: scaleToFreq(newScale),
+  scaleLength: getScaleLength(newScale),
+});
 
 const inputMenu = (
   state: FiddleState,
@@ -323,9 +337,7 @@ const scaleInput = (
         // @ts-ignore
         setState({
           ...state,
-          scaleInput: e.target.value,
-          freq: scaleToFreq(e.target.value),
-          scaleLength: getScaleLength(e.target.value),
+          ...updateScale(e.target.value),
         });
       },
     }
@@ -370,7 +382,7 @@ const keys = (state: FiddleState) =>
           ),
           keyActiveHoverStyle,
         ],
-        val.toString(),
+        Number(val).toFixed(decimalDigitsFreqOnKeys),
         { id: `key-${val}` },
         {
           // @ts-ignore
@@ -464,26 +476,31 @@ const formModal = (
           createElement("button", undefined, "Let's go", undefined, {
             // @ts-ignore
             onclick: () => {
-              const result = Array.from({
-                // @ts-ignore
-                length: state.form.edo.N,
-              }).reduce(
-                (acc, next, i) =>
-                  acc +
-                  "" +
+              const result =
+                Array.from({
                   // @ts-ignore
-                  ((i + 1) * 1200) / state.form.edo.N +
-                  "." +
+                  length: state.form.edo.N,
+                }).reduce((acc, next, i) => {
                   // @ts-ignore
-                  (i + 1 === Number(state.form.edo.N) ? "" : "\n"),
-                ""
-              ) as string;
+                  const n = Number(state.form.edo.N);
+                  const val = ((i + 1) * 1200) / n;
+                  const valAsStr = val.toString();
+                  const includesDot = valAsStr.includes(".");
+                  const displayVal = includesDot
+                    ? val.toFixed(decimalDigitsCent)
+                    : valAsStr + ".";
+
+                  return (
+                    acc +
+                    displayVal +
+                    // @ts-ignore
+                    (i + 1 === n ? "" : "\n")
+                  );
+                }, "") + "";
               // @ts-ignore
               setState({
                 ...state,
-                scaleInput: result,
-                freq: scaleToFreq(result),
-                scaleLength: getScaleLength(result),
+                ...updateScale(result),
               });
             },
           }),
@@ -505,9 +522,7 @@ type FiddleState =
 defineBuiltinElement<FiddleState>({
   tagName: "fiddle-keyboard",
   initialState: {
-    scaleInput: defaultScale,
-    freq: scaleToFreq(defaultScale),
-    scaleLength: getScaleLength(defaultScale),
+    ...updateScale(defaultScale),
     form: {
       edo: {
         N: 12,
