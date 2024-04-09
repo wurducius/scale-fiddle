@@ -1,4 +1,4 @@
-import { flashKeyDown, flashKeyUp } from "./synth-lib";
+import { flashKeyDown, flashKeyUp, playTone, releaseNote } from "./synth-lib";
 
 export const keysDown: Record<number, boolean | undefined> = {};
 

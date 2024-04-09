@@ -98,6 +98,9 @@ const updateScale = (state: FiddleStateImpl) => ({
   scaleInput: state.scaleInput,
   freq: scaleToFreq(state),
   scaleLength: getScaleLength(state.scaleInput),
+  scales: state.scales.map((s, index) =>
+    state.scaleIndex === index ? { ...s, scaleInput: state.scaleInput } : s
+  ),
 });
 
 const changeScaleMenu = (
@@ -145,24 +148,84 @@ const changeScaleMenu = (
     createElement(
       "select",
       undefined,
-      [
-        createElement("option", undefined, "Title 1", {
-          value: "t1",
-          selected: "selected",
-        }),
-        createElement("option", undefined, "Title 2", {
-          value: "t2",
-        }),
-        createElement("option", undefined, "Title 3", {
-          value: "t3",
-        }),
-      ],
-      { value: "t1" },
-      {}
+      // @ts-ignore
+      state.scales.map((scale, index) =>
+        createElement(
+          "option",
+          undefined,
+          scale.name,
+          // @ts-ignore
+          index === Number(state.scaleIndex)
+            ? { value: index, selected: "selected" }
+            : {
+                value: index,
+              }
+        )
+      ),
+      // @ts-ignore
+      { value: state.scaleIndex },
+      {
+        // @ts-ignore
+        onchange: (e) => {
+          // @ts-ignore
+          setState({
+            ...state,
+            scaleIndex: Number(e.target.value),
+            // @ts-ignore
+            scaleInput: state.scales[Number(e.target.value)].scaleInput,
+            recompute: true,
+          });
+        },
+      }
     ),
     createElement("p", sx({ marginTop: "8px" }), "Scale name"),
-    createElement("input", undefined, undefined, { value: "Scale #1" }),
-    createElement("button", sx({ marginTop: "8px" }), "Add new scale", {}, {}),
+    createElement(
+      "input",
+      undefined,
+      undefined,
+      {
+        // @ts-ignore
+        value: state.scales[state.scaleIndex].name,
+      },
+      {
+        // @ts-ignore
+        onchange: (e) => {
+          // @ts-ignore
+          const newScales = state.scales.map((scale, index) =>
+            // @ts-ignore
+            index === state.scaleIndex
+              ? { ...scale, name: e.target.value }
+              : scale
+          );
+          // @ts-ignore
+          setState({ ...state, scales: newScales });
+        },
+      }
+    ),
+    createElement(
+      "button",
+      sx({ marginTop: "8px" }),
+      "Add new scale",
+      {},
+      {
+        // @ts-ignore
+        onclick: () => {
+          // @ts-ignore
+          setState({
+            ...state,
+            scales: [
+              // @ts-ignore
+              ...state.scales,
+              { name: "New scale", scaleInput: defaultScale },
+            ],
+            // @ts-ignore
+            scaleIndex: state.scales.length,
+            scaleInput: defaultScale,
+            recompute: true,
+          });
+        },
+      }
+    ),
     createElement(
       "div",
       sx({ display: "none" }),
@@ -583,6 +646,8 @@ type FiddleStateImpl = {
   scaleInput: string;
   freq: string[];
   scaleLength: number;
+  scales: { name: string; scaleInput: string }[];
+  scaleIndex: number;
   tab: number;
   tuning: {
     baseFreq: number;
@@ -784,6 +849,8 @@ const aboutTab = (
 
 const initialState = {
   scaleInput: defaultScale,
+  scales: [{ name: "Initial scale", scaleInput: defaultScale }],
+  scaleIndex: 0,
   tab: 0,
   tuning: {
     baseFreq: 220,
