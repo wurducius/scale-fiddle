@@ -378,10 +378,93 @@ type FiddleState =
   | undefined
   | {};
 
+const appbarButton = (label: string, onclick: () => void, isActive: boolean) =>
+  createElement(
+    "button",
+    sx({
+      fontSize: "16px",
+      backgroundColor: isActive ? "grey" : "black",
+      color: "fuchsia",
+      border: "1px solid fuchsia",
+      cursor: "pointer",
+    }),
+    label,
+    undefined,
+    {
+      // @ts-ignore
+      onclick,
+    }
+  );
+
+const appbar = (
+  state: FiddleState,
+  setState: undefined | ((nextState: FiddleState) => void)
+) => {
+  // @ts-ignore
+  const tabIndex = state.tab;
+
+  return createElement(
+    "div",
+    sx({
+      display: "flex",
+      height: "50px",
+      alignItems: "center",
+      border: "2px solid purple",
+      padding: "0 16px",
+    }),
+    createElement(
+      "div",
+      sx({
+        display: "flex",
+        justifyContent: "space-between",
+        flex: 1,
+      }),
+      [
+        createElement("div", sx({ display: "flex", gap: "16px" }), [
+          appbarButton(
+            "Scale",
+            () => {
+              // @ts-ignore
+              setState({ ...state, tab: 0 });
+            },
+            tabIndex === 0
+          ),
+          appbarButton(
+            "Synth",
+            () => {
+              // @ts-ignore
+              setState({ ...state, tab: 1 });
+            },
+            tabIndex === 1
+          ),
+          appbarButton(
+            "Options",
+            () => {
+              // @ts-ignore
+              setState({ ...state, tab: 2 });
+            },
+            tabIndex === 2
+          ),
+          appbarButton(
+            "About",
+            () => {
+              // @ts-ignore
+              setState({ ...state, tab: 3 });
+            },
+            tabIndex === 3
+          ),
+        ]),
+        createElement("div", undefined, "Scale Fiddle"),
+      ]
+    )
+  );
+};
+
 defineBuiltinElement<FiddleState>({
   tagName: "fiddle-keyboard",
   initialState: {
     ...updateScale(defaultScale),
+    tab: 0,
     form: {
       edo: {
         N: 12,
@@ -395,6 +478,7 @@ defineBuiltinElement<FiddleState>({
     mapKeyboardKeys(freq);
 
     return createElement("div", undefined, [
+      appbar(state, setState),
       inputMenu(state, setState),
       keys(state),
       formModal(state, setState),
