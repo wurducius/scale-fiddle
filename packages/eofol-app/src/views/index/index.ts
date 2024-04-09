@@ -105,13 +105,64 @@ const changeScaleMenu = (
   setState: undefined | ((nextState: FiddleState) => void)
 ) => {
   return [
+    createElement("div", sx({ display: "flex" }), [
+      createElement("button", sx({ flex: 1 }), "New scale", undefined, {
+        // @ts-ignore
+        onmouseover: () => {
+          const contentNew = document.getElementById(
+            "dropdown-new-scale-content"
+          );
+          if (contentNew) {
+            contentNew.setAttribute("style", "display: block;");
+          }
+          const contentModify = document.getElementById(
+            "dropdown-modify-scale-content"
+          );
+          if (contentModify) {
+            contentModify.setAttribute("style", "display: none;");
+          }
+        },
+      }),
+      createElement("button", sx({ flex: 1 }), "Modify scale", undefined, {
+        // @ts-ignore
+        onmouseover: () => {
+          const contentModify = document.getElementById(
+            "dropdown-modify-scale-content"
+          );
+          if (contentModify) {
+            contentModify.setAttribute("style", "display: block;");
+          }
+          const contentNew = document.getElementById(
+            "dropdown-new-scale-content"
+          );
+          if (contentNew) {
+            contentNew.setAttribute("style", "display: none;");
+          }
+        },
+      }),
+    ]),
+    createElement("p", sx({ marginTop: "8px" }), "Select scale"),
     createElement(
-      "button",
-      [sx({}, "hover")],
-      "New scale",
+      "select",
       undefined,
-      undefined
+      [
+        createElement("option", undefined, "Title 1", {
+          value: "t1",
+          selected: "selected",
+        }),
+        createElement("option", undefined, "Title 2", {
+          value: "t2",
+        }),
+        createElement("option", undefined, "Title 3", {
+          value: "t3",
+        }),
+      ],
+      { value: "t1" },
+      {}
     ),
+    createElement("p", sx({ marginTop: "8px" }), "Scale name"),
+    createElement("input", undefined, undefined, { value: "Scale #1" }),
+    createElement("button", sx({ marginTop: "8px" }), "Add new scale", {}, {}),
     createElement(
       "div",
       sx({ display: "none" }),
@@ -143,14 +194,68 @@ const changeScaleMenu = (
       ),
       {
         id: "dropdown-new-scale-content",
+      },
+      {
+        // @ts-ignore
+        onmouseleave: () => {
+          const contentNew = document.getElementById(
+            "dropdown-new-scale-content"
+          );
+          if (contentNew) {
+            contentNew.setAttribute("style", "display: none;");
+          }
+          const contentModify = document.getElementById(
+            "dropdown-modify-scale-content"
+          );
+          if (contentModify) {
+            contentModify.setAttribute("style", "display: none;");
+          }
+        },
       }
     ),
     createElement(
-      "button",
-      [sx({}, "hover")],
-      "Modify scale",
-      undefined,
-      undefined
+      "div",
+      sx({ display: "none" }),
+      createElement(
+        "div",
+        sx({
+          display: "flex",
+          flexDirection: "column",
+          fontSize: "16px",
+        }),
+        [
+          createElement("button", undefined, "Transpose", undefined, {
+            // @ts-ignore
+            onclick: () => {
+              //  const content = document.getElementById("modal-edo");
+              //  if (content) {
+              //    content.setAttribute("style", "display: block;");
+              //   }
+            },
+          }),
+          createElement("button", undefined, "Stretch"),
+        ]
+      ),
+      {
+        id: "dropdown-modify-scale-content",
+      },
+      {
+        // @ts-ignore
+        onmouseleave: () => {
+          const contentNew = document.getElementById(
+            "dropdown-new-scale-content"
+          );
+          if (contentNew) {
+            contentNew.setAttribute("style", "display: none;");
+          }
+          const contentModify = document.getElementById(
+            "dropdown-modify-scale-content"
+          );
+          if (contentModify) {
+            contentModify.setAttribute("style", "display: none;");
+          }
+        },
+      }
     ),
   ];
 };
@@ -252,40 +357,24 @@ const inputMenu = (
   setState: undefined | ((nextState: FiddleState) => void)
 ) =>
   createElement("div", sx({ display: "flex", height: "300px" }), [
-    createElement("div", sx({ flex: 1 }), [
-      createElement(
-        "div",
-        undefined,
-        createElement("div", undefined, changeScaleMenu(state, setState)),
-        undefined,
-        {
-          // @ts-ignore
-          onmouseover: () => {
-            const content = document.getElementById(
-              "dropdown-new-scale-content"
-            );
-            if (content) {
-              content.setAttribute("style", "display: block;");
-            }
-          },
-          // @ts-ignore
-          onmouseleave: () => {
-            const content = document.getElementById(
-              "dropdown-new-scale-content"
-            );
-            if (content) {
-              content.setAttribute("style", "display: none;");
-            }
-          },
-        }
-      ),
-      createElement("p", undefined, "Select scale"),
-      createElement("p", undefined, "Scale name"),
-      createElement("p", undefined, "New scale"),
+    createElement("div", sx({ flex: 1, padding: "0 4px" }), [
+      createElement("div", undefined, changeScaleMenu(state, setState)),
     ]),
-    createElement("div", sx({ flex: 1 }), scaleLibrary(state, setState)),
-    createElement("div", sx({ flex: 1 }), scaleOverview(state, setState)),
-    createElement("div", sx({ flex: 1 }), scaleTuning(state, setState)),
+    createElement(
+      "div",
+      sx({ flex: 1, padding: "0 4px" }),
+      scaleLibrary(state, setState)
+    ),
+    createElement(
+      "div",
+      sx({ flex: 1, padding: "0 4px" }),
+      scaleOverview(state, setState)
+    ),
+    createElement(
+      "div",
+      sx({ flex: 1, padding: "0 4px" }),
+      scaleTuning(state, setState)
+    ),
   ]);
 
 const scaleLibrary = (
@@ -294,7 +383,7 @@ const scaleLibrary = (
 ) => {
   return createElement(
     "textarea",
-    sx({ height: "100%", resize: "none" }), // @ts-ignore
+    sx({ height: "100%", width: "100%", resize: "none" }), // @ts-ignore
     state.scaleInput, // @ts-ignore
     {},
     {
