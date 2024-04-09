@@ -88,7 +88,8 @@ const scaleToFreq = (scaleInput: string) => {
 
   return freq
     .sort((a, b) => a - b)
-    .map((tone) => tone.toFixed(decimalDigitsFreq));
+    .map((tone) => tone.toFixed(decimalDigitsFreq))
+    .filter(Boolean);
 };
 
 const updateScale = (newScale: string) => ({
@@ -191,11 +192,64 @@ const scaleOverview = (
   ]);
 };
 
+const scaleTuning = (
+  state: FiddleState,
+  setState: undefined | ((nextState: FiddleState) => void)
+) => {
+  // @ts-ignore
+  const tuning = state.tuning;
+
+  return createElement("div", undefined, [
+    createElement("p", undefined, "Base frequency Hz"),
+    createElement(
+      "input",
+      undefined,
+      undefined,
+      { value: tuning.baseFreq },
+      {
+        // @ts-ignore
+        onchange: (e) => {
+          const val = Number(e.target.value);
+          if (Number.isFinite(val)) {
+            // @ts-ignore
+            setState({
+              ...state,
+              tuning: { ...tuning, baseFreq: val },
+            });
+            // @ts-ignore
+            // setState({ ...state, ...updateScale(state.scaleInput) });
+          }
+        },
+      }
+    ),
+    createElement("p", undefined, "Period interval (Equave)"),
+    createElement(
+      "input",
+      undefined,
+      undefined,
+      { value: tuning.period },
+      {
+        // @ts-ignore
+        onchange: (e) => {
+          const val = Number(e.target.value);
+          if (Number.isFinite(val)) {
+            // @ts-ignore
+            setState({
+              ...state,
+              tuning: { ...tuning, period: val },
+            });
+          }
+        },
+      }
+    ),
+  ]);
+};
+
 const inputMenu = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
 ) =>
-  createElement("div", sx({ display: "flex", height: "200px" }), [
+  createElement("div", sx({ display: "flex", height: "300px" }), [
     createElement("div", sx({ flex: 1 }), [
       createElement(
         "div",
@@ -226,9 +280,7 @@ const inputMenu = (
     ]),
     createElement("div", sx({ flex: 1 }), scaleLibrary(state, setState)),
     createElement("div", sx({ flex: 1 }), scaleOverview(state, setState)),
-    createElement("div", sx({ flex: 1 }), [
-      createElement("p", undefined, "Tuning - base frequency"),
-    ]),
+    createElement("div", sx({ flex: 1 }), scaleTuning(state, setState)),
   ]);
 
 const scaleLibrary = (
@@ -628,6 +680,10 @@ defineBuiltinElement<FiddleState>({
   initialState: {
     ...updateScale(defaultScale),
     tab: 0,
+    tuning: {
+      baseFreq: 220,
+      period: 2,
+    },
     form: {
       edo: {
         N: 12,
