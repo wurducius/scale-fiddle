@@ -279,6 +279,9 @@ const inputMenu = (
           },
         }
       ),
+      createElement("p", undefined, "Select scale"),
+      createElement("p", undefined, "Scale name"),
+      createElement("p", undefined, "New scale"),
     ]),
     createElement("div", sx({ flex: 1 }), scaleLibrary(state, setState)),
     createElement("div", sx({ flex: 1 }), scaleOverview(state, setState)),
@@ -289,31 +292,26 @@ const scaleLibrary = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
 ) => {
-  return createElement("div", undefined, [
-    createElement("p", undefined, "Select scale"),
-    createElement("p", undefined, "Scale name"),
-    createElement(
-      "textarea",
-      sx({ height: "200px", resize: "none" }), // @ts-ignore
-      state.scaleInput, // @ts-ignore
-      {},
-      {
+  return createElement(
+    "textarea",
+    sx({ height: "100%", resize: "none" }), // @ts-ignore
+    state.scaleInput, // @ts-ignore
+    {},
+    {
+      // @ts-ignore
+      onchange: (e) => {
+        const nextState = {
+          ...state,
+          scaleInput: e.target.value,
+        } as FiddleStateImpl;
         // @ts-ignore
-        onchange: (e) => {
-          const nextState = {
-            ...state,
-            scaleInput: e.target.value,
-          } as FiddleStateImpl;
-          // @ts-ignore
-          setState({
-            ...nextState,
-            ...updateScale(nextState),
-          });
-        },
-      }
-    ),
-    createElement("p", undefined, "New scale"),
-  ]);
+        setState({
+          ...nextState,
+          ...updateScale(nextState),
+        });
+      },
+    }
+  );
 };
 
 sy({ border: "2px solid pink", backgroundColor: "darkmagenta" }, "key-active");
