@@ -1,17 +1,19 @@
 #eofol {
-  color: magenta;
-  font-size: 48px;
+  color: fuchsia;
+  padding: 0 0;
+}
+
+body {
+  padding: 0 0;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .container {
-  margin: 16px 8px 16px 8px;
   text-align: center;
-}
-
-.phi {
-  background-color: #278da6;
-  border-radius: 8px;
-  font-size: 12px;
 }
 
 .eofol-button {
