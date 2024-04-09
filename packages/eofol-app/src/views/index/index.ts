@@ -173,6 +173,12 @@ const inputMenu = (
         }
       ),
       scaleInput(state, setState),
+      createElement("div", undefined, [
+        createElement("p", undefined, "Scale library - multiple scales"),
+        createElement("p", undefined, "Modify scale"),
+        createElement("p", undefined, "Scale overview"),
+        createElement("p", undefined, "Tuning - base frequency"),
+      ]),
     ])
   );
 
@@ -378,14 +384,19 @@ type FiddleState =
   | undefined
   | {};
 
-const appbarButton = (label: string, onclick: () => void, isActive: boolean) =>
+const appbarButton = (
+  label: string,
+  onclick: () => void,
+  isActive: boolean,
+  isSecondary?: boolean
+) =>
   createElement(
     "button",
     sx({
       fontSize: "16px",
-      backgroundColor: isActive ? "grey" : "black",
-      color: "fuchsia",
-      border: "1px solid fuchsia",
+      backgroundColor: isActive ? "fuchsia" : "black",
+      color: isSecondary ? "teal" : isActive ? "black" : "fuchsia",
+      border: `1px solid ${isSecondary ? "teal" : "fuchsia"}`,
       cursor: "pointer",
     }),
     label,
@@ -420,41 +431,73 @@ const appbar = (
         flex: 1,
       }),
       [
-        createElement("div", sx({ display: "flex", gap: "16px" }), [
-          appbarButton(
-            "Scale",
-            () => {
-              // @ts-ignore
-              setState({ ...state, tab: 0 });
-            },
-            tabIndex === 0
-          ),
-          appbarButton(
-            "Synth",
-            () => {
-              // @ts-ignore
-              setState({ ...state, tab: 1 });
-            },
-            tabIndex === 1
-          ),
-          appbarButton(
-            "Options",
-            () => {
-              // @ts-ignore
-              setState({ ...state, tab: 2 });
-            },
-            tabIndex === 2
-          ),
-          appbarButton(
-            "About",
-            () => {
-              // @ts-ignore
-              setState({ ...state, tab: 3 });
-            },
-            tabIndex === 3
-          ),
-        ]),
-        createElement("div", undefined, "Scale Fiddle"),
+        createElement(
+          "div",
+          sx({ display: "flex", gap: "16px", alignItems: "center" }),
+          [
+            appbarButton(
+              "Scale",
+              () => {
+                // @ts-ignore
+                setState({ ...state, tab: 0 });
+              },
+              tabIndex === 0
+            ),
+            appbarButton(
+              "Synth",
+              () => {
+                // @ts-ignore
+                setState({ ...state, tab: 1 });
+              },
+              tabIndex === 1
+            ),
+            appbarButton(
+              "Options",
+              () => {
+                // @ts-ignore
+                setState({ ...state, tab: 2 });
+              },
+              tabIndex === 2
+            ),
+            appbarButton(
+              "About",
+              () => {
+                // @ts-ignore
+                setState({ ...state, tab: 3 });
+              },
+              tabIndex === 3
+            ),
+          ]
+        ),
+        createElement(
+          "div",
+          sx({ display: "flex", gap: "16px", alignItems: "center" }),
+          [
+            appbarButton(
+              "Share scale",
+              () => {
+                console.log("share scale");
+              },
+              false,
+              true
+            ),
+            createElement(
+              "a",
+              undefined,
+              appbarButton(
+                "Microtonal Structure Theory",
+                () => {},
+                false,
+                true
+              ),
+              {
+                target: "_blank",
+                href: "https://www.facebook.com/groups/microtonalstructuremusictheory",
+              }
+            ),
+            createElement("div", undefined, "Scale Fiddle"),
+          ]
+        ),
       ]
     )
   );
@@ -471,14 +514,37 @@ const synthTab = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
 ) => {
-  return ["Synth"];
+  return [
+    createElement("div", undefined, [
+      createElement("h1", undefined, "Synth"),
+      createElement("p", undefined, "Volume"),
+      createElement("p", undefined, "Panic button"),
+      createElement("p", undefined, "Organ"),
+      createElement("p", undefined, "Waveform type - preset or custom"),
+      createElement("p", undefined, "Custom waveform coefficients"),
+      createElement("p", undefined, "Preset custom waveforms"),
+      createElement("p", undefined, "Envelope type - ADSR or custom"),
+      createElement("p", undefined, "Envelope A attack - volume, curve"),
+      createElement("p", undefined, "Envelope D decay - volume, curve"),
+      createElement("p", undefined, "Envelope S sustain - volume, curve"),
+      createElement("p", undefined, "Envelope R release - volume, curve"),
+      createElement("p", undefined, "Envelope custom phases - volume, curve"),
+      createElement("p", undefined, "Preset envelopes"),
+    ]),
+  ];
 };
 
 const optionsTab = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
 ) => {
-  return ["Options"];
+  return [
+    createElement("div", undefined, [
+      createElement("h1", undefined, "Options"),
+      createElement("p", undefined, "Precision - decimal digits"),
+      createElement("p", undefined, "? Kill time"),
+    ]),
+  ];
 };
 
 const aboutTab = (
