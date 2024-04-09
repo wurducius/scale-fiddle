@@ -97,6 +97,54 @@ const updateScale = (newScale: string) => ({
   scaleLength: getScaleLength(newScale),
 });
 
+const changeScaleMenu = (
+  state: FiddleState,
+  setState: undefined | ((nextState: FiddleState) => void)
+) => {
+  return [
+    createElement(
+      "button",
+      [sx({}, "hover")],
+      "New scale",
+      undefined,
+      undefined
+    ),
+    createElement(
+      "div",
+      sx({ display: "none" }),
+      createElement(
+        "div",
+        sx({
+          display: "flex",
+          flexDirection: "column",
+          fontSize: "16px",
+        }),
+        [
+          createElement(
+            "button",
+            undefined,
+            "Equal temperament (EDO)",
+            undefined,
+            {
+              // @ts-ignore
+              onclick: () => {
+                const content = document.getElementById("modal-edo");
+                if (content) {
+                  content.setAttribute("style", "display: block;");
+                }
+              },
+            }
+          ),
+          createElement("button", undefined, "Moment of symmetry (MOS)"),
+        ]
+      ),
+      {
+        id: "dropdown-new-scale-content",
+      }
+    ),
+  ];
+};
+
 const inputMenu = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
@@ -108,48 +156,7 @@ const inputMenu = (
       createElement(
         "div",
         undefined,
-        [
-          createElement(
-            "button",
-            [sx({}, "hover")],
-            "New scale",
-            undefined,
-            undefined
-          ),
-          createElement(
-            "div",
-            sx({ display: "none" }),
-            createElement(
-              "div",
-              sx({
-                display: "flex",
-                flexDirection: "column",
-                fontSize: "16px",
-              }),
-              [
-                createElement(
-                  "button",
-                  undefined,
-                  "Equal temperament (EDO)",
-                  undefined,
-                  {
-                    // @ts-ignore
-                    onclick: () => {
-                      const content = document.getElementById("modal-edo");
-                      if (content) {
-                        content.setAttribute("style", "display: block;");
-                      }
-                    },
-                  }
-                ),
-                createElement("button", undefined, "Moment of symmetry (MOS)"),
-              ]
-            ),
-            {
-              id: "dropdown-new-scale-content",
-            }
-          ),
-        ],
+        createElement("div", undefined, changeScaleMenu(state, setState)),
         undefined,
         {
           // @ts-ignore
@@ -172,7 +179,7 @@ const inputMenu = (
           },
         }
       ),
-      scaleInput(state, setState),
+      scaleLibrary(state, setState),
       createElement("div", undefined, [
         createElement("p", undefined, "Scale library - multiple scales"),
         createElement("p", undefined, "Modify scale"),
@@ -182,26 +189,32 @@ const inputMenu = (
     ])
   );
 
-const scaleInput = (
+const scaleLibrary = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
-) =>
-  createElement(
-    "textarea",
-    sx({ height: "200px" }), // @ts-ignore
-    state.scaleInput, // @ts-ignore
-    {},
-    {
-      // @ts-ignore
-      onchange: (e) => {
+) => {
+  return createElement("div", undefined, [
+    createElement("p", undefined, "Select scale"),
+    createElement("p", undefined, "Scale name"),
+    createElement(
+      "textarea",
+      sx({ height: "200px", resize: "none" }), // @ts-ignore
+      state.scaleInput, // @ts-ignore
+      {},
+      {
         // @ts-ignore
-        setState({
-          ...state,
-          ...updateScale(e.target.value),
-        });
-      },
-    }
-  );
+        onchange: (e) => {
+          // @ts-ignore
+          setState({
+            ...state,
+            ...updateScale(e.target.value),
+          });
+        },
+      }
+    ),
+    createElement("p", undefined, "New scale"),
+  ]);
+};
 
 sy({ border: "2px solid pink", backgroundColor: "darkmagenta" }, "key-active");
 
