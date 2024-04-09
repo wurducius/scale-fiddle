@@ -1,4 +1,3 @@
-import { StateSetter } from "../../../../../../eofol/packages/eofol-types";
 import "../../styles/base.css";
 import "./index.css";
 
@@ -9,6 +8,7 @@ import {
   registerServiceWorker,
   defineBuiltinElement,
   sx,
+  sy,
 } from "@eofol/eofol";
 
 const svgElement: HTMLImageElement | null = <HTMLImageElement>(
@@ -195,15 +195,6 @@ const scaleToFreq = (scaleInput: string) => {
       intervalMap[mod(raw.length + i - 1, raw.length)];
   }
 
-  /*
-200.
-400.
-600.
-800.
-1000.
-1200.
-*/
-
   for (let i = 1; i < downKeys + 2; i++) {
     freq[i] =
       baseFreq *
@@ -220,6 +211,9 @@ const handleKeyDown = (event: any, freq: any, key: string, index: number) => {
   if (event.key === key && !keysDown[index]) {
     // @ts-ignore
     playTone(freq[index]);
+    document
+      .getElementById(`key-${freq[index]}`)
+      ?.setAttribute("class", "key-inactive key-active " + keyActiveHoverStyle);
     keysDown[index] = true;
   }
 };
@@ -228,6 +222,9 @@ const handleKeyUp = (event: any, freq: any, key: string, index: number) => {
   if (event.key === key && keysDown[index]) {
     // @ts-ignore
     releaseNote(freq[index]);
+    document
+      .getElementById(`key-${freq[index]}`)
+      ?.setAttribute("class", "key-inactive " + keyActiveHoverStyle);
     keysDown[index] = false;
   }
 };
@@ -334,6 +331,13 @@ const scaleInput = (
     }
   );
 
+sy({ border: "2px solid pink", backgroundColor: "darkmagenta" }, "key-active");
+
+const keyActiveHoverStyle = sx(
+  { border: "2px solid pink", backgroundColor: "darkmagenta" },
+  "hover"
+);
+
 const keys = (state: FiddleState) =>
   createElement(
     "div",
@@ -343,31 +347,31 @@ const keys = (state: FiddleState) =>
       createElement(
         "div",
         [
-          sx({
-            height: "100px",
-            width: "64px",
-            fontSize: "16px",
-            border: "2px solid fuchsia",
-            backgroundColor: "black",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            cursor: "pointer",
-            userSelect: "none",
-            touchAction: "none",
-            // @ts-ignore
-            flex: `1 0 ${
+          sy(
+            {
+              height: "100px",
+              width: "64px",
+              fontSize: "16px",
+              border: "2px solid fuchsia",
+              backgroundColor: "black",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              cursor: "pointer",
+              userSelect: "none",
+              touchAction: "none",
               // @ts-ignore
-              (100 / state.scaleLength) * 0.9
-            }%`,
-          }),
-          sx(
-            { border: "2px solid pink", backgroundColor: "darkmagenta" },
-            "hover"
+              flex: `1 0 ${
+                // @ts-ignore
+                (100 / state.scaleLength) * 0.9
+              }%`,
+            },
+            "key-inactive"
           ),
+          keyActiveHoverStyle,
         ],
         val.toString(),
-        {},
+        { id: `key-${val}` },
         {
           // @ts-ignore
           onmousedown: () => {
