@@ -460,6 +460,48 @@ const appbar = (
   );
 };
 
+const scaleTab = (
+  state: FiddleState,
+  setState: undefined | ((nextState: FiddleState) => void)
+) => {
+  return [inputMenu(state, setState), keys(state), formModal(state, setState)];
+};
+
+const synthTab = (
+  state: FiddleState,
+  setState: undefined | ((nextState: FiddleState) => void)
+) => {
+  return ["Synth"];
+};
+
+const optionsTab = (
+  state: FiddleState,
+  setState: undefined | ((nextState: FiddleState) => void)
+) => {
+  return ["Options"];
+};
+
+const aboutTab = (
+  state: FiddleState,
+  setState: undefined | ((nextState: FiddleState) => void)
+) => {
+  return [
+    createElement("div", sx({ marginTop: "100px" }), [
+      createElement("h1", undefined, "Scale Fiddle"),
+      createElement("h2", undefined, "Version 0.3"),
+      createElement(
+        "h2",
+        undefined,
+        "Created by Microtonal Structure Theory team"
+      ),
+      createElement("h2", undefined, "Jakub Eliáš"),
+      createElement("h2", undefined, "Janne Karimäki"),
+      createElement("h2", undefined, "Imanuel Habekotte"),
+      createElement("h2", undefined, "Developed using Eofol"),
+    ]),
+  ];
+};
+
 defineBuiltinElement<FiddleState>({
   tagName: "fiddle-keyboard",
   initialState: {
@@ -474,14 +516,17 @@ defineBuiltinElement<FiddleState>({
   render: (state, setState) => {
     // @ts-ignore
     const freq = state.freq;
+    // @ts-ignore
+    const tab = state.tab;
 
     mapKeyboardKeys(freq);
 
     return createElement("div", undefined, [
       appbar(state, setState),
-      inputMenu(state, setState),
-      keys(state),
-      formModal(state, setState),
+      ...(tab === 0 ? scaleTab(state, setState) : []),
+      ...(tab === 1 ? synthTab(state, setState) : []),
+      ...(tab === 2 ? optionsTab(state, setState) : []),
+      ...(tab === 3 ? aboutTab(state, setState) : []),
     ]);
   },
 });
