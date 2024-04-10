@@ -10,6 +10,7 @@ import {
   flashKeyDown,
   flashKeyUp,
   keyActiveHoverStyle,
+  panic,
   playTone as playToneImpl,
   releaseNote as releaseNoteImpl,
   setTotalGain,
@@ -973,6 +974,7 @@ const appbar = (
               "Panic",
               () => {
                 console.log("panic");
+                panic();
               },
               false,
               true
@@ -981,10 +983,22 @@ const appbar = (
               "Share scale",
               () => {
                 console.log("share scale");
+                // @ts-ignore
+                navigator.clipboard.writeText(state.scaleInput);
+                const snackbarElement = document.getElementById(
+                  "snackbar-share-scale"
+                );
+                snackbarElement?.setAttribute("class", "show");
+                setTimeout(() => {
+                  snackbarElement?.setAttribute("class", "");
+                }, 3000);
               },
               false,
               true
             ),
+            createElement("div", "snackbar", "Scale copied to clipboard.", {
+              id: "snackbar-share-scale",
+            }),
             createElement(
               "a",
               undefined,

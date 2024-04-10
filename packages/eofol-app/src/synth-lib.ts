@@ -32,7 +32,7 @@ const TOTAL_GAIN_DEFAULT = 1;
 const WAVEFORM_ID_DEFAULT = "distorted-organ";
 
 const audioContext = new AudioContext();
-const oscList: Record<
+let oscList: Record<
   string,
   { osc: OscillatorNode; gain: GainNode } | undefined
 > = {};
@@ -57,6 +57,29 @@ setWaveform(WAVEFORM_ID_DEFAULT);
 
 export const setTotalGain = (totalGain: number) => {
   mainGainNode.gain.value = totalGain;
+};
+
+export const panic = () => {
+  Object.keys(oscList).forEach((oscName) => {
+    const oscItem = oscList[oscName];
+
+    if (oscItem) {
+      if (oscItem.gain) {
+        oscItem.gain.gain.cancelScheduledValues(audioContext.currentTime);
+        oscItem.gain.gain.linearRampToValueAtTime(
+          0,
+          audioContext.currentTime + 0.01
+        );
+      }
+      if (oscItem.osc) {
+        oscItem.osc.stop(audioContext.currentTime + 0.01);
+      }
+    }
+  });
+
+  setTimeout(() => {
+    oscList = {};
+  }, 11);
 };
 
 export const playTone = (state: FiddleState) => (freq: string) => {
