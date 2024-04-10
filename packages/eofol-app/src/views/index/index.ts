@@ -698,160 +698,172 @@ const keys = (state: FiddleState) => {
   );
 };
 
+const modal =
+  (
+    state: FiddleState,
+    setState: undefined | ((nextState: FiddleState) => void)
+  ) =>
+  (id: string, title: string, formName: string) => {
+    return createElement(
+      "div",
+      sx({
+        display: "none",
+        position: "fixed",
+        zIndex: "1",
+        paddingTop: "100px",
+        left: 0,
+        top: 0,
+        width: "100%",
+        height: "100%",
+        overflow: "auto",
+        backgroundColor: "rgba(0,0,0,0.4)",
+      }),
+      [
+        createElement(
+          "div",
+          sx({
+            position: "relative",
+            padding: "16px 16px 64px 16px",
+            width: "80%",
+            margin: "auto",
+            border: "2px solid grey",
+            backgroundColor: "#dddddd",
+          }),
+          [
+            createElement(
+              "div",
+              sx({ display: "flex", justifyContent: "flex-end" }),
+              createElement(
+                "button",
+                undefined,
+                "X",
+                {},
+                {
+                  // @ts-ignore
+                  onclick: () => {
+                    // @ts-ignore
+                    setState({
+                      ...state,
+                      form: {
+                        // @ts-ignore
+                        ...state.form,
+                        // @ts-ignore
+                        [formName]: { ...state.form[formName], open: false },
+                      },
+                    });
+                  },
+                }
+              )
+            ),
+            createElement("div", sx({ fontSize: "32px" }), title),
+            createElement("div", undefined, [
+              createElement("div", sx({ fontSize: "24px" }), "N"),
+              createElement(
+                "input",
+                undefined,
+                undefined,
+                {
+                  // @ts-ignore
+                  value: state.form[formName].N,
+                },
+                {
+                  // @ts-ignore
+                  oninput: (event) => {
+                    // @ts-ignore
+                    setState({
+                      ...state,
+                      form: {
+                        // @ts-ignore
+                        ...state.form,
+                        // @ts-ignore
+                        [formName]: {
+                          // @ts-ignore
+                          ...state.form[formName],
+                          N: event.target.value,
+                        },
+                      },
+                    });
+                  },
+                }
+              ),
+            ]),
+            createElement("button", undefined, "Let's go", undefined, {
+              // @ts-ignore
+              onclick: () => {
+                const result =
+                  Array.from({
+                    // @ts-ignore
+                    length: state.form[formName].N,
+                  }).reduce((acc, next, i) => {
+                    // @ts-ignore
+                    const n = Number(state.form[formName].N);
+                    const val = ((i + 1) * 1200) / n;
+                    const valAsStr = val.toString();
+                    const includesDot = valAsStr.includes(".");
+                    const displayVal = includesDot
+                      ? val.toFixed(decimalDigitsCent)
+                      : valAsStr + ".";
+
+                    return (
+                      acc +
+                      displayVal +
+                      // @ts-ignore
+                      (i + 1 === n ? "" : "\n")
+                    );
+                  }, "") + "";
+                const nextState = {
+                  ...state,
+                  scaleInput: result,
+                } as FiddleStateImpl;
+                // @ts-ignore
+                setState({
+                  ...state,
+                  ...updateScale(nextState),
+                  form: {
+                    // @ts-ignore
+                    ...state.form, // @ts-ignore
+                    [formName]: { ...state.form[formName], open: false },
+                  },
+                });
+              },
+            }),
+          ],
+          {},
+          {
+            // @ts-ignore
+            onclick: (e) => {
+              e.stopPropagation();
+            },
+          }
+        ),
+      ],
+      { id },
+      {
+        // @ts-ignore
+        onclick: () => {
+          // @ts-ignore
+          setState({
+            ...state,
+            form: {
+              // @ts-ignore
+              ...state.form,
+              // @ts-ignore
+              [formName]: { ...state.form[formName], open: false },
+            },
+          });
+        },
+      }
+    );
+  };
+
 const formModal = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
-) =>
-  createElement(
-    "div",
-    sx({
-      display: "none",
-      position: "fixed",
-      zIndex: "1",
-      paddingTop: "100px",
-      left: 0,
-      top: 0,
-      width: "100%",
-      height: "100%",
-      overflow: "auto",
-      backgroundColor: "rgba(0,0,0,0.4)",
-    }),
-    [
-      createElement(
-        "div",
-        sx({
-          position: "relative",
-          padding: "16px 16px 64px 16px",
-          width: "80%",
-          margin: "auto",
-          border: "2px solid grey",
-          backgroundColor: "#dddddd",
-        }),
-        [
-          createElement(
-            "div",
-            sx({ display: "flex", justifyContent: "flex-end" }),
-            createElement(
-              "button",
-              undefined,
-              "X",
-              {},
-              {
-                // @ts-ignore
-                onclick: () => {
-                  // @ts-ignore
-                  setState({
-                    ...state,
-                    form: {
-                      // @ts-ignore
-                      ...state.form,
-                      // @ts-ignore
-                      edo: { ...state.form.edo, open: false },
-                    },
-                  });
-                },
-              }
-            )
-          ),
-          createElement(
-            "div",
-            sx({ fontSize: "32px" }),
-            "Equal division of octave (EDO)"
-          ),
-          createElement("div", undefined, [
-            createElement("div", sx({ fontSize: "24px" }), "N"),
-            createElement(
-              "input",
-              undefined,
-              undefined,
-              {
-                // @ts-ignore
-                value: state.form.edo.N,
-              },
-              {
-                // @ts-ignore
-                oninput: (event) => {
-                  // @ts-ignore
-                  setState({
-                    ...state,
-                    form: {
-                      // @ts-ignore
-                      ...state.form,
-                      // @ts-ignore
-                      edo: { ...state.form.edo, N: event.target.value },
-                    },
-                  });
-                },
-              }
-            ),
-          ]),
-          createElement("button", undefined, "Let's go", undefined, {
-            // @ts-ignore
-            onclick: () => {
-              const result =
-                Array.from({
-                  // @ts-ignore
-                  length: state.form.edo.N,
-                }).reduce((acc, next, i) => {
-                  // @ts-ignore
-                  const n = Number(state.form.edo.N);
-                  const val = ((i + 1) * 1200) / n;
-                  const valAsStr = val.toString();
-                  const includesDot = valAsStr.includes(".");
-                  const displayVal = includesDot
-                    ? val.toFixed(decimalDigitsCent)
-                    : valAsStr + ".";
+) => {
+  const m = modal(state, setState);
 
-                  return (
-                    acc +
-                    displayVal +
-                    // @ts-ignore
-                    (i + 1 === n ? "" : "\n")
-                  );
-                }, "") + "";
-              const nextState = {
-                ...state,
-                scaleInput: result,
-              } as FiddleStateImpl;
-              // @ts-ignore
-              setState({
-                ...state,
-                ...updateScale(nextState),
-                form: {
-                  // @ts-ignore
-                  ...state.form, // @ts-ignore
-                  edo: { ...state.form.edo, open: false },
-                },
-              });
-            },
-          }),
-        ],
-        {},
-        {
-          // @ts-ignore
-          onclick: (e) => {
-            e.stopPropagation();
-          },
-        }
-      ),
-    ],
-    { id: "modal-edo" },
-    {
-      // @ts-ignore
-      onclick: () => {
-        // @ts-ignore
-        setState({
-          ...state,
-          form: {
-            // @ts-ignore
-            ...state.form,
-            // @ts-ignore
-            edo: { ...state.form.edo, open: false },
-          },
-        });
-      },
-    }
-  );
+  return [m("modal-edo", "Equal division of octave (EDO)", "edo")];
+};
 
 const appbarButton = (
   label: string,
@@ -984,7 +996,11 @@ const scaleTab = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
 ) => {
-  return [inputMenu(state, setState), keys(state), formModal(state, setState)];
+  return [
+    inputMenu(state, setState),
+    keys(state),
+    ...formModal(state, setState),
+  ];
 };
 
 const sliderInput = (
