@@ -17,6 +17,82 @@ export type FiddleStateImpl = {
       open: boolean;
       N: number;
     };
+    mos: {
+      open: boolean;
+      N: number;
+    };
+    linear: {
+      open: boolean;
+      N: number;
+    };
+    meantone: {
+      open: boolean;
+      N: number;
+    };
+    harm: {
+      open: boolean;
+      N: number;
+    };
+    just: {
+      open: boolean;
+      N: number;
+    };
+    ratiochord: {
+      open: boolean;
+      N: number;
+    };
+    limit: {
+      open: boolean;
+      N: number;
+    };
+    higher: {
+      open: boolean;
+      N: number;
+    };
+    eulerfokker: {
+      open: boolean;
+      N: number;
+    };
+    preset: {
+      open: boolean;
+      N: number;
+    };
+    transpose: {
+      open: boolean;
+      N: number;
+    };
+    mode: {
+      open: boolean;
+      N: number;
+    };
+    subset: {
+      open: boolean;
+      N: number;
+    };
+    multiply: {
+      open: boolean;
+      N: number;
+    };
+    reverse: {
+      open: boolean;
+      N: number;
+    };
+    sort: {
+      open: boolean;
+      N: number;
+    };
+    stretch: {
+      open: boolean;
+      N: number;
+    };
+    approxequal: {
+      open: boolean;
+      N: number;
+    };
+    temper: {
+      open: boolean;
+      N: number;
+    };
   };
   recompute: boolean | undefined;
   synth: {

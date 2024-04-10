@@ -169,10 +169,35 @@ const updateScale = (state: FiddleStateImpl) => ({
   overview: scaleToOverview(state),
 });
 
+const menuButtonOpensModal =
+  (
+    state: FiddleState,
+    setState: undefined | ((nextState: FiddleState) => void)
+  ) =>
+  (title: string, formName: string) => {
+    return createElement("button", undefined, title, undefined, {
+      // @ts-ignore
+      onclick: () => {
+        // @ts-ignore
+        setState({
+          ...state,
+          form: {
+            // @ts-ignore
+            ...state.form,
+            // @ts-ignore
+            [formName]: { ...state.form[formName], open: true },
+          },
+        });
+      },
+    });
+  };
+
 const changeScaleMenu = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
 ) => {
+  const dropdownItem = menuButtonOpensModal(state, setState);
+
   return [
     createElement("div", sx({ display: "flex" }), [
       createElement("button", sx({ flex: 1 }), "New scale", undefined, {
@@ -317,28 +342,17 @@ const changeScaleMenu = (
           fontSize: "16px",
         }),
         [
-          createElement(
-            "button",
-            undefined,
-            "Equal temperament (EDO)",
-            undefined,
-            {
-              // @ts-ignore
-              onclick: () => {
-                // @ts-ignore
-                setState({
-                  ...state,
-                  form: {
-                    // @ts-ignore
-                    ...state.form,
-                    // @ts-ignore
-                    edo: { ...state.form.edo, open: true },
-                  },
-                });
-              },
-            }
-          ),
-          createElement("button", undefined, "Moment of symmetry (MOS)"),
+          dropdownItem("Equal temperament (EDO)", "edo"),
+          dropdownItem("Moment of symmetry (MOS)", "mos"),
+          dropdownItem("Rank-2 temperament (1-generated)", "linear"),
+          dropdownItem("Meantone temperament", "meantone"),
+          dropdownItem("Harmonic series", "harm"),
+          dropdownItem("Just temperament", "just"),
+          dropdownItem("Ratio chord", "ratiochord"),
+          dropdownItem("Tempered limit", "limit"),
+          dropdownItem("Higher rank temperament", "higher"),
+          dropdownItem("Euler-Fokker genus form", "eulerfokker"),
+          dropdownItem("Preset scale", "preset"),
         ]
       ),
       {
@@ -379,16 +393,15 @@ const changeScaleMenu = (
           fontSize: "16px",
         }),
         [
-          createElement("button", undefined, "Transpose", undefined, {
-            // @ts-ignore
-            onclick: () => {
-              //  const content = document.getElementById("modal-edo");
-              //  if (content) {
-              //    content.setAttribute("style", "display: block;");
-              //   }
-            },
-          }),
-          createElement("button", undefined, "Stretch"),
+          dropdownItem("Transpose", "transpose"),
+          dropdownItem("Mode", "mode"),
+          dropdownItem("Subset", "subset"),
+          dropdownItem("Multiply", "multiply"),
+          dropdownItem("Reverse", "reverse"),
+          dropdownItem("Sort", "sort"),
+          dropdownItem("Stretch", "stretch"),
+          dropdownItem("Approximate by equal", "approxequal"),
+          dropdownItem("Temper", "temper"),
         ]
       ),
       {
@@ -1443,6 +1456,82 @@ const initialState = {
   },
   form: {
     edo: {
+      open: false,
+      N: 12,
+    },
+    mos: {
+      open: false,
+      N: 12,
+    },
+    linear: {
+      open: false,
+      N: 12,
+    },
+    meantone: {
+      open: false,
+      N: 12,
+    },
+    harm: {
+      open: false,
+      N: 12,
+    },
+    just: {
+      open: false,
+      N: 12,
+    },
+    ratiochord: {
+      open: false,
+      N: 12,
+    },
+    limit: {
+      open: false,
+      N: 12,
+    },
+    higher: {
+      open: false,
+      N: 12,
+    },
+    eulerfokker: {
+      open: false,
+      N: 12,
+    },
+    preset: {
+      open: false,
+      N: 12,
+    },
+    transpose: {
+      open: false,
+      N: 12,
+    },
+    mode: {
+      open: false,
+      N: 12,
+    },
+    subset: {
+      open: false,
+      N: 12,
+    },
+    multiply: {
+      open: false,
+      N: 12,
+    },
+    reverse: {
+      open: false,
+      N: 12,
+    },
+    sort: {
+      open: false,
+      N: 12,
+    },
+    stretch: {
+      open: false,
+      N: 12,
+    },
+    approxequal: {
+      open: false,
+      N: 12,
+    },
+    temper: {
       open: false,
       N: 12,
     },
