@@ -1475,6 +1475,7 @@ const aboutTab = (
 };
 
 const initialState = {
+  init: true,
   scaleInput: defaultScale,
   scales: [{ name: "Initial scale", scaleInput: defaultScale }],
   scaleIndex: 0,
@@ -1598,6 +1599,25 @@ defineBuiltinElement<FiddleStateImpl>({
   effect: (state, setState) => {
     // @ts-ignore
     const stateImpl = state as FiddleStateImpl;
+
+    console.log(stateImpl.init);
+
+    if (stateImpl.init) {
+      const data = localStorage.getItem("scale-fiddle-data");
+      if (data) {
+        const json = JSON.parse(data);
+        console.log("loaded state", json);
+        // @ts-ignore
+        setState({ ...json, init: false });
+      } else {
+        console.log("no data to load");
+        // @ts-ignore
+        setState({ ...state, init: false });
+      }
+    } else {
+      localStorage.setItem("scale-fiddle-data", JSON.stringify(state));
+      console.log("saved state");
+    }
 
     if (stateImpl.recompute) {
       // @ts-ignore
