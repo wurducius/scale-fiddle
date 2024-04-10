@@ -1,8 +1,3 @@
-export const upKeys = 24;
-export const downKeys = 12;
-
-// -----------------
-
 export const startGain = 0.001;
 export const startTime = 0.001;
 export const endGain = 0.001;

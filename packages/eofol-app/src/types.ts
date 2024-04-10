@@ -9,6 +9,8 @@ export type FiddleStateImpl = {
   tuning: {
     baseFreq: number;
     period: number;
+    keysUp: number;
+    keysDown: number;
   };
   form: {
     edo: {

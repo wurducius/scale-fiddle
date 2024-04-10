@@ -4,8 +4,6 @@ import {
   decimalDigitsFreq,
   decimalDigitsFreqOnKeys,
   decimalDigitsRatio,
-  downKeys,
-  upKeys,
 } from "../../parameters";
 import "../../styles/base.css";
 import {
@@ -68,6 +66,8 @@ const scaleToFreq = (state: FiddleStateImpl) => {
   const scaleInput = state.scaleInput;
   const baseFreq = state.tuning.baseFreq;
   const period = state.tuning.period;
+  const upKeys = state.tuning.keysUp;
+  const downKeys = state.tuning.keysDown;
 
   const raw = scaleInput.split("\n").filter(Boolean);
   const intervalMap = raw.map(parseScala(state));
@@ -86,11 +86,13 @@ const scaleToFreq = (state: FiddleStateImpl) => {
       intervalMap[mod(raw.length + i - 1, raw.length)];
   }
 
-  for (let i = 1; i < downKeys + 2; i++) {
-    freq[i] =
-      baseFreq *
-      Math.pow(period, -(1 + Math.floor((i - 1) / raw.length))) *
-      intervalMap[mod(raw.length - i, raw.length)];
+  if (downKeys > 0) {
+    for (let i = 1; i < downKeys + 2; i++) {
+      freq[i] =
+        baseFreq *
+        Math.pow(period, -(1 + Math.floor((i - 1) / raw.length))) *
+        intervalMap[mod(raw.length - i, raw.length)];
+    }
   }
 
   return freq
@@ -103,6 +105,8 @@ const scaleToOverview = (state: FiddleStateImpl) => {
   const scaleInput = state.scaleInput;
   const baseFreq = state.tuning.baseFreq;
   const period = state.tuning.period;
+  const upKeys = state.tuning.keysUp;
+  const downKeys = state.tuning.keysDown;
 
   const raw = scaleInput.split("\n").filter(Boolean);
   const intervalMap = raw.map(parseScala(state));
@@ -128,18 +132,20 @@ const scaleToOverview = (state: FiddleStateImpl) => {
     };
   }
 
-  for (let i = 1; i < downKeys + 2; i++) {
-    const f =
-      baseFreq *
-      Math.pow(period, -(1 + Math.floor((i - 1) / raw.length))) *
-      intervalMap[mod(raw.length - i, raw.length)];
-    const ratio = intervalMap[mod(raw.length - i, raw.length)];
-    freq[i] = {
-      freq: f,
-      ratio: ratio === period ? 1 : ratio,
-      name: raw[mod(raw.length - i, raw.length)],
-      cent: Math.log2(f / baseFreq) * 1200,
-    };
+  if (downKeys > 0) {
+    for (let i = 1; i < downKeys + 2; i++) {
+      const f =
+        baseFreq *
+        Math.pow(period, -(1 + Math.floor((i - 1) / raw.length))) *
+        intervalMap[mod(raw.length - i, raw.length)];
+      const ratio = intervalMap[mod(raw.length - i, raw.length)];
+      freq[i] = {
+        freq: f,
+        ratio: ratio === period ? 1 : ratio,
+        name: raw[mod(raw.length - i, raw.length)],
+        cent: Math.log2(f / baseFreq) * 1200,
+      };
+    }
   }
 
   return freq
@@ -484,7 +490,48 @@ const scaleTuning = (
         },
       }
     ),
-    createElement("p", undefined, "upkeys + downkeys"),
+    createElement("p", undefined, "Number of keys up"),
+    createElement(
+      "input",
+      undefined,
+      undefined,
+      { value: tuning.keysUp },
+      {
+        // @ts-ignore
+        onchange: (e) => {
+          const val = Number(e.target.value);
+          if (Number.isFinite(val) && val >= 0) {
+            // @ts-ignore
+            setState({
+              ...state,
+              tuning: { ...tuning, keysUp: val },
+              recompute: true,
+            });
+          }
+        },
+      }
+    ),
+    createElement("p", undefined, "Number of keys down"),
+    createElement(
+      "input",
+      undefined,
+      undefined,
+      { value: tuning.keysDown },
+      {
+        // @ts-ignore
+        onchange: (e) => {
+          const val = Number(e.target.value);
+          if (Number.isFinite(val) && val >= 0) {
+            // @ts-ignore
+            setState({
+              ...state,
+              tuning: { ...tuning, keysDown: val },
+              recompute: true,
+            });
+          }
+        },
+      }
+    ),
   ]);
 };
 
@@ -808,6 +855,14 @@ const appbar = (
           "div",
           sx({ display: "flex", gap: "16px", alignItems: "center" }),
           [
+            appbarButton(
+              "Panic",
+              () => {
+                console.log("panic");
+              },
+              false,
+              true
+            ),
             appbarButton(
               "Share scale",
               () => {
@@ -1264,16 +1319,17 @@ const optionsTab = (
   return [
     createElement("div", undefined, [
       createElement("h1", undefined, "Options"),
+      createElement("p", undefined, "UNDER CONSTRUCTION"),
       createElement(
         "p",
         undefined,
-        "Precision - decimal digits - freq, cent, ratio + freq on keys"
+        "TODO: Precision - decimal digits - freq, cent, ratio + freq on keys"
       ),
-      createElement("p", undefined, "Start gain"),
-      createElement("p", undefined, "Start time"),
-      createElement("p", undefined, "End gain"),
-      createElement("p", undefined, "End time"),
-      createElement("p", undefined, "Kill time"),
+      createElement("p", undefined, "TODO: Start gain"),
+      createElement("p", undefined, "TODO: Start time"),
+      createElement("p", undefined, "TODO: End gain"),
+      createElement("p", undefined, "TODO: End time"),
+      createElement("p", undefined, "TODO: Kill time"),
     ]),
   ];
 };
@@ -1308,6 +1364,8 @@ const initialState = {
   tuning: {
     baseFreq: 220,
     period: 2,
+    keysUp: 24,
+    keysDown: 12,
   },
   form: {
     edo: {
