@@ -94,6 +94,58 @@ const scaleToFreq = (state: FiddleStateImpl) => {
     .filter(Boolean);
 };
 
+const scaleToOverview = (state: FiddleStateImpl) => {
+  const scaleInput = state.scaleInput;
+  const baseFreq = state.tuning.baseFreq;
+  const period = state.tuning.period;
+
+  const raw = scaleInput.split("\n").filter(Boolean);
+  const intervalMap = raw.map(parseScala(state));
+
+  const freq = [];
+  freq[downKeys] = { freq: baseFreq, ratio: 1, name: "base", cent: 0 };
+
+  for (let i = 0; i < upKeys; i++) {
+    const f =
+      baseFreq *
+      Math.pow(
+        period,
+        Math.floor(i / raw.length) -
+          (mod(raw.length + i - 1, raw.length) === raw.length - 1 ? 1 : 0)
+      ) *
+      intervalMap[mod(raw.length + i - 1, raw.length)];
+    freq[downKeys + i + 1] = {
+      freq: f,
+      ratio: intervalMap[mod(raw.length + i - 1, raw.length)],
+      name: raw[mod(raw.length + i - 1, raw.length)],
+      cent: Math.log2(f / baseFreq) * 1200,
+    };
+  }
+
+  for (let i = 1; i < downKeys + 2; i++) {
+    const f =
+      baseFreq *
+      Math.pow(period, -(1 + Math.floor((i - 1) / raw.length))) *
+      intervalMap[mod(raw.length - i, raw.length)];
+    freq[i] = {
+      freq: f,
+      ratio: intervalMap[mod(raw.length - i, raw.length)],
+      name: raw[mod(raw.length - i, raw.length)],
+      cent: Math.log2(f / baseFreq) * 1200,
+    };
+  }
+
+  return freq
+    .sort((a, b) => Number(a.freq) - Number(b.freq))
+    .map((tone) => ({
+      ...tone,
+      freq: Number(tone.freq).toFixed(decimalDigitsFreq),
+      cent: Number(tone.cent).toFixed(decimalDigitsCent),
+      ratio: Number(tone.ratio).toFixed(2),
+    }))
+    .filter(Boolean);
+};
+
 const updateScale = (state: FiddleStateImpl) => ({
   scaleInput: state.scaleInput,
   freq: scaleToFreq(state),
@@ -101,6 +153,7 @@ const updateScale = (state: FiddleStateImpl) => ({
   scales: state.scales.map((s, index) =>
     state.scaleIndex === index ? { ...s, scaleInput: state.scaleInput } : s
   ),
+  overview: scaleToOverview(state),
 });
 
 const changeScaleMenu = (
@@ -336,38 +389,42 @@ const scaleOverview = (
   setState: undefined | ((nextState: FiddleState) => void)
 ) => {
   // @ts-ignore
-  const freq = state.freq;
+  const overview = state.overview;
 
-  return createElement("div", sx({ overflow: "auto", height: "100%" }), [
-    createElement(
-      "div",
-      sx({
-        display: "flex",
-        justifyContent: "space-between",
-        borderBottom: "2px solid fuchsia",
-        borderLeft: "2px solid fuchsia",
-        borderRight: "2px solid fuchsia",
-      }),
-      [
-        createElement("div", undefined, "Index"),
-        createElement("div", undefined, `Frequency`),
-        createElement("div", undefined, "Cents"),
-        createElement("div", undefined, "Ratio"),
-      ]
-    ),
-    ...freq.map((tone: string, index: number) =>
+  return createElement(
+    "div",
+    sx({ overflow: "auto", height: "100%", padding: "0 8px" }),
+    [
       createElement(
         "div",
-        sx({ display: "flex", justifyContent: "space-between" }),
+        sx({
+          display: "flex",
+          justifyContent: "space-between",
+          borderBottom: "2px solid fuchsia",
+        }),
         [
-          createElement("div", undefined, index.toString()),
-          createElement("div", undefined, `${tone} Hz`),
-          createElement("div", undefined, "cent"),
-          createElement("div", undefined, "ratio"),
+          createElement("div", undefined, "Index"),
+          createElement("div", undefined, `Frequency`),
+          createElement("div", undefined, "Cents"),
+          createElement("div", undefined, "Ratio"),
+          createElement("div", undefined, "Name"),
         ]
-      )
-    ),
-  ]);
+      ),
+      ...overview.map((tone: any, index: number) =>
+        createElement(
+          "div",
+          sx({ display: "flex", justifyContent: "space-between" }),
+          [
+            createElement("div", undefined, index.toString()),
+            createElement("div", undefined, `${tone.freq} Hz`),
+            createElement("div", undefined, `${tone.cent}c`),
+            createElement("div", undefined, tone.ratio),
+            createElement("div", undefined, tone.name),
+          ]
+        )
+      ),
+    ]
+  );
 };
 
 const scaleTuning = (
@@ -656,6 +713,7 @@ type FiddleStateImpl = {
   scaleLength: number;
   scales: { name: string; scaleInput: string }[];
   scaleIndex: number;
+  overview: { freq: string; name: string; cent: string; ratio: string }[];
   tab: number;
   tuning: {
     baseFreq: number;
