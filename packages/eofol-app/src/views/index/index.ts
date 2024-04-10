@@ -703,7 +703,12 @@ const modal =
     state: FiddleState,
     setState: undefined | ((nextState: FiddleState) => void)
   ) =>
-  (id: string, title: string, formName: string) => {
+  (
+    id: string,
+    title: string,
+    formName: string,
+    form: [{ title: string; type: string; innerFormName: string }]
+  ) => {
     return createElement(
       "div",
       sx({
@@ -756,37 +761,43 @@ const modal =
               )
             ),
             createElement("div", sx({ fontSize: "32px" }), title),
-            createElement("div", undefined, [
-              createElement("div", sx({ fontSize: "24px" }), "N"),
-              createElement(
-                "input",
-                undefined,
-                undefined,
-                {
-                  // @ts-ignore
-                  value: state.form[formName].N,
-                },
-                {
-                  // @ts-ignore
-                  oninput: (event) => {
-                    // @ts-ignore
-                    setState({
-                      ...state,
-                      form: {
+            createElement(
+              "div",
+              undefined,
+              form
+                .map((item) => [
+                  createElement("div", sx({ fontSize: "24px" }), item.title),
+                  createElement(
+                    "input",
+                    undefined,
+                    undefined,
+                    {
+                      // @ts-ignore
+                      value: state.form[formName][item.innerFormName],
+                    },
+                    {
+                      // @ts-ignore
+                      oninput: (event) => {
                         // @ts-ignore
-                        ...state.form,
-                        // @ts-ignore
-                        [formName]: {
-                          // @ts-ignore
-                          ...state.form[formName],
-                          N: event.target.value,
-                        },
+                        setState({
+                          ...state,
+                          form: {
+                            // @ts-ignore
+                            ...state.form,
+                            // @ts-ignore
+                            [formName]: {
+                              // @ts-ignore
+                              ...state.form[formName],
+                              [item.innerFormName]: event.target.value,
+                            },
+                          },
+                        });
                       },
-                    });
-                  },
-                }
-              ),
-            ]),
+                    }
+                  ),
+                ])
+                .flat()
+            ),
             createElement("button", undefined, "Let's go", undefined, {
               // @ts-ignore
               onclick: () => {
@@ -862,7 +873,11 @@ const formModal = (
 ) => {
   const m = modal(state, setState);
 
-  return [m("modal-edo", "Equal division of octave (EDO)", "edo")];
+  return [
+    m("modal-edo", "Equal division of octave (EDO)", "edo", [
+      { title: "N", type: "number", innerFormName: "N" },
+    ]),
+  ];
 };
 
 const appbarButton = (
