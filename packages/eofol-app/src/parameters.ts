@@ -3,8 +3,6 @@ export const startTime = 0.001;
 export const endGain = 0.001;
 export const endTime = 0.001;
 
-export const killTime = 0.01;
-
 // ------------------
 
 export const decimalDigitsFreq = 3;

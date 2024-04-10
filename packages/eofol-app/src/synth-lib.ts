@@ -1,5 +1,5 @@
 import { sx } from "@eofol/eofol/dist";
-import { startGain, startTime, endGain, endTime, killTime } from "./parameters";
+import { startGain, startTime, endGain, endTime } from "./parameters";
 import { FiddleState } from "./types";
 import { timbrePresets } from "./timbre";
 
@@ -99,18 +99,33 @@ export const playTone = (state: FiddleState) => (freq: string) => {
     // @ts-ignore
   } = state.synth;
 
-  const osc = audioContext.createOscillator();
-  const gain = audioContext.createGain();
-  osc.connect(gain);
-  gain.connect(mainGainNode);
-
   const t = audioContext.currentTime;
 
-  osc.setPeriodicWave(customWaveform);
+  const last = oscList[freq];
 
-  osc.frequency.value = Number(freq);
+  let osc;
+  let gain;
+  if (last) {
+    osc = last.osc;
+    gain = last.gain;
 
-  gain.gain.value = 0;
+    gain.gain.cancelScheduledValues(t);
+  } else {
+    osc = audioContext.createOscillator();
+    gain = audioContext.createGain();
+    osc.connect(gain);
+    gain.connect(mainGainNode);
+
+    osc.setPeriodicWave(customWaveform);
+
+    osc.frequency.value = Number(freq);
+
+    gain.gain.value = 0;
+
+    osc.start(t);
+
+    oscList[freq.toString()] = { osc, gain };
+  }
 
   gain.gain.linearRampToValueAtTime(startGain, t + startTime);
 
@@ -134,10 +149,7 @@ export const playTone = (state: FiddleState) => (freq: string) => {
     );
   }
 
-  osc.start(t);
-
   console.log("play");
-  oscList[freq.toString()] = { osc, gain };
 };
 
 export const releaseNote = (state: FiddleState) => (freq: string) => {
@@ -147,12 +159,11 @@ export const releaseNote = (state: FiddleState) => (freq: string) => {
     // @ts-ignore
   } = state.synth;
 
-  const item = oscList[freq.toString()];
-  if (item) {
-    const osc = item.osc;
-    const gain = item.gain;
+  const last = oscList[freq];
+
+  if (last) {
+    const gain = last.gain;
     const t = audioContext.currentTime;
-    console.log("release");
 
     gain.gain.cancelScheduledValues(t);
 
@@ -161,7 +172,6 @@ export const releaseNote = (state: FiddleState) => (freq: string) => {
 
     gain.gain.linearRampToValueAtTime(0, t + releaseTime + endTime);
 
-    osc.stop(t + releaseTime + endTime + killTime);
-    // oscList[freq.toString()] = undefined;
+    console.log("release");
   }
 };

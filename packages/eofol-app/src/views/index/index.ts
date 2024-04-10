@@ -1476,7 +1476,6 @@ const optionsTab = (
       createElement("p", undefined, "TODO: Start time"),
       createElement("p", undefined, "TODO: End gain"),
       createElement("p", undefined, "TODO: End time"),
-      createElement("p", undefined, "TODO: Kill time"),
     ]),
   ];
 };
@@ -1603,7 +1602,7 @@ const initialState = {
     organ: true,
     envelopeType: "adsr",
     attackGain: 1,
-    attackTime: 0.02,
+    attackTime: 0.002,
     attackCurve: "exponential",
     decayGain: 0.9,
     decayTime: 0.02,
