@@ -482,6 +482,7 @@ const scaleTuning = (
         },
       }
     ),
+    createElement("p", undefined, "upkeys + downkeys"),
   ]);
 };
 
@@ -1229,8 +1230,16 @@ const optionsTab = (
   return [
     createElement("div", undefined, [
       createElement("h1", undefined, "Options"),
-      createElement("p", undefined, "Precision - decimal digits"),
-      createElement("p", undefined, "? Kill time"),
+      createElement(
+        "p",
+        undefined,
+        "Precision - decimal digits - freq, cent, ratio + freq on keys"
+      ),
+      createElement("p", undefined, "Start gain"),
+      createElement("p", undefined, "Start time"),
+      createElement("p", undefined, "End gain"),
+      createElement("p", undefined, "End time"),
+      createElement("p", undefined, "Kill time"),
     ]),
   ];
 };
