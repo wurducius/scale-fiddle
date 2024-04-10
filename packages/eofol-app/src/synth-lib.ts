@@ -1,14 +1,7 @@
 import { sx } from "@eofol/eofol/dist";
-import {
-  customWaveformSine,
-  waveformType,
-  startGain,
-  startTime,
-  endGain,
-  endTime,
-  killTime,
-} from "./parameters";
+import { startGain, startTime, endGain, endTime, killTime } from "./parameters";
 import { FiddleState } from "./types";
+import { timbrePresets } from "./timbre";
 
 export const keyActiveHoverStyle = sx(
   { border: "2px solid pink", backgroundColor: "#914a91" },
@@ -35,6 +28,9 @@ const getCurve = (shape: string | undefined) => {
   }
 };
 
+const TOTAL_GAIN_DEFAULT = 1;
+const WAVEFORM_ID_DEFAULT = "distorted-organ";
+
 const audioContext = new AudioContext();
 const oscList: Record<
   string,
@@ -42,11 +38,22 @@ const oscList: Record<
 > = {};
 const mainGainNode = audioContext.createGain();
 mainGainNode.connect(audioContext.destination);
-mainGainNode.gain.value = 1;
+mainGainNode.gain.value = TOTAL_GAIN_DEFAULT;
 
-const sineTerms = new Float32Array(customWaveformSine);
-const cosineTerms = new Float32Array(sineTerms.length);
-const customWaveform = audioContext.createPeriodicWave(cosineTerms, sineTerms);
+let waveform;
+let sineTerms;
+let cosineTerms;
+let customWaveform: PeriodicWave;
+
+export const setWaveform = (waveformId: string) => {
+  waveform =
+    timbrePresets.find((item) => item.id === waveformId) ?? timbrePresets[0];
+  sineTerms = new Float32Array(waveform.value);
+  cosineTerms = new Float32Array(sineTerms.length);
+  customWaveform = audioContext.createPeriodicWave(cosineTerms, sineTerms);
+};
+
+setWaveform(WAVEFORM_ID_DEFAULT);
 
 export const setTotalGain = (totalGain: number) => {
   mainGainNode.gain.value = totalGain;
@@ -76,11 +83,7 @@ export const playTone = (state: FiddleState) => (freq: string) => {
 
   const t = audioContext.currentTime;
 
-  if (waveformType === "custom") {
-    osc.setPeriodicWave(customWaveform);
-  } else {
-    osc.type = waveformType;
-  }
+  osc.setPeriodicWave(customWaveform);
 
   osc.frequency.value = Number(freq);
 

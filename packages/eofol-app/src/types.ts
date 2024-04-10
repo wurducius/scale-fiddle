@@ -33,6 +33,7 @@ export type FiddleStateImpl = {
     releaseTime: number;
     releaseCurve: string;
     waveformType: string;
+    waveformPreset: string;
   };
 };
 

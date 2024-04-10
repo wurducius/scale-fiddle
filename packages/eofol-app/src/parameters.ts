@@ -1,10 +1,3 @@
-// ------------------
-
-export const waveformType = "custom";
-export const customWaveformSine = [0, 0, 1, 1, 1];
-
-// ------------------
-
 export const upKeys = 24;
 export const downKeys = 12;
 

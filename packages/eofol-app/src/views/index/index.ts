@@ -15,7 +15,9 @@ import {
   playTone as playToneImpl,
   releaseNote as releaseNoteImpl,
   setTotalGain,
+  setWaveform,
 } from "../../synth-lib";
+import { timbrePresets } from "../../timbre";
 import { FiddleState, FiddleStateImpl } from "../../types";
 import "./index.css";
 
@@ -1214,10 +1216,42 @@ const synthTab = (
         envelopeMenu(state, setState),
       ]),
       createElement("div", sx({ flex: 1 }), [
-        createElement("p", undefined, "Waveform type - preset or custom"),
-        createElement("p", undefined, "Custom waveform coefficients"),
-        createElement("p", undefined, "Preset custom waveforms"),
-        createElement("p", undefined, "Panic button"),
+        createElement("p", undefined, "Timbre"),
+        createElement(
+          "select",
+          sx({ width: "100%" }),
+          // @ts-ignore
+          timbrePresets.map((timbre, index) =>
+            createElement(
+              "option",
+              undefined,
+              timbre.title,
+              // @ts-ignore
+              timbre.id === state.synth.waveformPreset
+                ? { value: timbre.id, selected: "selected" }
+                : {
+                    value: timbre.id,
+                  }
+            )
+          ),
+          // @ts-ignore
+          { value: state.synth.waveformPreset },
+          {
+            // @ts-ignore
+            onchange: (e) => {
+              // @ts-ignore
+              setState({
+                ...state,
+                synth: {
+                  // @ts-ignore
+                  ...state.synth,
+                  waveformPreset: e.target.value,
+                },
+              });
+              setWaveform(e.target.value);
+            },
+          }
+        ),
       ]),
     ]),
   ];
@@ -1298,6 +1332,7 @@ const initialState = {
     releaseTime: 0.1,
     releaseCurve: "linear",
     waveformType: "preset",
+    waveformPreset: "distorted-organ",
   },
 } as FiddleStateImpl;
 
