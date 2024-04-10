@@ -302,7 +302,13 @@ const changeScaleMenu = (
     ),
     createElement(
       "div",
-      sx({ display: "none" }),
+      sx({
+        display: "none",
+        position: "absolute",
+        top: "75px",
+        left: "4px",
+        width: "calc(12.5% - 4px)",
+      }),
       createElement(
         "div",
         sx({
@@ -319,10 +325,16 @@ const changeScaleMenu = (
             {
               // @ts-ignore
               onclick: () => {
-                const content = document.getElementById("modal-edo");
-                if (content) {
-                  content.setAttribute("style", "display: block;");
-                }
+                // @ts-ignore
+                setState({
+                  ...state,
+                  form: {
+                    // @ts-ignore
+                    ...state.form,
+                    // @ts-ignore
+                    edo: { ...state.form.edo, open: true },
+                  },
+                });
               },
             }
           ),
@@ -352,7 +364,13 @@ const changeScaleMenu = (
     ),
     createElement(
       "div",
-      sx({ display: "none" }),
+      sx({
+        display: "none",
+        position: "absolute",
+        top: "75px",
+        left: "12.5%",
+        width: "calc(12.5% - 4px)",
+      }),
       createElement(
         "div",
         sx({
@@ -690,13 +708,38 @@ const formModal = (
         "div",
         sx({
           position: "relative",
-          padding: "64px",
+          padding: "16px 16px 64px 16px",
           width: "80%",
           margin: "auto",
           border: "2px solid grey",
           backgroundColor: "#dddddd",
         }),
         [
+          createElement(
+            "div",
+            sx({ display: "flex", justifyContent: "flex-end" }),
+            createElement(
+              "button",
+              undefined,
+              "X",
+              {},
+              {
+                // @ts-ignore
+                onclick: () => {
+                  // @ts-ignore
+                  setState({
+                    ...state,
+                    form: {
+                      // @ts-ignore
+                      ...state.form,
+                      // @ts-ignore
+                      edo: { ...state.form.edo, open: false },
+                    },
+                  });
+                },
+              }
+            )
+          ),
           createElement(
             "div",
             sx({ fontSize: "32px" }),
@@ -714,12 +757,16 @@ const formModal = (
               },
               {
                 // @ts-ignore
-                onchange: (event) => {
+                oninput: (event) => {
                   // @ts-ignore
                   setState({
                     ...state,
-                    // @ts-ignore
-                    form: { ...state.form, edo: { N: event.target.value } },
+                    form: {
+                      // @ts-ignore
+                      ...state.form,
+                      // @ts-ignore
+                      edo: { ...state.form.edo, N: event.target.value },
+                    },
                   });
                 },
               }
@@ -757,13 +804,40 @@ const formModal = (
               setState({
                 ...state,
                 ...updateScale(nextState),
+                form: {
+                  // @ts-ignore
+                  ...state.form, // @ts-ignore
+                  edo: { ...state.form.edo, open: false },
+                },
               });
             },
           }),
-        ]
+        ],
+        {},
+        {
+          // @ts-ignore
+          onclick: (e) => {
+            e.stopPropagation();
+          },
+        }
       ),
     ],
-    { id: "modal-edo" }
+    { id: "modal-edo" },
+    {
+      // @ts-ignore
+      onclick: () => {
+        // @ts-ignore
+        setState({
+          ...state,
+          form: {
+            // @ts-ignore
+            ...state.form,
+            // @ts-ignore
+            edo: { ...state.form.edo, open: false },
+          },
+        });
+      },
+    }
   );
 
 const appbarButton = (
@@ -1369,6 +1443,7 @@ const initialState = {
   },
   form: {
     edo: {
+      open: false,
       N: 12,
     },
   },
@@ -1411,6 +1486,13 @@ defineBuiltinElement<FiddleStateImpl>({
         recompute: false,
         ...updateScale(stateImpl),
       });
+    }
+
+    if (stateImpl.form.edo.open) {
+      const content = document.getElementById("modal-edo");
+      if (content) {
+        content.setAttribute("style", "display: block;");
+      }
     }
   },
   render: (state, setState) => {

@@ -14,6 +14,7 @@ export type FiddleStateImpl = {
   };
   form: {
     edo: {
+      open: boolean;
       N: number;
     };
   };
