@@ -12,6 +12,15 @@ p {
   margin-bottom: 0;
 }
 
+a {
+  text-decoration: none;
+  color: darkcyan;
+  font-weight: 700;
+}
+a:hover {
+  color: cyan;
+}
+
 .container {
   text-align: center;
 }
@@ -32,7 +41,7 @@ p {
   background-color: rgb(100, 161, 199);
 }
 
-#snackbar-share-scale {
+.snackbar {
   visibility: hidden;
   min-width: 250px;
   margin-left: -125px;
@@ -48,7 +57,7 @@ p {
   font-size: 17px;
 }
 
-#snackbar-share-scale.show {
+.snackbar.show {
   visibility: visible;
   -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
   animation: fadein 0.5s, fadeout 0.5s 2.5s;

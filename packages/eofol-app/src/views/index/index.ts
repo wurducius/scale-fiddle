@@ -990,6 +990,12 @@ const appbar = (
               () => {
                 console.log("panic");
                 panic();
+                const snackbarElement =
+                  document.getElementById("snackbar-panic");
+                snackbarElement?.setAttribute("class", "snackbar show");
+                setTimeout(() => {
+                  snackbarElement?.setAttribute("class", "snackbar");
+                }, 3000);
               },
               false,
               true
@@ -1003,9 +1009,9 @@ const appbar = (
                 const snackbarElement = document.getElementById(
                   "snackbar-share-scale"
                 );
-                snackbarElement?.setAttribute("class", "show");
+                snackbarElement?.setAttribute("class", "snackbar show");
                 setTimeout(() => {
-                  snackbarElement?.setAttribute("class", "");
+                  snackbarElement?.setAttribute("class", "snackbar");
                 }, 3000);
               },
               false,
@@ -1013,6 +1019,9 @@ const appbar = (
             ),
             createElement("div", "snackbar", "Scale copied to clipboard.", {
               id: "snackbar-share-scale",
+            }),
+            createElement("div", "snackbar", "Panic! Shutting down synth.", {
+              id: "snackbar-panic",
             }),
             createElement(
               "a",
@@ -1050,10 +1059,11 @@ const scaleTab = (
 const sliderInput = (
   label: string,
   value: string,
-  setter: (nextValue: string) => void
+  setter: (nextValue: string) => void,
+  labelTag?: undefined | string
 ) => {
   return createElement("div", undefined, [
-    createElement("p", undefined, label),
+    createElement(labelTag ?? "p", undefined, label),
     createElement(
       "input",
       undefined,
@@ -1121,7 +1131,7 @@ const envelopeADSRMenu = (
 
   return [
     createElement("p", undefined, "ADSR envelope"),
-    createElement("h2", undefined, "Attack"),
+    createElement("h3", undefined, "Attack"),
     sliderInput(
       "Volume",
       (synth.attackGain * 100).toFixed(0).toString(),
@@ -1159,7 +1169,7 @@ const envelopeADSRMenu = (
         synth: { ...synth, attackCurve: nextValue },
       });
     }),
-    createElement("h2", undefined, "Decay"),
+    createElement("h3", undefined, "Decay"),
     sliderInput(
       "Volume",
       (synth.decayGain * 100).toFixed(0).toString(),
@@ -1197,7 +1207,7 @@ const envelopeADSRMenu = (
         synth: { ...synth, decayCurve: nextValue },
       });
     }),
-    createElement("h2", undefined, "Sustain"),
+    createElement("h3", undefined, "Sustain"),
     sliderInput(
       "Volume",
       (synth.sustainGain * 100).toFixed(0).toString(),
@@ -1235,7 +1245,7 @@ const envelopeADSRMenu = (
         synth: { ...synth, sustainCurve: nextValue },
       });
     }),
-    createElement("h2", undefined, "Release"),
+    createElement("h3", undefined, "Release"),
     sliderInput(
       "Volume",
       (synth.releaseGain * 100).toFixed(0).toString(),
@@ -1343,9 +1353,10 @@ const synthTab = (
               },
             });
             setTotalGain(newTotalGain);
-          }
+          },
+          "h2"
         ),
-        createElement("p", undefined, "Organ"),
+        createElement("h2", undefined, "Organ"),
         createElement(
           "input",
           undefined,
@@ -1364,7 +1375,7 @@ const synthTab = (
             },
           }
         ),
-        createElement("p", undefined, "Envelope type - ADSR or custom"),
+        createElement("h2", undefined, "Envelope"),
         createElement(
           "select",
           undefined,
@@ -1418,7 +1429,7 @@ const synthTab = (
         envelopeMenu(state, setState),
       ]),
       createElement("div", sx({ flex: 1 }), [
-        createElement("p", undefined, "Timbre"),
+        createElement("h2", undefined, "Timbre"),
         createElement(
           "select",
           sx({ width: "100%" }),
@@ -1487,17 +1498,37 @@ const aboutTab = (
   return [
     createElement("div", sx({ marginTop: "100px" }), [
       createElement("h1", undefined, "Scale Fiddle"),
-      createElement("h2", undefined, "Version 0.3"),
+      createElement("h3", undefined, "Version 0.3"),
+      createElement("h3", undefined, [
+        "Created by ",
+        createElement("a", undefined, "Microtonal Structure Theory team", {
+          target: "_blank",
+          href: "https://www.facebook.com/groups/microtonalstructuremusictheory",
+        }),
+      ]),
+      createElement("h3", undefined, [
+        createElement("a", undefined, "Jakub Eliáš", {
+          href: "mailto:wurducius@gmail.com",
+        }),
+        " (development & design)",
+      ]),
+      createElement("h3", undefined, "Janne Karimäki (analysis & testing)"),
+      createElement("h3", undefined, [
+        "Developed using ",
+        createElement("a", undefined, "Eofol", {
+          target: "_blank",
+          href: "https://eofol.com",
+        }),
+      ]),
+      createElement("h3", undefined, "2024"),
       createElement(
-        "h2",
+        "h3",
         undefined,
-        "Created by Microtonal Structure Theory team"
+        createElement("a", undefined, "MIT license", {
+          target: "_blank",
+          href: "https://eofol.com/license.html",
+        })
       ),
-      createElement("h2", undefined, "Jakub Eliáš (development & design)"),
-      createElement("h2", undefined, "Janne Karimäki (analysis & testing)"),
-      createElement("h2", undefined, "Developed using Eofol"),
-      createElement("h2", undefined, "2024"),
-      createElement("h2", undefined, "MIT license"),
     ]),
   ];
 };
