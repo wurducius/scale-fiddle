@@ -51,6 +51,7 @@ export const setWaveform = (waveformId: string) => {
   sineTerms = new Float32Array(waveform.value);
   cosineTerms = new Float32Array(sineTerms.length);
   customWaveform = audioContext.createPeriodicWave(cosineTerms, sineTerms);
+  panic();
 };
 
 setWaveform(WAVEFORM_ID_DEFAULT);
