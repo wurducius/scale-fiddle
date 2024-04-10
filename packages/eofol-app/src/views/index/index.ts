@@ -1327,7 +1327,7 @@ defineBuiltinElement<FiddleStateImpl>({
     // @ts-ignore
     const tab = state.tab;
 
-    mapKeyboardKeys(freq);
+    mapKeyboardKeys(state)(freq);
 
     return createElement("div", undefined, [
       appbar(state, setState),

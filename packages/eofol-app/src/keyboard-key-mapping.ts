@@ -1,36 +1,34 @@
 import { flashKeyDown, flashKeyUp, playTone, releaseNote } from "./synth-lib";
+import { FiddleState } from "./types";
 
 export const keysDown: Record<number, boolean | undefined> = {};
 
-const handleKeyDown = (
-  event: KeyboardEvent,
-  freq: string[],
-  key: string,
-  index: number
-) => {
-  if (event.key === key && !keysDown[index]) {
-    // @ts-ignore
-    playTone(freq[index]);
-    flashKeyDown(freq, index);
-    keysDown[index] = true;
-  }
-};
+const handleKeyDownImpl =
+  (state: FiddleState) =>
+  (event: KeyboardEvent, freq: string[], key: string, index: number) => {
+    if (event.key === key && !keysDown[index]) {
+      // @ts-ignore
+      playTone(state)(freq[index]);
+      flashKeyDown(freq, index);
+      keysDown[index] = true;
+    }
+  };
 
-const handleKeyUp = (
-  event: KeyboardEvent,
-  freq: string[],
-  key: string,
-  index: number
-) => {
-  if (event.key === key && keysDown[index]) {
-    // @ts-ignore
-    releaseNote(freq[index]);
-    flashKeyUp(freq, index);
-    keysDown[index] = false;
-  }
-};
+const handleKeyUpImpl =
+  (state: FiddleState) =>
+  (event: KeyboardEvent, freq: string[], key: string, index: number) => {
+    if (event.key === key && keysDown[index]) {
+      // @ts-ignore
+      releaseNote(state)(freq[index]);
+      flashKeyUp(freq, index);
+      keysDown[index] = false;
+    }
+  };
 
-export const mapKeyboardKeys = (freq: string[]) => {
+export const mapKeyboardKeys = (state: FiddleState) => (freq: string[]) => {
+  const handleKeyDown = handleKeyDownImpl(state);
+  const handleKeyUp = handleKeyUpImpl(state);
+
   document.onkeydown = (event) => {
     handleKeyDown(event, freq, "z", 0);
     handleKeyDown(event, freq, "x", 1);
