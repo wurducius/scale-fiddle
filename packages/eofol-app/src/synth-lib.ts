@@ -1,26 +1,14 @@
 import { sx } from "@eofol/eofol/dist";
 import {
-  totalGain,
   customWaveformSine,
   waveformType,
   startGain,
   startTime,
-  attackCurve,
-  attackGain,
-  attackTime,
-  decayCurve,
-  decayGain,
-  decayTime,
-  sustainCurve,
-  sustainGain,
-  sustainTime,
-  organ,
-  releaseCurve,
   endGain,
-  releaseTime,
   endTime,
   killTime,
 } from "./parameters";
+import { FiddleState } from "./types";
 
 export const keyActiveHoverStyle = sx(
   { border: "2px solid pink", backgroundColor: "#914a91" },
@@ -54,13 +42,33 @@ const oscList: Record<
 > = {};
 const mainGainNode = audioContext.createGain();
 mainGainNode.connect(audioContext.destination);
-mainGainNode.gain.value = totalGain;
+mainGainNode.gain.value = 1;
 
 const sineTerms = new Float32Array(customWaveformSine);
 const cosineTerms = new Float32Array(sineTerms.length);
 const customWaveform = audioContext.createPeriodicWave(cosineTerms, sineTerms);
 
-export function playTone(freq: number) {
+export const setTotalGain = (totalGain: number) => {
+  mainGainNode.gain.value = totalGain;
+};
+
+export const playTone = (state: FiddleState) => (freq: string) => {
+  const {
+    organ,
+    attackCurve,
+    attackGain,
+    attackTime,
+    decayCurve,
+    decayGain,
+    decayTime,
+    sustainCurve,
+    sustainGain,
+    sustainTime,
+    releaseCurve,
+    releaseTime,
+    // @ts-ignore
+  } = state.synth;
+
   const osc = audioContext.createOscillator();
   const gain = audioContext.createGain();
   osc.connect(gain);
@@ -74,7 +82,7 @@ export function playTone(freq: number) {
     osc.type = waveformType;
   }
 
-  osc.frequency.value = freq;
+  osc.frequency.value = Number(freq);
 
   gain.gain.value = 0;
 
@@ -104,9 +112,15 @@ export function playTone(freq: number) {
 
   console.log("play");
   oscList[freq.toString()] = { osc, gain };
-}
+};
 
-export function releaseNote(freq: number) {
+export const releaseNote = (state: FiddleState) => (freq: string) => {
+  const {
+    releaseCurve,
+    releaseTime,
+    // @ts-ignore
+  } = state.synth;
+
   const item = oscList[freq.toString()];
   if (item) {
     const osc = item.osc;
@@ -124,4 +138,4 @@ export function releaseNote(freq: number) {
     osc.stop(t + releaseTime + endTime + killTime);
     // oscList[freq.toString()] = undefined;
   }
-}
+};

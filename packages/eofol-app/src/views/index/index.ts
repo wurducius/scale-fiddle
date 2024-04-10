@@ -3,6 +3,7 @@ import {
   decimalDigitsCent,
   decimalDigitsFreq,
   decimalDigitsFreqOnKeys,
+  decimalDigitsRatio,
   downKeys,
   upKeys,
 } from "../../parameters";
@@ -11,9 +12,11 @@ import {
   flashKeyDown,
   flashKeyUp,
   keyActiveHoverStyle,
-  playTone,
-  releaseNote,
+  playTone as playToneImpl,
+  releaseNote as releaseNoteImpl,
+  setTotalGain,
 } from "../../synth-lib";
+import { FiddleState, FiddleStateImpl } from "../../types";
 import "./index.css";
 
 import {
@@ -114,9 +117,10 @@ const scaleToOverview = (state: FiddleStateImpl) => {
           (mod(raw.length + i - 1, raw.length) === raw.length - 1 ? 1 : 0)
       ) *
       intervalMap[mod(raw.length + i - 1, raw.length)];
+    const ratio = intervalMap[mod(raw.length + i - 1, raw.length)];
     freq[downKeys + i + 1] = {
       freq: f,
-      ratio: intervalMap[mod(raw.length + i - 1, raw.length)],
+      ratio: ratio === period ? 1 : ratio,
       name: raw[mod(raw.length + i - 1, raw.length)],
       cent: Math.log2(f / baseFreq) * 1200,
     };
@@ -127,9 +131,10 @@ const scaleToOverview = (state: FiddleStateImpl) => {
       baseFreq *
       Math.pow(period, -(1 + Math.floor((i - 1) / raw.length))) *
       intervalMap[mod(raw.length - i, raw.length)];
+    const ratio = intervalMap[mod(raw.length - i, raw.length)];
     freq[i] = {
       freq: f,
-      ratio: intervalMap[mod(raw.length - i, raw.length)],
+      ratio: ratio === period ? 1 : ratio,
       name: raw[mod(raw.length - i, raw.length)],
       cent: Math.log2(f / baseFreq) * 1200,
     };
@@ -141,7 +146,7 @@ const scaleToOverview = (state: FiddleStateImpl) => {
       ...tone,
       freq: Number(tone.freq).toFixed(decimalDigitsFreq),
       cent: Number(tone.cent).toFixed(decimalDigitsCent),
-      ratio: Number(tone.ratio).toFixed(2),
+      ratio: Number(tone.ratio).toFixed(decimalDigitsRatio),
     }))
     .filter(Boolean);
 };
@@ -533,8 +538,11 @@ const scaleLibrary = (
 
 sy({ border: "2px solid pink", backgroundColor: "darkmagenta" }, "key-active");
 
-const keys = (state: FiddleState) =>
-  createElement(
+const keys = (state: FiddleState) => {
+  const playTone = playToneImpl(state);
+  const releaseNote = releaseNoteImpl(state);
+
+  return createElement(
     "div",
     sx({ display: "flex", flexWrap: "wrap-reverse" }),
     // @ts-ignore
@@ -607,6 +615,7 @@ const keys = (state: FiddleState) =>
       )
     )
   );
+};
 
 const formModal = (
   state: FiddleState,
@@ -706,28 +715,6 @@ const formModal = (
     ],
     { id: "modal-edo" }
   );
-
-type FiddleStateImpl = {
-  scaleInput: string;
-  freq: string[];
-  scaleLength: number;
-  scales: { name: string; scaleInput: string }[];
-  scaleIndex: number;
-  overview: { freq: string; name: string; cent: string; ratio: string }[];
-  tab: number;
-  tuning: {
-    baseFreq: number;
-    period: number;
-  };
-  form: {
-    edo: {
-      N: number;
-    };
-  };
-  recompute: boolean | undefined;
-};
-
-type FiddleState = FiddleStateImpl | undefined | {};
 
 const appbarButton = (
   label: string,
@@ -855,26 +842,382 @@ const scaleTab = (
   return [inputMenu(state, setState), keys(state), formModal(state, setState)];
 };
 
-const synthTab = (
+const sliderInput = (
+  label: string,
+  value: string,
+  setter: (nextValue: string) => void
+) => {
+  return createElement("div", undefined, [
+    createElement("p", undefined, label),
+    createElement(
+      "input",
+      undefined,
+      undefined,
+      {
+        type: "range",
+        min: "0",
+        max: "100",
+        value,
+      },
+      {
+        // @ts-ignore
+        onchange: (e) => {
+          setter(e.target.value);
+        },
+      }
+    ),
+  ]);
+};
+
+const envelopeCurveSelect = (
+  value: string,
+  setter: (nextValue: string) => void
+) => {
+  return createElement("div", undefined, [
+    createElement("p", undefined, "Curve"),
+    createElement(
+      "select",
+      undefined,
+      [
+        createElement(
+          "option",
+          undefined,
+          "Linear",
+          value === "linear"
+            ? { selected: "selected", value: "linear" }
+            : { value: "linear" }
+        ),
+        createElement(
+          "option",
+          undefined,
+          "Exponential",
+          value === "exponential"
+            ? { selected: "selected", value: "exponential" }
+            : { value: "exponential" }
+        ),
+      ],
+      { value },
+      {
+        // @ts-ignore
+        onchange: (e) => {
+          setter(e.target.value);
+        },
+      }
+    ),
+  ]);
+};
+
+const envelopeADSRMenu = (
+  state: FiddleState,
+  setState: undefined | ((nextState: FiddleState) => void)
+) => {
+  // @ts-ignore
+  const synth = state.synth;
+
+  return [
+    createElement("p", undefined, "ADSR envelope"),
+    createElement("h2", undefined, "Attack"),
+    sliderInput(
+      "Volume",
+      (synth.attackGain * 100).toFixed(0).toString(),
+      (nextValue) => {
+        const val = Number(Number(nextValue).toFixed(0));
+        // @ts-ignore
+        setState({
+          ...state,
+          synth: {
+            ...synth,
+            attackGain: val / 100,
+          },
+        });
+      }
+    ),
+    sliderInput(
+      "Time",
+      (synth.attackTime * 1000).toFixed(0).toString(),
+      (nextValue) => {
+        const val = Number(Number(nextValue).toFixed(0));
+        // @ts-ignore
+        setState({
+          ...state,
+          synth: {
+            ...synth,
+            attackTime: val / 1000,
+          },
+        });
+      }
+    ),
+    envelopeCurveSelect(synth.attackCurve, (nextValue) => {
+      // @ts-ignore
+      setState({
+        ...state,
+        synth: { ...synth, attackCurve: nextValue },
+      });
+    }),
+    createElement("h2", undefined, "Decay"),
+    sliderInput(
+      "Volume",
+      (synth.decayGain * 100).toFixed(0).toString(),
+      (nextValue) => {
+        const val = Number(Number(nextValue).toFixed(0));
+        // @ts-ignore
+        setState({
+          ...state,
+          synth: {
+            ...synth,
+            decayGain: val / 100,
+          },
+        });
+      }
+    ),
+    sliderInput(
+      "Time",
+      (synth.decayTime * 1000).toFixed(0).toString(),
+      (nextValue) => {
+        const val = Number(Number(nextValue).toFixed(0));
+        // @ts-ignore
+        setState({
+          ...state,
+          synth: {
+            ...synth,
+            decayTime: val / 1000,
+          },
+        });
+      }
+    ),
+    envelopeCurveSelect(synth.decayCurve, (nextValue) => {
+      // @ts-ignore
+      setState({
+        ...state,
+        synth: { ...synth, decayCurve: nextValue },
+      });
+    }),
+    createElement("h2", undefined, "Sustain"),
+    sliderInput(
+      "Volume",
+      (synth.sustainGain * 100).toFixed(0).toString(),
+      (nextValue) => {
+        const val = Number(Number(nextValue).toFixed(0));
+        // @ts-ignore
+        setState({
+          ...state,
+          synth: {
+            ...synth,
+            sustainGain: val / 100,
+          },
+        });
+      }
+    ),
+    sliderInput(
+      "Time",
+      (synth.sustainTime * 1000).toFixed(0).toString(),
+      (nextValue) => {
+        const val = Number(Number(nextValue).toFixed(0));
+        // @ts-ignore
+        setState({
+          ...state,
+          synth: {
+            ...synth,
+            sustainTime: val / 1000,
+          },
+        });
+      }
+    ),
+    envelopeCurveSelect(synth.sustainCurve, (nextValue) => {
+      // @ts-ignore
+      setState({
+        ...state,
+        synth: { ...synth, sustainCurve: nextValue },
+      });
+    }),
+    createElement("h2", undefined, "Release"),
+    sliderInput(
+      "Volume",
+      (synth.releaseGain * 100).toFixed(0).toString(),
+      (nextValue) => {
+        const val = Number(Number(nextValue).toFixed(0));
+        // @ts-ignore
+        setState({
+          ...state,
+          synth: {
+            ...synth,
+            releaseGain: val / 100,
+          },
+        });
+      }
+    ),
+    sliderInput(
+      "Time",
+      (synth.releaseTime * 1000).toFixed(0).toString(),
+      (nextValue) => {
+        const val = Number(Number(nextValue).toFixed(0));
+        // @ts-ignore
+        setState({
+          ...state,
+          synth: {
+            ...synth,
+            releaseTime: val / 1000,
+          },
+        });
+      }
+    ),
+    envelopeCurveSelect(synth.releaseCurve, (nextValue) => {
+      // @ts-ignore
+      setState({
+        ...state,
+        synth: { ...synth, releaseCurve: nextValue },
+      });
+    }),
+  ];
+};
+
+const envelopePresetMenu = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
 ) => {
   return [
-    createElement("div", undefined, [
-      createElement("h1", undefined, "Synth"),
-      createElement("p", undefined, "Volume"),
-      createElement("p", undefined, "Panic button"),
-      createElement("p", undefined, "Organ"),
-      createElement("p", undefined, "Waveform type - preset or custom"),
-      createElement("p", undefined, "Custom waveform coefficients"),
-      createElement("p", undefined, "Preset custom waveforms"),
-      createElement("p", undefined, "Envelope type - ADSR or custom"),
-      createElement("p", undefined, "Envelope A attack - volume, curve"),
-      createElement("p", undefined, "Envelope D decay - volume, curve"),
-      createElement("p", undefined, "Envelope S sustain - volume, curve"),
-      createElement("p", undefined, "Envelope R release - volume, curve"),
-      createElement("p", undefined, "Envelope custom phases - volume, curve"),
-      createElement("p", undefined, "Preset envelopes"),
+    createElement("p", undefined, "Preset envelope"),
+    createElement("p", undefined, "Under construction - Preset envelopes"),
+  ];
+};
+
+const envelopeCustomMenu = (
+  state: FiddleState,
+  setState: undefined | ((nextState: FiddleState) => void)
+) => {
+  return [
+    createElement("p", undefined, "Custom envelope"),
+    createElement(
+      "p",
+      undefined,
+      "Under construction - Envelope custom phases - volume, curve"
+    ),
+  ];
+};
+
+const envelopeMenu = (
+  state: FiddleState,
+  setState: undefined | ((nextState: FiddleState) => void)
+) => {
+  // @ts-ignore
+  const synth = state.synth;
+
+  return createElement("div", undefined, [
+    ...(synth.envelopeType === "adsr" ? envelopeADSRMenu(state, setState) : []),
+    ...(synth.envelopeType === "preset"
+      ? envelopePresetMenu(state, setState)
+      : []),
+    ...(synth.envelopeType === "custom"
+      ? envelopeCustomMenu(state, setState)
+      : []),
+  ]);
+};
+
+const synthTab = (
+  state: FiddleState,
+  setState: undefined | ((nextState: FiddleState) => void)
+) => {
+  // @ts-ignore
+  const synth = state.synth;
+
+  return [
+    createElement("div", sx({ display: "flex" }), [
+      createElement("div", sx({ flex: 1 }), [
+        sliderInput(
+          "Volume",
+          (synth.totalGain * 100).toFixed(0).toString(),
+          (nextValue) => {
+            const val = Number(Number(nextValue).toFixed(0));
+            const newTotalGain = val / 100;
+            // @ts-ignore
+            setState({
+              ...state,
+              synth: {
+                ...synth,
+                totalGain: newTotalGain,
+              },
+            });
+            setTotalGain(newTotalGain);
+          }
+        ),
+        createElement("p", undefined, "Organ"),
+        createElement(
+          "input",
+          undefined,
+          undefined,
+          synth.organ
+            ? { type: "checkbox", checked: "true" }
+            : { type: "checkbox" },
+          {
+            // @ts-ignore
+            onchange: () => {
+              // @ts-ignore
+              setState({
+                ...state,
+                synth: { ...synth, organ: !synth.organ },
+              });
+            },
+          }
+        ),
+        createElement("p", undefined, "Envelope type - ADSR or custom"),
+        createElement(
+          "select",
+          undefined,
+          [
+            createElement(
+              "option",
+              undefined,
+              "ADSR",
+              synth.envelopeType === "adsr"
+                ? {
+                    selected: "selected",
+                    value: "adsr",
+                  }
+                : { value: "adsr" }
+            ),
+            createElement(
+              "option",
+              undefined,
+              "Preset",
+              synth.envelopeType === "preset"
+                ? {
+                    selected: "selected",
+                    value: "preset",
+                  }
+                : { value: "preset" }
+            ),
+            createElement(
+              "option",
+              undefined,
+              "Custom",
+              synth.envelopeType === "custom"
+                ? {
+                    selected: "selected",
+                    value: "custom",
+                  }
+                : { value: "custom" }
+            ),
+          ],
+          { value: synth.envelopeType },
+          {
+            // @ts-ignore
+            onchange: (e) => {
+              //@ts-ignore
+              setState({
+                ...state,
+                synth: { ...synth, envelopeType: e.target.value },
+              });
+            },
+          }
+        ),
+        envelopeMenu(state, setState),
+      ]),
+      createElement("div", sx({ flex: 1 }), [
+        createElement("p", undefined, "Waveform type - preset or custom"),
+        createElement("p", undefined, "Custom waveform coefficients"),
+        createElement("p", undefined, "Preset custom waveforms"),
+        createElement("p", undefined, "Panic button"),
+      ]),
     ]),
   ];
 };
@@ -905,10 +1248,11 @@ const aboutTab = (
         undefined,
         "Created by Microtonal Structure Theory team"
       ),
-      createElement("h2", undefined, "Jakub Eliáš"),
-      createElement("h2", undefined, "Janne Karimäki"),
-      createElement("h2", undefined, "Imanuel Habekotte"),
+      createElement("h2", undefined, "Jakub Eliáš (development & design)"),
+      createElement("h2", undefined, "Janne Karimäki (analysis & testing)"),
       createElement("h2", undefined, "Developed using Eofol"),
+      createElement("h2", undefined, "2024"),
+      createElement("h2", undefined, "MIT license"),
     ]),
   ];
 };
@@ -928,9 +1272,27 @@ const initialState = {
     },
   },
   recompute: false,
+  synth: {
+    totalGain: 1,
+    organ: true,
+    envelopeType: "adsr",
+    attackGain: 1,
+    attackTime: 0.02,
+    attackCurve: "exponential",
+    decayGain: 0.9,
+    decayTime: 0.02,
+    decayCurve: "linear",
+    sustainGain: 0.7,
+    sustainTime: 0.02,
+    sustainCurve: "linear",
+    releaseGain: 0.7,
+    releaseTime: 0.1,
+    releaseCurve: "linear",
+    waveformType: "preset",
+  },
 } as FiddleStateImpl;
 
-defineBuiltinElement<FiddleState>({
+defineBuiltinElement<FiddleStateImpl>({
   tagName: "fiddle-keyboard",
   initialState: {
     ...initialState,
