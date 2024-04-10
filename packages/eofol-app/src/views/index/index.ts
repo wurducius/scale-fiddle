@@ -808,7 +808,7 @@ const modal =
             },
             {
               // @ts-ignore
-              oninput: (event) => {
+              onchange: (event) => {
                 // @ts-ignore
                 setState({
                   ...state,
