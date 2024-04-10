@@ -40,26 +40,6 @@ const mainGainNode = audioContext.createGain();
 mainGainNode.connect(audioContext.destination);
 mainGainNode.gain.value = TOTAL_GAIN_DEFAULT;
 
-let waveform;
-let sineTerms;
-let cosineTerms;
-let customWaveform: PeriodicWave;
-
-export const setWaveform = (waveformId: string) => {
-  waveform =
-    timbrePresets.find((item) => item.id === waveformId) ?? timbrePresets[0];
-  sineTerms = new Float32Array(waveform.value);
-  cosineTerms = new Float32Array(sineTerms.length);
-  customWaveform = audioContext.createPeriodicWave(cosineTerms, sineTerms);
-  panic();
-};
-
-setWaveform(WAVEFORM_ID_DEFAULT);
-
-export const setTotalGain = (totalGain: number) => {
-  mainGainNode.gain.value = totalGain;
-};
-
 export const panic = () => {
   Object.keys(oscList).forEach((oscName) => {
     const oscItem = oscList[oscName];
@@ -81,6 +61,26 @@ export const panic = () => {
   setTimeout(() => {
     oscList = {};
   }, 11);
+};
+
+let waveform;
+let sineTerms;
+let cosineTerms;
+let customWaveform: PeriodicWave;
+
+export const setWaveform = (waveformId: string) => {
+  waveform =
+    timbrePresets.find((item) => item.id === waveformId) ?? timbrePresets[0];
+  sineTerms = new Float32Array(waveform.value);
+  cosineTerms = new Float32Array(sineTerms.length);
+  customWaveform = audioContext.createPeriodicWave(cosineTerms, sineTerms);
+  panic();
+};
+
+setWaveform(WAVEFORM_ID_DEFAULT);
+
+export const setTotalGain = (totalGain: number) => {
+  mainGainNode.gain.value = totalGain;
 };
 
 export const playTone = (state: FiddleState) => (freq: string) => {
