@@ -1,7 +1,12 @@
-import { createElement, sx, sy } from "@eofol/eofol";
-import { dropdown, dropdownContent } from "../../../dropdown";
+import {
+  createElement,
+  dropdown,
+  dropdownContent,
+  modal,
+  sx,
+  sy,
+} from "@eofol/eofol";
 import { defaultScale } from "../../../initial-state";
-import { modal } from "../../../modal";
 import {
   decimalDigitsFreqOnKeys,
   decimalDigitsCent,
