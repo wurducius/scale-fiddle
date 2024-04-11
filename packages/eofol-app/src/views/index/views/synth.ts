@@ -1,4 +1,4 @@
-import { createElement, sx } from "@eofol/eofol";
+import { createElement, select, sx } from "@eofol/eofol";
 import { setTotalGain, setWaveform } from "../../../synth-lib";
 import { FiddleState } from "../../../types";
 import { timbrePresets } from "../../../timbre-presets";
@@ -33,39 +33,25 @@ const sliderInput = (
 
 const envelopeCurveSelect = (
   value: string,
+  namePostfix: string,
   setter: (nextValue: string) => void
 ) => {
   return createElement("div", undefined, [
     createElement("p", undefined, "Curve"),
-    createElement(
-      "select",
-      undefined,
-      [
-        createElement(
-          "option",
-          undefined,
-          "Linear",
-          value === "linear"
-            ? { selected: "selected", value: "linear" }
-            : { value: "linear" }
-        ),
-        createElement(
-          "option",
-          undefined,
-          "Exponential",
-          value === "exponential"
-            ? { selected: "selected", value: "exponential" }
-            : { value: "exponential" }
-        ),
+    select({
+      name: "select-envelope-curve-" + namePostfix,
+      options: [
+        { title: "Linear", id: "linear" },
+        { title: "Exponential", id: "exponential" },
       ],
-      { value },
-      {
+      onChange: (nextVal) => {
         // @ts-ignore
         onchange: (e) => {
           setter(e.target.value);
-        },
-      }
-    ),
+        };
+      },
+      value,
+    }),
   ]);
 };
 
@@ -109,7 +95,7 @@ const envelopeADSRMenu = (
         });
       }
     ),
-    envelopeCurveSelect(synth.attackCurve, (nextValue) => {
+    envelopeCurveSelect(synth.attackCurve, "attack", (nextValue) => {
       // @ts-ignore
       setState({
         ...state,
@@ -147,7 +133,7 @@ const envelopeADSRMenu = (
         });
       }
     ),
-    envelopeCurveSelect(synth.decayCurve, (nextValue) => {
+    envelopeCurveSelect(synth.decayCurve, "decay", (nextValue) => {
       // @ts-ignore
       setState({
         ...state,
@@ -185,7 +171,7 @@ const envelopeADSRMenu = (
         });
       }
     ),
-    envelopeCurveSelect(synth.sustainCurve, (nextValue) => {
+    envelopeCurveSelect(synth.sustainCurve, "sustain", (nextValue) => {
       // @ts-ignore
       setState({
         ...state,
@@ -223,7 +209,7 @@ const envelopeADSRMenu = (
         });
       }
     ),
-    envelopeCurveSelect(synth.releaseCurve, (nextValue) => {
+    envelopeCurveSelect(synth.releaseCurve, "release", (nextValue) => {
       // @ts-ignore
       setState({
         ...state,
@@ -323,95 +309,47 @@ export const synthTab = (
           }
         ),
         createElement("h2", undefined, "Envelope"),
-        createElement(
-          "select",
-          undefined,
-          [
-            createElement(
-              "option",
-              undefined,
-              "ADSR",
-              synth.envelopeType === "adsr"
-                ? {
-                    selected: "selected",
-                    value: "adsr",
-                  }
-                : { value: "adsr" }
-            ),
-            createElement(
-              "option",
-              undefined,
-              "Preset",
-              synth.envelopeType === "preset"
-                ? {
-                    selected: "selected",
-                    value: "preset",
-                  }
-                : { value: "preset" }
-            ),
-            createElement(
-              "option",
-              undefined,
-              "Custom",
-              synth.envelopeType === "custom"
-                ? {
-                    selected: "selected",
-                    value: "custom",
-                  }
-                : { value: "custom" }
-            ),
+        select({
+          name: "select-envelope-type",
+          value: synth.envelopeType,
+          options: [
+            { title: "ADSR", id: "adsr" },
+            { title: "Preset", id: "preset" },
+            { title: "Custom", id: "custom" },
           ],
-          { value: synth.envelopeType },
-          {
-            // @ts-ignore
-            onchange: (e) => {
-              //@ts-ignore
-              setState({
-                ...state,
-                synth: { ...synth, envelopeType: e.target.value },
-              });
-            },
-          }
-        ),
+          onChange: (nextVal) => {
+            //@ts-ignore
+            setState({
+              ...state,
+              synth: { ...synth, envelopeType: nextVal },
+            });
+          },
+        }),
         envelopeMenu(state, setState),
       ]),
       createElement("div", sx({ flex: 1 }), [
         createElement("h2", undefined, "Timbre"),
-        createElement(
-          "select",
-          sx({ width: "100%" }),
+        select({
+          name: "select-waveform-preset",
           // @ts-ignore
-          timbrePresets.map((timbre, index) =>
-            createElement(
-              "option",
-              undefined,
-              timbre.title,
-              // @ts-ignore
-              timbre.id === state.synth.waveformPreset
-                ? { value: timbre.id, selected: "selected" }
-                : {
-                    value: timbre.id,
-                  }
-            )
-          ),
-          // @ts-ignore
-          { value: state.synth.waveformPreset },
-          {
+          value: state.synth.waveformPreset,
+          options: timbrePresets.map((timbre) => ({
+            title: timbre.title,
+            id: timbre.id,
+          })),
+          onChange: (nextVal) => {
             // @ts-ignore
-            onchange: (e) => {
-              // @ts-ignore
-              setState({
-                ...state,
-                synth: {
-                  // @ts-ignore
-                  ...state.synth,
-                  waveformPreset: e.target.value,
-                },
-              });
-              setWaveform(e.target.value);
-            },
-          }
-        ),
+            setState({
+              ...state,
+              synth: {
+                // @ts-ignore
+                ...state.synth,
+                waveformPreset: nextVal,
+              },
+            });
+            setWaveform(nextVal);
+          },
+        }),
       ]),
     ]),
   ];

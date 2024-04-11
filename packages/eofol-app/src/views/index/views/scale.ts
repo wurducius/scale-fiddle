@@ -60,39 +60,26 @@ const changeScaleMenu = (
       ),
     ]),
     createElement("p", sx({ marginTop: "8px" }), "Select scale"),
-    createElement(
-      "select",
-      sx({ width: "100%" }),
+    select({
       // @ts-ignore
-      state.scales.map((scale, index) =>
-        createElement(
-          "option",
-          undefined,
-          scale.name,
-          // @ts-ignore
-          index === Number(state.scaleIndex)
-            ? { value: index, selected: "selected" }
-            : {
-                value: index,
-              }
-        )
-      ),
+      value: state.scaleIndex,
       // @ts-ignore
-      { value: state.scaleIndex },
-      {
+      options: state.scales.map((scale, index) => ({
+        title: scale.name,
+        id: index,
+      })),
+      onChange: (nextVal) => {
         // @ts-ignore
-        onchange: (e) => {
+        setState({
+          ...state,
+          scaleIndex: Number(nextVal),
           // @ts-ignore
-          setState({
-            ...state,
-            scaleIndex: Number(e.target.value),
-            // @ts-ignore
-            scaleInput: state.scales[Number(e.target.value)].scaleInput,
-            recompute: true,
-          });
-        },
-      }
-    ),
+          scaleInput: state.scales[Number(nextVal)].scaleInput,
+          recompute: true,
+        });
+      },
+      name: "select-scale-library",
+    }),
     createElement("p", sx({ marginTop: "8px" }), "Scale name"),
     createElement(
       "div",
