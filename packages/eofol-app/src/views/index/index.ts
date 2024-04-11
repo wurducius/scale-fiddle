@@ -210,8 +210,42 @@ const dropdown = (
   });
 };
 
-const dropdownContent = () => {
-  return "";
+const dropdownContent = (
+  id: string,
+  classname: string,
+  children: Element | Element[]
+) => {
+  return createElement(
+    "div",
+    [
+      sx({
+        display: "none",
+        position: "absolute",
+      }),
+      classname,
+    ],
+    createElement(
+      "div",
+      sx({
+        display: "flex",
+        flexDirection: "column",
+        fontSize: "16px",
+      }),
+      children
+    ),
+    {
+      id,
+    },
+    {
+      // @ts-ignore
+      onmouseleave: () => {
+        const contentNew = document.getElementById(id);
+        if (contentNew) {
+          contentNew.setAttribute("style", "display: none;");
+        }
+      },
+    }
+  );
 };
 
 const changeScaleMenu = (
@@ -319,105 +353,37 @@ const changeScaleMenu = (
         },
       }
     ),
-    createElement(
-      "div",
-      sx({
-        display: "none",
-        position: "absolute",
-        top: "75px",
-        left: "4px",
-        width: "calc(12.5% - 4px)",
-      }),
-      createElement(
-        "div",
-        sx({
-          display: "flex",
-          flexDirection: "column",
-          fontSize: "16px",
-        }),
-        [
-          dropdownItem("Equal temperament (EDO)", "edo"),
-          dropdownItem("Moment of symmetry (MOS)", "mos"),
-          dropdownItem("Rank-2 temperament (1-generated)", "linear"),
-          dropdownItem("Meantone temperament", "meantone"),
-          dropdownItem("Harmonic series", "harm"),
-          dropdownItem("Just temperament", "just"),
-          dropdownItem("Ratio chord", "ratiochord"),
-          dropdownItem("Tempered limit", "limit"),
-          dropdownItem("Higher rank temperament", "higher"),
-          dropdownItem("Euler-Fokker genus form", "eulerfokker"),
-          dropdownItem("Preset scale", "preset"),
-        ]
-      ),
-      {
-        id: "dropdown-new-scale-content",
-      },
-      {
-        // @ts-ignore
-        onmouseleave: () => {
-          const contentNew = document.getElementById(
-            "dropdown-new-scale-content"
-          );
-          if (contentNew) {
-            contentNew.setAttribute("style", "display: none;");
-          }
-          const contentModify = document.getElementById(
-            "dropdown-modify-scale-content"
-          );
-          if (contentModify) {
-            contentModify.setAttribute("style", "display: none;");
-          }
-        },
-      }
+    dropdownContent(
+      "dropdown-new-scale-content",
+      sx({ top: "75px", left: "4px", width: "calc(12.5% - 4px)" }),
+      [
+        dropdownItem("Equal temperament (EDO)", "edo"),
+        dropdownItem("Moment of symmetry (MOS)", "mos"),
+        dropdownItem("Rank-2 temperament (1-generated)", "linear"),
+        dropdownItem("Meantone temperament", "meantone"),
+        dropdownItem("Harmonic series", "harm"),
+        dropdownItem("Just temperament", "just"),
+        dropdownItem("Ratio chord", "ratiochord"),
+        dropdownItem("Tempered limit", "limit"),
+        dropdownItem("Higher rank temperament", "higher"),
+        dropdownItem("Euler-Fokker genus form", "eulerfokker"),
+        dropdownItem("Preset scale", "preset"),
+      ]
     ),
-    createElement(
-      "div",
-      sx({
-        display: "none",
-        position: "absolute",
-        top: "75px",
-        left: "12.5%",
-        width: "calc(12.5% - 4px)",
-      }),
-      createElement(
-        "div",
-        sx({
-          display: "flex",
-          flexDirection: "column",
-          fontSize: "16px",
-        }),
-        [
-          dropdownItem("Transpose", "transpose"),
-          dropdownItem("Mode", "mode"),
-          dropdownItem("Subset", "subset"),
-          dropdownItem("Multiply", "multiply"),
-          dropdownItem("Reverse", "reverse"),
-          dropdownItem("Sort", "sort"),
-          dropdownItem("Stretch", "stretch"),
-          dropdownItem("Approximate by equal", "approxequal"),
-          dropdownItem("Temper", "temper"),
-        ]
-      ),
-      {
-        id: "dropdown-modify-scale-content",
-      },
-      {
-        // @ts-ignore
-        onmouseleave: () => {
-          const contentNew = document.getElementById(
-            "dropdown-new-scale-content"
-          );
-          if (contentNew) {
-            contentNew.setAttribute("style", "display: none;");
-          }
-          const contentModify = document.getElementById(
-            "dropdown-modify-scale-content"
-          );
-          if (contentModify) {
-            contentModify.setAttribute("style", "display: none;");
-          }
-        },
-      }
+    dropdownContent(
+      "dropdown-modify-scale-content",
+      sx({ top: "75px", left: "12.5%", width: "calc(12.5% - 4px)" }),
+      [
+        dropdownItem("Transpose", "transpose"),
+        dropdownItem("Mode", "mode"),
+        dropdownItem("Subset", "subset"),
+        dropdownItem("Multiply", "multiply"),
+        dropdownItem("Reverse", "reverse"),
+        dropdownItem("Sort", "sort"),
+        dropdownItem("Stretch", "stretch"),
+        dropdownItem("Approximate by equal", "approxequal"),
+        dropdownItem("Temper", "temper"),
+      ]
     ),
   ];
 };
