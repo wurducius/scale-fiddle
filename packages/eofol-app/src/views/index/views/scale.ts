@@ -18,7 +18,7 @@ import {
   releaseNote as releaseNoteImpl,
 } from "../../../synth-lib";
 import { FiddleState, FiddleStateImpl } from "../../../types";
-import { mouseDown } from "../../../util";
+import { mod, mouseDown } from "../../../util";
 import { updateScale } from "../../../sheen";
 import { scalePresets } from "../../../scale-presets";
 
@@ -566,7 +566,7 @@ const formModal = (
         { title: "N", type: "number", innerFormName: "N", id: "n" },
         { title: "T", type: "number", innerFormName: "T", id: "t" },
       ],
-      () => ""
+      ({ N, T }) => ""
     ),
     modalImpl(
       "modal-linear",
@@ -574,9 +574,25 @@ const formModal = (
       "linear",
       [
         { title: "T", type: "number", innerFormName: "T", id: "t" },
-        { title: "Generator", type: "number", innerFormName: "g", id: "g" },
+        {
+          title: "Generator (cents)",
+          type: "number",
+          innerFormName: "g",
+          id: "g",
+        },
       ],
-      () => ""
+      ({ T, g }) =>
+        Array.from({ length: T })
+          .map((item, index) =>
+            // @ts-ignore
+            mod(
+              (index + 1) * g,
+              // @ts-ignore
+              1200 * Math.log2(state.tuning.period)
+            ).toString()
+          )
+          .map((tone) => (tone.includes(".") ? tone : tone + "."))
+          .join("\n")
     ),
     modalImpl(
       "modal-meantone",
