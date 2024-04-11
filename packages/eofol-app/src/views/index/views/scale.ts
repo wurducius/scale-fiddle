@@ -2,6 +2,7 @@ import {
   createElement,
   dropdown,
   dropdownContent,
+  e,
   modal,
   sx,
   sy,
@@ -17,6 +18,7 @@ import {
 import { FiddleState, FiddleStateImpl } from "../../../types";
 import { mouseDown } from "../../../util";
 import { updateScale } from "../../../sheen";
+import { scalePresets } from "../../../scale-presets";
 
 const menuButtonOpensModal =
   (
@@ -565,13 +567,87 @@ const formModal = (
 ) => {
   const modalImpl = generalFormModal(state, setState);
 
+  console.log(state);
+
   return [
     modalImpl("modal-edo", "Equal division of octave (EDO)", "edo", [
       { title: "N", type: "number", innerFormName: "N" },
     ]),
-    modalImpl("modal-preset", "Preset scale", "preset", [
-      { title: "Choose scale", type: "select", innerFormName: "id" },
-    ]),
+    modal(
+      "modal-preset",
+      "Preset scale",
+      e("div", undefined, [
+        e(
+          "select",
+          undefined,
+          scalePresets.map((item) =>
+            e(
+              "option",
+              undefined,
+              item.title,
+              // @ts-ignore
+              item.id === state.form.preset.id
+                ? { value: item.id, selected: "selected" }
+                : { value: item.id }
+            )
+          ),
+          {
+            // @ts-ignore
+            value: state.form.preset.id,
+          },
+          {
+            // @ts-ignore
+            onchange: (e) => {
+              // @ts-ignore
+              setState({
+                ...state,
+                form: {
+                  // @ts-ignore
+                  ...state.form,
+                  preset: {
+                    // @ts-ignore
+                    ...state.form.preset,
+                    id: e.target.value,
+                  },
+                },
+              });
+            },
+          }
+        ),
+      ]),
+      // @ts-ignore
+      state.form.preset.open,
+      () => {
+        // @ts-ignore
+        setState({
+          ...state,
+          form: {
+            // @ts-ignore
+            ...state.form,
+            // @ts-ignore
+            preset: { ...state.form.preset, open: false },
+          },
+        });
+      },
+      () => {
+        // @ts-ignore
+        setState({
+          ...state,
+          recompute: true,
+          // @ts-ignore
+          scaleInput: scalePresets.find(
+            // @ts-ignore
+            (item) => item.id === state.form.preset.id
+          )?.value,
+          form: {
+            // @ts-ignore
+            ...state.form,
+            // @ts-ignore
+            preset: { ...state.form.preset, open: false },
+          },
+        });
+      }
+    ),
   ];
 };
 
