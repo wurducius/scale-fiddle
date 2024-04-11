@@ -4,6 +4,7 @@ import {
   dropdownContent,
   e,
   modal,
+  select,
   sx,
   sy,
 } from "@eofol/eofol";
@@ -567,8 +568,6 @@ const formModal = (
 ) => {
   const modalImpl = generalFormModal(state, setState);
 
-  console.log(state);
-
   return [
     modalImpl("modal-edo", "Equal division of octave (EDO)", "edo", [
       { title: "N", type: "number", innerFormName: "N" },
@@ -577,43 +576,30 @@ const formModal = (
       "modal-preset",
       "Preset scale",
       e("div", undefined, [
-        e(
-          "select",
-          undefined,
-          scalePresets.map((item) =>
-            e(
-              "option",
-              undefined,
-              item.title,
-              // @ts-ignore
-              item.id === state.form.preset.id
-                ? { value: item.id, selected: "selected" }
-                : { value: item.id }
-            )
-          ),
-          {
+        select({
+          options: scalePresets.map((item) => ({
+            title: item.title,
+            id: item.id,
+          })),
+          onChange: (nextVal) => {
             // @ts-ignore
-            value: state.form.preset.id,
-          },
-          {
-            // @ts-ignore
-            onchange: (e) => {
-              // @ts-ignore
-              setState({
-                ...state,
-                form: {
+            setState({
+              ...state,
+              form: {
+                // @ts-ignore
+                ...state.form,
+                preset: {
                   // @ts-ignore
-                  ...state.form,
-                  preset: {
-                    // @ts-ignore
-                    ...state.form.preset,
-                    id: e.target.value,
-                  },
+                  ...state.form.preset,
+                  id: nextVal,
                 },
-              });
-            },
-          }
-        ),
+              },
+            });
+          },
+          // @ts-ignore
+          value: state.form.preset.id,
+          name: "select-preset-scale",
+        }),
       ]),
       // @ts-ignore
       state.form.preset.open,
