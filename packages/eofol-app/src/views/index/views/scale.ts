@@ -416,6 +416,30 @@ const keys = (state: FiddleState) => {
   );
 };
 
+/*
+const result =
+          Array.from({
+            // @ts-ignore
+            length: state.form[formName].N,
+          }).reduce((acc, next, i) => {
+            // @ts-ignore
+            const n = Number(state.form[formName].N);
+            const val = ((i + 1) * 1200) / n;
+            const valAsStr = val.toString();
+            const includesDot = valAsStr.includes(".");
+            const displayVal = includesDot
+              ? val.toFixed(decimalDigitsCent)
+              : valAsStr + ".";
+
+            return (
+              acc +
+              displayVal +
+              // @ts-ignore
+              (i + 1 === n ? "" : "\n")
+            );
+          }, "") + "";
+          */
+
 const generalFormModal =
   (
     state: FiddleState,
@@ -425,7 +449,13 @@ const generalFormModal =
     id: string,
     title: string,
     formName: string,
-    form: [{ title: string; type: string; innerFormName: string; id: string }]
+    form: {
+      title: string;
+      type: string;
+      innerFormName: string;
+      id: string;
+    }[],
+    result: (params: Record<string, any>) => string
   ) => {
     // @ts-ignore
     const decimalDigitsCent = state.options.decimalDigitsCent;
@@ -474,30 +504,10 @@ const generalFormModal =
         });
       },
       () => {
-        const result =
-          Array.from({
-            // @ts-ignore
-            length: state.form[formName].N,
-          }).reduce((acc, next, i) => {
-            // @ts-ignore
-            const n = Number(state.form[formName].N);
-            const val = ((i + 1) * 1200) / n;
-            const valAsStr = val.toString();
-            const includesDot = valAsStr.includes(".");
-            const displayVal = includesDot
-              ? val.toFixed(decimalDigitsCent)
-              : valAsStr + ".";
-
-            return (
-              acc +
-              displayVal +
-              // @ts-ignore
-              (i + 1 === n ? "" : "\n")
-            );
-          }, "") + "";
         const nextState = {
           ...state,
-          scaleInput: result,
+          // @ts-ignore
+          scaleInput: result(state.form[formName]),
         } as FiddleStateImpl;
         // @ts-ignore
         setState({
@@ -521,9 +531,99 @@ const formModal = (
   const modalImpl = generalFormModal(state, setState);
 
   return [
-    modalImpl("modal-edo", "Equal division of octave (EDO)", "edo", [
-      { title: "N", type: "number", innerFormName: "N", id: "edo" },
-    ]),
+    modalImpl(
+      "modal-edo",
+      "Equal division of octave (EDO)",
+      "edo",
+      [{ title: "N", type: "number", innerFormName: "N", id: "edo" }],
+      ({ N }) =>
+        Array.from({
+          length: N,
+        }).reduce((acc, next, i) => {
+          // @ts-ignore
+          const n = Number(N);
+          const val = ((i + 1) * 1200) / n;
+          const valAsStr = val.toString();
+          const includesDot = valAsStr.includes(".");
+          const displayVal = includesDot
+            ? // @ts-ignore
+              val.toFixed(state.options.decimalDigitsCent)
+            : valAsStr + ".";
+
+          return (
+            acc +
+            displayVal +
+            // @ts-ignore
+            (i + 1 === n ? "" : "\n")
+          );
+        }, "") + ""
+    ),
+    modalImpl(
+      "modal-mos",
+      "Moment of symmetry (MOS)",
+      "mos",
+      [
+        { title: "N", type: "number", innerFormName: "N", id: "n" },
+        { title: "T", type: "number", innerFormName: "T", id: "t" },
+      ],
+      () => ""
+    ),
+    modalImpl(
+      "modal-linear",
+      "Linear temperament (1-generated)",
+      "linear",
+      [
+        { title: "T", type: "number", innerFormName: "T", id: "t" },
+        { title: "Generator", type: "number", innerFormName: "g", id: "g" },
+      ],
+      () => ""
+    ),
+    modalImpl(
+      "modal-meantone",
+      "Equal division of octave (EDO)",
+      "meantone",
+      [
+        { title: "T", type: "number", innerFormName: "T", id: "t" },
+        {
+          title: "Comma fraction",
+          type: "number",
+          innerFormName: "comma",
+          id: "comma",
+        },
+      ],
+      () => ""
+    ),
+    modalImpl(
+      "modal-harm",
+      "Harmonic series",
+      "harm",
+      [{ title: "T", type: "number", innerFormName: "T", id: "t" }],
+      () => ""
+    ),
+    modalImpl(
+      "modal-just",
+      "Just tuning",
+      "just",
+      [
+        { title: "T", type: "number", innerFormName: "T", id: "t" },
+        { title: "Limit", type: "number", innerFormName: "limit", id: "limit" },
+      ],
+      () => ""
+    ),
+    modalImpl(
+      "modal-ratiochord",
+      "Ratio chord",
+      "ratiochord",
+      [
+        {
+          title: "Chord",
+          type: "string",
+          innerFormName: "chord",
+          id: "chord",
+        },
+      ],
+      () => ""
+    ),
     modal(
       "modal-preset",
       "Preset scale",

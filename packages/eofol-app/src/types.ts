@@ -21,26 +21,30 @@ export type FiddleStateImpl = {
     mos: {
       open: boolean;
       N: number;
+      T: number;
     };
     linear: {
       open: boolean;
-      N: number;
+      T: number;
+      g: number;
     };
     meantone: {
       open: boolean;
-      N: number;
+      T: number;
+      comma: number;
     };
     harm: {
       open: boolean;
-      N: number;
+      T: number;
     };
     just: {
       open: boolean;
-      N: number;
+      T: number;
+      limit: number;
     };
     ratiochord: {
       open: boolean;
-      N: number;
+      chord: string;
     };
     limit: {
       open: boolean;

@@ -23,26 +23,30 @@ export const initialState = {
     mos: {
       open: false,
       N: 12,
+      T: 7,
     },
     linear: {
       open: false,
-      N: 12,
+      T: 12,
+      g: 700,
     },
     meantone: {
       open: false,
-      N: 12,
+      T: 12,
+      comma: 4,
     },
     harm: {
       open: false,
-      N: 12,
+      T: 12,
     },
     just: {
       open: false,
-      N: 12,
+      T: 12,
+      limit: 3,
     },
     ratiochord: {
       open: false,
-      N: 12,
+      chord: "2:3:4:5",
     },
     limit: {
       open: false,
