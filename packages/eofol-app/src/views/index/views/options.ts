@@ -1,26 +1,5 @@
-import { createElement } from "@eofol/eofol";
+import { createElement, input } from "@eofol/eofol";
 import { FiddleState } from "../../../types";
-
-const input = ({
-  value,
-  onChange,
-}: {
-  value: string;
-  onChange: (nextValue: string) => void;
-}) => {
-  return createElement(
-    "input",
-    undefined,
-    undefined,
-    { value },
-    {
-      // @ts-ignore
-      onchange: (e) => {
-        onChange(e.target.value);
-      },
-    }
-  );
-};
 
 export const optionsTab = (
   state: FiddleState,
@@ -43,6 +22,7 @@ export const optionsTab = (
             // @ts-ignore
             setState({
               ...state,
+              recompute: true,
               options: {
                 ...options,
                 decimalDigitsFreq: nextValue,
@@ -58,6 +38,7 @@ export const optionsTab = (
             // @ts-ignore
             setState({
               ...state,
+              recompute: true,
               options: {
                 ...options,
                 decimalDigitsCent: nextValue,
@@ -73,6 +54,7 @@ export const optionsTab = (
             // @ts-ignore
             setState({
               ...state,
+              recompute: true,
               options: {
                 ...options,
                 decimalDigitsRatio: nextValue,
@@ -88,6 +70,7 @@ export const optionsTab = (
             // @ts-ignore
             setState({
               ...state,
+              recompute: true,
               options: {
                 ...options,
                 decimalDigitsFreqOnKeys: nextValue,
