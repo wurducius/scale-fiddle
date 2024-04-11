@@ -22,6 +22,10 @@ import { mod, mouseDown } from "../../../util";
 import { updateScale } from "../../../sheen";
 import { scalePresets } from "../../../scale-presets";
 
+function onlyUnique(value: string, index: number, array: any[]) {
+  return array.indexOf(value) === index;
+}
+
 const menuButtonOpensModal =
   (
     state: FiddleState,
@@ -592,6 +596,7 @@ const formModal = (
             ).toString()
           )
           .map((tone) => (tone.includes(".") ? tone : tone + "."))
+          .filter(onlyUnique)
           .join("\n")
     ),
     modalImpl(
