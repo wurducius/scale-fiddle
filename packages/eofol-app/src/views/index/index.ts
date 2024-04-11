@@ -1,5 +1,6 @@
-import { ElementNode } from "../../../../../../eofol/packages/eofol-types";
+import { dropdown, dropdownContent } from "../../dropdown";
 import { mapKeyboardKeys } from "../../keyboard-key-mapping";
+import { modal } from "../../modal";
 import {
   decimalDigitsCent,
   decimalDigitsFreq,
@@ -19,8 +20,8 @@ import {
 } from "../../synth-lib";
 import { timbrePresets } from "../../timbre";
 import { FiddleState, FiddleStateImpl } from "../../types";
+import { mod, mouseDown } from "../../util";
 import "./index.css";
-
 import {
   createElement,
   registerServiceWorker,
@@ -44,20 +45,8 @@ const parseScala = (state: FiddleStateImpl) => (line: string) => {
   return Number(line);
 };
 
-function mod(n: number, m: number) {
-  return ((n % m) + m) % m;
-}
-
 const defaultScale =
   "100.\n200.\n300.\n400.\n500.\n600.\n700.\n800.\n900.\n1000.\n1100.\n1200.";
-
-var mouseDown = false;
-document.body.onmousedown = function () {
-  mouseDown = true;
-};
-document.body.onmouseup = function () {
-  mouseDown = false;
-};
 
 const getScaleLength = (scaleInput: string) => {
   const raw = scaleInput.split("\n");
@@ -193,60 +182,6 @@ const menuButtonOpensModal =
       },
     });
   };
-
-const dropdown = (
-  id: string,
-  title: string,
-  classname: string | string[] | undefined
-) => {
-  return createElement("button", classname, title, undefined, {
-    // @ts-ignore
-    onmouseover: () => {
-      const contentNew = document.getElementById(id);
-      if (contentNew) {
-        contentNew.setAttribute("style", "display: block;");
-      }
-    },
-  });
-};
-
-const dropdownContent = (
-  id: string,
-  classname: string,
-  children: Element | Element[]
-) => {
-  return createElement(
-    "div",
-    [
-      sx({
-        display: "none",
-        position: "absolute",
-      }),
-      classname,
-    ],
-    createElement(
-      "div",
-      sx({
-        display: "flex",
-        flexDirection: "column",
-        fontSize: "16px",
-      }),
-      children
-    ),
-    {
-      id,
-    },
-    {
-      // @ts-ignore
-      onmouseleave: () => {
-        const contentNew = document.getElementById(id);
-        if (contentNew) {
-          contentNew.setAttribute("style", "display: none;");
-        }
-      },
-    }
-  );
-};
 
 const changeScaleMenu = (
   state: FiddleState,
@@ -658,87 +593,7 @@ const keys = (state: FiddleState) => {
   );
 };
 
-const eModal = (
-  id: string,
-  title: string,
-  children: ElementNode,
-  open: boolean,
-  onClose: () => void,
-  onConfirm: () => void,
-  controls?: undefined | Element
-) => {
-  return createElement(
-    "div",
-    sx({
-      display: "none",
-      position: "fixed",
-      zIndex: "1",
-      paddingTop: "100px",
-      left: 0,
-      top: 0,
-      width: "100%",
-      height: "100%",
-      overflow: "auto",
-      backgroundColor: "rgba(0,0,0,0.4)",
-    }),
-    [
-      createElement(
-        "div",
-        sx({
-          position: "relative",
-          padding: "16px 16px 64px 16px",
-          width: "80%",
-          margin: "auto",
-          border: "2px solid grey",
-          backgroundColor: "#dddddd",
-        }),
-        [
-          createElement(
-            "div",
-            sx({ display: "flex", justifyContent: "flex-end" }),
-            createElement(
-              "button",
-              undefined,
-              "X",
-              {},
-              {
-                // @ts-ignore
-                onclick: () => {
-                  onClose();
-                },
-              }
-            )
-          ),
-          createElement("div", sx({ fontSize: "32px" }), title),
-          createElement("div", undefined, children),
-          controls ??
-            createElement("button", undefined, "Let's go", undefined, {
-              // @ts-ignore
-              onclick: () => {
-                onConfirm();
-              },
-            }),
-        ],
-        {},
-        {
-          // @ts-ignore
-          onclick: (e) => {
-            e.stopPropagation();
-          },
-        }
-      ),
-    ],
-    { id },
-    {
-      // @ts-ignore
-      onclick: () => {
-        onClose();
-      },
-    }
-  );
-};
-
-const modal =
+const generalFormModal =
   (
     state: FiddleState,
     setState: undefined | ((nextState: FiddleState) => void)
@@ -749,8 +604,7 @@ const modal =
     formName: string,
     form: [{ title: string; type: string; innerFormName: string }]
   ) => {
-    // @ts-ignore
-    return eModal(
+    return modal(
       id,
       title,
       form
@@ -845,10 +699,10 @@ const formModal = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
 ) => {
-  const m = modal(state, setState);
+  const modalImpl = generalFormModal(state, setState);
 
   return [
-    m("modal-edo", "Equal division of octave (EDO)", "edo", [
+    modalImpl("modal-edo", "Equal division of octave (EDO)", "edo", [
       { title: "N", type: "number", innerFormName: "N" },
     ]),
   ];
@@ -1617,23 +1471,18 @@ defineBuiltinElement<FiddleStateImpl>({
     // @ts-ignore
     const stateImpl = state as FiddleStateImpl;
 
-    console.log(stateImpl.init);
-
     if (stateImpl.init) {
       const data = localStorage.getItem("scale-fiddle-data");
       if (data) {
         const json = JSON.parse(data);
-        console.log("loaded state", json);
         // @ts-ignore
         setState({ ...json, init: false });
       } else {
-        console.log("no data to load");
         // @ts-ignore
         setState({ ...state, init: false });
       }
     } else {
       localStorage.setItem("scale-fiddle-data", JSON.stringify(state));
-      console.log("saved state");
     }
 
     if (stateImpl.recompute) {
