@@ -1,4 +1,4 @@
-import { createElement, select, sx } from "@eofol/eofol";
+import { checkbox, createElement, input, select, sx } from "@eofol/eofol";
 import { setTotalGain, setWaveform } from "../../../synth-lib";
 import { FiddleState } from "../../../types";
 import { timbrePresets } from "../../../timbre-presets";
@@ -11,23 +11,16 @@ const sliderInput = (
 ) => {
   return createElement("div", undefined, [
     createElement(labelTag ?? "p", undefined, label),
-    createElement(
-      "input",
-      undefined,
-      undefined,
-      {
-        type: "range",
-        min: "0",
-        max: "100",
-        value,
+    input({
+      name: "input-slider-" + label,
+      value,
+      onChange: (nextVal) => {
+        setter(nextVal);
       },
-      {
-        // @ts-ignore
-        onchange: (e) => {
-          setter(e.target.value);
-        },
-      }
-    ),
+      type: "range",
+      min: 0,
+      max: 100,
+    }),
   ]);
 };
 
@@ -290,24 +283,17 @@ export const synthTab = (
           "h2"
         ),
         createElement("h2", undefined, "Organ"),
-        createElement(
-          "input",
-          undefined,
-          undefined,
-          synth.organ
-            ? { type: "checkbox", checked: "true" }
-            : { type: "checkbox" },
-          {
+        checkbox({
+          name: "checkbox-organ",
+          value: synth.organ,
+          onChange: () => {
             // @ts-ignore
-            onchange: () => {
-              // @ts-ignore
-              setState({
-                ...state,
-                synth: { ...synth, organ: !synth.organ },
-              });
-            },
-          }
-        ),
+            setState({
+              ...state,
+              synth: { ...synth, organ: !synth.organ },
+            });
+          },
+        }),
         createElement("h2", undefined, "Envelope"),
         select({
           name: "select-envelope-type",

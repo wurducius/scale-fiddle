@@ -3,6 +3,7 @@ import {
   dropdown,
   dropdownContent,
   e,
+  input,
   modal,
   select,
   sx,
@@ -83,30 +84,21 @@ const changeScaleMenu = (
     createElement("p", sx({ marginTop: "8px" }), "Scale name"),
     createElement(
       "div",
-      sx({ display: "flex", flex: 1 }),
-      createElement(
-        "input",
-        sx({ width: "100%" }),
-        undefined,
-        {
+      sx({ display: "flex", flex: 1, justifyContent: "center" }),
+      input({
+        name: "input-scale-name",
+        // @ts-ignore
+        value: state.scales[state.scaleIndex].name,
+        onChange: (nextVal) => {
           // @ts-ignore
-          value: state.scales[state.scaleIndex].name,
+          const newScales = state.scales.map((scale, index) =>
+            // @ts-ignore
+            index === state.scaleIndex ? { ...scale, name: nextVal } : scale
+          );
+          // @ts-ignore
+          setState({ ...state, scales: newScales });
         },
-        {
-          // @ts-ignore
-          onchange: (e) => {
-            // @ts-ignore
-            const newScales = state.scales.map((scale, index) =>
-              // @ts-ignore
-              index === state.scaleIndex
-                ? { ...scale, name: e.target.value }
-                : scale
-            );
-            // @ts-ignore
-            setState({ ...state, scales: newScales });
-          },
-        }
-      )
+      })
     ),
     createElement(
       "button",
@@ -223,89 +215,69 @@ const scaleTuning = (
 
   return createElement("div", undefined, [
     createElement("p", undefined, "Base frequency Hz"),
-    createElement(
-      "input",
-      undefined,
-      undefined,
-      { value: tuning.baseFreq },
-      {
-        // @ts-ignore
-        onchange: (e) => {
-          const val = Number(e.target.value);
-          if (Number.isFinite(val)) {
-            // @ts-ignore
-            setState({
-              ...state,
-              tuning: { ...tuning, baseFreq: val },
-              recompute: true,
-            });
-          }
-        },
-      }
-    ),
+    input({
+      name: "input-basefreq",
+      value: tuning.baseFreq,
+      onChange: (nextVal) => {
+        const val = Number(nextVal);
+        if (Number.isFinite(val)) {
+          // @ts-ignore
+          setState({
+            ...state,
+            tuning: { ...tuning, baseFreq: val },
+            recompute: true,
+          });
+        }
+      },
+    }),
     createElement("p", undefined, "Period interval (Equave)"),
-    createElement(
-      "input",
-      undefined,
-      undefined,
-      { value: tuning.period },
-      {
-        // @ts-ignore
-        onchange: (e) => {
-          const val = Number(e.target.value);
-          if (Number.isFinite(val)) {
-            // @ts-ignore
-            setState({
-              ...state,
-              tuning: { ...tuning, period: val },
-              recompute: true,
-            });
-          }
-        },
-      }
-    ),
+    input({
+      name: "input-period",
+      value: tuning.period,
+      onChange: (nextVal) => {
+        const val = Number(nextVal);
+        if (Number.isFinite(val)) {
+          // @ts-ignore
+          setState({
+            ...state,
+            tuning: { ...tuning, period: val },
+            recompute: true,
+          });
+        }
+      },
+    }),
     createElement("p", undefined, "Number of keys up"),
-    createElement(
-      "input",
-      undefined,
-      undefined,
-      { value: tuning.keysUp },
-      {
-        // @ts-ignore
-        onchange: (e) => {
-          const val = Number(e.target.value);
-          if (Number.isFinite(val) && val >= 0) {
-            // @ts-ignore
-            setState({
-              ...state,
-              tuning: { ...tuning, keysUp: val },
-              recompute: true,
-            });
-          }
-        },
-      }
-    ),
+    input({
+      name: "input-keys-up",
+      value: tuning.keysUp,
+      onChange: (nextVal) => {
+        const val = Number(nextVal);
+        if (Number.isFinite(val) && val >= 0) {
+          // @ts-ignore
+          setState({
+            ...state,
+            tuning: { ...tuning, keysUp: val },
+            recompute: true,
+          });
+        }
+      },
+    }),
     createElement("p", undefined, "Number of keys down"),
-    createElement(
-      "input",
-      undefined,
-      undefined,
-      { value: tuning.keysDown },
-      {
-        // @ts-ignore
-        onchange: (e) => {
-          const val = Number(e.target.value);
-          if (Number.isFinite(val) && val >= 0) {
-            // @ts-ignore
-            setState({
-              ...state,
-              tuning: { ...tuning, keysDown: val },
-              recompute: true,
-            });
-          }
-        },
-      }
-    ),
+    input({
+      name: "input-keys-down",
+      value: tuning.keysDown,
+      onChange: (nextVal) => {
+        const val = Number(nextVal);
+        if (Number.isFinite(val) && val >= 0) {
+          // @ts-ignore
+          setState({
+            ...state,
+            tuning: { ...tuning, keysDown: val },
+            recompute: true,
+          });
+        }
+      },
+    }),
   ]);
 };
 
@@ -453,7 +425,7 @@ const generalFormModal =
     id: string,
     title: string,
     formName: string,
-    form: [{ title: string; type: string; innerFormName: string }]
+    form: [{ title: string; type: string; innerFormName: string; id: string }]
   ) => {
     // @ts-ignore
     const decimalDigitsCent = state.options.decimalDigitsCent;
@@ -464,34 +436,27 @@ const generalFormModal =
       form
         .map((item) => [
           createElement("div", sx({ fontSize: "24px" }), item.title),
-          createElement(
-            "input",
-            undefined,
-            undefined,
-            {
+          input({
+            name: "input-form-" + id,
+            // @ts-ignore
+            value: state.form[formName][item.innerFormName],
+            onChange: (nextVal) => {
               // @ts-ignore
-              value: state.form[formName][item.innerFormName],
-            },
-            {
-              // @ts-ignore
-              onchange: (event) => {
-                // @ts-ignore
-                setState({
-                  ...state,
-                  form: {
+              setState({
+                ...state,
+                form: {
+                  // @ts-ignore
+                  ...state.form,
+                  // @ts-ignore
+                  [formName]: {
                     // @ts-ignore
-                    ...state.form,
-                    // @ts-ignore
-                    [formName]: {
-                      // @ts-ignore
-                      ...state.form[formName],
-                      [item.innerFormName]: event.target.value,
-                    },
+                    ...state.form[formName],
+                    [item.innerFormName]: nextVal,
                   },
-                });
-              },
-            }
-          ),
+                },
+              });
+            },
+          }),
         ])
         .flat(),
       // @ts-ignore
@@ -557,7 +522,7 @@ const formModal = (
 
   return [
     modalImpl("modal-edo", "Equal division of octave (EDO)", "edo", [
-      { title: "N", type: "number", innerFormName: "N" },
+      { title: "N", type: "number", innerFormName: "N", id: "edo" },
     ]),
     modal(
       "modal-preset",
