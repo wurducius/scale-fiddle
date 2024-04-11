@@ -194,6 +194,26 @@ const menuButtonOpensModal =
     });
   };
 
+const dropdown = (
+  id: string,
+  title: string,
+  classname: string | string[] | undefined
+) => {
+  return createElement("button", classname, title, undefined, {
+    // @ts-ignore
+    onmouseover: () => {
+      const contentNew = document.getElementById(id);
+      if (contentNew) {
+        contentNew.setAttribute("style", "display: block;");
+      }
+    },
+  });
+};
+
+const dropdownContent = () => {
+  return "";
+};
+
 const changeScaleMenu = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
@@ -202,40 +222,12 @@ const changeScaleMenu = (
 
   return [
     createElement("div", sx({ display: "flex" }), [
-      createElement("button", sx({ flex: 1 }), "New scale", undefined, {
-        // @ts-ignore
-        onmouseover: () => {
-          const contentNew = document.getElementById(
-            "dropdown-new-scale-content"
-          );
-          if (contentNew) {
-            contentNew.setAttribute("style", "display: block;");
-          }
-          const contentModify = document.getElementById(
-            "dropdown-modify-scale-content"
-          );
-          if (contentModify) {
-            contentModify.setAttribute("style", "display: none;");
-          }
-        },
-      }),
-      createElement("button", sx({ flex: 1 }), "Modify scale", undefined, {
-        // @ts-ignore
-        onmouseover: () => {
-          const contentModify = document.getElementById(
-            "dropdown-modify-scale-content"
-          );
-          if (contentModify) {
-            contentModify.setAttribute("style", "display: block;");
-          }
-          const contentNew = document.getElementById(
-            "dropdown-new-scale-content"
-          );
-          if (contentNew) {
-            contentNew.setAttribute("style", "display: none;");
-          }
-        },
-      }),
+      dropdown("dropdown-new-scale-content", "New scale", sx({ flex: 1 })),
+      dropdown(
+        "dropdown-modify-scale-content",
+        "Modify scale",
+        sx({ flex: 1 })
+      ),
     ]),
     createElement("p", sx({ marginTop: "8px" }), "Select scale"),
     createElement(
