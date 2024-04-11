@@ -58,7 +58,7 @@ export const initialState = {
     },
     preset: {
       open: false,
-      N: 12,
+      id: "major-scale",
     },
     transpose: {
       open: false,

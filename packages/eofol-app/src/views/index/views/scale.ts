@@ -569,6 +569,9 @@ const formModal = (
     modalImpl("modal-edo", "Equal division of octave (EDO)", "edo", [
       { title: "N", type: "number", innerFormName: "N" },
     ]),
+    modalImpl("modal-preset", "Preset scale", "preset", [
+      { title: "Choose scale", type: "select", innerFormName: "id" },
+    ]),
   ];
 };
 

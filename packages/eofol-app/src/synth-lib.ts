@@ -1,6 +1,6 @@
 import { sx } from "@eofol/eofol/dist";
 import { FiddleState } from "./types";
-import { timbrePresets } from "./timbre";
+import { timbrePresets } from "./timbre-presets";
 
 export const keyActiveHoverStyle = sx(
   { border: "2px solid pink", backgroundColor: "#914a91" },

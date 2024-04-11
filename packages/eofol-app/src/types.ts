@@ -56,7 +56,7 @@ export type FiddleStateImpl = {
     };
     preset: {
       open: boolean;
-      N: number;
+      id: string;
     };
     transpose: {
       open: boolean;

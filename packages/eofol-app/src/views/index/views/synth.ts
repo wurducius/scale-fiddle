@@ -1,7 +1,7 @@
 import { createElement, sx } from "@eofol/eofol";
 import { setTotalGain, setWaveform } from "../../../synth-lib";
 import { FiddleState } from "../../../types";
-import { timbrePresets } from "../../../timbre";
+import { timbrePresets } from "../../../timbre-presets";
 
 const sliderInput = (
   label: string,
