@@ -1,6 +1,6 @@
 import { createElement, sx } from "@eofol/eofol";
-import { panic } from "../../synth-lib";
-import { FiddleState } from "../../types";
+import { panic } from "../../../synth-lib";
+import { FiddleState } from "../../../types";
 
 const appbarButton = (
   label: string,

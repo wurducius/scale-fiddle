@@ -9,8 +9,8 @@ import {
 import "../../styles/base.css";
 import "./index.css";
 import { updateScale } from "../../sheen";
-import { appbar } from "./appbar";
-import { scaleTab, synthTab, optionsTab, aboutTab } from "./tabs";
+import { appbar } from "./views/appbar";
+import { scaleTab, synthTab, optionsTab, aboutTab } from "./views";
 
 defineBuiltinElement<FiddleStateImpl>({
   tagName: "fiddle-keyboard",

@@ -1,25 +1,6 @@
-import {
-  decimalDigitsFreq,
-  decimalDigitsCent,
-  decimalDigitsRatio,
-} from "./parameters";
+import { parseScala } from "./scala";
 import { FiddleStateImpl } from "./types";
 import { mod } from "./util";
-
-export const parseScala = (state: FiddleStateImpl) => (line: string) => {
-  if (line.includes(".")) {
-    return Math.pow(state.tuning.period, Number(line) / 1200);
-  } else if (line.includes("/")) {
-    const split = line.split("/");
-    return Number(Number(split[0]) / Number(split[1]));
-  } else if (line.includes(",")) {
-    return Number(line.replace(",", "."));
-  } else if (line.includes("\\")) {
-    const split = line.split("\\");
-    return Math.pow(2, Number(split[0]) / Number(split[1]));
-  }
-  return Number(line);
-};
 
 export const getScaleLength = (scaleInput: string) => {
   const raw = scaleInput.split("\n");
@@ -32,6 +13,7 @@ export const scaleToFreq = (state: FiddleStateImpl) => {
   const period = state.tuning.period;
   const upKeys = state.tuning.keysUp;
   const downKeys = state.tuning.keysDown;
+  const decimalDigitsFreq = state.options.decimalDigitsFreq;
 
   const raw = scaleInput.split("\n").filter(Boolean);
   const intervalMap = raw.map(parseScala(state));
@@ -71,6 +53,8 @@ export const scaleToOverview = (state: FiddleStateImpl) => {
   const period = state.tuning.period;
   const upKeys = state.tuning.keysUp;
   const downKeys = state.tuning.keysDown;
+  const { decimalDigitsCent, decimalDigitsFreq, decimalDigitsRatio } =
+    state.options;
 
   const raw = scaleInput.split("\n").filter(Boolean);
   const intervalMap = raw.map(parseScala(state));

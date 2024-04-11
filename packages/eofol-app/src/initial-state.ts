@@ -117,4 +117,14 @@ export const initialState = {
     waveformType: "preset",
     waveformPreset: "distorted-organ",
   },
+  options: {
+    decimalDigitsFreq: 3,
+    decimalDigitsFreqOnKeys: 1,
+    decimalDigitsCent: 1,
+    decimalDigitsRatio: 3,
+    startGain: 0.001,
+    startTime: 0.001,
+    endGain: 0.001,
+    endTime: 0.001,
+  },
 } as FiddleStateImpl;

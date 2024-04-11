@@ -1,5 +1,4 @@
 import { sx } from "@eofol/eofol/dist";
-import { startGain, startTime, endGain, endTime } from "./parameters";
 import { FiddleState } from "./types";
 import { timbrePresets } from "./timbre";
 
@@ -100,6 +99,9 @@ export const playTone = (state: FiddleState) => (freq: string) => {
     // @ts-ignore
   } = state.synth;
 
+  // @ts-ignore
+  const { startGain, startTime, endGain, endTime } = state.options;
+
   const t = audioContext.currentTime;
 
   const last = oscList[freq];
@@ -159,6 +161,9 @@ export const releaseNote = (state: FiddleState) => (freq: string) => {
     releaseTime,
     // @ts-ignore
   } = state.synth;
+
+  // @ts-ignore
+  const { endGain, endTime } = state.options;
 
   const last = oscList[freq];
 

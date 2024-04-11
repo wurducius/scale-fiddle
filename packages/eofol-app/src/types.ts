@@ -115,6 +115,16 @@ export type FiddleStateImpl = {
     waveformType: string;
     waveformPreset: string;
   };
+  options: {
+    decimalDigitsFreq: number;
+    decimalDigitsFreqOnKeys: number;
+    decimalDigitsCent: number;
+    decimalDigitsRatio: number;
+    startGain: number;
+    startTime: number;
+    endGain: number;
+    endTime: number;
+  };
 };
 
 export type FiddleState = FiddleStateImpl | undefined | {};

@@ -8,10 +8,6 @@ import {
 } from "@eofol/eofol";
 import { defaultScale } from "../../../initial-state";
 import {
-  decimalDigitsFreqOnKeys,
-  decimalDigitsCent,
-} from "../../../parameters";
-import {
   flashKeyDown,
   flashKeyUp,
   keyActiveHoverStyle,
@@ -380,6 +376,9 @@ const keys = (state: FiddleState) => {
   const playTone = playToneImpl(state);
   const releaseNote = releaseNoteImpl(state);
 
+  // @ts-ignore
+  const decimalDigitsFreqOnKeys = state.options.decimalDigitsFreqOnKeys;
+
   return createElement(
     "div",
     sx({ display: "flex", flexWrap: "wrap-reverse" }),
@@ -466,6 +465,9 @@ const generalFormModal =
     formName: string,
     form: [{ title: string; type: string; innerFormName: string }]
   ) => {
+    // @ts-ignore
+    const decimalDigitsCent = state.options.decimalDigitsCent;
+
     return modal(
       id,
       title,
