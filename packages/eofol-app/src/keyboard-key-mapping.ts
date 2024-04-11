@@ -6,7 +6,11 @@ export const keysDown: Record<number, boolean | undefined> = {};
 const handleKeyDownImpl =
   (state: FiddleState) =>
   (event: KeyboardEvent, freq: string[], key: string, index: number) => {
-    if (event.key === key && !keysDown[index]) {
+    if (
+      event.key === key &&
+      !keysDown[index] &&
+      document.activeElement === document.body
+    ) {
       // @ts-ignore
       playTone(state)(freq[index]);
       flashKeyDown(freq, index);
