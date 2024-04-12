@@ -611,7 +611,25 @@ const formModal = (
       "Harmonic series",
       "harm",
       [{ title: "T", type: "number", innerFormName: "T", id: "t" }],
-      () => ""
+      ({ T }) => {
+        const vals = [0];
+        for (let i = 1; i < T + 1; i++) {
+          // @ts-ignore
+          vals.push(1200 * Math.log2(normalizePeriod(i, state.tuning.period)));
+          vals.push(
+            // @ts-ignore
+            1200 * Math.log2(normalizePeriod(1 / i, state.tuning.period))
+          );
+        }
+        return (
+          vals
+            .sort((a, b) => a - b)
+            // @ts-ignore
+            .map((val) => val.toFixed(state.options.decimalDigitsCent))
+            .filter(onlyUnique)
+            .join("\n")
+        );
+      }
     ),
     modalImpl(
       "modal-just",
@@ -625,12 +643,22 @@ const formModal = (
         const vals = [0];
         for (let i = 1; i < T + 1; i++) {
           // @ts-ignore
-          vals.push(1200 * Math.log2(normalizePeriod(i, state.tuning.period)));
           vals.push(
-            // @ts-ignore
-            1200 * Math.log2(normalizePeriod(1 / i, state.tuning.period))
+            1200 *
+              Math.log2(
+                // @ts-ignore
+                normalizePeriod(Math.pow(limit, i), state.tuning.period)
+              )
+          );
+          vals.push(
+            1200 *
+              Math.log2(
+                // @ts-ignore
+                normalizePeriod(1 / Math.pow(limit, i), state.tuning.period)
+              )
           );
         }
+
         return (
           vals
             .sort((a, b) => a - b)
