@@ -91,7 +91,7 @@ const changeScaleMenu = (
       dropdown("dropdown-new-scale-content", "New scale", sx({ flex: 1 })),
       dropdown(
         "dropdown-modify-scale-content",
-        "Modify scale",
+        "(TODO) Modify scale",
         sx({ flex: 1 })
       ),
     ]),
@@ -671,7 +671,7 @@ const formModal = (
     ),
     modalImpl(
       "modal-ratiochord",
-      "Ratio chord",
+      "(TODO) Ratio chord",
       "ratiochord",
       [
         {
