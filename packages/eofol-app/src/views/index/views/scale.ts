@@ -178,16 +178,25 @@ const changeScaleMenu = (
           // @ts-ignore
           onclick: () => {
             // @ts-ignore
+            const newScales = state.scales.filter(
+              // @ts-ignore
+              (item, i) => state.scaleIndex !== i
+            );
+            // @ts-ignore
+            const newScaleIndex =
+              // @ts-ignore
+              state.scaleIndex === 0
+                ? 0
+                : // @ts-ignore
+                  state.scaleIndex - 1;
+            // @ts-ignore
             setState({
               ...state,
               // @ts-ignore
-              scales: state.scales.filter((item, i) => state.scaleIndex !== i),
-              scaleIndex:
-                // @ts-ignore
-                state.scaleIndex === 0
-                  ? 0
-                  : // @ts-ignore
-                    state.scaleIndex - 1,
+              scales: newScales,
+              // @ts-ignore
+              scaleInput: newScales[newScaleIndex].scaleInput,
+              scaleIndex: newScaleIndex,
               recompute: true,
             });
           },
