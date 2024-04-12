@@ -26,6 +26,22 @@ function onlyUnique(value: string, index: number, array: any[]) {
   return array.indexOf(value) === index;
 }
 
+const linearScale = (state: FiddleState, T: number, g: number) =>
+  Array.from({ length: T })
+    .map((item, index) => {
+      // @ts-ignore
+      const centPeriod = 1200 * Math.log2(state.tuning.period);
+      const val = mod((index + 1) * g, centPeriod);
+      return val === 0
+        ? // @ts-ignore
+          centPeriod.toFixed(state.options.decimalDigitsCent)
+        : // @ts-ignore
+          val.toFixed(state.options.decimalDigitsCent);
+    })
+    .map((tone) => (tone.includes(".") ? tone : tone + "."))
+    .filter(onlyUnique)
+    .join("\n");
+
 const menuButtonOpensModal =
   (
     state: FiddleState,
@@ -541,26 +557,8 @@ const formModal = (
       "edo",
       [{ title: "N", type: "number", innerFormName: "N", id: "edo" }],
       ({ N }) =>
-        Array.from({
-          length: N,
-        }).reduce((acc, next, i) => {
-          // @ts-ignore
-          const n = Number(N);
-          const val = ((i + 1) * 1200) / n;
-          const valAsStr = val.toString();
-          const includesDot = valAsStr.includes(".");
-          const displayVal = includesDot
-            ? // @ts-ignore
-              val.toFixed(state.options.decimalDigitsCent)
-            : valAsStr + ".";
-
-          return (
-            acc +
-            displayVal +
-            // @ts-ignore
-            (i + 1 === n ? "" : "\n")
-          );
-        }, "") + ""
+        // @ts-ignore
+        linearScale(state, N, (1200 * Math.log2(state.tuning.period)) / N)
     ),
     modalImpl(
       "modal-mos",
@@ -570,7 +568,21 @@ const formModal = (
         { title: "N", type: "number", innerFormName: "N", id: "n" },
         { title: "T", type: "number", innerFormName: "T", id: "t" },
       ],
-      ({ N, T }) => ""
+      ({ N, T }) => {
+        const vals = Array.from({ length: T })
+          .map((item, i) => {
+            // @ts-ignore
+            const periodCent = 1200 * Math.log2(state.tuning.period);
+            const val = mod(
+              (Math.floor(((i + 1) * N) / T) * periodCent) / N,
+              periodCent
+            );
+            return val === 0 ? periodCent : val;
+          }) // @ts-ignore
+          .map((tone) => tone.toFixed(state.options.decimalDigitsCent))
+          .map((tone) => (tone.includes(".") ? tone : tone + "."));
+        return vals.join("\n");
+      }
     ),
     modalImpl(
       "modal-linear",
@@ -585,19 +597,7 @@ const formModal = (
           id: "g",
         },
       ],
-      ({ T, g }) =>
-        Array.from({ length: T })
-          .map((item, index) =>
-            // @ts-ignore
-            mod(
-              (index + 1) * g,
-              // @ts-ignore
-              1200 * Math.log2(state.tuning.period)
-            ).toString()
-          )
-          .map((tone) => (tone.includes(".") ? tone : tone + "."))
-          .filter(onlyUnique)
-          .join("\n")
+      ({ T, g }) => linearScale(state, T, g)
     ),
     modalImpl(
       "modal-meantone",
