@@ -7,46 +7,6 @@ export const getScaleLength = (scaleInput: string) => {
   return raw.length;
 };
 
-export const scaleToFreq = (state: FiddleStateImpl) => {
-  const scaleInput = state.scaleInput;
-  const baseFreq = state.tuning.baseFreq;
-  const period = state.tuning.period;
-  const upKeys = state.tuning.keysUp;
-  const downKeys = state.tuning.keysDown;
-  const decimalDigitsFreq = state.options.decimalDigitsFreq;
-
-  const raw = scaleInput.split("\n").filter(Boolean);
-  const intervalMap = raw.map(parseScala(state));
-
-  const freq: number[] = [];
-  freq[downKeys] = baseFreq;
-
-  for (let i = 0; i < upKeys; i++) {
-    freq[downKeys + i + 1] =
-      baseFreq *
-      Math.pow(
-        period,
-        Math.floor(i / raw.length) -
-          (mod(raw.length + i - 1, raw.length) === raw.length - 1 ? 1 : 0)
-      ) *
-      intervalMap[mod(raw.length + i - 1, raw.length)];
-  }
-
-  if (downKeys > 0) {
-    for (let i = 1; i < downKeys + 2; i++) {
-      freq[i] =
-        baseFreq *
-        Math.pow(period, -(1 + Math.floor((i - 1) / raw.length))) *
-        intervalMap[mod(raw.length - i, raw.length)];
-    }
-  }
-
-  return freq
-    .sort((a, b) => a - b)
-    .map((tone) => tone.toFixed(decimalDigitsFreq))
-    .filter(Boolean);
-};
-
 export const scaleToOverview = (state: FiddleStateImpl) => {
   const scaleInput = state.scaleInput;
   const baseFreq = state.tuning.baseFreq;
@@ -109,7 +69,6 @@ export const scaleToOverview = (state: FiddleStateImpl) => {
 
 export const updateScale = (state: FiddleStateImpl) => ({
   scaleInput: state.scaleInput,
-  freq: scaleToFreq(state),
   scaleLength: getScaleLength(state.scaleInput),
   scales: state.scales.map((s, index) =>
     state.scaleIndex === index ? { ...s, scaleInput: state.scaleInput } : s

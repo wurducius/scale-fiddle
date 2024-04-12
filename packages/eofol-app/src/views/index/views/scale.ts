@@ -406,12 +406,14 @@ const keys = (state: FiddleState) => {
 
   // @ts-ignore
   const decimalDigitsFreqOnKeys = state.options.decimalDigitsFreqOnKeys;
+  // @ts-ignore
+  const freq = state.overview.map((item) => item.freq);
 
   return createElement(
     "div",
     sx({ display: "flex", flexWrap: "wrap-reverse" }),
     // @ts-ignore
-    state.freq.map((val, index) =>
+    freq.map((val, index) =>
       createElement(
         "div",
         [
@@ -444,7 +446,7 @@ const keys = (state: FiddleState) => {
           // @ts-ignore
           onmousedown: () => {
             // @ts-ignore
-            flashKeyDown(state.freq, index);
+            flashKeyDown(freq, index);
             playTone(val);
           },
           // @ts-ignore
@@ -452,7 +454,7 @@ const keys = (state: FiddleState) => {
             event.preventDefault();
             if (mouseDown) {
               // @ts-ignore
-              flashKeyDown(state.freq, index);
+              flashKeyDown(freq, index);
               playTone(val);
             }
           },
@@ -460,19 +462,19 @@ const keys = (state: FiddleState) => {
           onmouseleave: (event) => {
             event.preventDefault();
             // @ts-ignore
-            flashKeyUp(state.freq, index);
+            flashKeyUp(freq, index);
             releaseNote(val);
           },
           // @ts-ignore
           onmouseup: () => {
             // @ts-ignore
-            flashKeyUp(state.freq, index);
+            flashKeyUp(freq, index);
             releaseNote(val);
           },
           // @ts-ignore
           onmouseleave: () => {
             // @ts-ignore
-            flashKeyUp(state.freq, index);
+            flashKeyUp(freq, index);
             releaseNote(val);
           },
           // @ts-ignore

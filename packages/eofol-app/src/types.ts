@@ -1,7 +1,6 @@
 export type FiddleStateImpl = {
   init: boolean;
   scaleInput: string;
-  freq: string[];
   scaleLength: number;
   scales: { name: string; scaleInput: string }[];
   scaleIndex: number;
