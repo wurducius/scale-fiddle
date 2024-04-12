@@ -135,34 +135,65 @@ const changeScaleMenu = (
         },
       })
     ),
-    createElement(
-      "button",
-      sx({ marginTop: "8px" }),
-      "Add new scale",
-      {},
-      {
-        // @ts-ignore
-        onclick: () => {
+    createElement("div", sx({ display: "flex", flexDirection: "column" }), [
+      createElement(
+        "button",
+        sx({ marginTop: "8px" }),
+        "Add new scale",
+        {},
+        {
           // @ts-ignore
-          setState({
-            ...state,
-            scales: [
-              // @ts-ignore
-              ...state.scales,
-              {
-                // @ts-ignore
-                name: "Scale #" + state.scales.length,
-                scaleInput: defaultScale,
-              },
-            ],
+          onclick: () => {
             // @ts-ignore
-            scaleIndex: state.scales.length,
-            scaleInput: defaultScale,
-            recompute: true,
-          });
-        },
-      }
-    ),
+            setState({
+              ...state,
+              scales: [
+                // @ts-ignore
+                ...state.scales,
+                {
+                  // @ts-ignore
+                  name: "Scale #" + state.scales.length,
+                  scaleInput: defaultScale,
+                },
+              ],
+              // @ts-ignore
+              scaleIndex: state.scales.length,
+              scaleInput: defaultScale,
+              recompute: true,
+            });
+          },
+        }
+      ),
+      createElement(
+        "button",
+        sx({ marginTop: "8px" }),
+        "Delete scale",
+        // @ts-ignore
+        state.scales.length <= 1
+          ? {
+              disabled: true,
+            }
+          : {},
+        {
+          // @ts-ignore
+          onclick: () => {
+            // @ts-ignore
+            setState({
+              ...state,
+              // @ts-ignore
+              scales: state.scales.filter((item, i) => state.scaleIndex !== i),
+              scaleIndex:
+                // @ts-ignore
+                state.scaleIndex === 0
+                  ? 0
+                  : // @ts-ignore
+                    state.scaleIndex - 1,
+              recompute: true,
+            });
+          },
+        }
+      ),
+    ]),
     dropdownContent(
       "dropdown-new-scale-content",
       sx({ top: "75px", left: "4px", width: "calc(12.5% - 4px)" }),
