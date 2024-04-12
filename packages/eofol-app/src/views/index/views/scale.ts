@@ -38,6 +38,7 @@ const linearScale = (state: FiddleState, T: number, g: number) =>
         : // @ts-ignore
           val.toFixed(state.options.decimalDigitsCent);
     })
+    .sort((a, b) => Number(a) - Number(b))
     .map((tone) => (tone.includes(".") ? tone : tone + "."))
     .filter(onlyUnique)
     .join("\n");
@@ -612,7 +613,8 @@ const formModal = (
           id: "comma",
         },
       ],
-      () => ""
+      ({ T, comma }) =>
+        linearScale(state, T, 1200 * Math.log2(Math.pow(5, 1 / comma)))
     ),
     modalImpl(
       "modal-harm",
