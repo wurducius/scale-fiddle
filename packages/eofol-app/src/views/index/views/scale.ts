@@ -503,36 +503,49 @@ const generalFormModal =
   ) => {
     // @ts-ignore
     const decimalDigitsCent = state.options.decimalDigitsCent;
+    // @ts-ignore
+    const resultScale = result(state.form[formName]);
 
     return modal(
       id,
       title,
-      form
-        .map((item) => [
-          createElement("div", sx({ fontSize: "24px" }), item.title),
-          input({
-            name: "input-form-" + id,
-            // @ts-ignore
-            value: state.form[formName][item.innerFormName],
-            onChange: (nextVal) => {
-              // @ts-ignore
-              setState({
-                ...state,
-                form: {
+      createElement("div", undefined, [
+        createElement(
+          "div",
+          undefined,
+          form
+            .map((item) => [
+              createElement("div", sx({ fontSize: "24px" }), item.title),
+              input({
+                name: "input-form-" + id,
+                // @ts-ignore
+                value: state.form[formName][item.innerFormName],
+                onChange: (nextVal) => {
                   // @ts-ignore
-                  ...state.form,
-                  // @ts-ignore
-                  [formName]: {
-                    // @ts-ignore
-                    ...state.form[formName],
-                    [item.innerFormName]: nextVal,
-                  },
+                  setState({
+                    ...state,
+                    form: {
+                      // @ts-ignore
+                      ...state.form,
+                      // @ts-ignore
+                      [formName]: {
+                        // @ts-ignore
+                        ...state.form[formName],
+                        [item.innerFormName]: nextVal,
+                      },
+                    },
+                  });
                 },
-              });
-            },
-          }),
-        ])
-        .flat(),
+              }),
+            ])
+            .flat()
+        ),
+        createElement(
+          "textarea",
+          sx({ resize: "none", height: "300px", marginTop: "16px" }),
+          [resultScale]
+        ),
+      ]),
       // @ts-ignore
       state.form[formName].open,
       () => {
@@ -551,7 +564,7 @@ const generalFormModal =
         const nextState = {
           ...state,
           // @ts-ignore
-          scaleInput: result(state.form[formName]),
+          scaleInput: resultScale,
         } as FiddleStateImpl;
         // @ts-ignore
         setState({
