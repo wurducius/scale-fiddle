@@ -26,12 +26,26 @@ function onlyUnique(value: string, index: number, array: any[]) {
   return array.indexOf(value) === index;
 }
 
+function normalizePeriod(value: number, period: number) {
+  if (value <= 0) {
+    return value;
+  }
+  let val = value;
+  while (val > period) {
+    val = val / period;
+  }
+  while (val < 1) {
+    val = val * period;
+  }
+  return val;
+}
+
 const linearScale = (state: FiddleState, T: number, g: number) =>
   Array.from({ length: T })
     .map((item, index) => {
       // @ts-ignore
       const centPeriod = 1200 * Math.log2(state.tuning.period);
-      const val = mod((index + 1) * g, centPeriod);
+      const val = mod(index * g, centPeriod);
       return val === 0
         ? // @ts-ignore
           centPeriod.toFixed(state.options.decimalDigitsCent)
@@ -437,30 +451,6 @@ const keys = (state: FiddleState) => {
   );
 };
 
-/*
-const result =
-          Array.from({
-            // @ts-ignore
-            length: state.form[formName].N,
-          }).reduce((acc, next, i) => {
-            // @ts-ignore
-            const n = Number(state.form[formName].N);
-            const val = ((i + 1) * 1200) / n;
-            const valAsStr = val.toString();
-            const includesDot = valAsStr.includes(".");
-            const displayVal = includesDot
-              ? val.toFixed(decimalDigitsCent)
-              : valAsStr + ".";
-
-            return (
-              acc +
-              displayVal +
-              // @ts-ignore
-              (i + 1 === n ? "" : "\n")
-            );
-          }, "") + "";
-          */
-
 const generalFormModal =
   (
     state: FiddleState,
@@ -631,7 +621,25 @@ const formModal = (
         { title: "T", type: "number", innerFormName: "T", id: "t" },
         { title: "Limit", type: "number", innerFormName: "limit", id: "limit" },
       ],
-      () => ""
+      ({ T, limit }) => {
+        const vals = [0];
+        for (let i = 1; i < T + 1; i++) {
+          // @ts-ignore
+          vals.push(1200 * Math.log2(normalizePeriod(i, state.tuning.period)));
+          vals.push(
+            // @ts-ignore
+            1200 * Math.log2(normalizePeriod(1 / i, state.tuning.period))
+          );
+        }
+        return (
+          vals
+            .sort((a, b) => a - b)
+            // @ts-ignore
+            .map((val) => val.toFixed(state.options.decimalDigitsCent))
+            .filter(onlyUnique)
+            .join("\n")
+        );
+      }
     ),
     modalImpl(
       "modal-ratiochord",
