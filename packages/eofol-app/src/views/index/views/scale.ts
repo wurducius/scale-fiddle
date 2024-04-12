@@ -1,14 +1,4 @@
-import {
-  createElement,
-  dropdown,
-  dropdownContent,
-  e,
-  input,
-  modal,
-  select,
-  sx,
-  sy,
-} from "@eofol/eofol";
+import { createElement, e, sx, sy } from "@eofol/eofol";
 import { defaultScale } from "../../../initial-state";
 import {
   flashKeyDown,
@@ -21,6 +11,13 @@ import { FiddleState, FiddleStateImpl } from "../../../types";
 import { mod, mouseDown } from "../../../util";
 import { updateScale } from "../../../sheen";
 import { scalePresets } from "../../../scale-presets";
+import {
+  dropdown,
+  select,
+  input,
+  dropdownContent,
+  modal,
+} from "@eofol/eofol-simple";
 
 function onlyUnique(value: string, index: number, array: any[]) {
   return array.indexOf(value) === index;

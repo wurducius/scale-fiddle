@@ -1,11 +1,12 @@
 {
-  "name": "eofol",
+  "name": "scale-fiddle",
   "version": "0.2.21",
   "description": "All-inclusive blazingly fast reactive web framework with zero configuration, batteries included!",
   "workspaces": [
     "packages/*"
   ],
-  "dependencies": {},
+  "dependencies": {
+  },
   "devDependencies": {
     "lerna": "^8.1.2"
   },

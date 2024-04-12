@@ -1,7 +1,8 @@
-import { checkbox, createElement, input, select, sx } from "@eofol/eofol";
+import { createElement, sx } from "@eofol/eofol";
 import { setTotalGain, setWaveform } from "../../../synth-lib";
 import { FiddleState } from "../../../types";
 import { timbrePresets } from "../../../timbre-presets";
+import { input, select, checkbox } from "@eofol/eofol-simple";
 
 const sliderInput = (
   label: string,

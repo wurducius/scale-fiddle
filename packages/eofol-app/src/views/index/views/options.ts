@@ -1,5 +1,6 @@
-import { createElement, input } from "@eofol/eofol";
+import { createElement } from "@eofol/eofol";
 import { FiddleState } from "../../../types";
+import { input } from "@eofol/eofol-simple";
 
 export const optionsTab = (
   state: FiddleState,
