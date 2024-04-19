@@ -2,6 +2,14 @@ import { createStyle, sx } from "@eofol/eofol";
 import { FiddleState } from "./types";
 import { timbrePresets } from "./timbre-presets";
 
+export let keyElementsMap: Record<string, Element> = {};
+export const clearKeyElementMap = () => {
+  keyElementsMap = {};
+};
+export const setKeyElementMap = (freq: string, element: Element) => {
+  keyElementsMap[freq] = element;
+};
+
 export const keyActiveHoverStyle = sx(
   { border: "2px solid pink", backgroundColor: "#914a91" },
   "hover"
@@ -12,14 +20,13 @@ createStyle(
 );
 
 export const flashKeyDownByValue = (freq: string) => {
-  document
-    .getElementById(`key-${freq}`)
-    ?.setAttribute("class", "key-inactive key-active");
+  keyElementsMap[freq]?.setAttribute("class", "key-inactive key-active");
 };
 export const flashKeyUpByValue = (freq: string) => {
-  document
-    .getElementById(`key-${freq}`)
-    ?.setAttribute("class", "key-inactive " + keyActiveHoverStyle);
+  keyElementsMap[freq]?.setAttribute(
+    "class",
+    "key-inactive " + keyActiveHoverStyle
+  );
 };
 
 const getCurve = (shape: string | undefined) => {

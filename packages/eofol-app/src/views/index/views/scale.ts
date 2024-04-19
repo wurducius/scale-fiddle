@@ -1,11 +1,14 @@
 import { createElement, e, sx, sy } from "@eofol/eofol";
 import { defaultScale } from "../../../initial-state";
 import {
+  clearKeyElementMap,
   flashKeyDownByValue,
   flashKeyUpByValue,
   keyActiveHoverStyle,
+  keyElementsMap,
   playTone as playToneImpl,
   releaseNote as releaseNoteImpl,
+  setKeyElementMap,
 } from "../../../synth-lib";
 import { FiddleState, FiddleStateImpl } from "../../../types";
 import { mod, mouseDown } from "../../../util";
@@ -498,12 +501,14 @@ const keys = (state: FiddleState) => {
     });
   }, 50);
 
+  clearKeyElementMap();
+
   return createElement(
     "div",
     sx({ display: "flex", flexWrap: "wrap-reverse" }),
     // @ts-ignore
-    freq.map((val, index) =>
-      createElement(
+    freq.map((val) => {
+      const keyElement = createElement(
         "div",
         [
           sy(
@@ -568,8 +573,10 @@ const keys = (state: FiddleState) => {
           },
           // @ts-ignore
         }
-      )
-    )
+      );
+      setKeyElementMap(val, keyElement);
+      return keyElement;
+    })
   );
 };
 
