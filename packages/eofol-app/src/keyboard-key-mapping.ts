@@ -1,4 +1,9 @@
-import { flashKeyDown, flashKeyUp, playTone, releaseNote } from "./synth-lib";
+import {
+  flashKeyDownByValue,
+  flashKeyUpByValue,
+  playTone,
+  releaseNote,
+} from "./synth-lib";
 import { FiddleState } from "./types";
 
 export const keysDown: Record<number, boolean | undefined> = {};
@@ -13,7 +18,7 @@ const handleKeyDownImpl =
     ) {
       // @ts-ignore
       playTone(state)(freq[index]);
-      flashKeyDown(freq, index);
+      flashKeyDownByValue(freq[index]);
       keysDown[index] = true;
     }
   };
@@ -24,7 +29,7 @@ const handleKeyUpImpl =
     if (event.key === key && keysDown[index]) {
       // @ts-ignore
       releaseNote(state)(freq[index]);
-      flashKeyUp(freq, index);
+      flashKeyUpByValue(freq[index]);
       keysDown[index] = false;
     }
   };

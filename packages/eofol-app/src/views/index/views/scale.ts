@@ -1,9 +1,7 @@
 import { createElement, e, sx, sy } from "@eofol/eofol";
 import { defaultScale } from "../../../initial-state";
 import {
-  flashKeyDown,
   flashKeyDownByValue,
-  flashKeyUp,
   flashKeyUpByValue,
   keyActiveHoverStyle,
   playTone as playToneImpl,
@@ -537,7 +535,7 @@ const keys = (state: FiddleState) => {
           // @ts-ignore
           onmousedown: () => {
             // @ts-ignore
-            flashKeyDown(freq, index);
+            flashKeyDownByValue(val);
             playTone(val);
           },
           // @ts-ignore
@@ -545,7 +543,7 @@ const keys = (state: FiddleState) => {
             event.preventDefault();
             if (mouseDown) {
               // @ts-ignore
-              flashKeyDown(freq, index);
+              flashKeyDownByValue(val);
               playTone(val);
             }
           },
@@ -553,19 +551,19 @@ const keys = (state: FiddleState) => {
           onmouseleave: (event) => {
             event.preventDefault();
             // @ts-ignore
-            flashKeyUp(freq, index);
+            flashKeyUpByValue(val);
             releaseNote(val);
           },
           // @ts-ignore
           onmouseup: () => {
             // @ts-ignore
-            flashKeyUp(freq, index);
+            flashKeyUpByValue(val);
             releaseNote(val);
           },
           // @ts-ignore
           onmouseleave: () => {
             // @ts-ignore
-            flashKeyUp(freq, index);
+            flashKeyUpByValue(val);
             releaseNote(val);
           },
           // @ts-ignore

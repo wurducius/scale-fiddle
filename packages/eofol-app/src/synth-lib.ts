@@ -7,23 +7,14 @@ export const keyActiveHoverStyle = sx(
   "hover"
 );
 
-createStyle("@media (hover: none) and (pointer: coarse) { }");
-
 createStyle(
   `@media (hover: hover) and (pointer: fine) { .${keyActiveHoverStyle}:hover { border: 2px solid pink; background-color: #914a91; } }`
 );
 
-export const flashKeyDown = (freq: string[], index: number) => {
-  flashKeyDownByValue(freq[index]);
-};
 export const flashKeyDownByValue = (freq: string) => {
   document
     .getElementById(`key-${freq}`)
     ?.setAttribute("class", "key-inactive key-active");
-};
-
-export const flashKeyUp = (freq: string[], index: number) => {
-  flashKeyUpByValue(freq[index]);
 };
 export const flashKeyUpByValue = (freq: string) => {
   document
