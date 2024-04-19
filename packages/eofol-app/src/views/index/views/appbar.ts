@@ -88,7 +88,6 @@ export const appbar = (
     appbarButton(
       "Panic",
       () => {
-        console.log("panic");
         panic();
         const snackbarElement = document.getElementById("snackbar-panic");
         snackbarElement?.setAttribute("class", "snackbar show");
@@ -102,7 +101,6 @@ export const appbar = (
     appbarButton(
       "Share scale",
       () => {
-        console.log("share scale");
         // @ts-ignore
         navigator.clipboard.writeText(state.scaleInput);
         const snackbarElement = document.getElementById("snackbar-share-scale");

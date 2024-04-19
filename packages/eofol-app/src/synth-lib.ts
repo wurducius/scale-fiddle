@@ -154,8 +154,6 @@ export const playTone = (state: FiddleState) => (freq: string) => {
       t + attackTime + decayTime + sustainTime + releaseTime + endTime
     );
   }
-
-  console.log("play");
 };
 
 export const releaseNote = (state: FiddleState) => (freq: string) => {
@@ -180,7 +178,5 @@ export const releaseNote = (state: FiddleState) => (freq: string) => {
     gain.gain[getCurve(releaseCurve)](endGain, t + releaseTime);
 
     gain.gain.linearRampToValueAtTime(0, t + releaseTime + endTime);
-
-    console.log("release");
   }
 };

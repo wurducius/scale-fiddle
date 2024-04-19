@@ -54,9 +54,8 @@ defineBuiltinElement<FiddleStateImpl>({
     }
   },
   render: (state, setState) => {
-    console.log("(R) App");
     // @ts-ignore
-    const freq = state.freq;
+    const freq = state.overview.map((item) => item.freq);
     // @ts-ignore
     const tab = state.tab;
 
