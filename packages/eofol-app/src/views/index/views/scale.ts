@@ -2,7 +2,9 @@ import { createElement, e, sx, sy } from "@eofol/eofol";
 import { defaultScale } from "../../../initial-state";
 import {
   flashKeyDown,
+  flashKeyDownByValue,
   flashKeyUp,
+  flashKeyUpByValue,
   keyActiveHoverStyle,
   playTone as playToneImpl,
   releaseNote as releaseNoteImpl,
@@ -438,6 +440,8 @@ const scaleLibrary = (
 
 sy({ border: "2px solid pink", backgroundColor: "darkmagenta" }, "key-active");
 
+let touchedKeys: string[] = [];
+
 const keys = (state: FiddleState) => {
   const playTone = playToneImpl(state);
   const releaseNote = releaseNoteImpl(state);
@@ -446,6 +450,55 @@ const keys = (state: FiddleState) => {
   const decimalDigitsFreqOnKeys = state.options.decimalDigitsFreqOnKeys;
   // @ts-ignore
   const freq = state.overview.map((item) => item.freq);
+
+  setTimeout(() => {
+    document.addEventListener("touchstart", (e) => {
+      const x = e.changedTouches[0]?.clientX;
+      const y = e.changedTouches[0]?.clientY;
+      const touchedElement = document.elementFromPoint(x, y);
+      if (touchedElement) {
+        const freq = touchedElement.id.substring(4);
+        if (!touchedKeys.includes(freq)) {
+          playTone(freq);
+          flashKeyDownByValue(freq);
+          touchedKeys.push(freq);
+        }
+      }
+    });
+    document.addEventListener("touchend", (e) => {
+      const x = e.changedTouches[0]?.clientX;
+      const y = e.changedTouches[0]?.clientY;
+      const touchedElement = document.elementFromPoint(x, y);
+      if (touchedElement) {
+        const freq = touchedElement.id.substring(4);
+        if (touchedKeys.includes(freq)) {
+          releaseNote(freq);
+          flashKeyUpByValue(freq);
+          touchedKeys = touchedKeys.filter((f) => f != freq);
+        }
+      }
+    });
+    document.addEventListener("touchmove", (e) => {
+      const x = e.changedTouches[0]?.clientX;
+      const y = e.changedTouches[0]?.clientY;
+      const touchedElement = document.elementFromPoint(x, y);
+      if (touchedElement) {
+        const freq = touchedElement.id.substring(4);
+        touchedKeys.forEach((f) => {
+          if (f != freq) {
+            releaseNote(f);
+            flashKeyUpByValue(f);
+          }
+        });
+        touchedKeys = touchedKeys.filter((f) => f === freq);
+        if (!touchedKeys.includes(freq)) {
+          playTone(freq);
+          flashKeyDownByValue(freq);
+          touchedKeys.push(freq);
+        }
+      }
+    });
+  }, 50);
 
   return createElement(
     "div",

@@ -8,14 +8,20 @@ export const keyActiveHoverStyle = sx(
 );
 
 export const flashKeyDown = (freq: string[], index: number) => {
+  flashKeyDownByValue(freq[index]);
+};
+export const flashKeyDownByValue = (freq: string) => {
   document
-    .getElementById(`key-${freq[index]}`)
+    .getElementById(`key-${freq}`)
     ?.setAttribute("class", "key-inactive key-active");
 };
 
 export const flashKeyUp = (freq: string[], index: number) => {
+  flashKeyUpByValue(freq[index]);
+};
+export const flashKeyUpByValue = (freq: string) => {
   document
-    .getElementById(`key-${freq[index]}`)
+    .getElementById(`key-${freq}`)
     ?.setAttribute("class", "key-inactive " + keyActiveHoverStyle);
 };
 
