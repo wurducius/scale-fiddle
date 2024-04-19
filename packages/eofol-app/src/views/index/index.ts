@@ -11,6 +11,7 @@ import "./index.css";
 import { updateScale } from "../../sheen";
 import { appbar } from "./views/appbar";
 import { scaleTab, synthTab, optionsTab, aboutTab } from "./views";
+import { docsTab } from "./views/docs";
 
 defineBuiltinElement<FiddleStateImpl>({
   tagName: "fiddle-keyboard",
@@ -66,7 +67,8 @@ defineBuiltinElement<FiddleStateImpl>({
       ...(tab === 0 ? scaleTab(state, setState) : []),
       ...(tab === 1 ? synthTab(state, setState) : []),
       ...(tab === 2 ? optionsTab(state, setState) : []),
-      ...(tab === 3 ? aboutTab(state, setState) : []),
+      ...(tab === 3 ? docsTab(state, setState) : []),
+      ...(tab === 4 ? aboutTab(state, setState) : []),
     ]);
   },
 });

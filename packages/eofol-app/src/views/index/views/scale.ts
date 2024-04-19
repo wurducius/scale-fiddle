@@ -18,6 +18,7 @@ import {
   dropdownContent,
   modal,
 } from "@eofol/eofol-simple";
+import { breakpoint } from "../../../breakpoint";
 
 function onlyUnique(value: string, index: number, array: any[]) {
   return array.indexOf(value) === index;
@@ -244,7 +245,12 @@ const scaleOverview = (
 
   return createElement(
     "div",
-    sx({ overflow: "auto", height: "100%", padding: "0 8px" }),
+    sx({
+      overflow: "auto",
+      height: "300px",
+      padding: "0 8px",
+      fontSize: breakpoint.md && !breakpoint.sm ? "12px" : "16px",
+    }),
     [
       createElement(
         "div",
@@ -356,27 +362,47 @@ const scaleTuning = (
 const inputMenu = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
-) =>
-  createElement("div", sx({ display: "flex", height: "300px" }), [
-    createElement("div", sx({ flex: 1, padding: "0 4px" }), [
-      createElement("div", undefined, changeScaleMenu(state, setState)),
-    ]),
-    createElement(
-      "div",
-      sx({ flex: 1, padding: "0 4px" }),
-      scaleLibrary(state, setState)
-    ),
-    createElement(
-      "div",
-      sx({ flex: 1, padding: "0 4px" }),
-      scaleOverview(state, setState)
-    ),
-    createElement(
-      "div",
-      sx({ flex: 1, padding: "0 4px" }),
-      scaleTuning(state, setState)
-    ),
-  ]);
+) => {
+  const changeScaleMenuElement = createElement(
+    "div",
+    sx({ flex: 1, padding: "0 4px", height: "300px" }),
+    [createElement("div", undefined, changeScaleMenu(state, setState))]
+  );
+  const scaleLibraryElement = createElement(
+    "div",
+    sx({ flex: 1, padding: "0 4px" }),
+    scaleLibrary(state, setState)
+  );
+  const scaleOverviewElement = createElement(
+    "div",
+    sx({ flex: 1, padding: "0 4px" }),
+    scaleOverview(state, setState)
+  );
+  const scaleTuningElement = createElement(
+    "div",
+    sx({ flex: 1, padding: "0 4px" }),
+    scaleTuning(state, setState)
+  );
+
+  return createElement(
+    "div",
+    sx({
+      display: "flex",
+      height: breakpoint.sm ? "600px" : "300px",
+      flexDirection: breakpoint.sm ? "column" : "row",
+    }),
+    [
+      createElement("div", sx({ display: "flex", flex: 1, height: "300px" }), [
+        changeScaleMenuElement,
+        scaleLibraryElement,
+      ]),
+      createElement("div", sx({ display: "flex", flex: 1, height: "300px" }), [
+        scaleOverviewElement,
+        scaleTuningElement,
+      ]),
+    ]
+  );
+};
 
 const scaleLibrary = (
   state: FiddleState,
@@ -384,7 +410,13 @@ const scaleLibrary = (
 ) => {
   return createElement(
     "textarea",
-    sx({ height: "100%", width: "100%", resize: "none" }), // @ts-ignore
+    sx({
+      height: "300px",
+      width: "100%",
+      resize: "none",
+      padding: "0 0",
+      overflowY: "scroll",
+    }), // @ts-ignore
     state.scaleInput, // @ts-ignore
     {},
     {

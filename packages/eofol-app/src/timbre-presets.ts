@@ -22,10 +22,37 @@ const square = {
   value: array.map((item, n) => (n % 2 === 0 ? 0 : 1 / n)),
 };
 
+const full = {
+  title: "Full",
+  id: "full",
+  value: array.map((item, n) => 1),
+};
+
+const even = {
+  title: "Even",
+  id: "even",
+  value: array.map((item, n) => (n % 2 === 0 ? 1 : 0)),
+};
+
+const odd = {
+  title: "Odd",
+  id: "odd",
+  value: array.map((item, n) => (n % 2 === 1 ? 1 : 0)),
+};
+
 const distortedOrgan = {
   title: "Distorted organ",
   id: "distorted-organ",
   value: [0, 0, 1, 1, 1],
 };
 
-export const timbrePresets = [sine, triangle, sawtooth, square, distortedOrgan];
+export const timbrePresets = [
+  sine,
+  triangle,
+  sawtooth,
+  square,
+  full,
+  even,
+  odd,
+  distortedOrgan,
+];

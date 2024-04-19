@@ -1,4 +1,4 @@
-import { sx } from "@eofol/eofol/dist";
+import { sx } from "@eofol/eofol";
 import { FiddleState } from "./types";
 import { timbrePresets } from "./timbre-presets";
 
