@@ -1,10 +1,16 @@
-import { sx } from "@eofol/eofol";
+import { createStyle, sx } from "@eofol/eofol";
 import { FiddleState } from "./types";
 import { timbrePresets } from "./timbre-presets";
 
 export const keyActiveHoverStyle = sx(
   { border: "2px solid pink", backgroundColor: "#914a91" },
   "hover"
+);
+
+createStyle("@media (hover: none) and (pointer: coarse) { }");
+
+createStyle(
+  `@media (hover: hover) and (pointer: fine) { .${keyActiveHoverStyle}:hover { border: 2px solid pink; background-color: #914a91; } }`
 );
 
 export const flashKeyDown = (freq: string[], index: number) => {
