@@ -140,7 +140,7 @@ export const playTone = (state: FiddleState) => (freq: string) => {
     oscList[freq.toString()] = { osc, gain };
   }
 
-  gain.gain.linearRampToValueAtTime(startGain, t + startTime);
+  gain.gain.linearRampToValueAtTime(startGain, t + 0.00000001);
 
   gain.gain[getCurve(attackCurve)](attackGain, t + attackTime);
 

@@ -5,7 +5,6 @@ import {
   flashKeyDownByValue,
   flashKeyUpByValue,
   keyActiveHoverStyle,
-  keyElementsMap,
   playTone as playToneImpl,
   releaseNote as releaseNoteImpl,
   setKeyElementMap,
@@ -540,36 +539,36 @@ const keys = (state: FiddleState) => {
           // @ts-ignore
           onmousedown: () => {
             // @ts-ignore
-            flashKeyDownByValue(val);
             playTone(val);
+            flashKeyDownByValue(val);
           },
           // @ts-ignore
           onmouseenter: (event) => {
             event.preventDefault();
             if (mouseDown) {
               // @ts-ignore
-              flashKeyDownByValue(val);
               playTone(val);
+              flashKeyDownByValue(val);
             }
           },
           // @ts-ignore
           onmouseleave: (event) => {
             event.preventDefault();
             // @ts-ignore
-            flashKeyUpByValue(val);
             releaseNote(val);
+            flashKeyUpByValue(val);
           },
           // @ts-ignore
           onmouseup: () => {
             // @ts-ignore
-            flashKeyUpByValue(val);
             releaseNote(val);
+            flashKeyUpByValue(val);
           },
           // @ts-ignore
           onmouseleave: () => {
             // @ts-ignore
-            flashKeyUpByValue(val);
             releaseNote(val);
+            flashKeyUpByValue(val);
           },
           // @ts-ignore
         }
