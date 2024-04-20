@@ -1,5 +1,4 @@
 #eofol {
-  color: fuchsia;
   padding: 0 0;
 }
 
@@ -14,7 +13,6 @@ p {
 
 a {
   text-decoration: none;
-  color: darkcyan;
   font-weight: 700;
 }
 a:hover {

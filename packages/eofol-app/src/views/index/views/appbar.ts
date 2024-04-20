@@ -2,6 +2,7 @@ import { createElement, sx } from "@eofol/eofol";
 import { panic } from "../../../synth-lib";
 import { FiddleState } from "../../../types";
 import { breakpoint } from "../../../breakpoint";
+import { theme } from "../../../theme";
 
 const appbarButton = (
   label: string,
@@ -11,13 +12,31 @@ const appbarButton = (
 ) =>
   createElement(
     "button",
-    sx({
-      fontSize: "16px",
-      backgroundColor: isActive ? "fuchsia" : "black",
-      color: isSecondary ? "teal" : isActive ? "black" : "fuchsia",
-      border: `1px solid ${isSecondary ? "teal" : "fuchsia"}`,
-      cursor: "pointer",
-    }),
+    [
+      sx({
+        fontSize: "16px",
+        backgroundColor: isActive ? theme.primary : "black",
+        color: isSecondary
+          ? theme.secondary
+          : isActive
+          ? "black"
+          : theme.primary,
+        border: `1px solid ${isSecondary ? theme.secondary : theme.primary}`,
+        cursor: "pointer",
+      }),
+      sx(
+        {
+          backgroundColor: isSecondary
+            ? theme.secondaryDark
+            : theme.primaryDarker,
+          color: isSecondary ? theme.secondaryLighter : theme.primaryLighter,
+          border: `1px solid ${
+            isSecondary ? theme.secondaryLighter : theme.primaryLighter
+          }`,
+        },
+        "hover"
+      ),
+    ],
     label,
     undefined,
     {

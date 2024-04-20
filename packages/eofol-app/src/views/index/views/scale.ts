@@ -21,6 +21,7 @@ import {
   modal,
 } from "@eofol/eofol-simple";
 import { breakpoint } from "../../../breakpoint";
+import { theme } from "../../../theme";
 
 function onlyUnique(value: string, index: number, array: any[]) {
   return array.indexOf(value) === index;
@@ -63,21 +64,27 @@ const menuButtonOpensModal =
     setState: undefined | ((nextState: FiddleState) => void)
   ) =>
   (title: string, formName: string) => {
-    return createElement("button", undefined, title, undefined, {
-      // @ts-ignore
-      onclick: () => {
+    return createElement(
+      "button",
+      sx({ width: "256px", height: "40px" }),
+      title,
+      undefined,
+      {
         // @ts-ignore
-        setState({
-          ...state,
-          form: {
-            // @ts-ignore
-            ...state.form,
-            // @ts-ignore
-            [formName]: { ...state.form[formName], open: true },
-          },
-        });
-      },
-    });
+        onclick: () => {
+          // @ts-ignore
+          setState({
+            ...state,
+            form: {
+              // @ts-ignore
+              ...state.form,
+              // @ts-ignore
+              [formName]: { ...state.form[formName], open: true },
+            },
+          });
+        },
+      }
+    );
   };
 
 const changeScaleMenu = (
@@ -138,7 +145,7 @@ const changeScaleMenu = (
     createElement("div", sx({ display: "flex", flexDirection: "column" }), [
       createElement(
         "button",
-        sx({ marginTop: "8px" }),
+        sx({ marginTop: "16px" }),
         "Add new scale",
         {},
         {
@@ -259,7 +266,7 @@ const scaleOverview = (
         sx({
           display: "flex",
           justifyContent: "space-between",
-          borderBottom: "2px solid fuchsia",
+          borderBottom: `2px solid ${theme.primary}`,
         }),
         [
           createElement("div", undefined, "Index"),
@@ -293,7 +300,7 @@ const scaleTuning = (
   // @ts-ignore
   const tuning = state.tuning;
 
-  return createElement("div", undefined, [
+  return createElement("div", sx({ marginTop: "16px" }), [
     createElement("p", undefined, "Base frequency Hz"),
     input({
       name: "input-basefreq",
@@ -413,14 +420,17 @@ const scaleLibrary = (
   return createElement(
     "textarea",
     sx({
-      height: "300px",
       width: "100%",
+      height: "284px",
       resize: "none",
-      padding: "0 0",
       overflowY: "scroll",
     }), // @ts-ignore
     state.scaleInput, // @ts-ignore
-    {},
+    {
+      "aria-label": "scale-library",
+      id: "scale-library",
+      name: "scale-library",
+    },
     {
       // @ts-ignore
       onchange: (e) => {
@@ -515,7 +525,7 @@ const keys = (state: FiddleState) => {
               height: "100px",
               width: "64px",
               fontSize: "16px",
-              border: "2px solid fuchsia",
+              border: `2px solid ${theme.primary}`,
               backgroundColor: "black",
               display: "flex",
               justifyContent: "center",
@@ -638,7 +648,12 @@ const generalFormModal =
         createElement(
           "textarea",
           sx({ resize: "none", height: "300px", marginTop: "16px" }),
-          [resultScale]
+          [resultScale],
+          {
+            "aria-label": "result-scale",
+            id: "result-scale",
+            name: "result-scale",
+          }
         ),
       ]),
       // @ts-ignore
