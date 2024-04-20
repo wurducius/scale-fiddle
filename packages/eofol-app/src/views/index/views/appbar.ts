@@ -180,7 +180,7 @@ export const appbar = (
       height: getAppbarHeight(breakpoint.xs, breakpoint.md),
       alignItems: !breakpoint.md ? "normal" : "center",
       justifyContent: !breakpoint.md ? "center" : "inherit",
-      border: "2px solid purple",
+      border: `1px solid ${theme.primary}`,
       padding: "0 16px",
       flexDirection: breakpoint.sm ? "column" : "row",
     }),
