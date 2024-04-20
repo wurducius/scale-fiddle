@@ -21,11 +21,11 @@ export const initStyles = () => {
   );
 
   createStyle(
-    `input { padding: 2px 10px; margin-top: 8px; font-size: 16px; width: 256px; height: 24px; background-color: ${theme.background}; color: ${theme.primary}; cursor: pointer; border: 1px solid ${theme.primary}; }`
+    `input { padding: 2px 10px; margin-top: 8px; margin-bottom: 8px; font-size: 16px; width: 256px; height: 24px; background-color: ${theme.background}; color: ${theme.primary}; cursor: pointer; border: 1px solid ${theme.primary}; }`
   );
 
   createStyle(
-    `textarea { padding: 8px 8px 8px 8px; font-size: 16px; width: 256px; height: 24px; background-color: ${theme.background}; color: ${theme.primary}; cursor: pointer; border: 1px solid ${theme.primary}; }`
+    `textarea { margin-right: 0; padding: 8px 0px 8px 8px; font-size: 16px; width: 256px; height: 24px; background-color: ${theme.background}; color: ${theme.primary}; cursor: pointer; border: 1px solid ${theme.primary}; }`
   );
 
   createStyle(
@@ -33,7 +33,7 @@ export const initStyles = () => {
   );
 
   createStyle(
-    `button { cursor: pointer; height: 28px; font-size: 16px; font-weight: 500; background-color: ${theme.background}; color: ${theme.primary}; border: 1px solid ${theme.primary} }`
+    `button { cursor: pointer; min-height: 28px; font-size: 16px; font-weight: 500; background-color: ${theme.background}; color: ${theme.primary}; border: 1px solid ${theme.primary} }`
   );
   createStyle(
     `button:hover { background-color: ${theme.primaryDarker}; color: ${theme.primaryLighter}; border: 1px solid ${theme.primaryLighter} }`
