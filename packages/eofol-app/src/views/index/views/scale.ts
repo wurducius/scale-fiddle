@@ -12,7 +12,7 @@ import {
 import { FiddleState, FiddleStateImpl } from "../../../types";
 import { mod, mouseDown } from "../../../util";
 import { updateScale } from "../../../sheen";
-import { scalePresets } from "../../../scale-presets";
+import { scalePresets } from "../../../presets/scale-presets";
 import {
   dropdown,
   select,
@@ -541,8 +541,11 @@ const keys = (state: FiddleState) => {
               touchAction: "none",
               // @ts-ignore
               flex: `1 0 ${
-                // @ts-ignore
-                (100 / state.scaleLength) * 0.9
+                breakpoint.md
+                  ? // @ts-ignore
+                    (100 / state.scaleLength) * 2
+                  : // @ts-ignore
+                    (100 / state.scaleLength) * 0.9
               }%`,
             },
             "key-inactive"

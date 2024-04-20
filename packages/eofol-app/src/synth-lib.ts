@@ -1,6 +1,6 @@
 import { createStyle, sx } from "@eofol/eofol";
 import { FiddleState } from "./types";
-import { timbrePresets } from "./timbre-presets";
+import { timbrePresets } from "./presets/timbre-presets";
 import { theme } from "./theme";
 
 export let keyElementsMap: Record<string, Element> = {};
