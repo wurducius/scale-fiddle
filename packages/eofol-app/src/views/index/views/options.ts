@@ -1,4 +1,4 @@
-import { createElement } from "@eofol/eofol";
+import { createElement, sx } from "@eofol/eofol";
 import { FiddleState } from "../../../types";
 import { input } from "@eofol/eofol-simple";
 
@@ -10,11 +10,9 @@ export const optionsTab = (
   const options = state.options;
 
   return [
-    createElement("div", undefined, [
-      createElement("h2", undefined, "Options"),
-
-      createElement("div", undefined, [
-        createElement("h3", undefined, "Precision"),
+    createElement("div", sx({ display: "flex" }), [
+      createElement("div", sx({ flex: 1 }), [
+        createElement("h2", undefined, "Precision"),
         createElement("p", undefined, "Frequency"),
         input({
           value: options.decimalDigitsFreq,
@@ -80,8 +78,8 @@ export const optionsTab = (
           },
         }),
       ]),
-      createElement("div", undefined, [
-        createElement("h3", undefined, "Synth configuration"),
+      createElement("div", sx({ flex: 1 }), [
+        createElement("h2", undefined, "Synth configuration"),
         createElement("p", undefined, "Start gain"),
         input({
           value: options.startGain,

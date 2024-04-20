@@ -84,8 +84,10 @@ let customWaveform: PeriodicWave;
 export const setWaveform = (waveformId: string) => {
   waveform =
     timbrePresets.find((item) => item.id === waveformId) ?? timbrePresets[0];
-  sineTerms = new Float32Array(waveform.value);
-  cosineTerms = new Float32Array(sineTerms.length);
+  sineTerms = new Float32Array(waveform.real.length);
+  sineTerms = waveform.real;
+  cosineTerms = new Float32Array(waveform.imag.length);
+  cosineTerms = waveform.imag;
   customWaveform = audioContext.createPeriodicWave(cosineTerms, sineTerms);
   panic();
 };

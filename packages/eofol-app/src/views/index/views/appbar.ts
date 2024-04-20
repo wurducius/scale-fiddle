@@ -56,7 +56,7 @@ export const appbar = (
     "div",
     sx({
       display: "flex",
-      gap: breakpoint.md ? "16px" : "8px",
+      gap: breakpoint.md ? "16px" : "16px",
       alignItems: "center",
     }),
     [
@@ -75,6 +75,14 @@ export const appbar = (
           setState({ ...state, tab: 1 });
         },
         tabIndex === 1
+      ),
+      appbarButton(
+        "Analyze",
+        () => {
+          // @ts-ignore
+          setState({ ...state, tab: 5 });
+        },
+        tabIndex === 5
       ),
       appbarButton(
         "Options",
@@ -131,15 +139,6 @@ export const appbar = (
       false,
       true
     ),
-  ];
-
-  const bottomRowSecond = [
-    createElement("div", "snackbar", "Scale copied to clipboard.", {
-      id: "snackbar-share-scale",
-    }),
-    createElement("div", "snackbar", "Panic! Shutting down synth.", {
-      id: "snackbar-panic",
-    }),
     createElement(
       "a",
       undefined,
@@ -149,18 +148,38 @@ export const appbar = (
         href: "https://www.facebook.com/groups/microtonalstructuremusictheory",
       }
     ),
-    createElement("div", undefined, "Scale Fiddle"),
+    createElement("div", "snackbar", "Scale copied to clipboard.", {
+      id: "snackbar-share-scale",
+    }),
+    createElement("div", "snackbar", "Panic! Shutting down synth.", {
+      id: "snackbar-panic",
+    }),
+  ];
+
+  const bottomRowSecond = [
+    createElement(
+      "div",
+      sx({ marginLeft: !breakpoint.md ? "32px" : "0", fontWeight: 700 }),
+      "Scale Fiddle v0.3"
+    ),
   ];
 
   const bottomRow = createElement(
     "div",
     sx({
       display: "flex",
-      gap: breakpoint.md ? "16px" : "8px",
       alignItems: "center",
       flexWrap: "wrap",
+      justifyContent: "space-between",
     }),
-    [...bottomRowFirst, ...bottomRowSecond]
+    [
+      createElement(
+        "div",
+        sx({ display: "flex", gap: breakpoint.md ? "16px" : "16px" }),
+        bottomRowFirst
+      ),
+      createElement("div", undefined, [...bottomRowSecond]),
+    ]
   );
 
   const getAppbarHeight = (xs: boolean, md: boolean) => {

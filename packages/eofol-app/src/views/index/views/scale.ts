@@ -95,38 +95,42 @@ const changeScaleMenu = (
 
   return [
     createElement("div", sx({ display: "flex" }), [
-      dropdown("dropdown-new-scale-content", "New scale", sx({ flex: 1 })),
+      dropdown("dropdown-new-scale-content", "Create scale", sx({ flex: 1 })),
       dropdown(
         "dropdown-modify-scale-content",
         "(TODO) Modify scale",
         sx({ flex: 1 })
       ),
     ]),
-    createElement("p", sx({ marginTop: "8px" }), "Select scale"),
-    select({
-      // @ts-ignore
-      value: state.scaleIndex,
-      // @ts-ignore
-      options: state.scales.map((scale, index) => ({
-        title: scale.name,
-        id: index,
-      })),
-      onChange: (nextVal) => {
+    createElement("p", sx({ marginTop: "16px" }), "Select scale"),
+    createElement(
+      "div",
+      sx({ width: "256px", margin: "0 auto 0 auto", display: "flex" }),
+      select({
         // @ts-ignore
-        setState({
-          ...state,
-          scaleIndex: Number(nextVal),
+        value: state.scaleIndex,
+        // @ts-ignore
+        options: state.scales.map((scale, index) => ({
+          title: scale.name,
+          id: index,
+        })),
+        onChange: (nextVal) => {
           // @ts-ignore
-          scaleInput: state.scales[Number(nextVal)].scaleInput,
-          recompute: true,
-        });
-      },
-      name: "select-scale-library",
-    }),
+          setState({
+            ...state,
+            scaleIndex: Number(nextVal),
+            // @ts-ignore
+            scaleInput: state.scales[Number(nextVal)].scaleInput,
+            recompute: true,
+          });
+        },
+        name: "select-scale-library",
+      })
+    ),
     createElement("p", sx({ marginTop: "8px" }), "Scale name"),
     createElement(
       "div",
-      sx({ display: "flex", flex: 1, justifyContent: "center" }),
+      sx({ width: "256px", margin: "0 auto 0 auto", display: "flex" }),
       input({
         name: "input-scale-name",
         // @ts-ignore
@@ -142,74 +146,83 @@ const changeScaleMenu = (
         },
       })
     ),
-    createElement("div", sx({ display: "flex", flexDirection: "column" }), [
-      createElement(
-        "button",
-        sx({ marginTop: "16px" }),
-        "Add new scale",
-        {},
-        {
-          // @ts-ignore
-          onclick: () => {
+    createElement(
+      "div",
+      sx({
+        display: "flex",
+        flexDirection: "column",
+        width: "256px",
+        margin: "16px auto 0 auto",
+      }),
+      [
+        createElement(
+          "button",
+          sx({ marginTop: "16px" }),
+          "Add new scale",
+          {},
+          {
             // @ts-ignore
-            setState({
-              ...state,
-              scales: [
-                // @ts-ignore
-                ...state.scales,
-                {
+            onclick: () => {
+              // @ts-ignore
+              setState({
+                ...state,
+                scales: [
                   // @ts-ignore
-                  name: "Scale #" + state.scales.length,
-                  scaleInput: defaultScale,
-                },
-              ],
-              // @ts-ignore
-              scaleIndex: state.scales.length,
-              scaleInput: defaultScale,
-              recompute: true,
-            });
-          },
-        }
-      ),
-      createElement(
-        "button",
-        sx({ marginTop: "8px" }),
-        "Delete scale",
-        // @ts-ignore
-        state.scales.length <= 1
-          ? {
-              disabled: true,
-            }
-          : {},
-        {
+                  ...state.scales,
+                  {
+                    // @ts-ignore
+                    name: "Scale #" + state.scales.length,
+                    scaleInput: defaultScale,
+                  },
+                ],
+                // @ts-ignore
+                scaleIndex: state.scales.length,
+                scaleInput: defaultScale,
+                recompute: true,
+              });
+            },
+          }
+        ),
+        createElement(
+          "button",
+          sx({ marginTop: "16px" }),
+          "Delete scale",
           // @ts-ignore
-          onclick: () => {
+          state.scales.length <= 1
+            ? {
+                disabled: true,
+              }
+            : {},
+          {
             // @ts-ignore
-            const newScales = state.scales.filter(
+            onclick: () => {
               // @ts-ignore
-              (item, i) => state.scaleIndex !== i
-            );
-            // @ts-ignore
-            const newScaleIndex =
+              const newScales = state.scales.filter(
+                // @ts-ignore
+                (item, i) => state.scaleIndex !== i
+              );
               // @ts-ignore
-              state.scaleIndex === 0
-                ? 0
-                : // @ts-ignore
-                  state.scaleIndex - 1;
-            // @ts-ignore
-            setState({
-              ...state,
+              const newScaleIndex =
+                // @ts-ignore
+                state.scaleIndex === 0
+                  ? 0
+                  : // @ts-ignore
+                    state.scaleIndex - 1;
               // @ts-ignore
-              scales: newScales,
-              // @ts-ignore
-              scaleInput: newScales[newScaleIndex].scaleInput,
-              scaleIndex: newScaleIndex,
-              recompute: true,
-            });
-          },
-        }
-      ),
-    ]),
+              setState({
+                ...state,
+                // @ts-ignore
+                scales: newScales,
+                // @ts-ignore
+                scaleInput: newScales[newScaleIndex].scaleInput,
+                scaleIndex: newScaleIndex,
+                recompute: true,
+              });
+            },
+          }
+        ),
+      ]
+    ),
     dropdownContent(
       "dropdown-new-scale-content",
       sx({ top: "75px", left: "4px", width: "calc(12.5% - 4px)" }),
@@ -302,69 +315,89 @@ const scaleTuning = (
 
   return createElement("div", sx({ marginTop: "16px" }), [
     createElement("p", undefined, "Base frequency Hz"),
-    input({
-      name: "input-basefreq",
-      value: tuning.baseFreq,
-      onChange: (nextVal) => {
-        const val = Number(nextVal);
-        if (Number.isFinite(val)) {
-          // @ts-ignore
-          setState({
-            ...state,
-            tuning: { ...tuning, baseFreq: val },
-            recompute: true,
-          });
-        }
-      },
-    }),
+    createElement(
+      "div",
+      sx({ width: "236px", margin: "0 auto 0 auto" }),
+      input({
+        name: "input-basefreq",
+        value: tuning.baseFreq,
+        classname: sx({ width: "100%" }),
+        onChange: (nextVal) => {
+          const val = Number(nextVal);
+          if (Number.isFinite(val)) {
+            // @ts-ignore
+            setState({
+              ...state,
+              tuning: { ...tuning, baseFreq: val },
+              recompute: true,
+            });
+          }
+        },
+      })
+    ),
     createElement("p", undefined, "Period interval (Equave)"),
-    input({
-      name: "input-period",
-      value: tuning.period,
-      onChange: (nextVal) => {
-        const val = Number(nextVal);
-        if (Number.isFinite(val)) {
-          // @ts-ignore
-          setState({
-            ...state,
-            tuning: { ...tuning, period: val },
-            recompute: true,
-          });
-        }
-      },
-    }),
+    createElement(
+      "div",
+      sx({ width: "236px", margin: "0 auto 0 auto" }),
+      input({
+        name: "input-period",
+        value: tuning.period,
+        classname: sx({ width: "100%" }),
+        onChange: (nextVal) => {
+          const val = Number(nextVal);
+          if (Number.isFinite(val)) {
+            // @ts-ignore
+            setState({
+              ...state,
+              tuning: { ...tuning, period: val },
+              recompute: true,
+            });
+          }
+        },
+      })
+    ),
     createElement("p", undefined, "Number of keys up"),
-    input({
-      name: "input-keys-up",
-      value: tuning.keysUp,
-      onChange: (nextVal) => {
-        const val = Number(nextVal);
-        if (Number.isFinite(val) && val >= 0) {
-          // @ts-ignore
-          setState({
-            ...state,
-            tuning: { ...tuning, keysUp: val },
-            recompute: true,
-          });
-        }
-      },
-    }),
+    createElement(
+      "div",
+      sx({ width: "236px", margin: "0 auto 0 auto" }),
+      input({
+        name: "input-keys-up",
+        value: tuning.keysUp,
+        classname: sx({ width: "100%" }),
+        onChange: (nextVal) => {
+          const val = Number(nextVal);
+          if (Number.isFinite(val) && val >= 0) {
+            // @ts-ignore
+            setState({
+              ...state,
+              tuning: { ...tuning, keysUp: val },
+              recompute: true,
+            });
+          }
+        },
+      })
+    ),
     createElement("p", undefined, "Number of keys down"),
-    input({
-      name: "input-keys-down",
-      value: tuning.keysDown,
-      onChange: (nextVal) => {
-        const val = Number(nextVal);
-        if (Number.isFinite(val) && val >= 0) {
-          // @ts-ignore
-          setState({
-            ...state,
-            tuning: { ...tuning, keysDown: val },
-            recompute: true,
-          });
-        }
-      },
-    }),
+    createElement(
+      "div",
+      sx({ width: "236px", margin: "0 auto 0 auto" }),
+      input({
+        name: "input-keys-down",
+        value: tuning.keysDown,
+        classname: sx({ width: "100%" }),
+        onChange: (nextVal) => {
+          const val = Number(nextVal);
+          if (Number.isFinite(val) && val >= 0) {
+            // @ts-ignore
+            setState({
+              ...state,
+              tuning: { ...tuning, keysDown: val },
+              recompute: true,
+            });
+          }
+        },
+      })
+    ),
   ]);
 };
 
@@ -374,7 +407,7 @@ const inputMenu = (
 ) => {
   const changeScaleMenuElement = createElement(
     "div",
-    sx({ flex: 1, padding: "0 4px", height: "300px" }),
+    sx({ flex: 1, padding: "0 4px 0 0", height: "300px" }),
     [createElement("div", undefined, changeScaleMenu(state, setState))]
   );
   const scaleLibraryElement = createElement(
@@ -389,7 +422,7 @@ const inputMenu = (
   );
   const scaleTuningElement = createElement(
     "div",
-    sx({ flex: 1, padding: "0 4px" }),
+    sx({ flex: 1, padding: "0 0 0 4px" }),
     scaleTuning(state, setState)
   );
 

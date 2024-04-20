@@ -5,6 +5,7 @@ import {
   createElement,
   registerServiceWorker,
   defineBuiltinElement,
+  sx,
 } from "@eofol/eofol";
 import "../../styles/base.css";
 import "./index.css";
@@ -13,6 +14,7 @@ import { appbar } from "./views/appbar";
 import { scaleTab, synthTab, optionsTab, aboutTab } from "./views";
 import { docsTab } from "./views/docs";
 import { initStyles } from "../../styles";
+import { analyzeTab } from "./views/analyze";
 
 initStyles();
 
@@ -66,11 +68,14 @@ defineBuiltinElement<FiddleStateImpl>({
 
     return createElement("div", undefined, [
       appbar(state, setState),
-      ...(tab === 0 ? scaleTab(state, setState) : []),
-      ...(tab === 1 ? synthTab(state, setState) : []),
-      ...(tab === 2 ? optionsTab(state, setState) : []),
-      ...(tab === 3 ? docsTab(state, setState) : []),
-      ...(tab === 4 ? aboutTab(state, setState) : []),
+      createElement("div", sx({ marginTop: "4px" }), [
+        ...(tab === 0 ? scaleTab(state, setState) : []),
+        ...(tab === 1 ? synthTab(state, setState) : []),
+        ...(tab === 2 ? optionsTab(state, setState) : []),
+        ...(tab === 3 ? docsTab(state, setState) : []),
+        ...(tab === 4 ? aboutTab(state, setState) : []),
+        ...(tab === 5 ? analyzeTab(state, setState) : []),
+      ]),
     ]);
   },
 });
