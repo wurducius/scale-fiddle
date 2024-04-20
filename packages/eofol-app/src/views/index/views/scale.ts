@@ -282,23 +282,49 @@ const scaleOverview = (
           borderBottom: `2px solid ${theme.primary}`,
         }),
         [
-          createElement("div", undefined, "Index"),
-          createElement("div", undefined, `Frequency`),
-          createElement("div", undefined, "Cents"),
-          createElement("div", undefined, "Ratio"),
-          createElement("div", undefined, "Name"),
+          createElement(
+            "div",
+            sx({ color: theme.secondary, flex: 1 }),
+            "Index"
+          ),
+          createElement(
+            "div",
+            sx({ color: theme.secondary, flex: 3 }),
+            `Frequency`
+          ),
+          createElement(
+            "div",
+            sx({ color: theme.secondary, flex: 3 }),
+            "Cents"
+          ),
+          createElement(
+            "div",
+            sx({ color: theme.secondary, flex: 2 }),
+            "Ratio"
+          ),
+          createElement("div", sx({ color: theme.secondary, flex: 2 }), "Name"),
         ]
       ),
       ...overview.map((tone: any, index: number) =>
         createElement(
           "div",
-          sx({ display: "flex", justifyContent: "space-between" }),
+          sx({
+            display: "flex",
+            justifyContent: "space-between",
+            color: Number(tone.ratio) === 1 ? theme.secondary : theme.primary,
+          }),
           [
-            createElement("div", undefined, index.toString()),
-            createElement("div", undefined, `${tone.freq} Hz`),
-            createElement("div", undefined, `${tone.cent}c`),
-            createElement("div", undefined, tone.ratio),
-            createElement("div", undefined, tone.name),
+            createElement("div", sx({ flex: 1 }), index.toString()),
+            createElement("div", sx({ flex: 3 }), `${tone.freq} Hz`),
+            createElement("div", sx({ flex: 3 }), `${tone.cent}c`),
+            createElement(
+              "div",
+              sx({
+                flex: 2,
+              }),
+              tone.ratio
+            ),
+            createElement("div", sx({ flex: 2 }), tone.name),
           ]
         )
       ),

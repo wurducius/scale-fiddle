@@ -1,3 +1,6 @@
+// todo precision
+let precision = 3;
+
 const valuesArray = (array: string[]) => array.join("\n");
 
 const valuesMap = (length: number, mapper: (n: number) => string | number) =>
@@ -23,7 +26,7 @@ const pickRelative = (values: string[], rel: number[]) => {
 
 const ed2 = (n: number) => map(n, (k) => truncate(((k + 1) * 1200) / n));
 
-const truncate = (n: number) => n.toFixed(1);
+const truncate = (n: number) => n.toFixed(precision);
 
 const majorScale = {
   id: "major-scale",
