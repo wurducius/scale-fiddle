@@ -448,7 +448,13 @@ const scaleLibrary = (
   );
 };
 
-sy({ border: "2px solid pink", backgroundColor: "darkmagenta" }, "key-active");
+sy(
+  {
+    border: `2px solid ${theme.primaryLighter}`,
+    backgroundColor: theme.secondaryDark,
+  },
+  "key-active"
+);
 
 let touchedKeys: string[] = [];
 

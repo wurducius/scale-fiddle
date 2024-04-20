@@ -14,22 +14,22 @@ export const initStyles = () => {
   );
 
   createStyle(
-    `input[type="range"] { margin-top: 8px; width: 256px; height: 24px; accent-color: ${theme.secondary}; cursor: pointer; }`
+    `input[type="range"] { margin-top: 8px; width: 256px; height: 24px; accent-color: ${theme.secondary}; }`
   );
   createStyle(
     `input[type="range"]:hover { accent-color: ${theme.secondaryDarker}; }`
   );
 
   createStyle(
-    `input { padding: 2px 10px; margin-top: 8px; margin-bottom: 8px; font-size: 16px; width: 256px; height: 24px; background-color: ${theme.background}; color: ${theme.primary}; cursor: pointer; border: 1px solid ${theme.primary}; }`
+    `input { cursor: text; padding: 2px 10px; margin-top: 8px; margin-bottom: 8px; font-size: 16px; width: 256px; height: 24px; background-color: ${theme.backgroundElevation}; color: ${theme.secondary}; border: 1px solid ${theme.secondary}; }`
   );
 
   createStyle(
-    `textarea { margin-right: 0; padding: 8px 0px 8px 8px; font-size: 16px; width: 256px; height: 24px; background-color: ${theme.background}; color: ${theme.primary}; cursor: pointer; border: 1px solid ${theme.primary}; }`
+    `textarea { cursor: text; margin-right: 0; padding: 8px 0px 8px 8px; font-size: 16px; width: 256px; height: 24px; background-color: ${theme.backgroundElevation}; color: ${theme.secondary}; border: 1px solid ${theme.secondary}; }`
   );
 
   createStyle(
-    `select { padding: 6px 10px; margin-top: 8px; font-size: 16px; height: 32px; width: 256px; background-color: ${theme.background}; color: ${theme.primary}; border: 1px solid ${theme.primary} }`
+    `select { padding: 6px 10px; margin-top: 8px; font-size: 16px; height: 32px; width: 256px; background-color: ${theme.background}; color: ${theme.secondary}; border: 1px solid ${theme.secondary} }`
   );
 
   createStyle(

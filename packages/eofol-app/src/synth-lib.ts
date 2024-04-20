@@ -1,6 +1,7 @@
 import { createStyle, sx } from "@eofol/eofol";
 import { FiddleState } from "./types";
 import { timbrePresets } from "./timbre-presets";
+import { theme } from "./theme";
 
 export let keyElementsMap: Record<string, Element> = {};
 export const clearKeyElementMap = () => {
@@ -11,12 +12,15 @@ export const setKeyElementMap = (freq: string, element: Element) => {
 };
 
 export const keyActiveHoverStyle = sx(
-  { border: "2px solid pink", backgroundColor: "#914a91" },
+  {
+    border: `2px solid ${theme.primaryLighter}`,
+    backgroundColor: theme.backgroundElevation,
+  },
   "hover"
 );
 
 createStyle(
-  `@media (hover: hover) and (pointer: fine) { .${keyActiveHoverStyle}:hover { border: 2px solid pink; background-color: #914a91; } }`
+  `@media (hover: hover) and (pointer: fine) { .${keyActiveHoverStyle}:hover { border: 2px solid ${theme.secondaryLighter}; background-color: ${theme.secondaryLighter}; } }`
 );
 
 export const flashKeyDownByValue = (freq: string) => {
