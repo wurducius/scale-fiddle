@@ -130,8 +130,12 @@ type Timbre = {
   imag: number[];
 };
 
-export const timbrePresets: Timbre[] = [
-  ...basic,
-  ...basicDerived,
-  ...instruments,
+export const timbrePresets: { group: string; options: Timbre[] }[] = [
+  { group: "Basic", options: basic },
+  { group: "Derived", options: basicDerived },
+  { group: "Instruments", options: instruments },
 ];
+
+export const timbrePresetsFlat: Timbre[] = timbrePresets
+  .map((item) => item.options)
+  .flat();

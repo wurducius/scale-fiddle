@@ -398,10 +398,7 @@ export const synthTab = (
               name: "select-waveform-preset",
               // @ts-ignore
               value: state.synth.waveformPreset,
-              options: timbrePresets.map((timbre) => ({
-                title: timbre.title,
-                id: timbre.id,
-              })),
+              options: timbrePresets,
               onChange: (nextVal) => {
                 // @ts-ignore
                 setState({

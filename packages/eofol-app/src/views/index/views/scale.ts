@@ -10,7 +10,7 @@ import {
 import { FiddleState, FiddleStateImpl } from "../../../types";
 import { mod, trimWhitespace } from "../../../util";
 import { updateScale } from "../../../sheen";
-import { scalePresets } from "../../../presets/scale-presets";
+import { scalePresets, scalePresetsFlat } from "../../../presets/scale-presets";
 import {
   dropdown,
   select,
@@ -30,6 +30,9 @@ import {
   keyColorOctaveStyle,
 } from "../../../keyboard-key-mapping";
 import { mouseHandlers, touchHandlers } from "../../../key-handlers";
+
+const MODAL_BG_COLOR = "#2d3748";
+const MODAL_BORDER_COLOR = theme.primary;
 
 function onlyUnique(value: string, index: number, array: any[]) {
   return array.indexOf(value) === index;
@@ -729,7 +732,11 @@ const generalFormModal =
           },
         });
       },
-      undefined
+      undefined,
+      sx({
+        backgroundColor: MODAL_BG_COLOR,
+        border: `2px solid ${MODAL_BORDER_COLOR}`,
+      })
     );
   };
 
@@ -894,10 +901,7 @@ const formModal = (
         [
           select({
             styles: sx({ width: "450px" }),
-            options: scalePresets.map((item) => ({
-              title: item.title,
-              id: item.id,
-            })),
+            options: scalePresets,
             onChange: (nextVal) => {
               // @ts-ignore
               setState({
@@ -920,7 +924,7 @@ const formModal = (
           textarea({
             name: "result-preset-scale",
             value:
-              scalePresets.find(
+              scalePresetsFlat.find(
                 // @ts-ignore
                 (item) => item.id === state.form.preset.id
               )?.value ?? "",
@@ -948,7 +952,7 @@ const formModal = (
         });
       },
       () => {
-        const presetScale = scalePresets.find(
+        const presetScale = scalePresetsFlat.find(
           // @ts-ignore
           (item) => item.id === state.form.preset.id
         );
@@ -974,7 +978,12 @@ const formModal = (
             },
           });
         }
-      }
+      },
+      undefined,
+      sx({
+        backgroundColor: MODAL_BG_COLOR,
+        border: `2px solid ${MODAL_BORDER_COLOR}`,
+      })
     ),
   ];
 };

@@ -1122,15 +1122,36 @@ const largeScales = [
 ];
 
 export const scalePresets = [
-  majorScale,
-  pentatonic,
-  wholeToneScale,
-  edo12,
-  edo24,
-  ...limitScales,
-  ...equalScales,
-  ...chordScales,
-  ...tetrachordScales,
-  ...pentaScales,
-  ...largeScales,
+  {
+    group: "Basic",
+    options: [majorScale, pentatonic, wholeToneScale, edo12, edo24],
+  },
+  {
+    group: "Limit",
+    options: limitScales,
+  },
+  {
+    group: "Equal temperament",
+    options: equalScales,
+  },
+  {
+    group: "Chords",
+    options: chordScales,
+  },
+  {
+    group: "Tetrachords",
+    options: tetrachordScales,
+  },
+  {
+    group: "Pentatonic",
+    options: pentaScales,
+  },
+  {
+    group: "Heptatonic",
+    options: largeScales,
+  },
 ];
+
+export const scalePresetsFlat = scalePresets
+  .map((group) => group.options)
+  .flat();

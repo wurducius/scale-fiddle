@@ -1,6 +1,6 @@
 import { createStyle, sx } from "@eofol/eofol";
 import { FiddleState } from "./types";
-import { timbrePresets } from "./presets/timbre-presets";
+import { timbrePresets, timbrePresetsFlat } from "./presets/timbre-presets";
 import { theme } from "./theme";
 import { keyColorOctaveStyle } from "./keyboard-key-mapping";
 
@@ -86,7 +86,8 @@ let customWaveform: PeriodicWave;
 
 export const setWaveform = (waveformId: string) => {
   waveform =
-    timbrePresets.find((item) => item.id === waveformId) ?? timbrePresets[0];
+    timbrePresetsFlat.find((item) => item.id === waveformId) ??
+    timbrePresetsFlat[0];
   sineTerms = new Float32Array(waveform.real.length);
   sineTerms = waveform.real;
   cosineTerms = new Float32Array(waveform.imag.length);
