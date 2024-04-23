@@ -23,6 +23,7 @@ import {
 } from "@eofol/eofol-simple";
 import { breakpoint } from "../../../breakpoint";
 import { theme } from "../../../theme";
+import { textarea } from "../../../extract/textarea";
 
 function onlyUnique(value: string, index: number, array: any[]) {
   return array.indexOf(value) === index;
@@ -242,7 +243,7 @@ const changeScaleMenu = (
         dropdownItem("Tempered limit", "limit", true),
         dropdownItem("Higher rank temperament", "higher", true),
         dropdownItem("Euler-Fokker genus form", "eulerfokker", true),
-        dropdownItem("Preset scale", "preset", true),
+        dropdownItem("Preset scale", "preset"),
       ]
     ),
     dropdownContent(
@@ -481,35 +482,23 @@ const scaleLibrary = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
 ) => {
-  return createElement(
-    "textarea",
-    sx({
-      width: "100%",
-      height: "284px",
-      resize: "none",
-      overflowY: "scroll",
-    }), // @ts-ignore
-    state.scaleInput, // @ts-ignore
-    {
-      "aria-label": "scale-library",
-      id: "scale-library",
-      name: "scale-library",
-    },
-    {
+  return textarea({
+    name: "scale-library",
+    // @ts-ignore
+    value: state.scaleInput,
+    onChange: (nextVal) => {
+      const nextState = {
+        ...state,
+        scaleInput: nextVal,
+      } as FiddleStateImpl;
       // @ts-ignore
-      onchange: (e) => {
-        const nextState = {
-          ...state,
-          scaleInput: e.target.value,
-        } as FiddleStateImpl;
-        // @ts-ignore
-        setState({
-          ...nextState,
-          ...updateScale(nextState),
-        });
-      },
-    }
-  );
+      setState({
+        ...nextState,
+        ...updateScale(nextState),
+      });
+    },
+    classname: sx({ height: "284px", width: "100%" }),
+  });
 };
 
 sy(
@@ -716,16 +705,12 @@ const generalFormModal =
             ])
             .flat()
         ),
-        createElement(
-          "textarea",
-          sx({ resize: "none", height: "300px", marginTop: "16px" }),
-          [resultScale],
-          {
-            "aria-label": "result-scale",
-            id: "result-scale",
-            name: "result-scale",
-          }
-        ),
+        textarea({
+          name: "result-scale",
+          value: resultScale,
+          classname: sx({ height: "300px", marginTop: "16px" }),
+          onChange: () => {},
+        }),
       ]),
       // @ts-ignore
       state.form[formName].open,
@@ -946,26 +931,20 @@ const formModal = (
             value: state.form.preset.id,
             name: "select-preset-scale",
           }),
-          createElement(
-            "textarea",
-            sx({
-              resize: "none",
-              height: "300px",
-              marginTop: "16px",
-              marginBottom: "8px",
-            }),
-            [
+          textarea({
+            name: "result-preset-scale",
+            value:
               scalePresets.find(
                 // @ts-ignore
                 (item) => item.id === state.form.preset.id
               )?.value ?? "",
-            ],
-            {
-              "aria-label": "result-preset-scale",
-              id: "result-preset-scale",
-              name: "result-preset-scale",
-            }
-          ),
+            onChange: () => {},
+            classname: sx({
+              height: "300px",
+              marginTop: "16px",
+              marginBottom: "8px",
+            }),
+          }),
         ]
       ),
       // @ts-ignore
