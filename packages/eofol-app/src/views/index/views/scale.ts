@@ -1,16 +1,14 @@
-import { createElement, debounce, e, sx, sy } from "@eofol/eofol";
+import { createElement, e, sx, sy } from "@eofol/eofol";
 import { defaultScale } from "../../../initial-state";
 import {
   clearKeyElementMap,
-  flashKeyDownByValue,
-  flashKeyUpByValue,
   keyActiveHoverStyle,
   playTone as playToneImpl,
   releaseNote as releaseNoteImpl,
   setKeyElementMap,
 } from "../../../synth-lib";
 import { FiddleState, FiddleStateImpl } from "../../../types";
-import { mod, mouseDown, trimWhitespace } from "../../../util";
+import { mod, trimWhitespace } from "../../../util";
 import { updateScale } from "../../../sheen";
 import { scalePresets } from "../../../presets/scale-presets";
 import {
@@ -31,6 +29,7 @@ import {
   keyColorNonoctaveStyle,
   keyColorOctaveStyle,
 } from "../../../keyboard-key-mapping";
+import { mouseHandlers, touchHandlers } from "../../../key-handlers";
 
 function onlyUnique(value: string, index: number, array: any[]) {
   return array.indexOf(value) === index;
@@ -573,8 +572,6 @@ sy(
   "key-active"
 );
 
-let touchedKeys: string[] = [];
-
 const keys = (state: FiddleState) => {
   const playTone = playToneImpl(state);
   const releaseNote = releaseNoteImpl(state);
@@ -585,52 +582,7 @@ const keys = (state: FiddleState) => {
   const freq = state.overview.map((item) => item.freq);
 
   setTimeout(() => {
-    document.addEventListener("touchstart", (e) => {
-      const x = e.changedTouches[0]?.clientX;
-      const y = e.changedTouches[0]?.clientY;
-      const touchedElement = document.elementFromPoint(x, y);
-      if (touchedElement) {
-        const freq = touchedElement.id.substring(4);
-        if (!touchedKeys.includes(freq)) {
-          playTone(freq);
-          flashKeyDownByValue(freq);
-          touchedKeys.push(freq);
-        }
-      }
-    });
-    document.addEventListener("touchend", (e) => {
-      const x = e.changedTouches[0]?.clientX;
-      const y = e.changedTouches[0]?.clientY;
-      const touchedElement = document.elementFromPoint(x, y);
-      if (touchedElement) {
-        const freq = touchedElement.id.substring(4);
-        if (touchedKeys.includes(freq)) {
-          releaseNote(freq);
-          flashKeyUpByValue(freq);
-          touchedKeys = touchedKeys.filter((f) => f != freq);
-        }
-      }
-    });
-    document.addEventListener("touchmove", (e) => {
-      const x = e.changedTouches[0]?.clientX;
-      const y = e.changedTouches[0]?.clientY;
-      const touchedElement = document.elementFromPoint(x, y);
-      if (touchedElement) {
-        const freq = touchedElement.id.substring(4);
-        touchedKeys.forEach((f) => {
-          if (f != freq) {
-            releaseNote(f);
-            flashKeyUpByValue(f);
-          }
-        });
-        touchedKeys = touchedKeys.filter((f) => f === freq);
-        if (!touchedKeys.includes(freq)) {
-          playTone(freq);
-          flashKeyDownByValue(freq);
-          touchedKeys.push(freq);
-        }
-      }
-    });
+    touchHandlers(playTone, releaseNote);
   }, 50);
 
   clearKeyElementMap();
@@ -675,42 +627,8 @@ const keys = (state: FiddleState) => {
           ],
           Number(val).toFixed(decimalDigitsFreqOnKeys),
           { id: `key-${val}` },
-          {
-            // @ts-ignore
-            onmousedown: () => {
-              // @ts-ignore
-              playTone(val);
-              flashKeyDownByValue(val);
-            },
-            // @ts-ignore
-            onmouseenter: (event) => {
-              debounce(
-                () => {
-                  event.preventDefault();
-                  if (mouseDown) {
-                    // @ts-ignore
-                    playTone(val);
-                    flashKeyDownByValue(val);
-                  }
-                },
-                20,
-                "debounce-onmouseenter"
-              );
-            },
-            // @ts-ignore
-            onmouseleave: (event) => {
-              event.preventDefault();
-              // @ts-ignore
-              releaseNote(val);
-              flashKeyUpByValue(val, isOctave);
-            },
-            // @ts-ignore
-            onmouseup: () => {
-              // @ts-ignore
-              releaseNote(val);
-              flashKeyUpByValue(val, isOctave);
-            },
-          }
+          // @ts-ignore
+          mouseHandlers(val, isOctave, playTone, releaseNote)
         );
         setKeyElementMap(val, keyElement);
         return keyElement;
