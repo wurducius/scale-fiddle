@@ -1,3 +1,5 @@
+import { en } from "./en";
+
 const storageData = localStorage.getItem("scale-fiddle-locale");
 
 const defaultData = { language: "en" };
@@ -9,57 +11,13 @@ export const setLanguage = (language: string) => {
   localStorage.setItem("scale-fiddle-locale", JSON.stringify({ language }));
 };
 
-const languages = ["en"];
+const languages = ["en", "cs"];
 
 const translations: Record<string, any> = {
-  en: {
+  en,
+  cs: {
     app: {
-      name: "Scale Fiddle",
-      version: "Version 0.3",
-      nameWithVersion: "Scale Fiddle v0.3",
-    },
-    about: {
-      name: "About",
-      createdBy: "Created by ",
-      microtonalStructureTheoryTeam: "Microtonal Structure Theory team",
-      developmentAndDesign: " (development & design)",
-      analysisAndTesting: " (development & design)",
-      developedUsing: "Developed using ",
-      mitLicense: "MIT license",
-    },
-    appbar: {
-      panic: "Panic",
-      shareScale: "Share scale",
-      microtonalStructureTheory: "Microtonal Structure Theory",
-    },
-    scale: {
-      name: "Scale",
-    },
-    synth: {
-      name: "Synth",
-    },
-    analyze: {
-      name: "Analyze",
-    },
-    options: {
-      name: "Options",
-      precision: "Precision",
-      synthConfiguration: "Synth configuration",
-    },
-    docs: {
-      name: "Docs",
-      fullName: "Documentation",
-    },
-    shared: {
-      underConstruction: "UNDER CONSTRUCTION",
-      frequency: "Frequency",
-      cent: "Cent",
-      ratio: "Ratio",
-      frequencyOnKeys: "Frequency on keys",
-      startGain: "Start gain",
-      startTime: "Start time",
-      endGain: "End gain",
-      endTime: "End time",
+      name: "Translation test",
     },
   },
 };

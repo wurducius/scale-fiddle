@@ -63,7 +63,7 @@ export const appbar = (
     }),
     [
       appbarButton(
-        "Scale",
+        t("scale.name", "Scale"),
         () => {
           // @ts-ignore
           setState({ ...state, tab: 0 });
@@ -71,7 +71,7 @@ export const appbar = (
         tabIndex === 0
       ),
       appbarButton(
-        "Synth",
+        t("synth.name", "Synth"),
         () => {
           // @ts-ignore
           setState({ ...state, tab: 1 });
@@ -79,7 +79,7 @@ export const appbar = (
         tabIndex === 1
       ),
       appbarButton(
-        "Analyze",
+        t("analyze.name", "Analyze"),
         () => {
           // @ts-ignore
           setState({ ...state, tab: 5 });
@@ -87,7 +87,7 @@ export const appbar = (
         tabIndex === 5
       ),
       appbarButton(
-        "Options",
+        t("options.name", "Options"),
         () => {
           // @ts-ignore
           setState({ ...state, tab: 2 });
@@ -95,7 +95,7 @@ export const appbar = (
         tabIndex === 2
       ),
       appbarButton(
-        "Docs",
+        t("docs.name", "Docs"),
         () => {
           // @ts-ignore
           setState({ ...state, tab: 3 });
@@ -103,7 +103,7 @@ export const appbar = (
         tabIndex === 3
       ),
       appbarButton(
-        "About",
+        t("about.name", "About"),
         () => {
           // @ts-ignore
           setState({ ...state, tab: 4 });
@@ -115,20 +115,24 @@ export const appbar = (
 
   const bottomRowFirst = [
     appbarButton(
-      "Panic",
+      t("action.panic", "Panic"),
       () => {
         panic();
-        notify({ title: "Panic! Shutting down synth." });
+        notify({
+          title: t("action.panicNotify", "Panic! Shutting down synth."),
+        });
       },
       false,
       true
     ),
     appbarButton(
-      "Share scale",
+      t("action.shareScale", "Share scale"),
       () => {
         // @ts-ignore
         navigator.clipboard.writeText(state.scaleInput);
-        notify({ title: "Scale copied to clipboard." });
+        notify({
+          title: t("action.shareScaleNotify", "Scale copied to clipboard."),
+        });
       },
       false,
       true
@@ -136,7 +140,12 @@ export const appbar = (
     createElement(
       "a",
       undefined,
-      appbarButton("Microtonal Structure Theory", () => {}, false, true),
+      appbarButton(
+        t("action.microtonalStructureTheory", "Microtonal Structure Theory"),
+        () => {},
+        false,
+        true
+      ),
       {
         target: "_blank",
         href: "https://www.facebook.com/groups/microtonalstructuremusictheory",
