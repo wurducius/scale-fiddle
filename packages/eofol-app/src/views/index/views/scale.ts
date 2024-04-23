@@ -1,4 +1,4 @@
-import { createElement, e, sx, sy } from "@eofol/eofol";
+import { createElement, debounce, e, sx, sy } from "@eofol/eofol";
 import { defaultScale } from "../../../initial-state";
 import {
   clearKeyElementMap,
@@ -684,12 +684,18 @@ const keys = (state: FiddleState) => {
             },
             // @ts-ignore
             onmouseenter: (event) => {
-              event.preventDefault();
-              if (mouseDown) {
-                // @ts-ignore
-                playTone(val);
-                flashKeyDownByValue(val);
-              }
+              debounce(
+                () => {
+                  event.preventDefault();
+                  if (mouseDown) {
+                    // @ts-ignore
+                    playTone(val);
+                    flashKeyDownByValue(val);
+                  }
+                },
+                20,
+                "debounce-onmouseenter"
+              );
             },
             // @ts-ignore
             onmouseleave: (event) => {
@@ -704,13 +710,6 @@ const keys = (state: FiddleState) => {
               releaseNote(val);
               flashKeyUpByValue(val, isOctave);
             },
-            // @ts-ignore
-            onmouseleave: () => {
-              // @ts-ignore
-              releaseNote(val);
-              flashKeyUpByValue(val, isOctave);
-            },
-            // @ts-ignore
           }
         );
         setKeyElementMap(val, keyElement);

@@ -1,4 +1,4 @@
-import { createElement, sx } from "@eofol/eofol";
+import { createElement, createStyle, cx, sx } from "@eofol/eofol";
 import { setTotalGain, setWaveform } from "../../../synth-lib";
 import { FiddleState } from "../../../types";
 import { timbrePresets } from "../../../presets/timbre-presets";
@@ -7,38 +7,61 @@ import { h1, h2, h3, p } from "../../../extract/font";
 import { theme } from "../../../theme";
 import { breakpoint } from "../../../breakpoint";
 
+createStyle('input[type="range"].lg { max-width: 500px; width: 100%; }');
+
 const sliderInput = (
   label: string,
   value: string,
   setter: (nextValue: string) => void,
   labelTag?: undefined | string,
-  adornmentMap?: (val: string) => string
+  adornmentMap?: (val: string) => string,
+  large?: boolean,
+  classname?: string,
+  id?: string
 ) => {
-  return createElement("div", sx({ color: theme.secondary }), [
-    createElement(labelTag ?? "p", undefined, label),
-    createElement(
-      "div",
-      sx({
-        display: "flex",
-        alignItems: "center",
-        gap: "16px",
-        justifyContent: "center",
-      }),
-      [
-        input({
-          name: "input-slider-" + label,
-          value,
-          onChange: (nextVal) => {
-            setter(nextVal);
-          },
-          type: "range",
-          min: 0,
-          max: 100,
+  const getDisplayValue = (val: string) =>
+    adornmentMap ? adornmentMap(val) : val;
+  const displayId = "input-slider-value-display-" + id;
+
+  return createElement(
+    "div",
+    [sx({ color: theme.secondary }), cx(classname)],
+    [
+      createElement(labelTag ?? "p", undefined, label),
+      createElement(
+        "div",
+        sx({
+          display: "flex",
+          alignItems: "center",
+          gap: "16px",
+          justifyContent: "center",
         }),
-        h3(adornmentMap ? adornmentMap(value) : value),
-      ]
-    ),
-  ]);
+        [
+          input({
+            name: "input-slider-" + label,
+            value,
+            onChange: (nextVal) => {
+              setter(nextVal);
+            },
+            onInput: (nextVal) => {
+              const displayElement = document.getElementById(displayId);
+              if (displayElement) {
+                displayElement.innerHTML = getDisplayValue(nextVal);
+              }
+            },
+            type: "range",
+            min: 0,
+            max: 100,
+            step: 1,
+            classname: cx(large && "lg"),
+          }),
+          createElement("h3", undefined, getDisplayValue(value), {
+            id: displayId,
+          }),
+        ]
+      ),
+    ]
+  );
 };
 
 const envelopeCurveSelect = (
@@ -91,7 +114,10 @@ const envelopeADSRMenu = (
               });
             },
             "h3",
-            (val) => `${val}%`
+            (val) => `${val}%`,
+            false,
+            undefined,
+            "attack-gain"
           ),
           sliderInput(
             "Time",
@@ -108,7 +134,10 @@ const envelopeADSRMenu = (
               });
             },
             "h3",
-            (val) => `${val} ms`
+            (val) => `${val} ms`,
+            false,
+            undefined,
+            "attack-time"
           ),
           envelopeCurveSelect(synth.attackCurve, "attack", (nextValue) => {
             // @ts-ignore
@@ -134,7 +163,10 @@ const envelopeADSRMenu = (
                 });
               },
               "h3",
-              (val) => `${val}%`
+              (val) => `${val}%`,
+              false,
+              undefined,
+              "decay-gain"
             ),
             sliderInput(
               "Time",
@@ -151,7 +183,10 @@ const envelopeADSRMenu = (
                 });
               },
               "h3",
-              (val) => `${val} ms`
+              (val) => `${val} ms`,
+              false,
+              undefined,
+              "decay-time"
             ),
             envelopeCurveSelect(synth.decayCurve, "decay", (nextValue) => {
               // @ts-ignore
@@ -179,7 +214,10 @@ const envelopeADSRMenu = (
               });
             },
             "h3",
-            (val) => `${val}%`
+            (val) => `${val}%`,
+            false,
+            undefined,
+            "sustain-gain"
           ),
           sliderInput(
             "Time",
@@ -196,7 +234,10 @@ const envelopeADSRMenu = (
               });
             },
             "h3",
-            (val) => `${val} ms`
+            (val) => `${val} ms`,
+            false,
+            undefined,
+            "sustain-time"
           ),
           envelopeCurveSelect(synth.sustainCurve, "sustain", (nextValue) => {
             // @ts-ignore
@@ -222,7 +263,10 @@ const envelopeADSRMenu = (
                 });
               },
               "h3",
-              (val) => `${val}%`
+              (val) => `${val}%`,
+              false,
+              undefined,
+              "release-gain"
             ),
             sliderInput(
               "Time",
@@ -239,7 +283,10 @@ const envelopeADSRMenu = (
                 });
               },
               "h3",
-              (val) => `${val} ms`
+              (val) => `${val} ms`,
+              false,
+              undefined,
+              "release-time"
             ),
             envelopeCurveSelect(synth.releaseCurve, "release", (nextValue) => {
               // @ts-ignore
@@ -325,7 +372,10 @@ export const synthTab = (
                 setTotalGain(newTotalGain);
               },
               "h1",
-              (val) => `${val}%`
+              (val) => `${val}%`,
+              true,
+              sx({ margin: "0 32px 0 32px" }),
+              "master-gain"
             ),
           ]),
           createElement("div", sx({ flex: 1 }), [

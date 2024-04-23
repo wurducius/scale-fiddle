@@ -14,7 +14,7 @@ export const initStyles = () => {
   );
 
   createStyle(
-    `input[type="range"] { margin-top: 8px; width: 256px; height: 24px; accent-color: ${theme.secondary}; cursor: pointer; }`
+    `input[type="range"] { margin-top: 8px; padding: 0 0 0 0; width: 256px; height: 24px; accent-color: ${theme.secondary}; cursor: pointer; }`
   );
   createStyle(
     `input[type="range"]:hover { accent-color: ${theme.secondaryDarker}; }`
