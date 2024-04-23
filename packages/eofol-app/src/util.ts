@@ -9,3 +9,8 @@ document.body.onmousedown = function () {
 document.body.onmouseup = function () {
   mouseDown = false;
 };
+
+const trimWhitespaceRegex = /\s/g;
+
+export const trimWhitespace = (str: string) =>
+  str.replace(trimWhitespaceRegex, "");

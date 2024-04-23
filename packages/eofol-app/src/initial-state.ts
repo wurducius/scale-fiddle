@@ -9,6 +9,7 @@ export const initialState = {
   scales: [{ name: "Initial scale", scaleInput: defaultScale }],
   scaleIndex: 0,
   tab: 0,
+  smallTab: 0,
   tuning: {
     baseFreq: 220,
     period: 2,

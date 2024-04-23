@@ -1,10 +1,25 @@
+import { sy } from "@eofol/eofol";
 import {
   flashKeyDownByValue,
   flashKeyUpByValue,
   playTone,
   releaseNote,
 } from "./synth-lib";
+import { theme } from "./theme";
 import { FiddleState } from "./types";
+
+export const keyColorOctaveStyle = sy(
+  {
+    color: theme.secondary,
+  },
+  "key-color-octave"
+);
+export const keyColorNonoctaveStyle = sy(
+  {
+    color: theme.primary,
+  },
+  "key-color-nonoctave"
+);
 
 export const keysDown: Record<number, boolean | undefined> = {};
 
@@ -18,6 +33,7 @@ const handleKeyDownImpl =
     ) {
       // @ts-ignore
       playTone(state)(freq[index]);
+      // @ts-ignore
       flashKeyDownByValue(freq[index]);
       keysDown[index] = true;
     }
@@ -29,7 +45,9 @@ const handleKeyUpImpl =
     if (event.key === key && keysDown[index]) {
       // @ts-ignore
       releaseNote(state)(freq[index]);
-      flashKeyUpByValue(freq[index]);
+      // @ts-ignore
+      const isOctave = Number(state.overview[index].ratio) === 1;
+      flashKeyUpByValue(freq[index], isOctave);
       keysDown[index] = false;
     }
   };

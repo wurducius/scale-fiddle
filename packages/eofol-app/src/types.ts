@@ -6,6 +6,7 @@ export type FiddleStateImpl = {
   scaleIndex: number;
   overview: { freq: string; name: string; cent: string; ratio: string }[];
   tab: number;
+  smallTab: number;
   tuning: {
     baseFreq: number;
     period: number;

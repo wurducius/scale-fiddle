@@ -1,4 +1,4 @@
-const breakpoints = [560, 1080, 1200, 1600, 2000, 2600];
+const breakpoints = [640, 1080, 1200, 1600, 2000, 2600];
 
 const mediaQueryMaxWidth = (width: number) => () =>
   window.matchMedia(`(max-width: ${width}px)`).matches;

@@ -2,6 +2,7 @@ import { createStyle, sx } from "@eofol/eofol";
 import { FiddleState } from "./types";
 import { timbrePresets } from "./presets/timbre-presets";
 import { theme } from "./theme";
+import { keyColorOctaveStyle } from "./keyboard-key-mapping";
 
 export let keyElementsMap: Record<string, Element> = {};
 export const clearKeyElementMap = () => {
@@ -26,10 +27,12 @@ createStyle(
 export const flashKeyDownByValue = (freq: string) => {
   keyElementsMap[freq]?.setAttribute("class", "key-inactive key-active");
 };
-export const flashKeyUpByValue = (freq: string) => {
+export const flashKeyUpByValue = (freq: string, isOctave?: boolean) => {
   keyElementsMap[freq]?.setAttribute(
     "class",
-    "key-inactive " + keyActiveHoverStyle
+    "key-inactive " +
+      (isOctave ? keyColorOctaveStyle + " " : "") +
+      keyActiveHoverStyle
   );
 };
 

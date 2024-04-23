@@ -10,7 +10,7 @@ import {
   setKeyElementMap,
 } from "../../../synth-lib";
 import { FiddleState, FiddleStateImpl } from "../../../types";
-import { mod, mouseDown } from "../../../util";
+import { mod, mouseDown, trimWhitespace } from "../../../util";
 import { updateScale } from "../../../sheen";
 import { scalePresets } from "../../../presets/scale-presets";
 import {
@@ -20,11 +20,17 @@ import {
   dropdownContent,
   modal,
   notify,
+  tooltip,
+  button,
 } from "@eofol/eofol-simple";
 import { breakpoint } from "../../../breakpoint";
 import { theme } from "../../../theme";
 import { textarea } from "../../../extract/textarea";
 import { p } from "../../../extract/font";
+import {
+  keyColorNonoctaveStyle,
+  keyColorOctaveStyle,
+} from "../../../keyboard-key-mapping";
 
 function onlyUnique(value: string, index: number, array: any[]) {
   return array.indexOf(value) === index;
@@ -100,6 +106,22 @@ const changeScaleMenu = (
 ) => {
   const dropdownItem = menuButtonOpensModal(state, setState);
 
+  const scaleNameInputElement = input({
+    name: "input-scale-name",
+    // @ts-ignore
+    value: state.scales[state.scaleIndex].name,
+    onChange: (nextVal) => {
+      // @ts-ignore
+      const newScales = state.scales.map((scale, index) =>
+        // @ts-ignore
+        index === state.scaleIndex ? { ...scale, name: nextVal } : scale
+      );
+      // @ts-ignore
+      setState({ ...state, scales: newScales });
+    },
+  });
+  scaleNameInputElement.setAttribute("spellcheck", "false");
+
   return [
     createElement("div", sx({ display: "flex" }), [
       dropdown("dropdown-new-scale-content", "Create scale", sx({ flex: 1 })),
@@ -138,20 +160,7 @@ const changeScaleMenu = (
     createElement(
       "div",
       sx({ width: "256px", margin: "0 auto 0 auto", display: "flex" }),
-      input({
-        name: "input-scale-name",
-        // @ts-ignore
-        value: state.scales[state.scaleIndex].name,
-        onChange: (nextVal) => {
-          // @ts-ignore
-          const newScales = state.scales.map((scale, index) =>
-            // @ts-ignore
-            index === state.scaleIndex ? { ...scale, name: nextVal } : scale
-          );
-          // @ts-ignore
-          setState({ ...state, scales: newScales });
-        },
-      })
+      scaleNameInputElement
     ),
     createElement(
       "div",
@@ -312,8 +321,12 @@ const scaleOverview = (
           createElement("div", sx({ color: theme.secondary, flex: 2 }), "Name"),
         ]
       ),
-      ...overview.map((tone: any, index: number) =>
-        createElement(
+      ...overview.map((tone: any, index: number) => {
+        const displayIndex = index.toString();
+        const displayFreq = `${tone.freq} Hz`;
+        const displayCent = `${tone.cent}c`;
+
+        return createElement(
           "div",
           sx({
             display: "flex",
@@ -321,20 +334,50 @@ const scaleOverview = (
             color: Number(tone.ratio) === 1 ? theme.secondary : theme.primary,
           }),
           [
-            createElement("div", sx({ flex: 1 }), index.toString()),
-            createElement("div", sx({ flex: 3 }), `${tone.freq} Hz`),
-            createElement("div", sx({ flex: 3 }), `${tone.cent}c`),
+            createElement(
+              "div",
+              sx({ display: "flex", justifyContent: "center", flex: 1 }),
+              tooltip(displayIndex, p(displayIndex))
+            ),
             createElement(
               "div",
               sx({
+                display: "flex",
+                justifyContent: "center",
+                flex: 3,
+              }),
+              tooltip(displayFreq, p(displayFreq))
+            ),
+            createElement(
+              "div",
+              sx({
+                display: "flex",
+                justifyContent: "center",
+                flex: 3,
+              }),
+              tooltip(displayCent, p(displayCent))
+            ),
+            createElement(
+              "div",
+              sx({
+                display: "flex",
+                justifyContent: "center",
                 flex: 2,
               }),
-              tone.ratio
+              tooltip(tone.ratio, p(tone.ratio))
             ),
-            createElement("div", sx({ flex: 2 }), tone.name),
+            createElement(
+              "div",
+              sx({
+                display: "flex",
+                justifyContent: "center",
+                flex: 2,
+              }),
+              tooltip(tone.name, p(trimWhitespace(tone.name)))
+            ),
           ]
-        )
-      ),
+        );
+      }),
     ]
   );
 };
@@ -434,28 +477,38 @@ const scaleTuning = (
   ]);
 };
 
+const getMenuHeight = () => {
+  if (breakpoint.xs) {
+    return "1200px";
+  }
+  if (breakpoint.sm) {
+    return "600px";
+  }
+  return "300px";
+};
+
 const inputMenu = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
 ) => {
   const changeScaleMenuElement = createElement(
     "div",
-    sx({ flex: 1, padding: "0 4px 0 0", height: "300px" }),
+    sx({ flex: 1, padding: "0 0 0 0", height: "300px" }),
     [createElement("div", undefined, changeScaleMenu(state, setState))]
   );
   const scaleLibraryElement = createElement(
     "div",
-    sx({ flex: 1, padding: "0 4px" }),
+    sx({ flex: 1, padding: "0 8px" }),
     scaleLibrary(state, setState)
   );
   const scaleOverviewElement = createElement(
     "div",
-    sx({ flex: 1, padding: "0 4px" }),
+    sx({ flex: 1, padding: "0 0" }),
     scaleOverview(state, setState)
   );
   const scaleTuningElement = createElement(
     "div",
-    sx({ flex: 1, padding: "0 0 0 4px" }),
+    sx({ flex: 1, padding: "0 0 0 0" }),
     scaleTuning(state, setState)
   );
 
@@ -463,19 +516,28 @@ const inputMenu = (
     "div",
     sx({
       display: "flex",
-      height: breakpoint.sm ? "600px" : "300px",
+      height: getMenuHeight(),
       flexDirection: breakpoint.sm ? "column" : "row",
     }),
-    [
-      createElement("div", sx({ display: "flex", flex: 1, height: "300px" }), [
-        changeScaleMenuElement,
-        scaleLibraryElement,
-      ]),
-      createElement("div", sx({ display: "flex", flex: 1, height: "300px" }), [
-        scaleOverviewElement,
-        scaleTuningElement,
-      ]),
-    ]
+    !breakpoint.xs
+      ? [
+          createElement(
+            "div",
+            sx({ display: "flex", flex: 1, height: "300px" }),
+            [changeScaleMenuElement, scaleLibraryElement]
+          ),
+          createElement(
+            "div",
+            sx({ display: "flex", flex: 1, height: "300px" }),
+            [scaleOverviewElement, scaleTuningElement]
+          ),
+        ]
+      : [
+          changeScaleMenuElement,
+          scaleLibraryElement,
+          scaleOverviewElement,
+          scaleTuningElement,
+        ]
   );
 };
 
@@ -483,7 +545,7 @@ const scaleLibrary = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
 ) => {
-  return textarea({
+  const textareaElement = textarea({
     name: "scale-library",
     // @ts-ignore
     value: state.scaleInput,
@@ -500,6 +562,7 @@ const scaleLibrary = (
     },
     classname: sx({ height: "284px", width: "100%" }),
   });
+  return textareaElement;
 };
 
 sy(
@@ -574,81 +637,86 @@ const keys = (state: FiddleState) => {
 
   return createElement(
     "div",
-    sx({ display: "flex", flexWrap: "wrap-reverse" }),
-    // @ts-ignore
-    freq.map((val) => {
-      const keyElement = createElement(
-        "div",
-        [
-          sy(
-            {
-              height: "100px",
-              width: "64px",
-              fontSize: "16px",
-              border: `2px solid ${theme.primary}`,
-              backgroundColor: "black",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              cursor: "pointer",
-              userSelect: "none",
-              touchAction: "none",
-              // @ts-ignore
-              flex: `1 0 ${
-                breakpoint.md
-                  ? // @ts-ignore
-                    (100 / state.scaleLength) * 2
-                  : // @ts-ignore
-                    (100 / state.scaleLength) * 0.9
-              }%`,
-            },
-            "key-inactive"
-          ),
-          keyActiveHoverStyle,
-        ],
-        Number(val).toFixed(decimalDigitsFreqOnKeys),
-        { id: `key-${val}` },
-        {
-          // @ts-ignore
-          onmousedown: () => {
+    sx({ maxHeight: "100%" }),
+    createElement(
+      "div",
+      sx({ display: "flex", flexWrap: "wrap-reverse" }),
+      // @ts-ignore
+      freq.map((val, i) => {
+        // @ts-ignore
+        const isOctave = Number(state.overview[i].ratio) === 1;
+        // @ts-ignore
+        const keyElement = createElement(
+          "div",
+          [
+            sy(
+              {
+                maxHeight: "calc(100% - 8px)",
+                height: "92px",
+                fontSize: "16px",
+                border: `2px solid ${theme.primary}`,
+                backgroundColor: "black",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                cursor: "pointer",
+                userSelect: "none",
+                touchAction: "none",
+                // @ts-ignore
+                flex: `1 0 ${(12 * 36) / (state.overview.length * 0.9)}%`,
+              },
+              "key-inactive"
+            ),
+            keyActiveHoverStyle,
             // @ts-ignore
-            playTone(val);
-            flashKeyDownByValue(val);
-          },
-          // @ts-ignore
-          onmouseenter: (event) => {
-            event.preventDefault();
-            if (mouseDown) {
+            Number(state.overview[i].ratio) === 1
+              ? keyColorOctaveStyle
+              : keyColorNonoctaveStyle,
+          ],
+          Number(val).toFixed(decimalDigitsFreqOnKeys),
+          { id: `key-${val}` },
+          {
+            // @ts-ignore
+            onmousedown: () => {
               // @ts-ignore
               playTone(val);
               flashKeyDownByValue(val);
-            }
-          },
-          // @ts-ignore
-          onmouseleave: (event) => {
-            event.preventDefault();
+            },
             // @ts-ignore
-            releaseNote(val);
-            flashKeyUpByValue(val);
-          },
-          // @ts-ignore
-          onmouseup: () => {
+            onmouseenter: (event) => {
+              event.preventDefault();
+              if (mouseDown) {
+                // @ts-ignore
+                playTone(val);
+                flashKeyDownByValue(val);
+              }
+            },
             // @ts-ignore
-            releaseNote(val);
-            flashKeyUpByValue(val);
-          },
-          // @ts-ignore
-          onmouseleave: () => {
+            onmouseleave: (event) => {
+              event.preventDefault();
+              // @ts-ignore
+              releaseNote(val);
+              flashKeyUpByValue(val, isOctave);
+            },
             // @ts-ignore
-            releaseNote(val);
-            flashKeyUpByValue(val);
-          },
-          // @ts-ignore
-        }
-      );
-      setKeyElementMap(val, keyElement);
-      return keyElement;
-    })
+            onmouseup: () => {
+              // @ts-ignore
+              releaseNote(val);
+              flashKeyUpByValue(val, isOctave);
+            },
+            // @ts-ignore
+            onmouseleave: () => {
+              // @ts-ignore
+              releaseNote(val);
+              flashKeyUpByValue(val, isOctave);
+            },
+            // @ts-ignore
+          }
+        );
+        setKeyElementMap(val, keyElement);
+        return keyElement;
+      })
+    )
   );
 };
 
@@ -994,7 +1062,7 @@ const formModal = (
   ];
 };
 
-export const scaleTab = (
+const desktopScaleTab = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
 ) => {
@@ -1003,4 +1071,45 @@ export const scaleTab = (
     keys(state),
     ...formModal(state, setState),
   ];
+};
+
+const mobileScaleTab = (
+  state: FiddleState,
+  setState: undefined | ((nextState: FiddleState) => void)
+) => {
+  // @ts-ignore
+  const isScaleTab = state.smallTab === 0;
+  // @ts-ignore
+  const isKeyboardTab = state.smallTab === 1;
+
+  return [
+    createElement("div", sx({ display: "flex", height: "50px" }), [
+      button({
+        onClick: () => {
+          // @ts-ignore
+          setState({ ...state, smallTab: 0 });
+        },
+        children: "Scale",
+      }),
+      button({
+        onClick: () => {
+          // @ts-ignore
+          setState({ ...state, smallTab: 1 });
+        },
+        children: "Keyboard",
+      }),
+    ]),
+    ...(isScaleTab ? [inputMenu(state, setState)] : []),
+    ...(isScaleTab ? formModal(state, setState) : []),
+    ...(isKeyboardTab ? [keys(state)] : []),
+  ];
+};
+
+export const scaleTab = (
+  state: FiddleState,
+  setState: undefined | ((nextState: FiddleState) => void)
+) => {
+  return !breakpoint.sm
+    ? desktopScaleTab(state, setState)
+    : mobileScaleTab(state, setState);
 };
