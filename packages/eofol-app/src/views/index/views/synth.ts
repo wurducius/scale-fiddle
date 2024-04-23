@@ -3,26 +3,41 @@ import { setTotalGain, setWaveform } from "../../../synth-lib";
 import { FiddleState } from "../../../types";
 import { timbrePresets } from "../../../presets/timbre-presets";
 import { input, select, checkbox } from "@eofol/eofol-simple";
-import { h2, h3, p } from "../../../extract/font";
+import { h1, h2, h3, p } from "../../../extract/font";
+import { theme } from "../../../theme";
+import { breakpoint } from "../../../breakpoint";
 
 const sliderInput = (
   label: string,
   value: string,
   setter: (nextValue: string) => void,
-  labelTag?: undefined | string
+  labelTag?: undefined | string,
+  adornmentMap?: (val: string) => string
 ) => {
-  return createElement("div", undefined, [
+  return createElement("div", sx({ color: theme.secondary }), [
     createElement(labelTag ?? "p", undefined, label),
-    input({
-      name: "input-slider-" + label,
-      value,
-      onChange: (nextVal) => {
-        setter(nextVal);
-      },
-      type: "range",
-      min: 0,
-      max: 100,
-    }),
+    createElement(
+      "div",
+      sx({
+        display: "flex",
+        alignItems: "center",
+        gap: "16px",
+        justifyContent: "center",
+      }),
+      [
+        input({
+          name: "input-slider-" + label,
+          value,
+          onChange: (nextVal) => {
+            setter(nextVal);
+          },
+          type: "range",
+          min: 0,
+          max: 100,
+        }),
+        h3(adornmentMap ? adornmentMap(value) : value),
+      ]
+    ),
   ]);
 };
 
@@ -32,7 +47,7 @@ const envelopeCurveSelect = (
   setter: (nextValue: string) => void
 ) => {
   return createElement("div", undefined, [
-    p("Curve"),
+    h3("Curve"),
     select({
       name: "select-envelope-curve-" + namePostfix,
       options: [
@@ -55,164 +70,188 @@ const envelopeADSRMenu = (
   const synth = state.synth;
 
   return [
-    createElement("div", sx({ display: "flex" }), [
-      createElement("div", sx({ flex: 1 }), [
-        h3("Attack"),
-        sliderInput(
-          "Volume",
-          (synth.attackGain * 100).toFixed(0).toString(),
-          (nextValue) => {
-            const val = Number(Number(nextValue).toFixed(0));
+    createElement(
+      "div",
+      sx({ display: "flex", flexDirection: breakpoint.md ? "column" : "row" }),
+      [
+        createElement("div", sx({ flex: 1 }), [
+          h2("Attack phase"),
+          sliderInput(
+            "Volume",
+            (synth.attackGain * 100).toFixed(0).toString(),
+            (nextValue) => {
+              const val = Number(Number(nextValue).toFixed(0));
+              // @ts-ignore
+              setState({
+                ...state,
+                synth: {
+                  ...synth,
+                  attackGain: val / 100,
+                },
+              });
+            },
+            "h3",
+            (val) => `${val}%`
+          ),
+          sliderInput(
+            "Time",
+            (synth.attackTime * 1000).toFixed(0).toString(),
+            (nextValue) => {
+              const val = Number(Number(nextValue).toFixed(0));
+              // @ts-ignore
+              setState({
+                ...state,
+                synth: {
+                  ...synth,
+                  attackTime: val / 1000,
+                },
+              });
+            },
+            "h3",
+            (val) => `${val} ms`
+          ),
+          envelopeCurveSelect(synth.attackCurve, "attack", (nextValue) => {
             // @ts-ignore
             setState({
               ...state,
-              synth: {
-                ...synth,
-                attackGain: val / 100,
-              },
+              synth: { ...synth, attackCurve: nextValue },
             });
-          }
-        ),
-        sliderInput(
-          "Time",
-          (synth.attackTime * 1000).toFixed(0).toString(),
-          (nextValue) => {
-            const val = Number(Number(nextValue).toFixed(0));
+          }),
+          createElement("div", sx({ marginTop: "64px" }), [
+            h2("Decay phase"),
+            sliderInput(
+              "Volume",
+              (synth.decayGain * 100).toFixed(0).toString(),
+              (nextValue) => {
+                const val = Number(Number(nextValue).toFixed(0));
+                // @ts-ignore
+                setState({
+                  ...state,
+                  synth: {
+                    ...synth,
+                    decayGain: val / 100,
+                  },
+                });
+              },
+              "h3",
+              (val) => `${val}%`
+            ),
+            sliderInput(
+              "Time",
+              (synth.decayTime * 1000).toFixed(0).toString(),
+              (nextValue) => {
+                const val = Number(Number(nextValue).toFixed(0));
+                // @ts-ignore
+                setState({
+                  ...state,
+                  synth: {
+                    ...synth,
+                    decayTime: val / 1000,
+                  },
+                });
+              },
+              "h3",
+              (val) => `${val} ms`
+            ),
+            envelopeCurveSelect(synth.decayCurve, "decay", (nextValue) => {
+              // @ts-ignore
+              setState({
+                ...state,
+                synth: { ...synth, decayCurve: nextValue },
+              });
+            }),
+          ]),
+        ]),
+        createElement("div", sx({ flex: 1 }), [
+          h2("Sustain phase"),
+          sliderInput(
+            "Volume",
+            (synth.sustainGain * 100).toFixed(0).toString(),
+            (nextValue) => {
+              const val = Number(Number(nextValue).toFixed(0));
+              // @ts-ignore
+              setState({
+                ...state,
+                synth: {
+                  ...synth,
+                  sustainGain: val / 100,
+                },
+              });
+            },
+            "h3",
+            (val) => `${val}%`
+          ),
+          sliderInput(
+            "Time",
+            (synth.sustainTime * 1000).toFixed(0).toString(),
+            (nextValue) => {
+              const val = Number(Number(nextValue).toFixed(0));
+              // @ts-ignore
+              setState({
+                ...state,
+                synth: {
+                  ...synth,
+                  sustainTime: val / 1000,
+                },
+              });
+            },
+            "h3",
+            (val) => `${val} ms`
+          ),
+          envelopeCurveSelect(synth.sustainCurve, "sustain", (nextValue) => {
             // @ts-ignore
             setState({
               ...state,
-              synth: {
-                ...synth,
-                attackTime: val / 1000,
-              },
+              synth: { ...synth, sustainCurve: nextValue },
             });
-          }
-        ),
-        envelopeCurveSelect(synth.attackCurve, "attack", (nextValue) => {
-          // @ts-ignore
-          setState({
-            ...state,
-            synth: { ...synth, attackCurve: nextValue },
-          });
-        }),
-        h3("Decay"),
-        sliderInput(
-          "Volume",
-          (synth.decayGain * 100).toFixed(0).toString(),
-          (nextValue) => {
-            const val = Number(Number(nextValue).toFixed(0));
-            // @ts-ignore
-            setState({
-              ...state,
-              synth: {
-                ...synth,
-                decayGain: val / 100,
+          }),
+          createElement("div", sx({ marginTop: "64px" }), [
+            h2("Release phase"),
+            sliderInput(
+              "Volume",
+              (synth.releaseGain * 100).toFixed(0).toString(),
+              (nextValue) => {
+                const val = Number(Number(nextValue).toFixed(0));
+                // @ts-ignore
+                setState({
+                  ...state,
+                  synth: {
+                    ...synth,
+                    releaseGain: val / 100,
+                  },
+                });
               },
-            });
-          }
-        ),
-        sliderInput(
-          "Time",
-          (synth.decayTime * 1000).toFixed(0).toString(),
-          (nextValue) => {
-            const val = Number(Number(nextValue).toFixed(0));
-            // @ts-ignore
-            setState({
-              ...state,
-              synth: {
-                ...synth,
-                decayTime: val / 1000,
+              "h3",
+              (val) => `${val}%`
+            ),
+            sliderInput(
+              "Time",
+              (synth.releaseTime * 1000).toFixed(0).toString(),
+              (nextValue) => {
+                const val = Number(Number(nextValue).toFixed(0));
+                // @ts-ignore
+                setState({
+                  ...state,
+                  synth: {
+                    ...synth,
+                    releaseTime: val / 1000,
+                  },
+                });
               },
-            });
-          }
-        ),
-        envelopeCurveSelect(synth.decayCurve, "decay", (nextValue) => {
-          // @ts-ignore
-          setState({
-            ...state,
-            synth: { ...synth, decayCurve: nextValue },
-          });
-        }),
-      ]),
-      createElement("div", sx({ flex: 1 }), [
-        h3("Sustain"),
-        sliderInput(
-          "Volume",
-          (synth.sustainGain * 100).toFixed(0).toString(),
-          (nextValue) => {
-            const val = Number(Number(nextValue).toFixed(0));
-            // @ts-ignore
-            setState({
-              ...state,
-              synth: {
-                ...synth,
-                sustainGain: val / 100,
-              },
-            });
-          }
-        ),
-        sliderInput(
-          "Time",
-          (synth.sustainTime * 1000).toFixed(0).toString(),
-          (nextValue) => {
-            const val = Number(Number(nextValue).toFixed(0));
-            // @ts-ignore
-            setState({
-              ...state,
-              synth: {
-                ...synth,
-                sustainTime: val / 1000,
-              },
-            });
-          }
-        ),
-        envelopeCurveSelect(synth.sustainCurve, "sustain", (nextValue) => {
-          // @ts-ignore
-          setState({
-            ...state,
-            synth: { ...synth, sustainCurve: nextValue },
-          });
-        }),
-        h3("Release"),
-        sliderInput(
-          "Volume",
-          (synth.releaseGain * 100).toFixed(0).toString(),
-          (nextValue) => {
-            const val = Number(Number(nextValue).toFixed(0));
-            // @ts-ignore
-            setState({
-              ...state,
-              synth: {
-                ...synth,
-                releaseGain: val / 100,
-              },
-            });
-          }
-        ),
-        sliderInput(
-          "Time",
-          (synth.releaseTime * 1000).toFixed(0).toString(),
-          (nextValue) => {
-            const val = Number(Number(nextValue).toFixed(0));
-            // @ts-ignore
-            setState({
-              ...state,
-              synth: {
-                ...synth,
-                releaseTime: val / 1000,
-              },
-            });
-          }
-        ),
-        envelopeCurveSelect(synth.releaseCurve, "release", (nextValue) => {
-          // @ts-ignore
-          setState({
-            ...state,
-            synth: { ...synth, releaseCurve: nextValue },
-          });
-        }),
-      ]),
-    ]),
+              "h3",
+              (val) => `${val} ms`
+            ),
+            envelopeCurveSelect(synth.releaseCurve, "release", (nextValue) => {
+              // @ts-ignore
+              setState({
+                ...state,
+                synth: { ...synth, releaseCurve: nextValue },
+              });
+            }),
+          ]),
+        ]),
+      ]
+    ),
   ];
 };
 
@@ -261,68 +300,76 @@ export const synthTab = (
 
   return [
     createElement("div", undefined, [
-      createElement("div", sx({ display: "flex" }), [
-        createElement("div", sx({ flex: 1 }), [
-          sliderInput(
-            "Master volume",
-            (synth.totalGain * 100).toFixed(0).toString(),
-            (nextValue) => {
-              const val = Number(Number(nextValue).toFixed(0));
-              const newTotalGain = val / 100;
+      createElement(
+        "div",
+        sx({
+          display: "flex",
+          flexDirection: breakpoint.md ? "column" : "row",
+        }),
+        [
+          createElement("div", sx({ flex: 1 }), [
+            sliderInput(
+              "Master volume",
+              (synth.totalGain * 100).toFixed(0).toString(),
+              (nextValue) => {
+                const val = Number(Number(nextValue).toFixed(0));
+                const newTotalGain = val / 100;
+                // @ts-ignore
+                setState({
+                  ...state,
+                  synth: {
+                    ...synth,
+                    totalGain: newTotalGain,
+                  },
+                });
+                setTotalGain(newTotalGain);
+              },
+              "h1",
+              (val) => `${val}%`
+            ),
+          ]),
+          createElement("div", sx({ flex: 1 }), [
+            h1("Organ (sustain)"),
+            checkbox({
+              name: "checkbox-organ",
+              value: synth.organ,
+              onChange: () => {
+                // @ts-ignore
+                setState({
+                  ...state,
+                  synth: { ...synth, organ: !synth.organ },
+                });
+              },
+            }),
+          ]),
+          createElement("div", sx({ flex: 1 }), [
+            h1("Timbre"),
+            select({
+              name: "select-waveform-preset",
               // @ts-ignore
-              setState({
-                ...state,
-                synth: {
-                  ...synth,
-                  totalGain: newTotalGain,
-                },
-              });
-              setTotalGain(newTotalGain);
-            },
-            "h2"
-          ),
-        ]),
-        createElement("div", sx({ flex: 1 }), [
-          h2("Organ (sustain)"),
-          checkbox({
-            name: "checkbox-organ",
-            value: synth.organ,
-            onChange: () => {
-              // @ts-ignore
-              setState({
-                ...state,
-                synth: { ...synth, organ: !synth.organ },
-              });
-            },
-          }),
-        ]),
-        createElement("div", sx({ flex: 1 }), [
-          h2("Timbre"),
-          select({
-            name: "select-waveform-preset",
-            // @ts-ignore
-            value: state.synth.waveformPreset,
-            options: timbrePresets.map((timbre) => ({
-              title: timbre.title,
-              id: timbre.id,
-            })),
-            onChange: (nextVal) => {
-              // @ts-ignore
-              setState({
-                ...state,
-                synth: {
-                  // @ts-ignore
-                  ...state.synth,
-                  waveformPreset: nextVal,
-                },
-              });
-              setWaveform(nextVal);
-            },
-          }),
-        ]),
-      ]),
+              value: state.synth.waveformPreset,
+              options: timbrePresets.map((timbre) => ({
+                title: timbre.title,
+                id: timbre.id,
+              })),
+              onChange: (nextVal) => {
+                // @ts-ignore
+                setState({
+                  ...state,
+                  synth: {
+                    // @ts-ignore
+                    ...state.synth,
+                    waveformPreset: nextVal,
+                  },
+                });
+                setWaveform(nextVal);
+              },
+            }),
+          ]),
+        ]
+      ),
     ]),
-    createElement("div", sx({ marginTop: "64px" }), h2("Envelope")),
+    createElement("div", sx({ marginTop: "64px" }), h1("Envelope")),
     select({
       name: "select-envelope-type",
       value: synth.envelopeType,
