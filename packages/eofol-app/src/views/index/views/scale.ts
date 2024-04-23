@@ -24,6 +24,7 @@ import {
 import { breakpoint } from "../../../breakpoint";
 import { theme } from "../../../theme";
 import { textarea } from "../../../extract/textarea";
+import { p } from "../../../extract/font";
 
 function onlyUnique(value: string, index: number, array: any[]) {
   return array.indexOf(value) === index;
@@ -108,7 +109,7 @@ const changeScaleMenu = (
         sx({ flex: 1 })
       ),
     ]),
-    createElement("p", sx({ marginTop: "16px" }), "Select scale"),
+    createElement("div", sx({ marginTop: "16px" }), p("Select scale")),
     createElement(
       "div",
       sx({ width: "256px", margin: "0 auto 0 auto", display: "flex" }),
@@ -133,7 +134,7 @@ const changeScaleMenu = (
         name: "select-scale-library",
       })
     ),
-    createElement("p", sx({ marginTop: "8px" }), "Scale name"),
+    createElement("div", sx({ marginTop: "8px" }), p("Scale name")),
     createElement(
       "div",
       sx({ width: "256px", margin: "0 auto 0 auto", display: "flex" }),
@@ -346,7 +347,7 @@ const scaleTuning = (
   const tuning = state.tuning;
 
   return createElement("div", sx({ marginTop: "16px" }), [
-    createElement("p", undefined, "Base frequency Hz"),
+    p("Base frequency Hz"),
     createElement(
       "div",
       sx({ width: "236px", margin: "0 auto 0 auto" }),
@@ -367,7 +368,7 @@ const scaleTuning = (
         },
       })
     ),
-    createElement("p", undefined, "Period interval (Equave)"),
+    p("Period interval (Equave) ratio"),
     createElement(
       "div",
       sx({ width: "236px", margin: "0 auto 0 auto" }),
@@ -388,7 +389,7 @@ const scaleTuning = (
         },
       })
     ),
-    createElement("p", undefined, "Number of keys up"),
+    p("Number of keys up"),
     createElement(
       "div",
       sx({ width: "236px", margin: "0 auto 0 auto" }),
@@ -409,7 +410,7 @@ const scaleTuning = (
         },
       })
     ),
-    createElement("p", undefined, "Number of keys down"),
+    p("Number of keys down"),
     createElement(
       "div",
       sx({ width: "236px", margin: "0 auto 0 auto" }),

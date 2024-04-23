@@ -1,5 +1,6 @@
 import { createElement, sx } from "@eofol/eofol";
 import { FiddleState } from "../../../types";
+import { p, h1 } from "../../../extract/font";
 
 export const analyzeTab = (
   state: FiddleState,
@@ -7,8 +8,8 @@ export const analyzeTab = (
 ) => {
   return [
     createElement("div", sx({ marginTop: "100px" }), [
-      createElement("h1", undefined, "Analyze"),
-      createElement("p", undefined, "UNDER CONSTRUCTION"),
+      h1("Analyze"),
+      p("UNDER CONSTRUCTION"),
     ]),
   ];
 };

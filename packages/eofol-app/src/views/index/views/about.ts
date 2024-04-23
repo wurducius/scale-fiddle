@@ -1,5 +1,7 @@
-import { createElement, sx } from "@eofol/eofol";
 import { FiddleState } from "../../../types";
+import { h1, h3 } from "../../../extract/font";
+import { a } from "@eofol/eofol-simple";
+import { createElement, sx } from "@eofol/eofol";
 
 export const aboutTab = (
   state: FiddleState,
@@ -7,36 +9,31 @@ export const aboutTab = (
 ) => {
   return [
     createElement("div", sx({ marginTop: "100px" }), [
-      createElement("h1", undefined, "Scale Fiddle"),
-      createElement("h3", undefined, "Version 0.3"),
-      createElement("h3", undefined, [
+      h1("Scale Fiddle"),
+      h3("Version 0.3"),
+      h3([
         "Created by ",
-        createElement("a", undefined, "Microtonal Structure Theory team", {
-          target: "_blank",
-          href: "https://www.facebook.com/groups/microtonalstructuremusictheory",
+        a({
+          link: "https://www.facebook.com/groups/microtonalstructuremusictheory",
+          external: true,
+          children: "Microtonal Structure Theory team",
         }),
       ]),
-      createElement("h3", undefined, [
-        createElement("a", undefined, "Jakub Eliáš", {
-          href: "mailto:wurducius@gmail.com",
-        }),
+      h3([
+        a({ link: "mailto:wurducius@gmail.com", children: "Jakub Eliáš" }),
         " (development & design)",
       ]),
-      createElement("h3", undefined, "Janne Karimäki (analysis & testing)"),
-      createElement("h3", undefined, [
+      h3("Janne Karimäki (analysis & testing)"),
+      h3([
         "Developed using ",
-        createElement("a", undefined, "Eofol", {
-          target: "_blank",
-          href: "https://eofol.com",
-        }),
+        a({ link: "https://eofol.com", external: true, children: "Eofol" }),
       ]),
-      createElement("h3", undefined, "2024"),
-      createElement(
-        "h3",
-        undefined,
-        createElement("a", undefined, "MIT license", {
-          target: "_blank",
-          href: "https://eofol.com/license.html",
+      h3("2024"),
+      h3(
+        a({
+          link: "https://eofol.com/license.html",
+          external: true,
+          children: "MIT license",
         })
       ),
     ]),

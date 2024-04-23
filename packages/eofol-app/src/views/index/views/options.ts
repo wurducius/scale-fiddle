@@ -1,6 +1,7 @@
 import { createElement, sx } from "@eofol/eofol";
 import { FiddleState } from "../../../types";
 import { input } from "@eofol/eofol-simple";
+import { h2, p } from "../../../extract/font";
 
 export const optionsTab = (
   state: FiddleState,
@@ -12,8 +13,8 @@ export const optionsTab = (
   return [
     createElement("div", sx({ display: "flex" }), [
       createElement("div", sx({ flex: 1 }), [
-        createElement("h2", undefined, "Precision"),
-        createElement("p", undefined, "Frequency"),
+        h2("Precision"),
+        p("Frequency"),
         input({
           value: options.decimalDigitsFreq,
           onChange: (nextValue) => {
@@ -29,7 +30,7 @@ export const optionsTab = (
             });
           },
         }),
-        createElement("p", undefined, "Cent"),
+        p("Cent"),
         input({
           value: options.decimalDigitsCent,
           onChange: (nextValue) => {
@@ -45,7 +46,7 @@ export const optionsTab = (
             });
           },
         }),
-        createElement("p", undefined, "Ratio"),
+        p("Ratio"),
         input({
           value: options.decimalDigitsRatio,
           onChange: (nextValue) => {
@@ -61,7 +62,7 @@ export const optionsTab = (
             });
           },
         }),
-        createElement("p", undefined, "Frequency on keys"),
+        p("Frequency on keys"),
         input({
           value: options.decimalDigitsFreqOnKeys,
           onChange: (nextValue) => {
@@ -79,8 +80,8 @@ export const optionsTab = (
         }),
       ]),
       createElement("div", sx({ flex: 1 }), [
-        createElement("h2", undefined, "Synth configuration"),
-        createElement("p", undefined, "Start gain"),
+        h2("Synth configuration"),
+        p("Start gain"),
         input({
           value: options.startGain,
           onChange: (nextValue) => {
@@ -95,7 +96,7 @@ export const optionsTab = (
             });
           },
         }),
-        createElement("p", undefined, "Start time"),
+        p("Start time"),
         input({
           value: options.startTime,
           onChange: (nextValue) => {
@@ -110,7 +111,7 @@ export const optionsTab = (
             });
           },
         }),
-        createElement("p", undefined, "End gain"),
+        p("End gain"),
         input({
           value: options.endGain,
           onChange: (nextValue) => {
@@ -125,7 +126,7 @@ export const optionsTab = (
             });
           },
         }),
-        createElement("p", undefined, "End time"),
+        p("End time"),
         input({
           value: options.endTime,
           onChange: (nextValue) => {
