@@ -535,8 +535,6 @@ const chromatictetrachord = {
   value: pickRelative(ed2(12), [1, 1, 3]),
 }; //4
 
-console.log(chromatictetrachord.value);
-
 const harmonictetrachord = {
   id: "harmonictetrachord",
   title: "4-12ed2 (131), Harmonic Tetrachord",

@@ -3,6 +3,7 @@ import { panic } from "../../../synth-lib";
 import { FiddleState } from "../../../types";
 import { breakpoint } from "../../../breakpoint";
 import { theme } from "../../../theme";
+import { notify } from "@eofol/eofol-simple";
 
 const appbarButton = (
   label: string,
@@ -116,11 +117,7 @@ export const appbar = (
       "Panic",
       () => {
         panic();
-        const snackbarElement = document.getElementById("snackbar-panic");
-        snackbarElement?.setAttribute("class", "snackbar show");
-        setTimeout(() => {
-          snackbarElement?.setAttribute("class", "snackbar");
-        }, 3000);
+        notify({ title: "Panic! Shutting down synth." });
       },
       false,
       true
@@ -130,11 +127,7 @@ export const appbar = (
       () => {
         // @ts-ignore
         navigator.clipboard.writeText(state.scaleInput);
-        const snackbarElement = document.getElementById("snackbar-share-scale");
-        snackbarElement?.setAttribute("class", "snackbar show");
-        setTimeout(() => {
-          snackbarElement?.setAttribute("class", "snackbar");
-        }, 3000);
+        notify({ title: "Scale copied to clipboard." });
       },
       false,
       true
@@ -148,12 +141,6 @@ export const appbar = (
         href: "https://www.facebook.com/groups/microtonalstructuremusictheory",
       }
     ),
-    createElement("div", "snackbar", "Scale copied to clipboard.", {
-      id: "snackbar-share-scale",
-    }),
-    createElement("div", "snackbar", "Panic! Shutting down synth.", {
-      id: "snackbar-panic",
-    }),
   ];
 
   const bottomRowSecond = [

@@ -1,4 +1,4 @@
-import { createStyle } from "@eofol/eofol/dist";
+import { createStyle } from "@eofol/eofol";
 import { theme } from "./theme";
 
 export const initStyles = () => {

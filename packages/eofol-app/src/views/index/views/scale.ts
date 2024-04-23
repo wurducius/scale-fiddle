@@ -19,6 +19,7 @@ import {
   input,
   dropdownContent,
   modal,
+  notify,
 } from "@eofol/eofol-simple";
 import { breakpoint } from "../../../breakpoint";
 import { theme } from "../../../theme";
@@ -63,7 +64,7 @@ const menuButtonOpensModal =
     state: FiddleState,
     setState: undefined | ((nextState: FiddleState) => void)
   ) =>
-  (title: string, formName: string) => {
+  (title: string, formName: string, notImplemented?: boolean) => {
     return createElement(
       "button",
       sx({ width: "256px", height: "40px" }),
@@ -72,16 +73,20 @@ const menuButtonOpensModal =
       {
         // @ts-ignore
         onclick: () => {
-          // @ts-ignore
-          setState({
-            ...state,
-            form: {
-              // @ts-ignore
-              ...state.form,
-              // @ts-ignore
-              [formName]: { ...state.form[formName], open: true },
-            },
-          });
+          if (!notImplemented) {
+            // @ts-ignore
+            setState({
+              ...state,
+              form: {
+                // @ts-ignore
+                ...state.form,
+                // @ts-ignore
+                [formName]: { ...state.form[formName], open: true },
+              },
+            });
+          } else {
+            notify({ title: "Not implemented yet." });
+          }
         },
       }
     );
@@ -98,7 +103,7 @@ const changeScaleMenu = (
       dropdown("dropdown-new-scale-content", "Create scale", sx({ flex: 1 })),
       dropdown(
         "dropdown-modify-scale-content",
-        "(TODO) Modify scale",
+        "Modify scale",
         sx({ flex: 1 })
       ),
     ]),
@@ -233,26 +238,26 @@ const changeScaleMenu = (
         dropdownItem("Meantone temperament", "meantone"),
         dropdownItem("Harmonic series", "harm"),
         dropdownItem("Just temperament", "just"),
-        dropdownItem("Ratio chord", "ratiochord"),
-        dropdownItem("Tempered limit", "limit"),
-        dropdownItem("Higher rank temperament", "higher"),
-        dropdownItem("Euler-Fokker genus form", "eulerfokker"),
-        dropdownItem("Preset scale", "preset"),
+        dropdownItem("Ratio chord", "ratiochord", true),
+        dropdownItem("Tempered limit", "limit", true),
+        dropdownItem("Higher rank temperament", "higher", true),
+        dropdownItem("Euler-Fokker genus form", "eulerfokker", true),
+        dropdownItem("Preset scale", "preset", true),
       ]
     ),
     dropdownContent(
       "dropdown-modify-scale-content",
       sx({ top: "75px", left: "12.5%", width: "calc(12.5% - 4px)" }),
       [
-        dropdownItem("Transpose", "transpose"),
-        dropdownItem("Mode", "mode"),
-        dropdownItem("Subset", "subset"),
-        dropdownItem("Multiply", "multiply"),
-        dropdownItem("Reverse", "reverse"),
-        dropdownItem("Sort", "sort"),
-        dropdownItem("Stretch", "stretch"),
-        dropdownItem("Approximate by equal", "approxequal"),
-        dropdownItem("Temper", "temper"),
+        dropdownItem("Transpose", "transpose", true),
+        dropdownItem("Mode", "mode", true),
+        dropdownItem("Subset", "subset", true),
+        dropdownItem("Multiply", "multiply", true),
+        dropdownItem("Reverse", "reverse", true),
+        dropdownItem("Sort", "sort", true),
+        dropdownItem("Stretch", "stretch", true),
+        dropdownItem("Approximate by equal", "approxequal", true),
+        dropdownItem("Temper", "temper", true),
       ]
     ),
   ];
@@ -675,8 +680,6 @@ const generalFormModal =
     result: (params: Record<string, any>) => string
   ) => {
     // @ts-ignore
-    const decimalDigitsCent = state.options.decimalDigitsCent;
-    // @ts-ignore
     const resultScale = result(state.form[formName]);
 
     return modal(
@@ -895,7 +898,7 @@ const formModal = (
     ),
     modalImpl(
       "modal-ratiochord",
-      "(TODO) Ratio chord",
+      "Ratio chord",
       "ratiochord",
       [
         {
@@ -910,32 +913,61 @@ const formModal = (
     modal(
       "modal-preset",
       "Preset scale",
-      e("div", undefined, [
-        select({
-          options: scalePresets.map((item) => ({
-            title: item.title,
-            id: item.id,
-          })),
-          onChange: (nextVal) => {
-            // @ts-ignore
-            setState({
-              ...state,
-              form: {
-                // @ts-ignore
-                ...state.form,
-                preset: {
-                  // @ts-ignore
-                  ...state.form.preset,
-                  id: nextVal,
-                },
-              },
-            });
-          },
-          // @ts-ignore
-          value: state.form.preset.id,
-          name: "select-preset-scale",
+      e(
+        "div",
+        sx({
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }),
-      ]),
+        [
+          select({
+            styles: sx({ width: "450px" }),
+            options: scalePresets.map((item) => ({
+              title: item.title,
+              id: item.id,
+            })),
+            onChange: (nextVal) => {
+              // @ts-ignore
+              setState({
+                ...state,
+                form: {
+                  // @ts-ignore
+                  ...state.form,
+                  preset: {
+                    // @ts-ignore
+                    ...state.form.preset,
+                    id: nextVal,
+                  },
+                },
+              });
+            },
+            // @ts-ignore
+            value: state.form.preset.id,
+            name: "select-preset-scale",
+          }),
+          createElement(
+            "textarea",
+            sx({
+              resize: "none",
+              height: "300px",
+              marginTop: "16px",
+              marginBottom: "8px",
+            }),
+            [
+              scalePresets.find(
+                // @ts-ignore
+                (item) => item.id === state.form.preset.id
+              )?.value ?? "",
+            ],
+            {
+              "aria-label": "result-preset-scale",
+              id: "result-preset-scale",
+              name: "result-preset-scale",
+            }
+          ),
+        ]
+      ),
       // @ts-ignore
       state.form.preset.open,
       () => {
@@ -951,22 +983,32 @@ const formModal = (
         });
       },
       () => {
-        // @ts-ignore
-        setState({
-          ...state,
-          recompute: true,
+        const presetScale = scalePresets.find(
           // @ts-ignore
-          scaleInput: scalePresets.find(
+          (item) => item.id === state.form.preset.id
+        );
+        if (presetScale) {
+          // @ts-ignore
+          setState({
+            ...state,
+            recompute: true,
             // @ts-ignore
-            (item) => item.id === state.form.preset.id
-          )?.value,
-          form: {
+            scales: state.scales.map((scale, index) =>
+              // @ts-ignore
+              index === state.scaleIndex
+                ? { ...scale, name: presetScale.title }
+                : scale
+            ),
             // @ts-ignore
-            ...state.form,
-            // @ts-ignore
-            preset: { ...state.form.preset, open: false },
-          },
-        });
+            scaleInput: presetScale.value,
+            form: {
+              // @ts-ignore
+              ...state.form,
+              // @ts-ignore
+              preset: { ...state.form.preset, open: false },
+            },
+          });
+        }
       }
     ),
   ];
