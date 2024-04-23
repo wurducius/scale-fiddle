@@ -4,6 +4,7 @@ import { FiddleState } from "../../../types";
 import { breakpoint } from "../../../breakpoint";
 import { theme } from "../../../theme";
 import { notify } from "@eofol/eofol-simple";
+import { t } from "../../../extract/translation";
 
 const appbarButton = (
   label: string,
@@ -147,7 +148,7 @@ export const appbar = (
     createElement(
       "div",
       sx({ marginLeft: !breakpoint.md ? "32px" : "0", fontWeight: 700 }),
-      "Scale Fiddle v0.3"
+      t("app.nameWithVersion", "Scale Fiddle v0.3")
     ),
   ];
 

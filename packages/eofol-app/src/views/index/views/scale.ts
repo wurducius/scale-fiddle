@@ -1,4 +1,4 @@
-import { createElement, e, sx, sy } from "@eofol/eofol";
+import { createElement, sx, sy } from "@eofol/eofol";
 import { defaultScale } from "../../../initial-state";
 import {
   clearKeyElementMap,
@@ -884,7 +884,7 @@ const formModal = (
     modal(
       "modal-preset",
       "Preset scale",
-      e(
+      createElement(
         "div",
         sx({
           display: "flex",
