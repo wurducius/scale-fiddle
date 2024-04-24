@@ -2,7 +2,7 @@ import { debounce, forceRerender } from "@eofol/eofol";
 
 const breakpoints = [640, 1080, 1200, 1600, 2000, 2600];
 
-const mediaQueryMaxWidth = (width: number) => () =>
+export const mediaQueryMaxWidth = (width: number) => () =>
   window.matchMedia(`(max-width: ${width}px)`).matches;
 
 const mediaQueryXs = mediaQueryMaxWidth(breakpoints[0]);

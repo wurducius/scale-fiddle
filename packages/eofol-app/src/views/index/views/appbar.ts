@@ -1,7 +1,7 @@
 import { createElement, cx, forceRerender, sx } from "@eofol/eofol";
 import { panic } from "../../../synth-lib";
 import { FiddleState } from "../../../types";
-import { breakpoint } from "../../../extract/breakpoint";
+import { breakpoint, mediaQueryMaxWidth } from "../../../extract/breakpoint";
 import { theme } from "../../../theme";
 import { a, button, notify, select } from "@eofol/eofol-simple";
 import {
@@ -54,6 +54,9 @@ export const appbar = (
 ) => {
   // @ts-ignore
   const tabIndex = state.tab;
+
+  const large = !mediaQueryMaxWidth(1280)();
+  const middle = !mediaQueryMaxWidth(820)();
 
   const topRow = div(
     sx({
@@ -169,7 +172,7 @@ export const appbar = (
   const bottomRowSecond = [
     div(
       sx({
-        marginLeft: !breakpoint.md ? "32px" : "0",
+        marginLeft: middle ? "32px" : "0",
         fontWeight: 700,
         fontSize: "20px",
       }),
@@ -197,32 +200,32 @@ export const appbar = (
     ]
   );
 
-  const getAppbarHeight = (xs: boolean, md: boolean) => {
-    if (!md) {
+  const getAppbarHeight = (large: boolean, middle: boolean) => {
+    if (large) {
       return "50px";
     }
-    if (md && !xs) {
-      return "60px";
+    if (middle) {
+      return "100px";
     }
-    return "90px";
+    return "150px";
   };
 
   return div(
     sx({
       display: "flex",
-      height: getAppbarHeight(breakpoint.xs, breakpoint.md),
+      height: getAppbarHeight(large, middle),
       alignItems: !breakpoint.md ? "normal" : "center",
       justifyContent: !breakpoint.md ? "center" : "inherit",
       border: `1px solid ${theme.primary}`,
       padding: "0 16px",
-      flexDirection: breakpoint.sm ? "column" : "row",
+      flexDirection: !large ? "column" : "row",
     }),
     div(
       sx({
         display: "flex",
         justifyContent: breakpoint.sm ? "inherit" : "space-between",
         flex: 1,
-        flexWrap: breakpoint.md ? "wrap" : "inherit",
+        flexWrap: "wrap",
       }),
       [topRow, bottomRow]
     )
