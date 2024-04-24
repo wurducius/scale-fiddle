@@ -5,7 +5,7 @@ import { timbrePresets } from "../../../presets/timbre-presets";
 import { input, select, checkbox } from "@eofol/eofol-simple";
 import { h1, h2, h3, p } from "../../../extract/font";
 import { theme } from "../../../theme";
-import { breakpoint } from "../../../breakpoint";
+import { breakpoint } from "../../../extract/breakpoint";
 
 createStyle('input[type="range"].lg { max-width: 500px; width: 100%; }');
 

@@ -20,7 +20,13 @@ export const scaleToOverview = (state: FiddleStateImpl) => {
   const intervalMap = raw.map(parseScala(state));
 
   const freq = [];
-  freq[downKeys] = { freq: baseFreq, ratio: 1, name: "base", cent: 0 };
+  freq[downKeys] = {
+    freq: baseFreq,
+    ratio: 1,
+    name: "base",
+    cent: 0,
+    isOctave: true,
+  };
 
   for (let i = 0; i < upKeys; i++) {
     const f =
@@ -32,11 +38,14 @@ export const scaleToOverview = (state: FiddleStateImpl) => {
       ) *
       intervalMap[mod(raw.length + i - 1, raw.length)];
     const ratio = intervalMap[mod(raw.length + i - 1, raw.length)];
+    const ratioImpl = ratio === period ? 1 : ratio;
+
     freq[downKeys + i + 1] = {
       freq: f,
-      ratio: ratio === period ? 1 : ratio,
+      ratio: ratioImpl,
       name: raw[mod(raw.length + i - 1, raw.length)],
       cent: Math.log2(f / baseFreq) * 1200,
+      isOctave: ratioImpl === 1,
     };
   }
 
@@ -47,11 +56,14 @@ export const scaleToOverview = (state: FiddleStateImpl) => {
         Math.pow(period, -(1 + Math.floor((i - 1) / raw.length))) *
         intervalMap[mod(raw.length - i, raw.length)];
       const ratio = intervalMap[mod(raw.length - i, raw.length)];
+      const ratioImpl = ratio === period ? 1 : ratio;
+
       freq[i] = {
         freq: f,
-        ratio: ratio === period ? 1 : ratio,
+        ratio: ratioImpl,
         name: raw[mod(raw.length - i, raw.length)],
         cent: Math.log2(f / baseFreq) * 1200,
+        isOctave: ratioImpl === 1,
       };
     }
   }

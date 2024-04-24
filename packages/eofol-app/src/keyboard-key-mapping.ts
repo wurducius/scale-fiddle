@@ -47,7 +47,7 @@ const handleKeyUpImpl =
       // @ts-ignore
       releaseNote(state)(freq[index]);
       // @ts-ignore
-      const isOctave = Number(state.overview[index].ratio) === 1;
+      const isOctave = state.overview[index].isOctave;
       flashKeyUpByValue(freq[index], isOctave);
       keysDown[index] = false;
     }

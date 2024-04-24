@@ -2,7 +2,7 @@ import { createElement, sx } from "@eofol/eofol";
 import { FiddleState } from "../../../types";
 import { input } from "@eofol/eofol-simple";
 import { h2, p } from "../../../extract/font";
-import { breakpoint } from "../../../breakpoint";
+import { breakpoint } from "../../../extract/breakpoint";
 
 export const optionsTab = (
   state: FiddleState,

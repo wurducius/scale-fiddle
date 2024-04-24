@@ -1,7 +1,7 @@
 import { createElement, forceRerender, sx } from "@eofol/eofol";
 import { panic } from "../../../synth-lib";
 import { FiddleState } from "../../../types";
-import { breakpoint } from "../../../breakpoint";
+import { breakpoint } from "../../../extract/breakpoint";
 import { theme } from "../../../theme";
 import { notify, select } from "@eofol/eofol-simple";
 import {
@@ -165,9 +165,9 @@ export const appbar = (
       value: language,
       name: "select-language",
       styles: sx({
-        height: "28px",
+        height: "36px",
         width: "200px",
-        fontSize: "14px",
+        fontSize: "16px",
         margin: "0 0 0 0",
         padding: "2px 4px 2px 4px",
       }),
@@ -177,7 +177,11 @@ export const appbar = (
   const bottomRowSecond = [
     createElement(
       "div",
-      sx({ marginLeft: !breakpoint.md ? "32px" : "0", fontWeight: 700 }),
+      sx({
+        marginLeft: !breakpoint.md ? "32px" : "0",
+        fontWeight: 700,
+        fontSize: "20px",
+      }),
       t("app.nameWithVersion", "Scale Fiddle v0.3")
     ),
   ];

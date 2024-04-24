@@ -21,7 +21,7 @@ import {
   tooltip,
   button,
 } from "@eofol/eofol-simple";
-import { breakpoint } from "../../../breakpoint";
+import { breakpoint } from "../../../extract/breakpoint";
 import { theme } from "../../../theme";
 import { textarea } from "../../../extract/textarea";
 import { p } from "../../../extract/font";
@@ -175,7 +175,7 @@ const changeScaleMenu = (
       [
         createElement(
           "button",
-          sx({ marginTop: "16px" }),
+          undefined,
           "Add new scale",
           {},
           {
@@ -333,7 +333,7 @@ const scaleOverview = (
             sx({
               display: "flex",
               justifyContent: "space-between",
-              color: Number(tone.ratio) === 1 ? theme.secondary : theme.primary,
+              color: tone.isOctave ? theme.secondary : theme.primary,
             }),
             [
               createElement(
@@ -600,7 +600,7 @@ const keys = (state: FiddleState) => {
       // @ts-ignore
       freq.map((val, i) => {
         // @ts-ignore
-        const isOctave = Number(state.overview[i].ratio) === 1;
+        const isOctave = state.overview[i].isOctave;
         // @ts-ignore
         const keyElement = createElement(
           "div",
@@ -624,10 +624,7 @@ const keys = (state: FiddleState) => {
               "key-inactive"
             ),
             keyActiveHoverStyle,
-            // @ts-ignore
-            Number(state.overview[i].ratio) === 1
-              ? keyColorOctaveStyle
-              : keyColorNonoctaveStyle,
+            isOctave ? keyColorOctaveStyle : keyColorNonoctaveStyle,
           ],
           Number(val).toFixed(decimalDigitsFreqOnKeys),
           { id: `key-${val}` },
