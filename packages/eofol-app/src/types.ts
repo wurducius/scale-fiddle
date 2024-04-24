@@ -132,3 +132,10 @@ export type FiddleStateImpl = {
 };
 
 export type FiddleState = FiddleStateImpl | undefined | {};
+
+export type Timbre = {
+  id: string;
+  title: string;
+  real: number[];
+  imag: number[];
+};

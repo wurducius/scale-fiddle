@@ -286,7 +286,6 @@ const scaleOverview = (
   return createElement(
     "div",
     sx({
-      overflow: "auto",
       height: "300px",
       padding: "0 8px",
       fontSize: breakpoint.md && !breakpoint.sm ? "12px" : "16px",
@@ -323,63 +322,65 @@ const scaleOverview = (
           createElement("div", sx({ color: theme.secondary, flex: 2 }), "Name"),
         ]
       ),
-      ...overview.map((tone: any, index: number) => {
-        const displayIndex = index.toString();
-        const displayFreq = `${tone.freq} Hz`;
-        const displayCent = `${tone.cent}c`;
+      createElement("div", sx({ overflow: "auto", height: "280px" }), [
+        ...overview.map((tone: any, index: number) => {
+          const displayIndex = index.toString();
+          const displayFreq = `${tone.freq} Hz`;
+          const displayCent = `${tone.cent}c`;
 
-        return createElement(
-          "div",
-          sx({
-            display: "flex",
-            justifyContent: "space-between",
-            color: Number(tone.ratio) === 1 ? theme.secondary : theme.primary,
-          }),
-          [
-            createElement(
-              "div",
-              sx({ display: "flex", justifyContent: "center", flex: 1 }),
-              tooltip(displayIndex, p(displayIndex))
-            ),
-            createElement(
-              "div",
-              sx({
-                display: "flex",
-                justifyContent: "center",
-                flex: 3,
-              }),
-              tooltip(displayFreq, p(displayFreq))
-            ),
-            createElement(
-              "div",
-              sx({
-                display: "flex",
-                justifyContent: "center",
-                flex: 3,
-              }),
-              tooltip(displayCent, p(displayCent))
-            ),
-            createElement(
-              "div",
-              sx({
-                display: "flex",
-                justifyContent: "center",
-                flex: 2,
-              }),
-              tooltip(tone.ratio, p(tone.ratio))
-            ),
-            createElement(
-              "div",
-              sx({
-                display: "flex",
-                justifyContent: "center",
-                flex: 2,
-              }),
-              tooltip(tone.name, p(trimWhitespace(tone.name)))
-            ),
-          ]
-        );
-      }),
+          return createElement(
+            "div",
+            sx({
+              display: "flex",
+              justifyContent: "space-between",
+              color: Number(tone.ratio) === 1 ? theme.secondary : theme.primary,
+            }),
+            [
+              createElement(
+                "div",
+                sx({ display: "flex", justifyContent: "center", flex: 1 }),
+                tooltip(displayIndex, p(displayIndex))
+              ),
+              createElement(
+                "div",
+                sx({
+                  display: "flex",
+                  justifyContent: "center",
+                  flex: 3,
+                }),
+                tooltip(displayFreq, p(displayFreq))
+              ),
+              createElement(
+                "div",
+                sx({
+                  display: "flex",
+                  justifyContent: "center",
+                  flex: 3,
+                }),
+                tooltip(displayCent, p(displayCent))
+              ),
+              createElement(
+                "div",
+                sx({
+                  display: "flex",
+                  justifyContent: "center",
+                  flex: 2,
+                }),
+                tooltip(tone.ratio, p(tone.ratio))
+              ),
+              createElement(
+                "div",
+                sx({
+                  display: "flex",
+                  justifyContent: "center",
+                  flex: 2,
+                }),
+                tooltip(tone.name, p(trimWhitespace(tone.name)))
+              ),
+            ]
+          );
+        }),
+      ]),
     ]
   );
 };

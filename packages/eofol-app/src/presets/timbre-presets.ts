@@ -1,3 +1,5 @@
+import { Timbre } from "../types";
+
 const WAVEFORM_SERIES_LENGTH = 20;
 
 const array = Array.from({ length: WAVEFORM_SERIES_LENGTH });
@@ -122,13 +124,6 @@ const basic = [sine, triangle, sawtooth, square];
 const basicDerived = [full, even, odd];
 
 const instruments = [distortedOrgan, guitarSimple, piano, bass, guitar];
-
-type Timbre = {
-  id: string;
-  title: string;
-  real: number[];
-  imag: number[];
-};
 
 export const timbrePresets: { group: string; options: Timbre[] }[] = [
   { group: "Basic", options: basic },

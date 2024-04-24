@@ -1,4 +1,4 @@
-import { createElement, sx } from "@eofol/eofol";
+import { createElement, forceRerender, sx } from "@eofol/eofol";
 import { panic } from "../../../synth-lib";
 import { FiddleState } from "../../../types";
 import { breakpoint } from "../../../breakpoint";
@@ -160,8 +160,7 @@ export const appbar = (
       options: languages,
       onChange: (nextVal) => {
         setLanguage(nextVal);
-        // @ts-ignore
-        setState(state);
+        forceRerender();
       },
       value: language,
       name: "select-language",

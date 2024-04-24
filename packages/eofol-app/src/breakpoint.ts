@@ -1,3 +1,5 @@
+import { debounce, forceRerender } from "@eofol/eofol";
+
 const breakpoints = [640, 1080, 1200, 1600, 2000, 2600];
 
 const mediaQueryMaxWidth = (width: number) => () =>
@@ -17,7 +19,7 @@ let lg = mediaQueryLg();
 let xl = mediaQueryXl();
 let xxl = mediaQueryXxl();
 
-export const breakpoint = {
+export let breakpoint = {
   xs,
   sm,
   md,
@@ -26,6 +28,33 @@ export const breakpoint = {
   xxl,
 };
 
-//addEventListener("change", () => {
-//  small = mediaQuerySmall();
-//});
+const handleResize = () => {
+  xs = mediaQueryXs();
+  sm = mediaQuerySm();
+  md = mediaQueryMd();
+  lg = mediaQueryLg();
+  xl = mediaQueryXl();
+  xxl = mediaQueryXxl();
+
+  breakpoint = {
+    xs,
+    sm,
+    md,
+    lg,
+    xl,
+    xxl,
+  };
+};
+
+const BREAKPOINT_RESIZE_HANDLER_INTERVAL_MS = 20;
+
+window.addEventListener("resize", () => {
+  debounce(
+    () => {
+      handleResize();
+      forceRerender();
+    },
+    BREAKPOINT_RESIZE_HANDLER_INTERVAL_MS,
+    "debounce-breakpoint-resize-handler"
+  );
+});
