@@ -159,8 +159,9 @@ export const appbar = (
     select({
       options: languages,
       onChange: (nextVal) => {
-        setLanguage(nextVal);
-        forceRerender();
+        setLanguage(nextVal).then(() => {
+          forceRerender();
+        });
       },
       value: language,
       name: "select-language",

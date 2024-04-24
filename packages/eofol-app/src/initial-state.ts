@@ -131,5 +131,6 @@ export const initialState = {
     startTime: 0.001,
     endGain: 0.001,
     endTime: 0.001,
+    keyLabel: "freq",
   },
 } as FiddleStateImpl;

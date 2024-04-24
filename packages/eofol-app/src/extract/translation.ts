@@ -1,5 +1,3 @@
-import { en } from "./en";
-
 const storageData = localStorage.getItem("scale-fiddle-locale");
 
 const defaultData = { language: "en" };
@@ -13,7 +11,9 @@ export const setLanguage = (nextLanguage: string) => {
     JSON.stringify({ language: nextLanguage })
   );
   language = nextLanguage;
-  getTranslation(nextLanguage);
+  return getTranslation(nextLanguage).then((val) => {
+    translation = val;
+  });
 };
 
 export const languages = [
@@ -23,32 +23,27 @@ export const languages = [
 
 const languageCodeList = languages.map((item) => item.id);
 
-const translations: Record<string, any> = {
-  en,
-  cs: {
-    app: {
-      name: "Translation test",
-    },
-    scale: {
-      name: "Stupnice",
-    },
-  },
-};
+function getTranslation(language: string) {
+  const target = languageCodeList.includes(language)
+    ? language
+    : defaultData.language;
+  const result = fetch(`translation/${target}.json`).then((res) => res.json());
+  return result;
+}
 
-let translation =
-  translations[
-    languageCodeList.includes(language) ? language : defaultData.language
-  ];
+// @ts-ignore
+let translation = undefined;
 
-const getTranslation = (language: string) => {
-  translation =
-    translations[
-      languageCodeList.includes(language) ? language : defaultData.language
-    ];
-};
+getTranslation(language).then((val) => {
+  translation = val;
+});
 
 export const t = (key: string, defaultValue: string) => {
+  // @ts-ignore
   let path = translation;
+  if (!path) {
+    return defaultValue;
+  }
   let val;
   try {
     key.split(".").forEach((part) => {

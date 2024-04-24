@@ -128,6 +128,7 @@ export type FiddleStateImpl = {
     startTime: number;
     endGain: number;
     endTime: number;
+    keyLabel: KeyLabel;
   };
 };
 
@@ -139,3 +140,5 @@ export type Timbre = {
   real: number[];
   imag: number[];
 };
+
+export type KeyLabel = "freq" | "cent" | "ratio" | "name" | "index";
