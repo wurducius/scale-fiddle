@@ -2,7 +2,7 @@ import { tooltip } from "@eofol/eofol-simple";
 import { sx } from "@eofol/eofol";
 import { breakpoint } from "../../../../extract/breakpoint";
 import { div } from "../../../../extract/primitive";
-import { theme } from "../../../../theme";
+import { theme } from "../../../../styles/theme";
 import { FiddleState } from "../../../../types";
 import { trimWhitespace } from "../../../../util";
 import { p } from "../../../../extract/font";

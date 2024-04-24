@@ -1,5 +1,5 @@
 import { sx } from "@eofol/eofol";
-import { setTotalGain, setWaveform } from "../../../synth-lib";
+import { setTotalGain, setWaveform } from "../../../synth/synth-lib";
 import { FiddleState } from "../../../types";
 import { timbrePresets } from "../../../presets/timbre-presets";
 import { select, checkbox } from "@eofol/eofol-simple";

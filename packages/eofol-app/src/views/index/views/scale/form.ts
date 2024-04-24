@@ -6,8 +6,12 @@ import {
   scalePresets,
   scalePresetsFlat,
 } from "../../../../presets/scale-presets";
-import { updateScale, linearScale, normalizePeriod } from "../../../../sheen";
-import { theme } from "../../../../theme";
+import {
+  updateScale,
+  linearScale,
+  normalizePeriod,
+} from "../../../../sheen/sheen";
+import { theme } from "../../../../styles/theme";
 import { FiddleState, FiddleStateImpl } from "../../../../types";
 import { mod, onlyUnique } from "../../../../util";
 

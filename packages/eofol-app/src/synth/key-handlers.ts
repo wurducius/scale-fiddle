@@ -1,9 +1,11 @@
-import { flashKeyDownByValue, flashKeyUpByValue } from "./synth-lib";
+import { flashKeyDownByValue, flashKeyUpByValue } from "./keyboard-flash";
 
 export let mouseDown = false;
+
 document.body.onmousedown = function () {
   mouseDown = true;
 };
+
 document.body.onmouseup = function () {
   mouseDown = false;
 };

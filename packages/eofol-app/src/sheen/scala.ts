@@ -1,4 +1,4 @@
-import { FiddleStateImpl } from "./types";
+import { FiddleStateImpl } from "../types";
 
 export const parseScala = (state: FiddleStateImpl) => (line: string) => {
   if (line.includes(".")) {

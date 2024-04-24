@@ -1,40 +1,8 @@
-import { createStyle, sx } from "@eofol/eofol";
-import { FiddleState } from "./types";
-import { timbrePresetsFlat } from "./presets/timbre-presets";
-import { theme } from "./theme";
-import { keyColorOctaveStyle } from "./keyboard-key-mapping";
+import { FiddleState } from "../types";
+import { timbrePresetsFlat } from "../presets/timbre-presets";
 
-export let keyElementsMap: Record<string, Element> = {};
-export const clearKeyElementMap = () => {
-  keyElementsMap = {};
-};
-export const setKeyElementMap = (freq: string, element: Element) => {
-  keyElementsMap[freq] = element;
-};
-
-export const keyActiveHoverStyle = sx(
-  {
-    border: `2px solid ${theme.primaryLighter}`,
-    backgroundColor: theme.backgroundElevation,
-  },
-  "hover"
-);
-
-createStyle(
-  `@media (hover: hover) and (pointer: fine) { .${keyActiveHoverStyle}:hover { border: 2px solid ${theme.secondaryLighter}; background-color: ${theme.secondaryLighter}; } }`
-);
-
-export const flashKeyDownByValue = (freq: string) => {
-  keyElementsMap[freq]?.setAttribute("class", "key-inactive key-active");
-};
-export const flashKeyUpByValue = (freq: string, isOctave?: boolean) => {
-  keyElementsMap[freq]?.setAttribute(
-    "class",
-    "key-inactive " +
-      (isOctave ? keyColorOctaveStyle + " " : "") +
-      keyActiveHoverStyle
-  );
-};
+const TOTAL_GAIN_DEFAULT = 1;
+const WAVEFORM_ID_DEFAULT = "distorted-organ";
 
 const getCurve = (shape: string | undefined) => {
   if (shape == "exponential") {
@@ -43,9 +11,6 @@ const getCurve = (shape: string | undefined) => {
     return "linearRampToValueAtTime";
   }
 };
-
-const TOTAL_GAIN_DEFAULT = 1;
-const WAVEFORM_ID_DEFAULT = "distorted-organ";
 
 const audioContext = new AudioContext();
 let oscList: Record<

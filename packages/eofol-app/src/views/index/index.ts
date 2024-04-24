@@ -1,14 +1,14 @@
 import { initialState } from "../../initial-state";
-import { mapKeyboardKeys } from "../../keyboard-key-mapping";
+import { mapKeyboardKeys } from "../../synth/keyboard-key-mapping";
 import { FiddleStateImpl } from "../../types";
 import { registerServiceWorker, defineBuiltinElement, sx } from "@eofol/eofol";
 import "../../styles/base.css";
 import "./index.css";
-import { updateScale } from "../../sheen";
+import { updateScale } from "../../sheen/sheen";
 import { appbar } from "./views/appbar";
 import { scaleTab, synthTab, optionsTab, aboutTab } from "./views";
 import { docsTab } from "./views/docs";
-import { initStyles } from "../../styles";
+import { initStyles } from "../../styles/styles";
 import { analyzeTab } from "./views/analyze";
 import { div } from "../../extract/primitive";
 

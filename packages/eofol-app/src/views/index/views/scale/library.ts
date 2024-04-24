@@ -1,6 +1,6 @@
 import { sx } from "@eofol/eofol";
 import { textarea } from "../../../../extract/textarea";
-import { updateScale } from "../../../../sheen";
+import { updateScale } from "../../../../sheen/sheen";
 import { FiddleState, FiddleStateImpl } from "../../../../types";
 
 export const scaleLibrary = (

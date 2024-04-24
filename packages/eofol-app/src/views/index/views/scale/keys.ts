@@ -1,21 +1,21 @@
 import { sy, sx } from "@eofol/eofol";
 import { breakpoint } from "../../../../extract/breakpoint";
 import { div } from "../../../../extract/primitive";
-import { mouseHandlers, touchHandlers } from "../../../../key-handlers";
+import { mouseHandlers, touchHandlers } from "../../../../synth/key-handlers";
 import {
-  keyColorOctaveStyle,
-  keyColorNonoctaveStyle,
-} from "../../../../keyboard-key-mapping";
+  playTone as playToneImpl,
+  releaseNote as releaseNoteImpl,
+} from "../../../../synth/synth-lib";
+import { theme } from "../../../../styles/theme";
+import { FiddleState } from "../../../../types";
+import { trimWhitespace } from "../../../../util";
 import {
   clearKeyElementMap,
   keyActiveHoverStyle,
-  playTone as playToneImpl,
-  releaseNote as releaseNoteImpl,
+  keyColorNonoctaveStyle,
+  keyColorOctaveStyle,
   setKeyElementMap,
-} from "../../../../synth-lib";
-import { theme } from "../../../../theme";
-import { FiddleState } from "../../../../types";
-import { trimWhitespace } from "../../../../util";
+} from "../../../../synth/keyboard-flash";
 
 sy(
   {

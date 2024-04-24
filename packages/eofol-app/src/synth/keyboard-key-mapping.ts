@@ -1,26 +1,7 @@
-import { sy } from "@eofol/eofol";
-import {
-  flashKeyDownByValue,
-  flashKeyUpByValue,
-  playTone,
-  releaseNote,
-} from "./synth-lib";
-import { theme } from "./theme";
-import { FiddleState } from "./types";
+import { playTone, releaseNote } from "./synth-lib";
+import { FiddleState } from "../types";
 import { keyDownHandlers, keyUpHandlers } from "./key-handlers";
-
-export const keyColorOctaveStyle = sy(
-  {
-    color: theme.secondary,
-  },
-  "key-color-octave"
-);
-export const keyColorNonoctaveStyle = sy(
-  {
-    color: theme.primary,
-  },
-  "key-color-nonoctave"
-);
+import { flashKeyDownByValue, flashKeyUpByValue } from "./keyboard-flash";
 
 export const keysDown: Record<number, boolean | undefined> = {};
 
