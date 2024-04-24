@@ -3,8 +3,13 @@ import { panic } from "../../../synth-lib";
 import { FiddleState } from "../../../types";
 import { breakpoint } from "../../../breakpoint";
 import { theme } from "../../../theme";
-import { notify } from "@eofol/eofol-simple";
-import { t } from "../../../extract/translation";
+import { notify, select } from "@eofol/eofol-simple";
+import {
+  language,
+  languages,
+  setLanguage,
+  t,
+} from "../../../extract/translation";
 
 const appbarButton = (
   label: string,
@@ -151,6 +156,23 @@ export const appbar = (
         href: "https://www.facebook.com/groups/microtonalstructuremusictheory",
       }
     ),
+    select({
+      options: languages,
+      onChange: (nextVal) => {
+        setLanguage(nextVal);
+        // @ts-ignore
+        setState(state);
+      },
+      value: language,
+      name: "select-language",
+      styles: sx({
+        height: "28px",
+        width: "200px",
+        fontSize: "14px",
+        margin: "0 0 0 0",
+        padding: "2px 4px 2px 4px",
+      }),
+    }),
   ];
 
   const bottomRowSecond = [
@@ -172,7 +194,11 @@ export const appbar = (
     [
       createElement(
         "div",
-        sx({ display: "flex", gap: breakpoint.md ? "16px" : "16px" }),
+        sx({
+          display: "flex",
+          gap: breakpoint.md ? "16px" : "16px",
+          alignItems: "center",
+        }),
         bottomRowFirst
       ),
       createElement("div", undefined, [...bottomRowSecond]),

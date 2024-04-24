@@ -1,6 +1,6 @@
 import { createStyle, sx } from "@eofol/eofol";
 import { FiddleState } from "./types";
-import { timbrePresets, timbrePresetsFlat } from "./presets/timbre-presets";
+import { timbrePresetsFlat } from "./presets/timbre-presets";
 import { theme } from "./theme";
 import { keyColorOctaveStyle } from "./keyboard-key-mapping";
 
