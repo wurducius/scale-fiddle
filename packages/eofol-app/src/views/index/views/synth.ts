@@ -6,6 +6,7 @@ import { input, select, checkbox } from "@eofol/eofol-simple";
 import { h1, h2, h3, p } from "../../../extract/font";
 import { theme } from "../../../theme";
 import { breakpoint } from "../../../extract/breakpoint";
+import { div } from "../../../extract/primitive";
 
 createStyle('input[type="range"].lg { max-width: 500px; width: 100%; }');
 
@@ -23,13 +24,11 @@ const sliderInput = (
     adornmentMap ? adornmentMap(val) : val;
   const displayId = "input-slider-value-display-" + id;
 
-  return createElement(
-    "div",
+  return div(
     [sx({ color: theme.secondary }), cx(classname)],
     [
       createElement(labelTag ?? "p", undefined, label),
-      createElement(
-        "div",
+      div(
         sx({
           display: "flex",
           alignItems: "center",
@@ -69,7 +68,7 @@ const envelopeCurveSelect = (
   namePostfix: string,
   setter: (nextValue: string) => void
 ) => {
-  return createElement("div", undefined, [
+  return div(undefined, [
     h3("Curve"),
     select({
       name: "select-envelope-curve-" + namePostfix,
@@ -93,11 +92,10 @@ const envelopeADSRMenu = (
   const synth = state.synth;
 
   return [
-    createElement(
-      "div",
+    div(
       sx({ display: "flex", flexDirection: breakpoint.md ? "column" : "row" }),
       [
-        createElement("div", sx({ flex: 1 }), [
+        div(sx({ flex: 1 }), [
           h2("Attack phase"),
           sliderInput(
             "Volume",
@@ -146,7 +144,7 @@ const envelopeADSRMenu = (
               synth: { ...synth, attackCurve: nextValue },
             });
           }),
-          createElement("div", sx({ marginTop: "64px" }), [
+          div(sx({ marginTop: "64px" }), [
             h2("Decay phase"),
             sliderInput(
               "Volume",
@@ -197,7 +195,7 @@ const envelopeADSRMenu = (
             }),
           ]),
         ]),
-        createElement("div", sx({ flex: 1 }), [
+        div(sx({ flex: 1 }), [
           h2("Sustain phase"),
           sliderInput(
             "Volume",
@@ -246,7 +244,7 @@ const envelopeADSRMenu = (
               synth: { ...synth, sustainCurve: nextValue },
             });
           }),
-          createElement("div", sx({ marginTop: "64px" }), [
+          div(sx({ marginTop: "64px" }), [
             h2("Release phase"),
             sliderInput(
               "Volume",
@@ -306,18 +304,14 @@ const envelopePresetMenu = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
 ) => {
-  return [
-    createElement("div", sx({ marginTop: "32px" }), [p("UNDER CONSTRUCTION")]),
-  ];
+  return [div(sx({ marginTop: "32px" }), [p("UNDER CONSTRUCTION")])];
 };
 
 const envelopeCustomMenu = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
 ) => {
-  return [
-    createElement("div", sx({ marginTop: "32px" }), [p("UNDER CONSTRUCTION")]),
-  ];
+  return [div(sx({ marginTop: "32px" }), [p("UNDER CONSTRUCTION")])];
 };
 
 const envelopeMenu = (
@@ -327,7 +321,7 @@ const envelopeMenu = (
   // @ts-ignore
   const synth = state.synth;
 
-  return createElement("div", undefined, [
+  return div(undefined, [
     ...(synth.envelopeType === "adsr" ? envelopeADSRMenu(state, setState) : []),
     ...(synth.envelopeType === "preset"
       ? envelopePresetMenu(state, setState)
@@ -346,15 +340,14 @@ export const synthTab = (
   const synth = state.synth;
 
   return [
-    createElement("div", undefined, [
-      createElement(
-        "div",
+    div(undefined, [
+      div(
         sx({
           display: "flex",
           flexDirection: breakpoint.md ? "column" : "row",
         }),
         [
-          createElement("div", sx({ flex: 1 }), [
+          div(sx({ flex: 1 }), [
             sliderInput(
               "Master volume",
               (synth.totalGain * 100).toFixed(0).toString(),
@@ -378,7 +371,7 @@ export const synthTab = (
               "master-gain"
             ),
           ]),
-          createElement("div", sx({ flex: 1 }), [
+          div(sx({ flex: 1 }), [
             h1("Organ (sustain)"),
             checkbox({
               name: "checkbox-organ",
@@ -392,7 +385,7 @@ export const synthTab = (
               },
             }),
           ]),
-          createElement("div", sx({ flex: 1 }), [
+          div(sx({ flex: 1 }), [
             h1("Timbre"),
             select({
               name: "select-waveform-preset",
@@ -416,7 +409,7 @@ export const synthTab = (
         ]
       ),
     ]),
-    createElement("div", sx({ marginTop: "64px" }), h1("Envelope")),
+    div(sx({ marginTop: "64px" }), h1("Envelope")),
     select({
       name: "select-envelope-type",
       value: synth.envelopeType,
@@ -434,6 +427,6 @@ export const synthTab = (
       },
     }),
     envelopeMenu(state, setState),
-    createElement("div", sx({ height: "32px" })),
+    div(sx({ height: "32px" })),
   ];
 };

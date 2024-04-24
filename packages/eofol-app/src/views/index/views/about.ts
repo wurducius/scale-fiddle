@@ -1,15 +1,16 @@
 import { FiddleState } from "../../../types";
 import { h1, h3 } from "../../../extract/font";
 import { a } from "@eofol/eofol-simple";
-import { createElement, sx } from "@eofol/eofol";
+import { sx } from "@eofol/eofol";
 import { t } from "../../../extract/translation";
+import { div } from "../../../extract/primitive";
 
 export const aboutTab = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
 ) => {
   return [
-    createElement("div", sx({ marginTop: "100px" }), [
+    div(sx({ marginTop: "100px" }), [
       h1(t("app.name", "Scale Fiddle")),
       h3(t("app.version", "Version 0.3")),
       h3([

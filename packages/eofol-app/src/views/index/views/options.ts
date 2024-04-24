@@ -3,6 +3,7 @@ import { FiddleState } from "../../../types";
 import { input, select } from "@eofol/eofol-simple";
 import { h2, p } from "../../../extract/font";
 import { breakpoint } from "../../../extract/breakpoint";
+import { div } from "../../../extract/primitive";
 
 export const optionsTab = (
   state: FiddleState,
@@ -12,15 +13,14 @@ export const optionsTab = (
   const options = state.options;
 
   return [
-    createElement("div", undefined, [
-      createElement(
-        "div",
+    div(undefined, [
+      div(
         sx({
           display: "flex",
           flexDirection: !breakpoint.xs ? "row" : "column",
         }),
         [
-          createElement("div", sx({ flex: 1 }), [
+          div(sx({ flex: 1 }), [
             h2("Precision"),
             p("Frequency"),
             input({
@@ -87,7 +87,7 @@ export const optionsTab = (
               },
             }),
           ]),
-          createElement("div", sx({ flex: 1 }), [
+          div(sx({ flex: 1 }), [
             h2("Synth configuration"),
             p("Start gain"),
             input({
@@ -152,15 +152,14 @@ export const optionsTab = (
           ]),
         ]
       ),
-      createElement(
-        "div",
+      div(
         sx({
           display: "flex",
           flexDirection: !breakpoint.xs ? "row" : "column",
           marginTop: "32px",
         }),
         [
-          createElement("div", sx({ flex: 1 }), [
+          div(sx({ flex: 1 }), [
             h2("Key labels"),
             select({
               name: "select-key-labels",

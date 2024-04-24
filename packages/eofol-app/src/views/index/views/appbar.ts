@@ -1,15 +1,16 @@
-import { createElement, forceRerender, sx } from "@eofol/eofol";
+import { createElement, cx, forceRerender, sx } from "@eofol/eofol";
 import { panic } from "../../../synth-lib";
 import { FiddleState } from "../../../types";
 import { breakpoint } from "../../../extract/breakpoint";
 import { theme } from "../../../theme";
-import { notify, select } from "@eofol/eofol-simple";
+import { a, button, notify, select } from "@eofol/eofol-simple";
 import {
   language,
   languages,
   setLanguage,
   t,
 } from "../../../extract/translation";
+import { div } from "../../../extract/primitive";
 
 const appbarButton = (
   label: string,
@@ -17,9 +18,8 @@ const appbarButton = (
   isActive: boolean,
   isSecondary?: boolean
 ) =>
-  createElement(
-    "button",
-    [
+  button({
+    styles: cx(
       sx({
         fontSize: "16px",
         backgroundColor: isActive ? theme.primary : "black",
@@ -42,15 +42,11 @@ const appbarButton = (
           }`,
         },
         "hover"
-      ),
-    ],
-    label,
-    undefined,
-    {
-      // @ts-ignore
-      onclick,
-    }
-  );
+      )
+    ),
+    children: label,
+    onClick: onclick,
+  });
 
 export const appbar = (
   state: FiddleState,
@@ -59,8 +55,7 @@ export const appbar = (
   // @ts-ignore
   const tabIndex = state.tab;
 
-  const topRow = createElement(
-    "div",
+  const topRow = div(
     sx({
       display: "flex",
       gap: breakpoint.md ? "16px" : "16px",
@@ -142,20 +137,16 @@ export const appbar = (
       false,
       true
     ),
-    createElement(
-      "a",
-      undefined,
-      appbarButton(
+    a({
+      external: true,
+      link: "https://www.facebook.com/groups/microtonalstructuremusictheory",
+      children: appbarButton(
         t("action.microtonalStructureTheory", "Microtonal Structure Theory"),
         () => {},
         false,
         true
       ),
-      {
-        target: "_blank",
-        href: "https://www.facebook.com/groups/microtonalstructuremusictheory",
-      }
-    ),
+    }),
     select({
       options: languages,
       onChange: (nextVal) => {
@@ -176,8 +167,7 @@ export const appbar = (
   ];
 
   const bottomRowSecond = [
-    createElement(
-      "div",
+    div(
       sx({
         marginLeft: !breakpoint.md ? "32px" : "0",
         fontWeight: 700,
@@ -187,8 +177,7 @@ export const appbar = (
     ),
   ];
 
-  const bottomRow = createElement(
-    "div",
+  const bottomRow = div(
     sx({
       display: "flex",
       alignItems: "center",
@@ -196,8 +185,7 @@ export const appbar = (
       justifyContent: "space-between",
     }),
     [
-      createElement(
-        "div",
+      div(
         sx({
           display: "flex",
           gap: breakpoint.md ? "16px" : "16px",
@@ -205,7 +193,7 @@ export const appbar = (
         }),
         bottomRowFirst
       ),
-      createElement("div", undefined, [...bottomRowSecond]),
+      div(undefined, [...bottomRowSecond]),
     ]
   );
 
@@ -219,8 +207,7 @@ export const appbar = (
     return "90px";
   };
 
-  return createElement(
-    "div",
+  return div(
     sx({
       display: "flex",
       height: getAppbarHeight(breakpoint.xs, breakpoint.md),
@@ -230,8 +217,7 @@ export const appbar = (
       padding: "0 16px",
       flexDirection: breakpoint.sm ? "column" : "row",
     }),
-    createElement(
-      "div",
+    div(
       sx({
         display: "flex",
         justifyContent: breakpoint.sm ? "inherit" : "space-between",

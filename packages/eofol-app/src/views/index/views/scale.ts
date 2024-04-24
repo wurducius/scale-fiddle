@@ -30,6 +30,7 @@ import {
   keyColorOctaveStyle,
 } from "../../../keyboard-key-mapping";
 import { mouseHandlers, touchHandlers } from "../../../key-handlers";
+import { div } from "../../../extract/primitive";
 
 const MODAL_BG_COLOR = "#2d3748";
 const MODAL_BORDER_COLOR = theme.primary;
@@ -75,31 +76,26 @@ const menuButtonOpensModal =
     setState: undefined | ((nextState: FiddleState) => void)
   ) =>
   (title: string, formName: string, notImplemented?: boolean) => {
-    return createElement(
-      "button",
-      sx({ width: "256px", height: "40px" }),
-      title,
-      undefined,
-      {
-        // @ts-ignore
-        onclick: () => {
-          if (!notImplemented) {
-            // @ts-ignore
-            setState({
-              ...state,
-              form: {
-                // @ts-ignore
-                ...state.form,
-                // @ts-ignore
-                [formName]: { ...state.form[formName], open: true },
-              },
-            });
-          } else {
-            notify({ title: "Not implemented yet." });
-          }
-        },
-      }
-    );
+    return button({
+      styles: sx({ width: "256px", height: "40px" }),
+      children: title,
+      onClick: () => {
+        if (!notImplemented) {
+          // @ts-ignore
+          setState({
+            ...state,
+            form: {
+              // @ts-ignore
+              ...state.form,
+              // @ts-ignore
+              [formName]: { ...state.form[formName], open: true },
+            },
+          });
+        } else {
+          notify({ title: "Not implemented yet." });
+        }
+      },
+    });
   };
 
 const changeScaleMenu = (
@@ -125,7 +121,7 @@ const changeScaleMenu = (
   scaleNameInputElement.setAttribute("spellcheck", "false");
 
   return [
-    createElement("div", sx({ display: "flex" }), [
+    div(sx({ display: "flex" }), [
       dropdown("dropdown-new-scale-content", "Create scale", sx({ flex: 1 })),
       dropdown(
         "dropdown-modify-scale-content",
@@ -133,9 +129,8 @@ const changeScaleMenu = (
         sx({ flex: 1 })
       ),
     ]),
-    createElement("div", sx({ marginTop: "16px" }), p("Select scale")),
-    createElement(
-      "div",
+    div(sx({ marginTop: "16px" }), p("Select scale")),
+    div(
       sx({ width: "256px", margin: "0 auto 0 auto", display: "flex" }),
       select({
         // @ts-ignore
@@ -158,14 +153,12 @@ const changeScaleMenu = (
         name: "select-scale-library",
       })
     ),
-    createElement("div", sx({ marginTop: "8px" }), p("Scale name")),
-    createElement(
-      "div",
+    div(sx({ marginTop: "8px" }), p("Scale name")),
+    div(
       sx({ width: "256px", margin: "0 auto 0 auto", display: "flex" }),
       scaleNameInputElement
     ),
-    createElement(
-      "div",
+    div(
       sx({
         display: "flex",
         flexDirection: "column",
@@ -173,72 +166,58 @@ const changeScaleMenu = (
         margin: "16px auto 0 auto",
       }),
       [
-        createElement(
-          "button",
-          undefined,
-          "Add new scale",
-          {},
-          {
+        button({
+          children: "Add new scale",
+          onClick: () => {
             // @ts-ignore
-            onclick: () => {
-              // @ts-ignore
-              setState({
-                ...state,
-                scales: [
+            setState({
+              ...state,
+              scales: [
+                // @ts-ignore
+                ...state.scales,
+                {
                   // @ts-ignore
-                  ...state.scales,
-                  {
-                    // @ts-ignore
-                    name: "Scale #" + state.scales.length,
-                    scaleInput: defaultScale,
-                  },
-                ],
-                // @ts-ignore
-                scaleIndex: state.scales.length,
-                scaleInput: defaultScale,
-                recompute: true,
-              });
-            },
-          }
-        ),
-        createElement(
-          "button",
-          sx({ marginTop: "16px" }),
-          "Delete scale",
+                  name: "Scale #" + state.scales.length,
+                  scaleInput: defaultScale,
+                },
+              ],
+              // @ts-ignore
+              scaleIndex: state.scales.length,
+              scaleInput: defaultScale,
+              recompute: true,
+            });
+          },
+        }),
+        button({
+          styles: sx({ marginTop: "16px" }),
+          children: "Delete scale",
           // @ts-ignore
-          state.scales.length <= 1
-            ? {
-                disabled: true,
-              }
-            : {},
-          {
+          disabled: state.scales.length <= 1,
+          onClick: () => {
             // @ts-ignore
-            onclick: () => {
+            const newScales = state.scales.filter(
               // @ts-ignore
-              const newScales = state.scales.filter(
-                // @ts-ignore
-                (item, i) => state.scaleIndex !== i
-              );
+              (item, i) => state.scaleIndex !== i
+            );
+            // @ts-ignore
+            const newScaleIndex =
               // @ts-ignore
-              const newScaleIndex =
-                // @ts-ignore
-                state.scaleIndex === 0
-                  ? 0
-                  : // @ts-ignore
-                    state.scaleIndex - 1;
+              state.scaleIndex === 0
+                ? 0
+                : // @ts-ignore
+                  state.scaleIndex - 1;
+            // @ts-ignore
+            setState({
+              ...state,
               // @ts-ignore
-              setState({
-                ...state,
-                // @ts-ignore
-                scales: newScales,
-                // @ts-ignore
-                scaleInput: newScales[newScaleIndex].scaleInput,
-                scaleIndex: newScaleIndex,
-                recompute: true,
-              });
-            },
-          }
-        ),
+              scales: newScales,
+              // @ts-ignore
+              scaleInput: newScales[newScaleIndex].scaleInput,
+              scaleIndex: newScaleIndex,
+              recompute: true,
+            });
+          },
+        }),
       ]
     ),
     dropdownContent(
@@ -283,66 +262,45 @@ const scaleOverview = (
   // @ts-ignore
   const overview = state.overview;
 
-  return createElement(
-    "div",
+  return div(
     sx({
       height: "300px",
       padding: "0 8px",
       fontSize: breakpoint.md && !breakpoint.sm ? "12px" : "16px",
     }),
     [
-      createElement(
-        "div",
+      div(
         sx({
           display: "flex",
           justifyContent: "space-between",
           borderBottom: `2px solid ${theme.primary}`,
         }),
         [
-          createElement(
-            "div",
-            sx({ color: theme.secondary, flex: 1 }),
-            "Index"
-          ),
-          createElement(
-            "div",
-            sx({ color: theme.secondary, flex: 3 }),
-            `Frequency`
-          ),
-          createElement(
-            "div",
-            sx({ color: theme.secondary, flex: 3 }),
-            "Cents"
-          ),
-          createElement(
-            "div",
-            sx({ color: theme.secondary, flex: 2 }),
-            "Ratio"
-          ),
-          createElement("div", sx({ color: theme.secondary, flex: 2 }), "Name"),
+          div(sx({ color: theme.secondary, flex: 1 }), "Index"),
+          div(sx({ color: theme.secondary, flex: 3 }), `Frequency`),
+          div(sx({ color: theme.secondary, flex: 3 }), "Cents"),
+          div(sx({ color: theme.secondary, flex: 2 }), "Ratio"),
+          div(sx({ color: theme.secondary, flex: 2 }), "Name"),
         ]
       ),
-      createElement("div", sx({ overflow: "auto", height: "280px" }), [
+      div(sx({ overflow: "auto", height: "280px" }), [
         ...overview.map((tone: any, index: number) => {
           const displayIndex = index.toString();
           const displayFreq = `${tone.freq} Hz`;
           const displayCent = `${tone.cent}c`;
 
-          return createElement(
-            "div",
+          return div(
             sx({
               display: "flex",
               justifyContent: "space-between",
               color: tone.isOctave ? theme.secondary : theme.primary,
             }),
             [
-              createElement(
-                "div",
+              div(
                 sx({ display: "flex", justifyContent: "center", flex: 1 }),
                 tooltip(displayIndex, p(displayIndex))
               ),
-              createElement(
-                "div",
+              div(
                 sx({
                   display: "flex",
                   justifyContent: "center",
@@ -350,8 +308,7 @@ const scaleOverview = (
                 }),
                 tooltip(displayFreq, p(displayFreq))
               ),
-              createElement(
-                "div",
+              div(
                 sx({
                   display: "flex",
                   justifyContent: "center",
@@ -359,8 +316,7 @@ const scaleOverview = (
                 }),
                 tooltip(displayCent, p(displayCent))
               ),
-              createElement(
-                "div",
+              div(
                 sx({
                   display: "flex",
                   justifyContent: "center",
@@ -368,8 +324,7 @@ const scaleOverview = (
                 }),
                 tooltip(tone.ratio, p(tone.ratio))
               ),
-              createElement(
-                "div",
+              div(
                 sx({
                   display: "flex",
                   justifyContent: "center",
@@ -392,10 +347,9 @@ const scaleTuning = (
   // @ts-ignore
   const tuning = state.tuning;
 
-  return createElement("div", sx({ marginTop: "16px" }), [
+  return div(sx({ marginTop: "16px" }), [
     p("Base frequency Hz"),
-    createElement(
-      "div",
+    div(
       sx({ width: "236px", margin: "0 auto 0 auto" }),
       input({
         name: "input-basefreq",
@@ -415,8 +369,7 @@ const scaleTuning = (
       })
     ),
     p("Period interval (Equave) ratio"),
-    createElement(
-      "div",
+    div(
       sx({ width: "236px", margin: "0 auto 0 auto" }),
       input({
         name: "input-period",
@@ -436,8 +389,7 @@ const scaleTuning = (
       })
     ),
     p("Number of keys up"),
-    createElement(
-      "div",
+    div(
       sx({ width: "236px", margin: "0 auto 0 auto" }),
       input({
         name: "input-keys-up",
@@ -457,8 +409,7 @@ const scaleTuning = (
       })
     ),
     p("Number of keys down"),
-    createElement(
-      "div",
+    div(
       sx({ width: "236px", margin: "0 auto 0 auto" }),
       input({
         name: "input-keys-down",
@@ -494,29 +445,24 @@ const inputMenu = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
 ) => {
-  const changeScaleMenuElement = createElement(
-    "div",
+  const changeScaleMenuElement = div(
     sx({ flex: 1, padding: "0 0 0 0", height: "300px" }),
-    [createElement("div", undefined, changeScaleMenu(state, setState))]
+    [div(undefined, changeScaleMenu(state, setState))]
   );
-  const scaleLibraryElement = createElement(
-    "div",
+  const scaleLibraryElement = div(
     sx({ flex: 1, padding: "0 8px" }),
     scaleLibrary(state, setState)
   );
-  const scaleOverviewElement = createElement(
-    "div",
+  const scaleOverviewElement = div(
     sx({ flex: 1, padding: "0 0" }),
     scaleOverview(state, setState)
   );
-  const scaleTuningElement = createElement(
-    "div",
+  const scaleTuningElement = div(
     sx({ flex: 1, padding: "0 0 0 0" }),
     scaleTuning(state, setState)
   );
 
-  return createElement(
-    "div",
+  return div(
     sx({
       display: "flex",
       height: getMenuHeight(),
@@ -524,16 +470,14 @@ const inputMenu = (
     }),
     !breakpoint.xs
       ? [
-          createElement(
-            "div",
-            sx({ display: "flex", flex: 1, height: "300px" }),
-            [changeScaleMenuElement, scaleLibraryElement]
-          ),
-          createElement(
-            "div",
-            sx({ display: "flex", flex: 1, height: "300px" }),
-            [scaleOverviewElement, scaleTuningElement]
-          ),
+          div(sx({ display: "flex", flex: 1, height: "300px" }), [
+            changeScaleMenuElement,
+            scaleLibraryElement,
+          ]),
+          div(sx({ display: "flex", flex: 1, height: "300px" }), [
+            scaleOverviewElement,
+            scaleTuningElement,
+          ]),
         ]
       : [
           changeScaleMenuElement,
@@ -615,8 +559,7 @@ const renderKey = (
   const keyLabel = getKeyLabel(state, i);
 
   // @ts-ignore
-  const keyElement = createElement(
-    "div",
+  const keyElement = div(
     [
       sy(
         {
@@ -659,11 +602,9 @@ const keys = (state: FiddleState) => {
 
   clearKeyElementMap();
 
-  return createElement(
-    "div",
+  return div(
     sx({ maxHeight: "100%" }),
-    createElement(
-      "div",
+    div(
       sx({
         display: "grid",
         gridTemplateColumns: breakpoint.md
@@ -704,13 +645,12 @@ const generalFormModal =
     return modal(
       id,
       title,
-      createElement("div", undefined, [
-        createElement(
-          "div",
+      div(undefined, [
+        div(
           undefined,
           form
             .map((item) => [
-              createElement("div", sx({ fontSize: "24px" }), item.title),
+              div(sx({ fontSize: "24px" }), item.title),
               input({
                 name: "input-form-" + id,
                 // @ts-ignore
@@ -932,8 +872,7 @@ const formModal = (
     modal(
       "modal-preset",
       "Preset scale",
-      createElement(
-        "div",
+      div(
         sx({
           display: "flex",
           flexDirection: "column",
@@ -1050,7 +989,7 @@ const mobileScaleTab = (
   const isKeyboardTab = state.smallTab === 1;
 
   return [
-    createElement("div", sx({ display: "flex", height: "50px" }), [
+    div(sx({ display: "flex", height: "50px" }), [
       button({
         onClick: () => {
           // @ts-ignore

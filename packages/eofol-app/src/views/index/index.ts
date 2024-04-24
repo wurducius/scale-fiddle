@@ -15,6 +15,7 @@ import { scaleTab, synthTab, optionsTab, aboutTab } from "./views";
 import { docsTab } from "./views/docs";
 import { initStyles } from "../../styles";
 import { analyzeTab } from "./views/analyze";
+import { div } from "../../extract/primitive";
 
 initStyles();
 
@@ -66,9 +67,9 @@ defineBuiltinElement<FiddleStateImpl>({
 
     mapKeyboardKeys(state)(freq);
 
-    return createElement("div", undefined, [
+    return div(undefined, [
       appbar(state, setState),
-      createElement("div", sx({ marginTop: "4px" }), [
+      div(sx({ marginTop: "4px" }), [
         ...(tab === 0 ? scaleTab(state, setState) : []),
         ...(tab === 1 ? synthTab(state, setState) : []),
         ...(tab === 2 ? optionsTab(state, setState) : []),
