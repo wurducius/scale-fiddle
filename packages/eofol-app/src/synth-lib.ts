@@ -120,7 +120,7 @@ export const playTone = (state: FiddleState) => (freq: string) => {
   } = state.synth;
 
   // @ts-ignore
-  const { startGain, startTime, endGain, endTime } = state.options;
+  const { startGain, endGain, endTime } = state.options;
 
   const t = audioContext.currentTime;
 

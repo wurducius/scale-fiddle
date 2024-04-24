@@ -1,3 +1,4 @@
+/*
 const fuchsiaTheme = {
   primary: "fuchsia",
   primaryLighter: "hsl(300, 100%, 65%)",
@@ -14,6 +15,7 @@ const fuchsiaTheme = {
   background: "rgba(0, 0, 0, 0.9)",
   backgroundElevation: "#888888",
 };
+*/
 
 const cyanTheme = {
   primary: "#03dac6",

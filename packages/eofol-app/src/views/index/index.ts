@@ -1,12 +1,7 @@
 import { initialState } from "../../initial-state";
 import { mapKeyboardKeys } from "../../keyboard-key-mapping";
 import { FiddleStateImpl } from "../../types";
-import {
-  createElement,
-  registerServiceWorker,
-  defineBuiltinElement,
-  sx,
-} from "@eofol/eofol";
+import { registerServiceWorker, defineBuiltinElement, sx } from "@eofol/eofol";
 import "../../styles/base.css";
 import "./index.css";
 import { updateScale } from "../../sheen";

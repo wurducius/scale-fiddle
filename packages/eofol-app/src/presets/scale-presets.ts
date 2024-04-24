@@ -1,5 +1,5 @@
 // todo precision
-let precision = 3;
+const precision = 3;
 
 const valuesArray = (array: string[]) => array.join("\n");
 
