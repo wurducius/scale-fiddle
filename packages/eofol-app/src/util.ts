@@ -6,3 +6,7 @@ const trimWhitespaceRegex = /\s/g;
 
 export const trimWhitespace = (str: string) =>
   str.replace(trimWhitespaceRegex, "");
+
+export function onlyUnique(value: string, index: number, array: any[]) {
+  return array.indexOf(value) === index;
+}

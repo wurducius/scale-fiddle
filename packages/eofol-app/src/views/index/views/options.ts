@@ -1,9 +1,17 @@
-import { createElement, sx } from "@eofol/eofol";
+import { sx } from "@eofol/eofol";
 import { FiddleState } from "../../../types";
 import { input, select } from "@eofol/eofol-simple";
 import { h2, p } from "../../../extract/font";
 import { breakpoint } from "../../../extract/breakpoint";
 import { div } from "../../../extract/primitive";
+
+const keyLabelOptions = [
+  { id: "freq", title: "Frequency" },
+  { id: "cent", title: "Cent" },
+  { id: "ratio", title: "Ratio" },
+  { id: "name", title: "Name" },
+  { id: "index", title: "Index" },
+];
 
 export const optionsTab = (
   state: FiddleState,
@@ -163,13 +171,7 @@ export const optionsTab = (
             h2("Key labels"),
             select({
               name: "select-key-labels",
-              options: [
-                { id: "freq", title: "Frequency" },
-                { id: "cent", title: "Cent" },
-                { id: "ratio", title: "Ratio" },
-                { id: "name", title: "Name" },
-                { id: "index", title: "Index" },
-              ],
+              options: keyLabelOptions,
               // @ts-ignore
               value: state.options.keyLabel,
               onChange: (nextVal) => {

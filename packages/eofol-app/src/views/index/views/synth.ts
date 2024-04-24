@@ -1,67 +1,12 @@
-import { createElement, createStyle, cx, sx } from "@eofol/eofol";
+import { sx } from "@eofol/eofol";
 import { setTotalGain, setWaveform } from "../../../synth-lib";
 import { FiddleState } from "../../../types";
 import { timbrePresets } from "../../../presets/timbre-presets";
-import { input, select, checkbox } from "@eofol/eofol-simple";
+import { select, checkbox } from "@eofol/eofol-simple";
 import { h1, h2, h3, p } from "../../../extract/font";
-import { theme } from "../../../theme";
 import { breakpoint } from "../../../extract/breakpoint";
 import { div } from "../../../extract/primitive";
-
-createStyle('input[type="range"].lg { max-width: 500px; width: 100%; }');
-
-const sliderInput = (
-  label: string,
-  value: string,
-  setter: (nextValue: string) => void,
-  labelTag?: undefined | string,
-  adornmentMap?: (val: string) => string,
-  large?: boolean,
-  classname?: string,
-  id?: string
-) => {
-  const getDisplayValue = (val: string) =>
-    adornmentMap ? adornmentMap(val) : val;
-  const displayId = "input-slider-value-display-" + id;
-
-  return div(
-    [sx({ color: theme.secondary }), cx(classname)],
-    [
-      createElement(labelTag ?? "p", undefined, label),
-      div(
-        sx({
-          display: "flex",
-          alignItems: "center",
-          gap: "16px",
-          justifyContent: "center",
-        }),
-        [
-          input({
-            name: "input-slider-" + label,
-            value,
-            onChange: (nextVal) => {
-              setter(nextVal);
-            },
-            onInput: (nextVal) => {
-              const displayElement = document.getElementById(displayId);
-              if (displayElement) {
-                displayElement.innerHTML = getDisplayValue(nextVal);
-              }
-            },
-            type: "range",
-            min: 0,
-            max: 100,
-            step: 1,
-            classname: cx(large && "lg"),
-          }),
-          createElement("h3", undefined, getDisplayValue(value), {
-            id: displayId,
-          }),
-        ]
-      ),
-    ]
-  );
-};
+import { sliderInput } from "../../../ui";
 
 const envelopeCurveSelect = (
   value: string,

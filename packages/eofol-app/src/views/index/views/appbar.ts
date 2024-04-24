@@ -1,4 +1,4 @@
-import { createElement, cx, forceRerender, sx } from "@eofol/eofol";
+import { cx, forceRerender, sx } from "@eofol/eofol";
 import { panic } from "../../../synth-lib";
 import { FiddleState } from "../../../types";
 import { breakpoint, mediaQueryMaxWidth } from "../../../extract/breakpoint";
@@ -12,7 +12,7 @@ import {
 } from "../../../extract/translation";
 import { div } from "../../../extract/primitive";
 
-const appbarButton = (
+export const appbarButton = (
   label: string,
   onclick: () => void,
   isActive: boolean,
@@ -47,6 +47,16 @@ const appbarButton = (
     children: label,
     onClick: onclick,
   });
+
+const getAppbarHeight = (large: boolean, middle: boolean) => {
+  if (large) {
+    return "50px";
+  }
+  if (middle) {
+    return "100px";
+  }
+  return "150px";
+};
 
 export const appbar = (
   state: FiddleState,
@@ -199,16 +209,6 @@ export const appbar = (
       div(undefined, [...bottomRowSecond]),
     ]
   );
-
-  const getAppbarHeight = (large: boolean, middle: boolean) => {
-    if (large) {
-      return "50px";
-    }
-    if (middle) {
-      return "100px";
-    }
-    return "150px";
-  };
 
   return div(
     sx({
