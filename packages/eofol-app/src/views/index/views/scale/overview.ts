@@ -17,6 +17,7 @@ export const scaleOverview = (
       height: "300px",
       padding: "0 8px",
       fontSize: breakpoint.md && !breakpoint.sm ? "12px" : "16px",
+      border: `1px solid ${theme.color.secondary}`,
     }),
     [
       div(

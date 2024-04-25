@@ -9,7 +9,7 @@ const handleKeyDownImpl =
   (state: FiddleState) =>
   (event: KeyboardEvent, freq: string[], key: string, index: number) => {
     if (
-      event.key === key &&
+      event.key.toLowerCase() === key &&
       !keysDown[index] &&
       document.activeElement === document.body
     ) {
@@ -24,7 +24,7 @@ const handleKeyDownImpl =
 const handleKeyUpImpl =
   (state: FiddleState) =>
   (event: KeyboardEvent, freq: string[], key: string, index: number) => {
-    if (event.key === key && keysDown[index]) {
+    if (event.key.toLowerCase() === key && keysDown[index]) {
       // @ts-ignore
       releaseNote(state)(freq[index]);
       // @ts-ignore

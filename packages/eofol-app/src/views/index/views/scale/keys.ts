@@ -105,7 +105,10 @@ export const keys = (state: FiddleState) => {
   clearKeyElementMap();
 
   return div(
-    sx({ maxHeight: "100%" }),
+    sx({
+      maxHeight: "100%",
+      paddingTop: "24px",
+    }),
     div(
       sx({
         display: "grid",
