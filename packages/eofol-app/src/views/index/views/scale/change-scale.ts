@@ -7,10 +7,9 @@ import {
   notify,
 } from "@eofol/eofol-simple";
 import { sx } from "@eofol/eofol";
-import { div } from "../../../../extract/primitive";
-import { defaultScale } from "../../../../initial-state";
+import { defaultScale } from "../../../../data";
+import { div, p } from "../../../../extract";
 import { FiddleState } from "../../../../types";
-import { p } from "../../../../extract/font";
 
 const menuButtonOpensModal =
   (

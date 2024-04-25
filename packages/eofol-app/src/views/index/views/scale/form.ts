@@ -1,22 +1,17 @@
 import { modal, input, select } from "@eofol/eofol-simple";
-import { sx } from "@eofol/eofol";
-import { div } from "../../../../extract/primitive";
-import { textarea } from "../../../../extract/textarea";
-import {
-  scalePresets,
-  scalePresetsFlat,
-} from "../../../../presets/scale-presets";
-import {
-  updateScale,
-  linearScale,
-  normalizePeriod,
-} from "../../../../sheen/sheen";
-import { theme } from "../../../../styles/theme";
+import { sx, e } from "@eofol/eofol";
+import { scalePresets, scalePresetsFlat } from "../../../../data";
+import { div, textarea } from "../../../../extract";
+import { updateScale, linearScale, normalizePeriod } from "../../../../sheen";
+import { theme } from "../../../../styles";
 import { FiddleState, FiddleStateImpl } from "../../../../types";
+import { defineSelectSearch } from "../../../../ui";
 import { mod, onlyUnique } from "../../../../util";
 
 const MODAL_BG_COLOR = "#2d3748";
 const MODAL_BORDER_COLOR = theme.primary;
+
+defineSelectSearch({ options: scalePresets });
 
 const generalFormModal =
   (
@@ -275,6 +270,7 @@ export const formModal = (
           alignItems: "center",
         }),
         [
+          e("select-search"),
           select({
             styles: sx({ width: "450px" }),
             options: scalePresets,

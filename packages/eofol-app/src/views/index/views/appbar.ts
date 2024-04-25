@@ -1,16 +1,17 @@
 import { cx, forceRerender, sx } from "@eofol/eofol";
-import { panic } from "../../../synth/synth-lib";
-import { FiddleState } from "../../../types";
-import { breakpoint, mediaQueryMaxWidth } from "../../../extract/breakpoint";
-import { theme } from "../../../styles/theme";
-import { a, button, notify, select } from "@eofol/eofol-simple";
+import { button, notify, a, select } from "@eofol/eofol-simple";
 import {
-  language,
+  mediaQueryMaxWidth,
+  div,
+  breakpoint,
+  t,
   languages,
   setLanguage,
-  t,
-} from "../../../extract/translation";
-import { div } from "../../../extract/primitive";
+  language,
+} from "../../../extract";
+import { theme } from "../../../styles";
+import { panic } from "../../../synth";
+import { FiddleState } from "../../../types";
 
 export const appbarButton = (
   label: string,

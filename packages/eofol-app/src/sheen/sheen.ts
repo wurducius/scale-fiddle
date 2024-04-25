@@ -1,6 +1,6 @@
-import { parseScala } from "./scala";
 import { FiddleState, FiddleStateImpl } from "../types";
 import { mod, onlyUnique } from "../util";
+import { parseScala } from "./scala";
 
 export const linearScale = (state: FiddleState, T: number, g: number) =>
   Array.from({ length: T })

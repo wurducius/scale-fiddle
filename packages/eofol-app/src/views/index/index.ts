@@ -1,16 +1,21 @@
-import { initialState } from "../../initial-state";
-import { mapKeyboardKeys } from "../../synth/keyboard-key-mapping";
-import { FiddleStateImpl } from "../../types";
-import { registerServiceWorker, defineBuiltinElement, sx } from "@eofol/eofol";
 import "../../styles/base.css";
 import "./index.css";
-import { updateScale } from "../../sheen/sheen";
-import { appbar } from "./views/appbar";
-import { scaleTab, synthTab, optionsTab, aboutTab } from "./views";
-import { docsTab } from "./views/docs";
-import { initStyles } from "../../styles/styles";
-import { analyzeTab } from "./views/analyze";
-import { div } from "../../extract/primitive";
+import { defineBuiltinElement, sx, registerServiceWorker } from "@eofol/eofol";
+import { initialState } from "../../data";
+import { div } from "../../extract";
+import { updateScale } from "../../sheen";
+import { initStyles } from "../../styles";
+import { mapKeyboardKeys } from "../../synth";
+import { FiddleStateImpl } from "../../types";
+import {
+  appbar,
+  scaleTab,
+  synthTab,
+  optionsTab,
+  docsTab,
+  aboutTab,
+  analyzeTab,
+} from "./views";
 
 initStyles();
 

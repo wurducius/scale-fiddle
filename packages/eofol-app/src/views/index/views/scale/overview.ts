@@ -1,11 +1,9 @@
 import { tooltip } from "@eofol/eofol-simple";
 import { sx } from "@eofol/eofol";
-import { breakpoint } from "../../../../extract/breakpoint";
-import { div } from "../../../../extract/primitive";
-import { theme } from "../../../../styles/theme";
+import { div, breakpoint, p } from "../../../../extract";
+import { theme } from "../../../../styles";
 import { FiddleState } from "../../../../types";
 import { trimWhitespace } from "../../../../util";
-import { p } from "../../../../extract/font";
 
 export const scaleOverview = (
   state: FiddleState,

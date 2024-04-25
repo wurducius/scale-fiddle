@@ -1,21 +1,19 @@
 import { sy, sx } from "@eofol/eofol";
-import { breakpoint } from "../../../../extract/breakpoint";
-import { div } from "../../../../extract/primitive";
-import { mouseHandlers, touchHandlers } from "../../../../synth/key-handlers";
+import { div, breakpoint } from "../../../../extract";
+import { theme } from "../../../../styles";
 import {
-  playTone as playToneImpl,
-  releaseNote as releaseNoteImpl,
-} from "../../../../synth/synth-lib";
-import { theme } from "../../../../styles/theme";
+  keyActiveHoverStyle,
+  keyColorOctaveStyle,
+  keyColorNonoctaveStyle,
+  mouseHandlers,
+  setKeyElementMap,
+  touchHandlers,
+  clearKeyElementMap,
+  playTone,
+  releaseNote,
+} from "../../../../synth";
 import { FiddleState } from "../../../../types";
 import { trimWhitespace } from "../../../../util";
-import {
-  clearKeyElementMap,
-  keyActiveHoverStyle,
-  keyColorNonoctaveStyle,
-  keyColorOctaveStyle,
-  setKeyElementMap,
-} from "../../../../synth/keyboard-flash";
 
 sy(
   {
@@ -94,14 +92,14 @@ const renderKey = (
 };
 
 export const keys = (state: FiddleState) => {
-  const playTone = playToneImpl(state);
-  const releaseNote = releaseNoteImpl(state);
+  const playToneImpl = playTone(state);
+  const releaseNoteImpl = releaseNote(state);
 
   // @ts-ignore
   const freq = state.overview.map((item) => item.freq);
 
   setTimeout(() => {
-    touchHandlers(playTone, releaseNote);
+    touchHandlers(playToneImpl, releaseNoteImpl);
   }, 50);
 
   clearKeyElementMap();
@@ -120,7 +118,7 @@ export const keys = (state: FiddleState) => {
         direction: "rtl",
       }),
       freq.map((val: string, i: number) =>
-        renderKey(state, freq.length - 1 - i, playTone, releaseNote)
+        renderKey(state, freq.length - 1 - i, playToneImpl, releaseNoteImpl)
       )
     )
   );

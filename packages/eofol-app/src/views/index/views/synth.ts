@@ -1,11 +1,13 @@
 import { sx } from "@eofol/eofol";
-import { setTotalGain, setWaveform } from "../../../synth/synth-lib";
-import { FiddleState } from "../../../types";
-import { timbrePresets } from "../../../presets/timbre-presets";
 import { select, checkbox } from "@eofol/eofol-simple";
-import { h1, h2, h3, p } from "../../../extract/font";
-import { breakpoint } from "../../../extract/breakpoint";
-import { div } from "../../../extract/primitive";
+import {
+  envelopeCurveOptions,
+  timbrePresets,
+  envelopeTypeOptions,
+} from "../../../data";
+import { div, breakpoint, h2, p, h1, h3 } from "../../../extract";
+import { setTotalGain, setWaveform } from "../../../synth";
+import { FiddleState } from "../../../types";
 import { sliderInput } from "../../../ui";
 
 const envelopeCurveSelect = (
@@ -17,10 +19,7 @@ const envelopeCurveSelect = (
     h3("Curve"),
     select({
       name: "select-envelope-curve-" + namePostfix,
-      options: [
-        { title: "Linear", id: "linear" },
-        { title: "Exponential", id: "exponential" },
-      ],
+      options: envelopeCurveOptions,
       onChange: (nextVal) => {
         setter(nextVal);
       },
@@ -358,11 +357,7 @@ export const synthTab = (
     select({
       name: "select-envelope-type",
       value: synth.envelopeType,
-      options: [
-        { title: "ADSR envelope", id: "adsr" },
-        { title: "Preset envelope", id: "preset" },
-        { title: "Custom envelope", id: "custom" },
-      ],
+      options: envelopeTypeOptions,
       onChange: (nextVal) => {
         //@ts-ignore
         setState({

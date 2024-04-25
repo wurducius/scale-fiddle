@@ -1,8 +1,6 @@
 import { sx } from "@eofol/eofol";
+import { div, t, h1, p } from "../../../extract";
 import { FiddleState } from "../../../types";
-import { h1, p } from "../../../extract/font";
-import { t } from "../../../extract/translation";
-import { div } from "../../../extract/primitive";
 
 export const docsTab = (
   state: FiddleState,

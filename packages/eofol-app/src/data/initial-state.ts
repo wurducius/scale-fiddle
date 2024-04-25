@@ -1,4 +1,4 @@
-import { FiddleStateImpl } from "./types";
+import { FiddleStateImpl } from "../types";
 
 export const defaultScale =
   "100.\n200.\n300.\n400.\n500.\n600.\n700.\n800.\n900.\n1000.\n1100.\n1200.";

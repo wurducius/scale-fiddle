@@ -1,5 +1,5 @@
+import { timbrePresetsFlat } from "../data";
 import { FiddleState } from "../types";
-import { timbrePresetsFlat } from "../presets/timbre-presets";
 
 const TOTAL_GAIN_DEFAULT = 1;
 const WAVEFORM_ID_DEFAULT = "distorted-organ";

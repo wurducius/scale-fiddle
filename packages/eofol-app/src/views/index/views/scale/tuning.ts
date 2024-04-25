@@ -1,8 +1,7 @@
 import { input } from "@eofol/eofol-simple";
 import { sx } from "@eofol/eofol";
-import { div } from "../../../../extract/primitive";
 import { FiddleState } from "../../../../types";
-import { p } from "../../../../extract/font";
+import { p, div } from "../../../../extract";
 
 export const scaleTuning = (
   state: FiddleState,

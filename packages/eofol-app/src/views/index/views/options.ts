@@ -1,17 +1,8 @@
-import { sx } from "@eofol/eofol";
-import { FiddleState } from "../../../types";
 import { input, select } from "@eofol/eofol-simple";
-import { h2, p } from "../../../extract/font";
-import { breakpoint } from "../../../extract/breakpoint";
-import { div, flex } from "../../../extract/primitive";
-
-const keyLabelOptions = [
-  { id: "freq", title: "Frequency" },
-  { id: "cent", title: "Cent" },
-  { id: "ratio", title: "Ratio" },
-  { id: "name", title: "Name" },
-  { id: "index", title: "Index" },
-];
+import { sx } from "@eofol/eofol";
+import { keyLabelOptions } from "../../../data";
+import { div, flex, breakpoint, h2, p } from "../../../extract";
+import { FiddleState } from "../../../types";
 
 export const optionsTab = (
   state: FiddleState,

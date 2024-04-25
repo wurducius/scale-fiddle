@@ -1,8 +1,6 @@
 import { sx } from "@eofol/eofol";
 import { FiddleState } from "../../../types";
-import { p, h1 } from "../../../extract/font";
-import { t } from "../../../extract/translation";
-import { div } from "../../../extract/primitive";
+import { p, h1, t, div } from "../../../extract";
 
 export const analyzeTab = (
   state: FiddleState,

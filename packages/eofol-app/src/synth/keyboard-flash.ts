@@ -1,5 +1,5 @@
 import { sx, createStyle, sy } from "@eofol/eofol";
-import { theme } from "../styles/theme";
+import { theme } from "../styles";
 
 export const keyColorOctaveStyle = sy(
   {

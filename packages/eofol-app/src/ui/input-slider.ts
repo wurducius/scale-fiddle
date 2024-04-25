@@ -1,7 +1,7 @@
-import { createElement, createStyle, cx, sx } from "@eofol/eofol";
 import { input } from "@eofol/eofol-simple";
-import { div } from "./extract/primitive";
-import { theme } from "./styles/theme";
+import { createStyle, sx, cx, createElement } from "@eofol/eofol";
+import { div } from "../extract";
+import { theme } from "../styles";
 
 createStyle('input[type="range"].lg { max-width: 500px; width: 100%; }');
 
