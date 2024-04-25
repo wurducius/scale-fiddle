@@ -3,13 +3,13 @@ import { theme } from "../styles";
 
 export const keyColorOctaveStyle = sy(
   {
-    color: theme.secondary,
+    color: theme.color.secondary,
   },
   "key-color-octave"
 );
 export const keyColorNonoctaveStyle = sy(
   {
-    color: theme.primary,
+    color: theme.color.primary,
   },
   "key-color-nonoctave"
 );
@@ -24,14 +24,14 @@ export const setKeyElementMap = (freq: string, element: Element) => {
 
 export const keyActiveHoverStyle = sx(
   {
-    border: `2px solid ${theme.primaryLighter}`,
-    backgroundColor: theme.backgroundElevation,
+    border: `2px solid ${theme.color.primaryLighter}`,
+    backgroundColor: theme.color.backgroundElevation,
   },
   "hover"
 );
 
 createStyle(
-  `@media (hover: hover) and (pointer: fine) { .${keyActiveHoverStyle}:hover { border: 2px solid ${theme.secondaryLighter}; background-color: ${theme.secondaryLighter}; } }`
+  `@media (hover: hover) and (pointer: fine) { .${keyActiveHoverStyle}:hover { border: 2px solid ${theme.color.secondaryLighter}; background-color: ${theme.color.secondaryLighter}; } }`
 );
 
 export const flashKeyDownByValue = (freq: string) => {

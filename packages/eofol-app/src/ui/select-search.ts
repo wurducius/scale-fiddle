@@ -1,5 +1,5 @@
 import { input, button } from "@eofol/eofol-simple";
-import { sy, sx, defineBuiltinElement } from "@eofol/eofol";
+import { sy, sx, defineBuiltinElement, cx } from "@eofol/eofol";
 import { div, flex, h2 } from "../extract";
 import { theme } from "../styles";
 
@@ -37,7 +37,7 @@ const searchSelectMenu = (children: Element[]) =>
 
 sy(
   {
-    color: theme.secondary,
+    color: theme.color.secondary,
     cursor: "pointer",
     padding: "2px 0 2px 32px",
   },
@@ -50,7 +50,7 @@ const searchSelectMenuItem = (item: Option) =>
       "search-select-menu-item-base",
       sx(
         {
-          backgroundColor: theme.secondaryDarker,
+          backgroundColor: theme.color.secondaryDarker,
           color: "#000000",
           fontWeight: 700,
         },
@@ -155,7 +155,21 @@ const searchSelect = (
             openMenu();
           },
           children: "Open",
-          styles: sx({ height: "36px" }),
+          styles: cx(
+            sx({
+              height: "36px",
+              color: theme.color.secondary,
+              border: `1px solid ${theme.color.secondary}`,
+            }),
+            sx(
+              {
+                backgroundColor: theme.color.secondaryDark,
+                color: "#000000",
+                border: `1px solid ${theme.color.secondary}`,
+              },
+              "hover"
+            )
+          ),
         }),
       ]),
       div(

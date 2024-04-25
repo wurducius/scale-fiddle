@@ -20,7 +20,7 @@ export const sliderInput = (
   const displayId = "input-slider-value-display-" + id;
 
   return div(
-    [sx({ color: theme.secondary }), cx(classname)],
+    [sx({ color: theme.color.secondary }), cx(classname)],
     [
       createElement(labelTag ?? "p", undefined, label),
       div(

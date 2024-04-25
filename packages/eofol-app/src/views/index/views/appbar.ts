@@ -23,23 +23,28 @@ export const appbarButton = (
     styles: cx(
       sx({
         fontSize: "16px",
-        backgroundColor: isActive ? theme.primary : "black",
+        backgroundColor: isActive ? theme.color.primary : "black",
         color: isSecondary
-          ? theme.secondary
+          ? theme.color.secondary
           : isActive
           ? "black"
-          : theme.primary,
-        border: `1px solid ${isSecondary ? theme.secondary : theme.primary}`,
+          : theme.color.primary,
+        border: `1px solid ${
+          isSecondary ? theme.color.secondary : theme.color.primary
+        }`,
         cursor: "pointer",
+        fontWeight: 500,
       }),
       sx(
         {
           backgroundColor: isSecondary
-            ? theme.secondaryDark
-            : theme.primaryDarker,
-          color: isSecondary ? theme.secondaryLighter : theme.primaryLighter,
+            ? theme.color.secondaryDark
+            : theme.color.primaryDarker,
+          color: "#000000",
           border: `1px solid ${
-            isSecondary ? theme.secondaryLighter : theme.primaryLighter
+            isSecondary
+              ? theme.color.secondaryLighter
+              : theme.color.primaryLighter
           }`,
         },
         "hover"
@@ -217,7 +222,7 @@ export const appbar = (
       height: getAppbarHeight(large, middle),
       alignItems: !breakpoint.md ? "normal" : "center",
       justifyContent: !breakpoint.md ? "center" : "inherit",
-      border: `1px solid ${theme.primary}`,
+      border: `1px solid ${theme.color.primary}`,
       padding: "0 16px",
       flexDirection: !large ? "column" : "row",
     }),

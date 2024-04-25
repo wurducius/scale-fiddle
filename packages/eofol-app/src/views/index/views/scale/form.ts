@@ -8,9 +8,6 @@ import { FiddleState, FiddleStateImpl } from "../../../../types";
 import { defineSelectSearch } from "../../../../ui";
 import { mod, onlyUnique } from "../../../../util";
 
-const MODAL_BG_COLOR = "#2d3748";
-const MODAL_BORDER_COLOR = theme.primary;
-
 defineSelectSearch({ options: scalePresets });
 
 const generalFormModal =
@@ -106,8 +103,8 @@ const generalFormModal =
       },
       undefined,
       sx({
-        backgroundColor: MODAL_BG_COLOR,
-        border: `2px solid ${MODAL_BORDER_COLOR}`,
+        backgroundColor: theme.color.backgroundModal,
+        border: `2px solid ${theme.color.primary}`,
       })
     );
   };
@@ -353,8 +350,8 @@ export const formModal = (
       },
       undefined,
       sx({
-        backgroundColor: MODAL_BG_COLOR,
-        border: `2px solid ${MODAL_BORDER_COLOR}`,
+        backgroundColor: theme.color.backgroundModal,
+        border: `2px solid ${theme.color.primary}`,
       })
     ),
   ];

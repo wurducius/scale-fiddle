@@ -23,14 +23,14 @@ export const scaleOverview = (
         sx({
           display: "flex",
           justifyContent: "space-between",
-          borderBottom: `2px solid ${theme.primary}`,
+          borderBottom: `2px solid ${theme.color.primary}`,
         }),
         [
-          div(sx({ color: theme.secondary, flex: 1 }), "Index"),
-          div(sx({ color: theme.secondary, flex: 3 }), `Frequency`),
-          div(sx({ color: theme.secondary, flex: 3 }), "Cents"),
-          div(sx({ color: theme.secondary, flex: 2 }), "Ratio"),
-          div(sx({ color: theme.secondary, flex: 2 }), "Name"),
+          div(sx({ color: theme.color.secondary, flex: 1 }), "Index"),
+          div(sx({ color: theme.color.secondary, flex: 3 }), `Frequency`),
+          div(sx({ color: theme.color.secondary, flex: 3 }), "Cents"),
+          div(sx({ color: theme.color.secondary, flex: 2 }), "Ratio"),
+          div(sx({ color: theme.color.secondary, flex: 2 }), "Name"),
         ]
       ),
       div(sx({ overflow: "auto", height: "280px" }), [
@@ -43,7 +43,9 @@ export const scaleOverview = (
             sx({
               display: "flex",
               justifyContent: "space-between",
-              color: tone.isOctave ? theme.secondary : theme.primary,
+              color: tone.isOctave
+                ? theme.color.secondary
+                : theme.color.primary,
             }),
             [
               div(

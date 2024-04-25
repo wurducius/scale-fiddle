@@ -17,8 +17,8 @@ import { trimWhitespace } from "../../../../util";
 
 sy(
   {
-    border: `2px solid ${theme.primaryLighter}`,
-    backgroundColor: theme.secondaryDark,
+    border: `2px solid ${theme.color.primaryLighter}`,
+    backgroundColor: theme.color.secondaryDark,
   },
   "key-active"
 );
@@ -68,7 +68,7 @@ const renderKey = (
         {
           height: "92px",
           fontSize: "16px",
-          border: `2px solid ${theme.primary}`,
+          border: `2px solid ${theme.color.primary}`,
           backgroundColor: "black",
           display: "flex",
           justifyContent: "center",

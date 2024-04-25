@@ -18,20 +18,23 @@ const fuchsiaTheme = {
 */
 
 const cyanTheme = {
-  primary: "#03dac6",
-  primaryLighter: "#35E1D1",
-  primaryDarker: "#02AE9E",
+  color: {
+    primary: "#03dac6",
+    primaryLighter: "#35E1D1",
+    primaryDarker: "#02AE9E",
 
-  secondary: "#86b1ff",
-  secondaryDarker: "#6B8DCC",
-  secondaryLighter: "#9EC0FF",
+    secondary: "#86b1ff",
+    secondaryDarker: "#6B8DCC",
+    secondaryLighter: "#9EC0FF",
 
-  secondaryDark: "#6B8DCC",
+    secondaryDark: "#6B8DCC",
 
-  font: "#03dac6",
+    font: "#03dac6",
 
-  background: "#121212",
-  backgroundElevation: "#333333",
+    background: "#121212",
+    backgroundElevation: "#333333",
+    backgroundModal: "#2d3748",
+  },
 };
 
 export const theme = cyanTheme;
