@@ -7,26 +7,55 @@ import {
   h5 as h5Impl,
   h6 as h6Impl,
 } from "@eofol/eofol-simple";
+import { sy } from "@eofol/eofol";
 
 type TypographyNodeContent = (string | Element)[] | (string | Element);
 
-export const p = (content: TypographyNodeContent) =>
-  pImpl({ children: content });
+const typographyNoGuttersStyle = sy(
+  { marginTop: 0, marginBottom: 0 },
+  "typography-base-no-gutters"
+);
 
-export const h1 = (content: TypographyNodeContent) =>
-  h1Impl({ children: content });
+const typographyPBoldStyle = sy({ fontWeight: 700 }, "typography-base-bold");
 
-export const h2 = (content: TypographyNodeContent) =>
-  h2Impl({ children: content });
+export const p = (content: TypographyNodeContent, noGutters?: boolean) =>
+  pImpl({
+    children: content,
+    styles: noGutters ? typographyNoGuttersStyle : undefined,
+  });
 
-export const h3 = (content: TypographyNodeContent) =>
-  h3Impl({ children: content });
+export const h1 = (content: TypographyNodeContent, noGutters?: boolean) =>
+  h1Impl({
+    children: content,
+    styles: noGutters ? typographyNoGuttersStyle : undefined,
+  });
 
-export const h4 = (content: TypographyNodeContent) =>
-  h4Impl({ children: content });
+export const h2 = (content: TypographyNodeContent, noGutters?: boolean) =>
+  h2Impl({
+    children: content,
+    styles: noGutters ? typographyNoGuttersStyle : undefined,
+  });
 
-export const h5 = (content: TypographyNodeContent) =>
-  h5Impl({ children: content });
+export const h3 = (content: TypographyNodeContent, noGutters?: boolean) =>
+  h3Impl({
+    children: content,
+    styles: noGutters ? typographyNoGuttersStyle : undefined,
+  });
 
-export const h6 = (content: TypographyNodeContent) =>
-  h6Impl({ children: content });
+export const h4 = (content: TypographyNodeContent, noGutters?: boolean) =>
+  h4Impl({
+    children: content,
+    styles: noGutters ? typographyNoGuttersStyle : undefined,
+  });
+
+export const h5 = (content: TypographyNodeContent, noGutters?: boolean) =>
+  h5Impl({
+    children: content,
+    styles: noGutters ? typographyNoGuttersStyle : undefined,
+  });
+
+export const h6 = (content: TypographyNodeContent, noGutters?: boolean) =>
+  h6Impl({
+    children: content,
+    styles: noGutters ? typographyNoGuttersStyle : undefined,
+  });

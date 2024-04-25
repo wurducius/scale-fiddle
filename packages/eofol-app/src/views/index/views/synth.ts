@@ -1,14 +1,11 @@
 import { sx } from "@eofol/eofol";
 import { select, checkbox } from "@eofol/eofol-simple";
 import { div, breakpoint, h2, p, h1, h3 } from "../../../extract";
-import { setTotalGain, setWaveform } from "../../../synth";
+import { setTotalGain } from "../../../synth";
 import { FiddleState } from "../../../types";
 import { sliderInput } from "../../../ui";
-import {
-  envelopeCurveOptions,
-  envelopeTypeOptions,
-  timbrePresets,
-} from "../../../data";
+import { envelopeCurveOptions, envelopeTypeOptions } from "../../../data";
+import { waveformSelect } from "./synth-view/waveform-select";
 
 const envelopeCurveSelect = (
   value: string,
@@ -329,27 +326,7 @@ export const synthTab = (
               },
             }),
           ]),
-          div(sx({ flex: 1 }), [
-            h1("Timbre"),
-            select({
-              name: "select-waveform-preset",
-              // @ts-ignore
-              value: state.synth.waveformPreset,
-              options: timbrePresets,
-              onChange: (nextVal) => {
-                // @ts-ignore
-                setState({
-                  ...state,
-                  synth: {
-                    // @ts-ignore
-                    ...state.synth,
-                    waveformPreset: nextVal,
-                  },
-                });
-                setWaveform(nextVal);
-              },
-            }),
-          ]),
+          div(sx({ flex: 1 }), [h1("Timbre"), waveformSelect(state, setState)]),
         ]
       ),
     ]),

@@ -2,12 +2,14 @@ import { button } from "@eofol/eofol-simple";
 import { sx } from "@eofol/eofol";
 import { breakpoint, div } from "../../../extract";
 import { FiddleState } from "../../../types";
-import { changeScaleMenu } from "./scale/change-scale";
-import { formModal } from "./scale/form";
-import { keys } from "./scale/keys";
-import { scaleLibrary } from "./scale/library";
-import { scaleOverview } from "./scale/overview";
-import { scaleTuning } from "./scale/tuning";
+import {
+  changeScaleMenu,
+  scaleLibrary,
+  scaleOverview,
+  scaleTuning,
+  keys,
+  formModal,
+} from "./scale-view";
 
 const getMenuHeight = () => {
   if (breakpoint.xs) {

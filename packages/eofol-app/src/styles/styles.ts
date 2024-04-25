@@ -34,7 +34,7 @@ export const initStyles = () => {
   );
 
   createStyle(
-    `button { cursor: pointer; min-height: 36px; font-size: 16px; font-weight: 500; background-color: ${theme.color.background}; color: ${theme.color.primary}; border: 1px solid ${theme.color.primary} }`
+    `button { cursor: pointer; min-height: 36px; padding: 0 16px; font-size: 16px; font-weight: 500; background-color: ${theme.color.background}; color: ${theme.color.primary}; border: 1px solid ${theme.color.primary} }`
   );
   createStyle(
     `button:hover { background-color: ${theme.color.primaryDarker}; color: #000000; border: 1px solid ${theme.color.primaryLighter} }`

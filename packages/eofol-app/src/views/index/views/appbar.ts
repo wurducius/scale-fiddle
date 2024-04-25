@@ -71,7 +71,7 @@ export const appbar = (
   // @ts-ignore
   const tabIndex = state.tab;
 
-  const large = !mediaQueryMaxWidth(1280)();
+  const large = !mediaQueryMaxWidth(1450)();
   const middle = !mediaQueryMaxWidth(820)();
 
   const topRow = div(
@@ -209,6 +209,7 @@ export const appbar = (
           display: "flex",
           gap: breakpoint.md ? "16px" : "16px",
           alignItems: "center",
+          marginLeft: large ? "12px" : 0,
         }),
         bottomRowFirst
       ),
