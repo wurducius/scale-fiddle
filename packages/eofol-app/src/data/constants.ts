@@ -1,18 +1,12 @@
-export const keyLabelOptions = [
-  { id: "freq", title: "Frequency" },
-  { id: "cent", title: "Cent" },
-  { id: "ratio", title: "Ratio" },
-  { id: "name", title: "Name" },
-  { id: "index", title: "Index" },
-];
+export const DEFAULT_SCALE_INPUT =
+  "100.\n200.\n300.\n400.\n500.\n600.\n700.\n800.\n900.\n1000.\n1100.\n1200.";
 
-export const envelopeCurveOptions = [
-  { title: "Linear", id: "linear" },
-  { title: "Exponential", id: "exponential" },
-];
+export const DEFAULT_SCALE_NAME = "Initial scale";
 
-export const envelopeTypeOptions = [
-  { title: "ADSR envelope", id: "adsr" },
-  { title: "Preset envelope", id: "preset" },
-  { title: "Custom envelope", id: "custom" },
-];
+export const SCALE_PRESET_PRECISION_DIGITS_CENT = 3;
+
+export const WAVEFORM_SERIES_LENGTH = 20;
+
+export const TOTAL_GAIN_DEFAULT = 1;
+
+export const WAVEFORM_ID_DEFAULT = "distorted-organ";

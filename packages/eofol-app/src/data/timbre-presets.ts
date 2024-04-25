@@ -1,6 +1,5 @@
 import { Timbre } from "../types";
-
-const WAVEFORM_SERIES_LENGTH = 20;
+import { WAVEFORM_SERIES_LENGTH } from "./constants";
 
 const array = Array.from({ length: WAVEFORM_SERIES_LENGTH });
 

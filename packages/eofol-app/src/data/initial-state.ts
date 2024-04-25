@@ -1,12 +1,10 @@
 import { FiddleStateImpl } from "../types";
-
-export const defaultScale =
-  "100.\n200.\n300.\n400.\n500.\n600.\n700.\n800.\n900.\n1000.\n1100.\n1200.";
+import { DEFAULT_SCALE_INPUT, DEFAULT_SCALE_NAME } from "./constants";
 
 export const initialState = {
   init: true,
-  scaleInput: defaultScale,
-  scales: [{ name: "Initial scale", scaleInput: defaultScale }],
+  scaleInput: DEFAULT_SCALE_INPUT,
+  scales: [{ name: DEFAULT_SCALE_NAME, scaleInput: DEFAULT_SCALE_INPUT }],
   scaleIndex: 0,
   tab: 0,
   smallTab: 0,

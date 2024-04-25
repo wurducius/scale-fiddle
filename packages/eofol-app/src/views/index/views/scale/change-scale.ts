@@ -7,7 +7,7 @@ import {
   notify,
 } from "@eofol/eofol-simple";
 import { sx } from "@eofol/eofol";
-import { defaultScale } from "../../../../data";
+import { DEFAULT_SCALE_INPUT } from "../../../../data";
 import { div, p } from "../../../../extract";
 import { FiddleState } from "../../../../types";
 
@@ -119,12 +119,12 @@ export const changeScaleMenu = (
                 {
                   // @ts-ignore
                   name: "Scale #" + state.scales.length,
-                  scaleInput: defaultScale,
+                  scaleInput: DEFAULT_SCALE_INPUT,
                 },
               ],
               // @ts-ignore
               scaleIndex: state.scales.length,
-              scaleInput: defaultScale,
+              scaleInput: DEFAULT_SCALE_INPUT,
               recompute: true,
             });
           },

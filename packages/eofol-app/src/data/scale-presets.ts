@@ -1,5 +1,4 @@
-// todo precision
-const precision = 3;
+import { SCALE_PRESET_PRECISION_DIGITS_CENT } from "./constants";
 
 const valuesArray = (array: string[]) => array.join("\n");
 
@@ -26,7 +25,7 @@ const pickRelative = (values: string[], rel: number[]) => {
 
 const ed2 = (n: number) => map(n, (k) => truncate(((k + 1) * 1200) / n));
 
-const truncate = (n: number) => n.toFixed(precision);
+const truncate = (n: number) => n.toFixed(SCALE_PRESET_PRECISION_DIGITS_CENT);
 
 const majorScale = {
   id: "major-scale",

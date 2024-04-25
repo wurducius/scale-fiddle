@@ -1,14 +1,14 @@
 import { sx } from "@eofol/eofol";
 import { select, checkbox } from "@eofol/eofol-simple";
-import {
-  envelopeCurveOptions,
-  timbrePresets,
-  envelopeTypeOptions,
-} from "../../../data";
 import { div, breakpoint, h2, p, h1, h3 } from "../../../extract";
 import { setTotalGain, setWaveform } from "../../../synth";
 import { FiddleState } from "../../../types";
 import { sliderInput } from "../../../ui";
+import {
+  envelopeCurveOptions,
+  envelopeTypeOptions,
+  timbrePresets,
+} from "../../../data";
 
 const envelopeCurveSelect = (
   value: string,

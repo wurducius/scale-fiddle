@@ -1,8 +1,9 @@
-import { timbrePresetsFlat } from "../data";
+import {
+  TOTAL_GAIN_DEFAULT,
+  WAVEFORM_ID_DEFAULT,
+  timbrePresetsFlat,
+} from "../data";
 import { FiddleState } from "../types";
-
-const TOTAL_GAIN_DEFAULT = 1;
-const WAVEFORM_ID_DEFAULT = "distorted-organ";
 
 const getCurve = (shape: string | undefined) => {
   if (shape == "exponential") {
