@@ -2,23 +2,6 @@ import { FiddleState, FiddleStateImpl } from "../types";
 import { mod, onlyUnique } from "../util";
 import { parseScala } from "./scala";
 
-export const linearScale = (state: FiddleState, T: number, g: number) =>
-  Array.from({ length: T })
-    .map((item, index) => {
-      // @ts-ignore
-      const centPeriod = 1200 * Math.log2(state.tuning.period);
-      const val = mod(index * g, centPeriod);
-      return val === 0
-        ? // @ts-ignore
-          centPeriod.toFixed(state.options.decimalDigitsCent)
-        : // @ts-ignore
-          val.toFixed(state.options.decimalDigitsCent);
-    })
-    .sort((a, b) => Number(a) - Number(b))
-    .map((tone) => (tone.includes(".") ? tone : tone + "."))
-    .filter(onlyUnique)
-    .join("\n");
-
 export function normalizePeriod(value: number, period: number) {
   if (value <= 0) {
     return value;

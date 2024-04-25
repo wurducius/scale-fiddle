@@ -2,7 +2,17 @@ import { modal, input, select } from "@eofol/eofol-simple";
 import { sx, e } from "@eofol/eofol";
 import { scalePresets, scalePresetsFlat } from "../../../../data";
 import { div, textarea } from "../../../../extract";
-import { updateScale, linearScale, normalizePeriod } from "../../../../sheen";
+import {
+  updateScale,
+  linearScale,
+  normalizePeriod,
+  createEdo,
+  createMOS,
+  createLinear,
+  createMeantone,
+  createHarmonicSeries,
+  createJust,
+} from "../../../../sheen";
 import { theme } from "../../../../styles";
 import { FiddleState, FiddleStateImpl } from "../../../../types";
 import { defineSelectSearch } from "../../../../ui";
@@ -121,9 +131,7 @@ export const formModal = (
       "Equal division of octave (EDO)",
       "edo",
       [{ title: "N", type: "number", innerFormName: "N", id: "edo" }],
-      ({ N }) =>
-        // @ts-ignore
-        linearScale(state, N, (1200 * Math.log2(state.tuning.period)) / N)
+      ({ N }) => createEdo(state, N)
     ),
     modalImpl(
       "modal-mos",
@@ -133,21 +141,7 @@ export const formModal = (
         { title: "N", type: "number", innerFormName: "N", id: "n" },
         { title: "T", type: "number", innerFormName: "T", id: "t" },
       ],
-      ({ N, T }) => {
-        const vals = Array.from({ length: T })
-          .map((item, i) => {
-            // @ts-ignore
-            const periodCent = 1200 * Math.log2(state.tuning.period);
-            const val = mod(
-              (Math.floor(((i + 1) * N) / T) * periodCent) / N,
-              periodCent
-            );
-            return val === 0 ? periodCent : val;
-          }) // @ts-ignore
-          .map((tone) => tone.toFixed(state.options.decimalDigitsCent))
-          .map((tone) => (tone.includes(".") ? tone : tone + "."));
-        return vals.join("\n");
-      }
+      ({ N, T }) => createMOS(state, N, T)
     ),
     modalImpl(
       "modal-linear",
@@ -162,7 +156,7 @@ export const formModal = (
           id: "g",
         },
       ],
-      ({ T, g }) => linearScale(state, T, g)
+      ({ T, g }) => createLinear(state, T, g)
     ),
     modalImpl(
       "modal-meantone",
@@ -177,33 +171,14 @@ export const formModal = (
           id: "comma",
         },
       ],
-      ({ T, comma }) =>
-        linearScale(state, T, 1200 * Math.log2(Math.pow(5, 1 / comma)))
+      ({ T, comma }) => createMeantone(state, T, comma)
     ),
     modalImpl(
       "modal-harm",
       "Harmonic series",
       "harm",
       [{ title: "T", type: "number", innerFormName: "T", id: "t" }],
-      ({ T }) => {
-        const vals = [0];
-        for (let i = 1; i < T + 1; i++) {
-          // @ts-ignore
-          vals.push(1200 * Math.log2(normalizePeriod(i, state.tuning.period)));
-          vals.push(
-            // @ts-ignore
-            1200 * Math.log2(normalizePeriod(1 / i, state.tuning.period))
-          );
-        }
-        return (
-          vals
-            .sort((a, b) => a - b)
-            // @ts-ignore
-            .map((val) => val.toFixed(state.options.decimalDigitsCent))
-            .filter(onlyUnique)
-            .join("\n")
-        );
-      }
+      ({ T }) => createHarmonicSeries(state, T)
     ),
     modalImpl(
       "modal-just",
@@ -213,35 +188,7 @@ export const formModal = (
         { title: "T", type: "number", innerFormName: "T", id: "t" },
         { title: "Limit", type: "number", innerFormName: "limit", id: "limit" },
       ],
-      ({ T, limit }) => {
-        const vals = [0];
-        for (let i = 1; i < T + 1; i++) {
-          // @ts-ignore
-          vals.push(
-            1200 *
-              Math.log2(
-                // @ts-ignore
-                normalizePeriod(Math.pow(limit, i), state.tuning.period)
-              )
-          );
-          vals.push(
-            1200 *
-              Math.log2(
-                // @ts-ignore
-                normalizePeriod(1 / Math.pow(limit, i), state.tuning.period)
-              )
-          );
-        }
-
-        return (
-          vals
-            .sort((a, b) => a - b)
-            // @ts-ignore
-            .map((val) => val.toFixed(state.options.decimalDigitsCent))
-            .filter(onlyUnique)
-            .join("\n")
-        );
-      }
+      ({ T, limit }) => createJust(state, T, limit)
     ),
     modalImpl(
       "modal-ratiochord",
