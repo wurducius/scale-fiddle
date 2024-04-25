@@ -71,7 +71,8 @@ export const appbar = (
   // @ts-ignore
   const tabIndex = state.tab;
 
-  const large = !mediaQueryMaxWidth(1450)();
+  const largex = !mediaQueryMaxWidth(1450 + 16)();
+  const large = !mediaQueryMaxWidth(1450 + 0)();
   const middle = !mediaQueryMaxWidth(820)();
 
   const topRow = div(
@@ -220,7 +221,7 @@ export const appbar = (
   return div(
     sx({
       display: "flex",
-      height: getAppbarHeight(large, middle),
+      height: getAppbarHeight(largex, middle),
       alignItems: !breakpoint.md ? "normal" : "center",
       justifyContent: !breakpoint.md ? "center" : "inherit",
       border: `1px solid ${theme.color.primary}`,
