@@ -3,7 +3,7 @@ import { sx } from "@eofol/eofol";
 import { keyLabelOptions } from "../../../data";
 import { div, flex, breakpoint, h2, p } from "../../../extract";
 import { FiddleState } from "../../../types";
-import { theme } from "../../../styles";
+import { theme } from "../../../extract";
 
 export const optionsTab = (
   state: FiddleState,

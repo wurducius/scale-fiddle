@@ -1,7 +1,7 @@
 import { modal, input, select } from "@eofol/eofol-simple";
 import { sx, e } from "@eofol/eofol";
 import { scalePresets, scalePresetsFlat } from "../../../../data";
-import { div, textarea } from "../../../../extract";
+import { div, textarea, theme } from "../../../../extract";
 import {
   updateScale,
   linearScale,
@@ -13,10 +13,8 @@ import {
   createHarmonicSeries,
   createJust,
 } from "../../../../sheen";
-import { theme } from "../../../../styles";
 import { FiddleState, FiddleStateImpl } from "../../../../types";
 import { defineSelectSearch } from "../../../../ui";
-import { mod, onlyUnique } from "../../../../util";
 
 defineSelectSearch({ options: scalePresets });
 
@@ -48,7 +46,10 @@ const generalFormModal =
           undefined,
           form
             .map((item) => [
-              div(sx({ fontSize: "24px" }), item.title),
+              div(
+                sx({ fontSize: theme.typography.heading.fontSize }),
+                item.title
+              ),
               input({
                 name: "input-form-" + id,
                 // @ts-ignore

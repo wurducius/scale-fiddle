@@ -1,5 +1,5 @@
 import { debounce, forceRerender } from "@eofol/eofol";
-import { theme } from "../styles";
+import { theme } from "./theme";
 
 const breakpoints = theme.breakpoints.values;
 

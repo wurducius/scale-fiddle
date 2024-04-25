@@ -2,9 +2,9 @@ import "../../styles/base.css";
 import "./index.css";
 import { defineBuiltinElement, sx, registerServiceWorker } from "@eofol/eofol";
 import { initialState } from "../../data";
-import { div } from "../../extract";
+import { div, setTheme } from "../../extract";
 import { updateScale } from "../../sheen";
-import { initStyles } from "../../styles";
+import { cyanTheme, initStyles } from "../../styles";
 import { mapKeyboardKeys } from "../../synth";
 import { FiddleStateImpl } from "../../types";
 import {
@@ -17,6 +17,7 @@ import {
   analyzeTab,
 } from "./views";
 
+setTheme(cyanTheme);
 initStyles();
 
 defineBuiltinElement<FiddleStateImpl>({

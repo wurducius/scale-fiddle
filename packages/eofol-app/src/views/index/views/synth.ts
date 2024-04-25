@@ -6,7 +6,7 @@ import { FiddleState } from "../../../types";
 import { sliderInput } from "../../../ui";
 import { envelopeCurveOptions, envelopeTypeOptions } from "../../../data";
 import { waveformSelect } from "./synth-view/waveform-select";
-import { theme } from "../../../styles";
+import { theme } from "../../../extract";
 
 const envelopeCurveSelect = (
   value: string,

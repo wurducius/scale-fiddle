@@ -1,7 +1,6 @@
 import { input, button } from "@eofol/eofol-simple";
 import { sy, sx, defineBuiltinElement, cx } from "@eofol/eofol";
-import { div, flex, h2 } from "../extract";
-import { theme } from "../styles";
+import { div, flex, h2, theme } from "../extract";
 
 type Option = { title: string; id: string };
 

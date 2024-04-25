@@ -1,6 +1,5 @@
 import { sy, sx } from "@eofol/eofol";
-import { div, breakpoint } from "../../../../extract";
-import { theme } from "../../../../styles";
+import { div, breakpoint, theme } from "../../../../extract";
 import {
   keyActiveHoverStyle,
   keyColorOctaveStyle,
@@ -67,7 +66,7 @@ const renderKey = (
       sy(
         {
           height: "92px",
-          fontSize: "16px",
+          fontSize: theme.typography.text.fontSize,
           border: `2px solid ${theme.color.primary}`,
           backgroundColor: "black",
           display: "flex",

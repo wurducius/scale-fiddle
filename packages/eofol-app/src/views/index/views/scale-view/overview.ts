@@ -1,7 +1,6 @@
 import { tooltip } from "@eofol/eofol-simple";
 import { sx } from "@eofol/eofol";
-import { div, breakpoint, p } from "../../../../extract";
-import { theme } from "../../../../styles";
+import { div, breakpoint, p, theme } from "../../../../extract";
 import { FiddleState } from "../../../../types";
 import { trimWhitespace } from "../../../../util";
 
@@ -16,7 +15,10 @@ export const scaleOverview = (
     sx({
       height: "300px",
       padding: `0 ${theme.spacing.space2}`,
-      fontSize: breakpoint.md && !breakpoint.sm ? "12px" : theme.spacing.space2,
+      fontSize:
+        breakpoint.md && !breakpoint.sm
+          ? theme.typography.tableSmall.fontSize
+          : theme.typography.text.fontSize,
       border: `1px solid ${theme.color.secondary}`,
     }),
     [

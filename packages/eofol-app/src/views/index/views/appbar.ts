@@ -8,8 +8,8 @@ import {
   languages,
   setLanguage,
   language,
+  theme,
 } from "../../../extract";
-import { theme } from "../../../styles";
 import { panic } from "../../../synth";
 import { FiddleState } from "../../../types";
 
@@ -22,7 +22,7 @@ export const appbarButton = (
   button({
     styles: cx(
       sx({
-        fontSize: "16px",
+        fontSize: theme.typography.text.fontSize,
         backgroundColor: isActive ? theme.color.primary : "black",
         color: isSecondary
           ? theme.color.secondary
@@ -179,7 +179,7 @@ export const appbar = (
       styles: sx({
         height: "36px",
         width: "200px",
-        fontSize: "16px",
+        fontSize: theme.typography.text.fontSize,
         margin: "0 0 0 0",
         padding: "2px 4px 2px 4px",
       }),
@@ -191,7 +191,7 @@ export const appbar = (
       sx({
         marginLeft: middle ? theme.spacing.space4 : "0",
         fontWeight: 700,
-        fontSize: "20px",
+        fontSize: theme.typography.title.fontSize,
       }),
       t("app.nameWithVersion", "Scale Fiddle v0.3")
     ),

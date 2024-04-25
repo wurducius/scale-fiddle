@@ -10,7 +10,7 @@ import {
   keys,
   formModal,
 } from "./scale-view";
-import { theme } from "../../../styles";
+import { theme } from "../../../extract";
 
 const getMenuHeight = () => {
   if (breakpoint.xs) {
