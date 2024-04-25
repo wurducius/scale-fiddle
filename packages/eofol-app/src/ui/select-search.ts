@@ -23,11 +23,11 @@ sy(
     marginLeft: "auto",
     marginRight: "auto",
     textAlign: "left",
-    backgroundColor: theme.backgroundElevation,
+    backgroundColor: "#121212",
     overflow: "auto",
     height: "400px",
     padding: "8px 0 8px 0",
-    width: "400px",
+    width: "475px",
   },
   "search-select-menu"
 );
@@ -36,7 +36,11 @@ const searchSelectMenu = (children: Element[]) =>
   div("search-select-menu", children);
 
 sy(
-  { paddingLeft: "32px", color: theme.secondary, cursor: "pointer" },
+  {
+    color: theme.secondary,
+    cursor: "pointer",
+    padding: "2px 0 2px 32px",
+  },
   "search-select-menu-item-base"
 );
 
@@ -131,6 +135,11 @@ const searchSelect = (
       filterOptions(nextVal);
     },
     onChange: () => {},
+    classname: sx({
+      backgroundColor: "#121212",
+      height: "30px",
+      width: "400px",
+    }),
   });
   searchSelectInputElement.onmouseover = () => {
     openMenu();
@@ -139,13 +148,14 @@ const searchSelect = (
   return div(
     undefined,
     [
-      flex({}, [
+      flex({ alignItems: "center" }, [
         searchSelectInputElement,
         button({
           onClick: () => {
             openMenu();
           },
           children: "Open",
+          styles: sx({ height: "36px" }),
         }),
       ]),
       div(
