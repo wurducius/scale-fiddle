@@ -10,6 +10,7 @@ import {
   keys,
   formModal,
 } from "./scale-view";
+import { theme } from "../../../styles";
 
 const getMenuHeight = () => {
   if (breakpoint.xs) {
@@ -30,7 +31,7 @@ const inputMenu = (
     [div(undefined, changeScaleMenu(state, setState))]
   );
   const scaleLibraryElement = div(
-    sx({ flex: 1, padding: "0 8px" }),
+    sx({ flex: 1, padding: `0 ${theme.spacing.space1}` }),
     scaleLibrary(state, setState)
   );
   const scaleOverviewElement = div(

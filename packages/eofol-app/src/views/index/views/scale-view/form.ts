@@ -76,7 +76,7 @@ const generalFormModal =
         textarea({
           name: "result-scale",
           value: resultScale,
-          classname: sx({ height: "300px", marginTop: "16px" }),
+          classname: sx({ height: "300px", marginTop: theme.spacing.space2 }),
           onChange: () => {},
         }),
       ]),
@@ -247,8 +247,8 @@ export const formModal = (
             onChange: () => {},
             classname: sx({
               height: "300px",
-              marginTop: "16px",
-              marginBottom: "8px",
+              marginTop: theme.spacing.space2,
+              marginBottom: theme.spacing.space1,
             }),
           }),
         ]

@@ -10,6 +10,7 @@ import { sx } from "@eofol/eofol";
 import { DEFAULT_SCALE_INPUT } from "../../../../data";
 import { div, p } from "../../../../extract";
 import { FiddleState } from "../../../../types";
+import { theme } from "../../../../styles";
 
 const menuButtonOpensModal =
   (
@@ -18,7 +19,7 @@ const menuButtonOpensModal =
   ) =>
   (title: string, formName: string, notImplemented?: boolean) => {
     return button({
-      styles: sx({ width: "256px", height: "40px" }),
+      styles: sx({ width: "256px", height: theme.spacing.space5 }),
       children: title,
       onClick: () => {
         if (!notImplemented) {
@@ -70,7 +71,7 @@ export const changeScaleMenu = (
         sx({ flex: 1 })
       ),
     ]),
-    div(sx({ marginTop: "16px" }), p("Select scale")),
+    div(sx({ marginTop: theme.spacing.space2 }), p("Select scale")),
     div(
       sx({ width: "256px", margin: "0 auto 0 auto", display: "flex" }),
       select({
@@ -94,7 +95,7 @@ export const changeScaleMenu = (
         name: "select-scale-library",
       })
     ),
-    div(sx({ marginTop: "8px" }), p("Scale name")),
+    div(sx({ marginTop: theme.spacing.space1 }), p("Scale name")),
     div(
       sx({ width: "256px", margin: "0 auto 0 auto", display: "flex" }),
       scaleNameInputElement
@@ -104,7 +105,7 @@ export const changeScaleMenu = (
         display: "flex",
         flexDirection: "column",
         width: "256px",
-        margin: "16px auto 0 auto",
+        margin: `${theme.spacing.space2} auto 0 auto`,
       }),
       [
         button({
@@ -130,7 +131,7 @@ export const changeScaleMenu = (
           },
         }),
         button({
-          styles: sx({ marginTop: "16px" }),
+          styles: sx({ marginTop: theme.spacing.space2 }),
           children: "Delete scale",
           // @ts-ignore
           disabled: state.scales.length <= 1,

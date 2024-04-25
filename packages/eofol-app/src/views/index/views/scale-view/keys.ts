@@ -107,7 +107,7 @@ export const keys = (state: FiddleState) => {
   return div(
     sx({
       maxHeight: "100%",
-      paddingTop: "24px",
+      paddingTop: theme.spacing.space3,
     }),
     div(
       sx({

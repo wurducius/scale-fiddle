@@ -3,6 +3,7 @@ import { sx } from "@eofol/eofol";
 import { keyLabelOptions } from "../../../data";
 import { div, flex, breakpoint, h2, p } from "../../../extract";
 import { FiddleState } from "../../../types";
+import { theme } from "../../../styles";
 
 export const optionsTab = (
   state: FiddleState,
@@ -149,7 +150,7 @@ export const optionsTab = (
         sx({
           display: "flex",
           flexDirection: !breakpoint.xs ? "row" : "column",
-          marginTop: "32px",
+          marginTop: theme.spacing.space4,
         }),
         [
           div(sx({ flex: 1 }), [

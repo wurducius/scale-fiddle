@@ -6,6 +6,7 @@ import { FiddleState } from "../../../types";
 import { sliderInput } from "../../../ui";
 import { envelopeCurveOptions, envelopeTypeOptions } from "../../../data";
 import { waveformSelect } from "./synth-view/waveform-select";
+import { theme } from "../../../styles";
 
 const envelopeCurveSelect = (
   value: string,
@@ -85,7 +86,7 @@ const envelopeADSRMenu = (
               synth: { ...synth, attackCurve: nextValue },
             });
           }),
-          div(sx({ marginTop: "64px" }), [
+          div(sx({ marginTop: theme.spacing.space8 }), [
             h2("Decay phase"),
             sliderInput(
               "Volume",
@@ -185,7 +186,7 @@ const envelopeADSRMenu = (
               synth: { ...synth, sustainCurve: nextValue },
             });
           }),
-          div(sx({ marginTop: "64px" }), [
+          div(sx({ marginTop: theme.spacing.space8 }), [
             h2("Release phase"),
             sliderInput(
               "Volume",
@@ -245,14 +246,18 @@ const envelopePresetMenu = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
 ) => {
-  return [div(sx({ marginTop: "32px" }), [p("UNDER CONSTRUCTION")])];
+  return [
+    div(sx({ marginTop: theme.spacing.space4 }), [p("UNDER CONSTRUCTION")]),
+  ];
 };
 
 const envelopeCustomMenu = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
 ) => {
-  return [div(sx({ marginTop: "32px" }), [p("UNDER CONSTRUCTION")])];
+  return [
+    div(sx({ marginTop: theme.spacing.space4 }), [p("UNDER CONSTRUCTION")]),
+  ];
 };
 
 const envelopeMenu = (
@@ -308,7 +313,7 @@ export const synthTab = (
               "h1",
               (val) => `${val}%`,
               true,
-              sx({ margin: "0 32px 0 32px" }),
+              sx({ margin: `0 ${theme.spacing.space4}` }),
               "master-gain"
             ),
           ]),
@@ -330,7 +335,7 @@ export const synthTab = (
         ]
       ),
     ]),
-    div(sx({ marginTop: "64px" }), h1("Envelope")),
+    div(sx({ marginTop: theme.spacing.space8 }), h1("Envelope")),
     select({
       name: "select-envelope-type",
       value: synth.envelopeType,
@@ -344,6 +349,6 @@ export const synthTab = (
       },
     }),
     envelopeMenu(state, setState),
-    div(sx({ height: "32px" })),
+    div(sx({ height: theme.spacing.space4 })),
   ];
 };

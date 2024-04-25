@@ -35,6 +35,24 @@ const cyanTheme = {
     backgroundElevation: "#333333",
     backgroundModal: "#2d3748",
   },
+  typography: {},
+  spacing: {
+    space1: "8px",
+    space2: "16px",
+    space3: "24px",
+    space4: "32px",
+    space5: "40px",
+    space6: "48px",
+    space7: "56px",
+    space8: "64px",
+    space9: "72px",
+    space10: "80px",
+  },
+  breakpoints: { values: [640, 1080, 1200, 1600, 2000, 2600] },
+  shape: {},
+  zIndex: {},
+  config: {},
+  components: {},
 };
 
 export const theme = cyanTheme;

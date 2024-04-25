@@ -15,8 +15,8 @@ export const scaleOverview = (
   return div(
     sx({
       height: "300px",
-      padding: "0 8px",
-      fontSize: breakpoint.md && !breakpoint.sm ? "12px" : "16px",
+      padding: `0 ${theme.spacing.space2}`,
+      fontSize: breakpoint.md && !breakpoint.sm ? "12px" : theme.spacing.space2,
       border: `1px solid ${theme.color.secondary}`,
     }),
     [

@@ -77,7 +77,7 @@ export const appbar = (
   const topRow = div(
     sx({
       display: "flex",
-      gap: breakpoint.md ? "16px" : "16px",
+      gap: theme.spacing.space2,
       alignItems: "center",
     }),
     [
@@ -188,7 +188,7 @@ export const appbar = (
   const bottomRowSecond = [
     div(
       sx({
-        marginLeft: middle ? "32px" : "0",
+        marginLeft: middle ? theme.spacing.space4 : "0",
         fontWeight: 700,
         fontSize: "20px",
       }),
@@ -207,7 +207,7 @@ export const appbar = (
       div(
         sx({
           display: "flex",
-          gap: breakpoint.md ? "16px" : "16px",
+          gap: theme.spacing.space2,
           alignItems: "center",
           marginLeft: large ? "12px" : 0,
         }),
@@ -224,7 +224,7 @@ export const appbar = (
       alignItems: !breakpoint.md ? "normal" : "center",
       justifyContent: !breakpoint.md ? "center" : "inherit",
       border: `1px solid ${theme.color.primary}`,
-      padding: "0 16px",
+      padding: `0 ${theme.spacing.space2}`,
       flexDirection: !large ? "column" : "row",
     }),
     div(

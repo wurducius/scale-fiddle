@@ -26,7 +26,7 @@ sy(
     backgroundColor: "#121212",
     overflow: "auto",
     height: "400px",
-    padding: "8px 0 8px 0",
+    padding: `${theme.spacing.space1} 0`,
     width: "475px",
   },
   "search-select-menu"
@@ -39,7 +39,7 @@ sy(
   {
     color: theme.color.secondary,
     cursor: "pointer",
-    padding: "2px 0 2px 32px",
+    padding: `2px 0 2px ${theme.spacing.space4}`,
   },
   "search-select-menu-item-base"
 );
@@ -60,7 +60,10 @@ const searchSelectMenuItem = (item: Option) =>
     item.title
   );
 
-sy({ padding: "8px 16px 8px 16px" }, "select-search-opt-group");
+sy(
+  { padding: `${theme.spacing.space1} ${theme.spacing.space2}` },
+  "select-search-opt-group"
+);
 
 const searchSelectOptGroup = (group: string) =>
   div("select-search-opt-group", group);

@@ -27,7 +27,7 @@ export const sliderInput = (
         sx({
           display: "flex",
           alignItems: "center",
-          gap: "16px",
+          gap: theme.spacing.space2,
           justifyContent: "center",
         }),
         [
