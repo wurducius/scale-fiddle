@@ -1,9 +1,7 @@
-import { sy, sx } from "@eofol/eofol";
+import { sx } from "@eofol/eofol";
 import { div, breakpoint, theme } from "../../../../extract";
 import {
   keyActiveHoverStyle,
-  keyColorOctaveStyle,
-  keyColorNonoctaveStyle,
   mouseHandlers,
   setKeyElementMap,
   touchHandlers,
@@ -13,14 +11,6 @@ import {
 } from "../../../../synth";
 import { FiddleState } from "../../../../types";
 import { trimWhitespace } from "../../../../util";
-
-sy(
-  {
-    border: `2px solid ${theme.color.primaryLighter}`,
-    backgroundColor: theme.color.secondaryDark,
-  },
-  "key-active"
-);
 
 const getKeyLabel = (state: FiddleState, i: number) => {
   // @ts-ignore
@@ -63,24 +53,9 @@ const renderKey = (
   // @ts-ignore
   const keyElement = div(
     [
-      sy(
-        {
-          height: "92px",
-          fontSize: theme.typography.text.fontSize,
-          border: `2px solid ${theme.color.primary}`,
-          backgroundColor: "black",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          cursor: "pointer",
-          userSelect: "none",
-          touchAction: "none",
-          direction: "ltr",
-        },
-        "key-inactive"
-      ),
+      "key-inactive",
       keyActiveHoverStyle,
-      isOctave ? keyColorOctaveStyle : keyColorNonoctaveStyle,
+      isOctave ? "key-color-octave" : "key-color-nonoctave",
     ],
     keyLabel,
     { id: `key-${val}` },

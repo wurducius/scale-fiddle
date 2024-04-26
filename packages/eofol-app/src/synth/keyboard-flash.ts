@@ -1,18 +1,5 @@
-import { sx, sy } from "@eofol/eofol";
+import { sx } from "@eofol/eofol";
 import { theme } from "../extract";
-
-export const keyColorOctaveStyle = sy(
-  {
-    color: theme.color.secondary,
-  },
-  "key-color-octave"
-);
-export const keyColorNonoctaveStyle = sy(
-  {
-    color: theme.color.primary,
-  },
-  "key-color-nonoctave"
-);
 
 export let keyElementsMap: Record<string, Element> = {};
 export const clearKeyElementMap = () => {
@@ -37,7 +24,7 @@ export const flashKeyUpByValue = (freq: string, isOctave?: boolean) => {
   keyElementsMap[freq]?.setAttribute(
     "class",
     "key-inactive " +
-      (isOctave ? keyColorOctaveStyle + " " : "") +
+      (isOctave ? "key-color-octave" + " " : "") +
       keyActiveHoverStyle
   );
 };
