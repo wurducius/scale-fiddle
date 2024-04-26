@@ -30,14 +30,17 @@ export const appbarButton = (
     onClick: onclick,
   });
 
-const getAppbarHeight = (large: boolean, middle: boolean) => {
+const getAppbarHeight = (large: boolean, middle: boolean, small: boolean) => {
   if (large) {
     return "50px";
   }
   if (middle) {
     return "100px";
   }
-  return "150px";
+  if (small) {
+    return "150px";
+  }
+  return "250px";
 };
 
 export const appbar = (
@@ -49,13 +52,18 @@ export const appbar = (
 
   const largex = !mediaQueryMaxWidth(1450 + 16)();
   const large = !mediaQueryMaxWidth(1450 + 0)();
-  const middle = !mediaQueryMaxWidth(820)();
+
+  const middle = !mediaQueryMaxWidth(886)();
+  const middlexxx = !mediaQueryMaxWidth(886)();
+
+  const small = !mediaQueryMaxWidth(705)();
 
   const topRow = div(
     sx({
       display: "flex",
       gap: theme.spacing.space2,
       alignItems: "center",
+      flexWrap: "wrap",
     }),
     [
       appbarButton(
@@ -168,6 +176,7 @@ export const appbar = (
         marginLeft: middle ? theme.spacing.space4 : "0",
         fontWeight: 700,
         fontSize: theme.typography.title.fontSize,
+        marginRight: !middlexxx ? "32px" : 0,
       }),
       t("app.nameWithVersion", "Scale Fiddle v0.3")
     ),
@@ -187,6 +196,7 @@ export const appbar = (
           gap: theme.spacing.space2,
           alignItems: "center",
           marginLeft: large ? "12px" : 0,
+          flexWrap: "wrap",
         }),
         bottomRowFirst
       ),
@@ -197,7 +207,7 @@ export const appbar = (
   return div(
     sx({
       display: "flex",
-      height: getAppbarHeight(largex, middle),
+      height: getAppbarHeight(largex, middle, small),
       alignItems: !breakpoint.md ? "normal" : "center",
       justifyContent: !breakpoint.md ? "center" : "inherit",
       border: `1px solid ${theme.color.primary}`,
