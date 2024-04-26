@@ -2,9 +2,9 @@ import "../../styles/base.css";
 import "./index.css";
 import { defineBuiltinElement, sx, registerServiceWorker } from "@eofol/eofol";
 import { initialState } from "../../data";
-import { div, setTheme } from "../../extract";
+import { div, setTheme, theme } from "../../extract";
 import { updateScale } from "../../sheen";
-import { cyanTheme, initStyles } from "../../styles";
+import { defaultTheme, initStyles, themes } from "../../styles";
 import { mapKeyboardKeys } from "../../synth";
 import { FiddleStateImpl } from "../../types";
 import {
@@ -17,8 +17,18 @@ import {
   analyzeTab,
 } from "./views";
 
-setTheme(cyanTheme);
-initStyles();
+const storage = localStorage.getItem("scale-fiddle-data");
+
+const initialTheme = storage
+  ? (
+      themes.find((t) => t.id === JSON.parse(storage).options.theme) ??
+      defaultTheme
+    ).theme
+  : defaultTheme;
+
+setTheme(initialTheme);
+
+initStyles(theme);
 
 defineBuiltinElement<FiddleStateImpl>({
   tagName: "fiddle-keyboard",

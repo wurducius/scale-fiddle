@@ -1,7 +1,21 @@
-import { createStyle } from "@eofol/eofol";
-import { theme } from "../extract";
+import { Theme } from "../extract";
 
-export const initStyles = () => {
+const createStyle = (rule: string) => {
+  const element = document.getElementById("theme-styles");
+  if (element) {
+    element.innerHTML = element.innerHTML + " " + rule;
+  }
+};
+
+export const initStyles = (theme: Theme) => {
+  const styleElement = document.getElementById("theme-styles");
+  if (styleElement) {
+    document.head.removeChild(styleElement);
+  }
+  const nextStyleElement = document.createElement("style");
+  nextStyleElement.id = "theme-styles";
+  document.head.insertAdjacentElement("afterbegin", nextStyleElement);
+
   createStyle(`#eofol { color: ${theme.color.font}; }`);
   createStyle(`a { color: ${theme.color.secondaryDark}}`);
   createStyle(`body { background-color: ${theme.color.background}; }`);

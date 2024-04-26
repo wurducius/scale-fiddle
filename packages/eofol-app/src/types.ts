@@ -129,6 +129,7 @@ export type FiddleStateImpl = {
     endGain: number;
     endTime: number;
     keyLabel: KeyLabel;
+    theme: string;
   };
 };
 

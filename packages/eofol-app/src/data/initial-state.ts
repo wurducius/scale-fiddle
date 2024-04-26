@@ -130,5 +130,6 @@ export const initialState = {
     endGain: 0.001,
     endTime: 0.001,
     keyLabel: "freq",
+    theme: "dark-cyan",
   },
 } as FiddleStateImpl;

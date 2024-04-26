@@ -1,28 +1,17 @@
 import { defaultTheme } from "./default-theme";
 
-function isObject(item: any) {
-  return item && typeof item === "object" && !Array.isArray(item);
-}
-
-function mergeDeep(target: any, ...sources: any) {
-  if (!sources.length) return target;
-  const source = sources.shift();
-
-  if (isObject(target) && isObject(source)) {
-    for (const key in source) {
-      if (isObject(source[key])) {
-        if (!target[key]) Object.assign(target, { [key]: {} });
-        mergeDeep(target[key], source[key]);
-      } else {
-        Object.assign(target, { [key]: source[key] });
-      }
-    }
+export function mergeDeep(target: any, source: any) {
+  const result = { ...target, ...source };
+  for (const key of Object.keys(result)) {
+    result[key] =
+      typeof target[key] == "object" && typeof source[key] == "object"
+        ? mergeDeep(target[key], source[key])
+        : structuredClone(result[key]);
   }
-
-  return mergeDeep(target, ...sources);
+  return result;
 }
 
-type Theme = {
+export type Theme = {
   color: Record<string, string>;
   typography: Record<string, { fontSize: string }>;
   spacing: Record<string, string>;
@@ -36,6 +25,6 @@ const createTheme = (styles: Partial<Theme>) => mergeDeep(defaultTheme, styles);
 
 export let theme: Theme = createTheme({});
 
-export const setTheme = (styles: any) => {
+export const setTheme = (styles: Partial<Theme>) => {
   theme = createTheme(styles);
 };

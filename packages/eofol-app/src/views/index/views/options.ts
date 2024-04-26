@@ -1,9 +1,10 @@
 import { input, select } from "@eofol/eofol-simple";
-import { sx } from "@eofol/eofol";
+import { forceRerender, sx } from "@eofol/eofol";
 import { keyLabelOptions } from "../../../data";
-import { div, flex, breakpoint, h2, p } from "../../../extract";
+import { div, flex, breakpoint, h2, p, setTheme } from "../../../extract";
 import { FiddleState } from "../../../types";
 import { theme } from "../../../extract";
+import { defaultTheme, initStyles, themes } from "../../../styles";
 
 export const optionsTab = (
   state: FiddleState,
@@ -166,6 +167,30 @@ export const optionsTab = (
                   ...state,
                   // @ts-ignore
                   options: { ...state.options, keyLabel: nextVal },
+                });
+              },
+            }),
+          ]),
+          div(sx({ flex: 1 }), [
+            h2("Theme"),
+            select({
+              name: "select-theme",
+              options: themes,
+              // @ts-ignore
+              value: state.options.theme,
+              onChange: (nextVal) => {
+                const nextTheme = (
+                  themes.find((theme) => theme.id === nextVal) ?? defaultTheme
+                ).theme;
+
+                setTheme(nextTheme);
+                initStyles(theme);
+
+                // @ts-ignore
+                setState({
+                  ...state,
+                  // @ts-ignore
+                  options: { ...state.options, theme: nextVal },
                 });
               },
             }),
