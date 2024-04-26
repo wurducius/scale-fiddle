@@ -19,7 +19,7 @@ export const scaleTuning = (
       flex({ alignItems: "center", justifyContent: "center" }, [
         p("Base frequency Hz"),
         div(
-          sx({ width: "64px", margin: "0 0 0 auto" }),
+          sx({ width: "64px", margin: "0 0 0 auto", display: "flex" }),
           input({
             name: "input-basefreq",
             value: tuning.baseFreq,
@@ -41,7 +41,7 @@ export const scaleTuning = (
       flex({ alignItems: "center", justifyContent: "center" }, [
         p("Period interval ratio"),
         div(
-          sx({ width: "64px", margin: "0 0 0 auto" }),
+          sx({ width: "64px", margin: "0 0 0 auto", display: "flex" }),
           input({
             name: "input-period",
             value: tuning.period,
@@ -63,7 +63,7 @@ export const scaleTuning = (
       flex({ alignItems: "center", justifyContent: "center" }, [
         p("Number of keys up"),
         div(
-          sx({ width: "64px", margin: "0 0 0 auto" }),
+          sx({ width: "64px", margin: "0 0 0 auto", display: "flex" }),
           input({
             name: "input-keys-up",
             value: tuning.keysUp,
@@ -85,7 +85,7 @@ export const scaleTuning = (
       flex({ alignItems: "center", justifyContent: "center" }, [
         p("Number of keys down"),
         div(
-          sx({ width: "64px", margin: "0 0 0 auto" }),
+          sx({ width: "64px", margin: "0 0 0 auto", display: "flex" }),
           input({
             name: "input-keys-down",
             value: tuning.keysDown,

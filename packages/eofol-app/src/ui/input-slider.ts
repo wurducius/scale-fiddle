@@ -1,8 +1,6 @@
 import { input } from "@eofol/eofol-simple";
-import { createStyle, sx, cx, createElement } from "@eofol/eofol";
+import { sx, cx, createElement } from "@eofol/eofol";
 import { div, theme } from "../extract";
-
-createStyle('input[type="range"].lg { max-width: 500px; width: 100%; }');
 
 export const sliderInput = (
   label: string,

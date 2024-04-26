@@ -81,7 +81,6 @@ const testTheme = mergeDeep(commonTheme, {
 export const themes = [
   { theme: cyanTheme, id: "dark-cyan", title: "Cyan dark" },
   { theme: fuchsiaTheme, id: "dark-fuchsia", title: "Fuchsia dark" },
-  { theme: testTheme, id: "dark-test", title: "Test" },
 ];
 
 export const defaultTheme = cyanTheme;

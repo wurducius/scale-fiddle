@@ -5,8 +5,8 @@ import { setTotalGain } from "../../../synth";
 import { FiddleState } from "../../../types";
 import { sliderInput } from "../../../ui";
 import { envelopeCurveOptions, envelopeTypeOptions } from "../../../data";
-import { waveformSelect } from "./synth-view/waveform-select";
 import { theme } from "../../../extract";
+import { waveformSelect } from "./synth-view";
 
 const envelopeCurveSelect = (
   value: string,

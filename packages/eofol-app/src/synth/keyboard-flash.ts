@@ -1,4 +1,4 @@
-import { sx, createStyle, sy } from "@eofol/eofol";
+import { sx, sy } from "@eofol/eofol";
 import { theme } from "../extract";
 
 export const keyColorOctaveStyle = sy(
@@ -28,10 +28,6 @@ export const keyActiveHoverStyle = sx(
     backgroundColor: theme.color.backgroundElevation,
   },
   "hover"
-);
-
-createStyle(
-  `@media (hover: hover) and (pointer: fine) { .${keyActiveHoverStyle}:hover { border: 2px solid ${theme.color.secondaryLighter}; background-color: ${theme.color.secondaryLighter}; } }`
 );
 
 export const flashKeyDownByValue = (freq: string) => {
