@@ -1,11 +1,9 @@
-import { modal, input, select } from "@eofol/eofol-simple";
-import { sx, e } from "@eofol/eofol";
+import { modal, input } from "@eofol/eofol-simple";
+import { sx, e, createStore, setStore } from "@eofol/eofol";
 import { scalePresets, scalePresetsFlat } from "../../../../data";
 import { div, textarea, theme } from "../../../../extract";
 import {
   updateScale,
-  linearScale,
-  normalizePeriod,
   createEdo,
   createMOS,
   createLinear,
@@ -15,6 +13,10 @@ import {
 } from "../../../../sheen";
 import { FiddleState, FiddleStateImpl } from "../../../../types";
 import { defineSelectSearch } from "../../../../ui";
+
+createStore("select-search-preset", {
+  onChange: undefined,
+});
 
 defineSelectSearch({ options: scalePresets });
 
@@ -126,6 +128,25 @@ export const formModal = (
 ) => {
   const modalImpl = generalFormModal(state, setState);
 
+  setStore("select-search-preset", {
+    // @ts-ignore
+    onChange: (nextVal) => {
+      // @ts-ignore
+      setState({
+        ...state,
+        form: {
+          // @ts-ignore
+          ...state.form,
+          preset: {
+            // @ts-ignore
+            ...state.form.preset,
+            id: nextVal,
+          },
+        },
+      });
+    },
+  });
+
   return [
     modalImpl(
       "modal-edo",
@@ -216,28 +237,6 @@ export const formModal = (
         }),
         [
           e("select-search"),
-          select({
-            styles: sx({ width: "450px" }),
-            options: scalePresets,
-            onChange: (nextVal) => {
-              // @ts-ignore
-              setState({
-                ...state,
-                form: {
-                  // @ts-ignore
-                  ...state.form,
-                  preset: {
-                    // @ts-ignore
-                    ...state.form.preset,
-                    id: nextVal,
-                  },
-                },
-              });
-            },
-            // @ts-ignore
-            value: state.form.preset.id,
-            name: "select-preset-scale",
-          }),
           textarea({
             name: "result-preset-scale",
             value:

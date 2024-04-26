@@ -1,6 +1,7 @@
 import { input, button } from "@eofol/eofol-simple";
-import { sy, sx, defineBuiltinElement, cx } from "@eofol/eofol";
+import { sy, sx, defineBuiltinElement, cx, selector } from "@eofol/eofol";
 import { div, flex, h2, theme } from "../extract";
+import { scalePresetsFlat } from "../data";
 
 type Option = { title: string; id: string };
 
@@ -10,6 +11,7 @@ type SelectSearchProps = {
   options: SelectOptions;
   value: string;
   defaultOptions: SelectOptions;
+  onChange: undefined | ((nextVal: string) => void);
 };
 
 type DefineSelectSearchProps = { options: SelectOptions };
@@ -43,7 +45,12 @@ sy(
   "search-select-menu-item-base"
 );
 
-const searchSelectMenuItem = (item: Option) =>
+const searchSelectMenuItem = (
+  item: Option,
+  onChange: any,
+  state: any,
+  setState: any
+) =>
   div(
     [
       "search-select-menu-item-base",
@@ -56,7 +63,19 @@ const searchSelectMenuItem = (item: Option) =>
         "hover"
       ),
     ],
-    item.title
+    item.title,
+    {},
+    {
+      onclick: () => {
+        if (onChange) {
+          onChange(item.id);
+          setState({
+            ...state,
+            value: scalePresetsFlat.find((s) => s.id === item.id)?.title,
+          });
+        }
+      },
+    }
   );
 
 sy(
@@ -72,9 +91,11 @@ sy({ display: "none", position: "absolute" }, "select-search-menu-inactive");
 sy({ display: "block", position: "absolute" }, "select-search-menu-active");
 
 const searchSelect = (
-  { options, value, defaultOptions }: SelectSearchProps,
+  { options, value, defaultOptions, onChange }: SelectSearchProps,
   setState: any
 ) => {
+  const state = { options, value, defaultOptions, onChange };
+
   const openMenu = () => {
     const menuElement = document.getElementById("select-search-menu");
     if (menuElement) {
@@ -146,6 +167,7 @@ const searchSelect = (
   searchSelectInputElement.onmouseover = () => {
     openMenu();
   };
+  searchSelectInputElement.setAttribute("spellcheck", "false");
 
   return div(
     undefined,
@@ -187,10 +209,10 @@ const searchSelect = (
                         searchSelectOptGroup(option.group),
                         // @ts-ignore
                         ...option.options.map((item) =>
-                          searchSelectMenuItem(item)
+                          searchSelectMenuItem(item, onChange, state, setState)
                         ),
                       ] // @ts-ignore
-                    : searchSelectMenuItem(option)
+                    : searchSelectMenuItem(option, onChange, state, setState)
                 )
                 .flat()
             : [
@@ -222,9 +244,11 @@ export const defineSelectSearch = ({ options }: DefineSelectSearchProps) => {
   defineBuiltinElement<SelectSearchProps>({
     tagName: "select-search",
     initialState: { options, value: "", defaultOptions: options },
+    subscribe: ["select-search-preset"],
     render: (state, setState) => {
+      const data = selector("select-search-preset");
       // @ts-ignore
-      return searchSelect(state, setState);
+      return searchSelect({ ...state, onChange: data.onChange }, setState);
     },
     effect: (state) => {
       const inputElement = document.getElementById(

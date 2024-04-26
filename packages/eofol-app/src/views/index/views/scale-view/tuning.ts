@@ -23,7 +23,7 @@ export const scaleTuning = (
           input({
             name: "input-basefreq",
             value: tuning.baseFreq,
-            classname: sx({ width: "100%" }),
+            classname: sx({ width: "100%", margin: "4px 0 4px 0" }),
             onChange: (nextVal) => {
               const val = Number(nextVal);
               if (Number.isFinite(val)) {
@@ -45,7 +45,7 @@ export const scaleTuning = (
           input({
             name: "input-period",
             value: tuning.period,
-            classname: sx({ width: "100%" }),
+            classname: sx({ width: "100%", margin: "4px 0 4px 0" }),
             onChange: (nextVal) => {
               const val = Number(nextVal);
               if (Number.isFinite(val)) {
@@ -67,7 +67,7 @@ export const scaleTuning = (
           input({
             name: "input-keys-up",
             value: tuning.keysUp,
-            classname: sx({ width: "100%" }),
+            classname: sx({ width: "100%", margin: "4px 0 4px 0" }),
             onChange: (nextVal) => {
               const val = Number(nextVal);
               if (Number.isFinite(val) && val >= 0) {
@@ -89,7 +89,7 @@ export const scaleTuning = (
           input({
             name: "input-keys-down",
             value: tuning.keysDown,
-            classname: sx({ width: "100%" }),
+            classname: sx({ width: "100%", margin: "4px 0 4px 0" }),
             onChange: (nextVal) => {
               const val = Number(nextVal);
               if (Number.isFinite(val) && val >= 0) {
@@ -104,8 +104,9 @@ export const scaleTuning = (
           })
         ),
       ]),
-      div(sx({ marginTop: theme.spacing.space1 }), [
+      div(sx({ marginTop: theme.spacing.space2 }), [
         h3("Timbre", true),
+        div(sx({ marginTop: theme.spacing.space1 })),
         waveformSelect(state, setState),
       ]),
     ]
