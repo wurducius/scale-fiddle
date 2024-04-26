@@ -1,5 +1,5 @@
 import { input } from "@eofol/eofol-simple";
-import { sx, cx, createElement } from "@eofol/eofol";
+import { cx, createElement, sy } from "@eofol/eofol";
 import { div, theme } from "../extract";
 
 export const sliderInput = (
@@ -17,40 +17,32 @@ export const sliderInput = (
   const displayId = "input-slider-value-display-" + id;
 
   return div(
-    [sx({ color: theme.color.secondary }), cx(classname)],
+    ["input-slider-base", cx(classname)],
     [
       createElement(labelTag ?? "p", undefined, label),
-      div(
-        sx({
-          display: "flex",
-          alignItems: "center",
-          gap: theme.spacing.space2,
-          justifyContent: "center",
+      div("input-slider-parent", [
+        input({
+          name: "input-slider-" + label,
+          value,
+          onChange: (nextVal) => {
+            setter(nextVal);
+          },
+          onInput: (nextVal) => {
+            const displayElement = document.getElementById(displayId);
+            if (displayElement) {
+              displayElement.innerHTML = getDisplayValue(nextVal);
+            }
+          },
+          type: "range",
+          min: 0,
+          max: 100,
+          step: 1,
+          classname: cx(large && "lg"),
         }),
-        [
-          input({
-            name: "input-slider-" + label,
-            value,
-            onChange: (nextVal) => {
-              setter(nextVal);
-            },
-            onInput: (nextVal) => {
-              const displayElement = document.getElementById(displayId);
-              if (displayElement) {
-                displayElement.innerHTML = getDisplayValue(nextVal);
-              }
-            },
-            type: "range",
-            min: 0,
-            max: 100,
-            step: 1,
-            classname: cx(large && "lg"),
-          }),
-          createElement("h3", undefined, getDisplayValue(value), {
-            id: displayId,
-          }),
-        ]
-      ),
+        createElement("h3", undefined, getDisplayValue(value), {
+          id: displayId,
+        }),
+      ]),
     ]
   );
 };

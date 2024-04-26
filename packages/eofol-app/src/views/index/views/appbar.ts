@@ -1,4 +1,4 @@
-import { cx, forceRerender, sx } from "@eofol/eofol";
+import { cx, forceRerender, sx, sy } from "@eofol/eofol";
 import { button, notify, a, select } from "@eofol/eofol-simple";
 import {
   mediaQueryMaxWidth,
@@ -21,34 +21,10 @@ export const appbarButton = (
 ) =>
   button({
     styles: cx(
-      sx({
-        fontSize: theme.typography.text.fontSize,
-        backgroundColor: isActive ? theme.color.primary : "black",
-        color: isSecondary
-          ? theme.color.secondary
-          : isActive
-          ? "black"
-          : theme.color.primary,
-        border: `1px solid ${
-          isSecondary ? theme.color.secondary : theme.color.primary
-        }`,
-        cursor: "pointer",
-        fontWeight: 500,
-      }),
-      sx(
-        {
-          backgroundColor: isSecondary
-            ? theme.color.secondaryDark
-            : theme.color.primaryDarker,
-          color: "#000000",
-          border: `1px solid ${
-            isSecondary
-              ? theme.color.secondaryLighter
-              : theme.color.primaryLighter
-          }`,
-        },
-        "hover"
-      )
+      "button-base",
+      `button-${isSecondary ? "secondary" : "primary"}${
+        isActive ? "-active" : ""
+      }`
     ),
     children: label,
     onClick: onclick,

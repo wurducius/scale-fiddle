@@ -16,8 +16,6 @@ const typographyNoGuttersStyle = sy(
   "typography-base-no-gutters"
 );
 
-const typographyPBoldStyle = sy({ fontWeight: 700 }, "typography-base-bold");
-
 export const p = (content: TypographyNodeContent, noGutters?: boolean) =>
   pImpl({
     children: content,

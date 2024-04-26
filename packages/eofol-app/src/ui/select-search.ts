@@ -86,9 +86,20 @@ sy(
 const searchSelectOptGroup = (group: string) =>
   div("select-search-opt-group", group);
 
-sy({ display: "none", position: "absolute" }, "select-search-menu-inactive");
+sy({ position: "absolute" }, "select-search-menu-base");
 
-sy({ display: "block", position: "absolute" }, "select-search-menu-active");
+sy({ display: "none" }, "select-search-menu-inactive");
+
+sy({ display: "block" }, "select-search-menu-active");
+
+sy(
+  {
+    backgroundColor: "#121212",
+    height: "30px",
+    width: "400px",
+  },
+  "select-search-input-base"
+);
 
 const searchSelect = (
   { options, value, defaultOptions, onChange }: SelectSearchProps,
@@ -99,14 +110,16 @@ const searchSelect = (
   const openMenu = () => {
     const menuElement = document.getElementById("select-search-menu");
     if (menuElement) {
-      menuElement.className = "select-search-menu-active";
+      menuElement.className =
+        "select-search-menu-base select-search-menu-active";
     }
   };
 
   const closeMenu = () => {
     const menuElement = document.getElementById("select-search-menu");
     if (menuElement) {
-      menuElement.className = "select-search-menu-inactive";
+      menuElement.className =
+        "select-search-menu-base select-search-menu-inactive";
     }
   };
 
@@ -158,11 +171,7 @@ const searchSelect = (
       filterOptions(nextVal);
     },
     onChange: () => {},
-    classname: sx({
-      backgroundColor: "#121212",
-      height: "30px",
-      width: "400px",
-    }),
+    classname: "select-search-input-base",
   });
   searchSelectInputElement.onmouseover = () => {
     openMenu();
@@ -197,7 +206,7 @@ const searchSelect = (
         }),
       ]),
       div(
-        "select-search-menu-inactive",
+        "select-search-menu-base select-search-menu-inactive",
         searchSelectMenu(
           options.length > 0
             ? options

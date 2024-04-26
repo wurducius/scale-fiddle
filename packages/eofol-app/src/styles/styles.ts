@@ -1,4 +1,4 @@
-import { Theme, clearStyle, createStyle } from "../extract";
+import { Theme, clearStyle, createStyle, createStyleObj } from "../extract";
 import { keyActiveHoverStyle } from "../synth";
 
 export const initStyles = (theme: Theme) => {
@@ -62,4 +62,46 @@ export const initStyles = (theme: Theme) => {
   createStyle(`.key-color-octave { color: ${theme.color.secondary}; }`);
 
   createStyle(`.key-color-nonoctave { color: ${theme.color.primary}; }`);
+
+  const getButtonStyle = (isSecondary: boolean, isActive: boolean) => ({
+    fontSize: theme.typography.text.fontSize,
+    backgroundColor: isActive ? theme.color.primary : "black",
+    color: isSecondary
+      ? theme.color.secondary
+      : isActive
+      ? "black"
+      : theme.color.primary,
+    border: `1px solid ${
+      isSecondary ? theme.color.secondary : theme.color.primary
+    }`,
+  });
+
+  createStyleObj(getButtonStyle(false, false), ".button-primary");
+  createStyleObj(getButtonStyle(false, true), ".button-primary-active");
+  createStyleObj(getButtonStyle(true, false), ".button-secondary");
+  createStyleObj(getButtonStyle(true, true), ".button-secondary-active");
+
+  const getButtonHoverStyle = (isSecondary: boolean) => ({
+    backgroundColor: isSecondary
+      ? theme.color.secondaryDark
+      : theme.color.primaryDarker,
+    color: "#000000",
+    border: `1px solid ${
+      isSecondary ? theme.color.secondaryLighter : theme.color.primaryLighter
+    }`,
+  });
+
+  createStyleObj(getButtonHoverStyle(false), ".button-primary:hover");
+  createStyleObj(getButtonHoverStyle(true), ".button-secondary:hover");
+
+  createStyleObj({ color: theme.color.secondary }, ".input-slider-base");
+  createStyleObj(
+    {
+      display: "flex",
+      alignItems: "center",
+      gap: theme.spacing.space2,
+      justifyContent: "center",
+    },
+    "input-slider-parent"
+  );
 };
