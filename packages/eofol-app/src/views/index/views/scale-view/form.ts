@@ -10,6 +10,7 @@ import {
   createMeantone,
   createHarmonicSeries,
   createJust,
+  createRatioChord,
 } from "../../../../sheen";
 import { FiddleState, FiddleStateImpl } from "../../../../types";
 import { defineSelectSearch } from "../../../../ui";
@@ -228,7 +229,7 @@ export const formModal = (
           id: "chord",
         },
       ],
-      () => ""
+      ({ chord }) => createRatioChord(state, chord)
     ),
     modal(
       "modal-preset",

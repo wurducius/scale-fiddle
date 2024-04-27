@@ -76,7 +76,7 @@ export const changeScaleMenu = (
             dropdownItem("Meantone temperament", "meantone"),
             dropdownItem("Harmonic series", "harm"),
             dropdownItem("Just temperament", "just"),
-            dropdownItem("Ratio chord", "ratiochord", true),
+            dropdownItem("Ratio chord", "ratiochord"),
             dropdownItem("Tempered limit", "limit", true),
             dropdownItem("Higher rank temperament", "higher", true),
             dropdownItem("Euler-Fokker genus form", "eulerfokker", true),

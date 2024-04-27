@@ -95,3 +95,26 @@ export const createJust = (state: FiddleState, T: number, limit: number) => {
       .join("\n")
   );
 };
+
+export const createRatioChord = (state: FiddleState, chord: string) => {
+  const points = chord.split(":");
+  const result = [];
+  const first = Number(points[0]);
+  for (let i = 1; i < points.length; i++) {
+    result[i - 1] = Number(points[i]) / first;
+  }
+  result[points.length - 1] = first;
+  return result
+    .map(
+      (tone) =>
+        1200 *
+        Math.log2(
+          // @ts-ignore
+          normalizePeriod(tone, state.tuning.period)
+        )
+    )
+    .sort((a, b) => a - b) // @ts-ignore
+    .map((tone) => tone.toFixed(state.options.decimalDigitsCent))
+    .filter(onlyUnique)
+    .join("\n");
+};
