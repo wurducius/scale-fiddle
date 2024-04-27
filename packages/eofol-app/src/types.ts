@@ -94,7 +94,8 @@ export type FiddleStateImpl = {
     };
     temper: {
       open: boolean;
-      commas: string[];
+      commas: string;
+      epsilon: number;
     };
   };
   recompute: boolean | undefined;

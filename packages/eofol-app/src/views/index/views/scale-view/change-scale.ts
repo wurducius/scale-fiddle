@@ -92,7 +92,7 @@ export const changeScaleMenu = (
             dropdownItem("Sort", "sort"),
             dropdownItem("Stretch", "stretch"),
             dropdownItem("Approximate by equal", "approxequal"),
-            dropdownItem("Temper", "temper", true),
+            dropdownItem("Temper", "temper"),
           ],
           classname: sx({ flex: 1 }),
         })

@@ -95,7 +95,8 @@ export const initialState = {
     },
     temper: {
       open: false,
-      commas: ["81/80"],
+      commas: "81/80, 5311441/524288",
+      epsilon: 0.0001,
     },
   },
   recompute: false,

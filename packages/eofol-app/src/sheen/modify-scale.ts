@@ -1,5 +1,7 @@
 import { FiddleState } from "../types";
 import { mod, trimWhitespace } from "../util";
+import { parseScala } from "./scala";
+import { normalizePeriod } from "./sheen";
 import { initModify, outputScale } from "./sheen-util";
 
 export const modifyTranspose = (state: FiddleState, t: number) => {
@@ -93,6 +95,48 @@ export const modifyApproxEqual = (state: FiddleState, N: number) => {
     }
     return deltaIndex != undefined ? equal[deltaIndex] : 0;
   });
+
+  return outputScale(state, result);
+};
+
+export const modifyTemper = (
+  state: FiddleState,
+  commas: string,
+  epsilon: number
+) => {
+  const centsScale = initModify(state);
+
+  const parsedCommas = commas
+    .split(",")
+    .map(trimWhitespace)
+    // @ts-ignore
+    .map(parseScala(state)) // @ts-ignore
+    .map((tone) => normalizePeriod(tone, state.tuning.period));
+
+  const result: number[] = [];
+  for (let i = 0; i < centsScale.length; i++) {
+    const first = centsScale[i];
+    const second = centsScale[mod(i + 1, centsScale.length)];
+    const deltaForward = Math.abs(second - first);
+    const deltaBackward = Math.abs(1200 - second + first);
+
+    let isTemperedOut = undefined;
+    for (let j = 0; j < parsedCommas.length; j++) {
+      if (
+        Math.abs(deltaForward - parsedCommas[j]) < epsilon ||
+        Math.abs(deltaBackward - parsedCommas[j]) < epsilon
+      ) {
+        isTemperedOut = parsedCommas[j];
+        break;
+      }
+    }
+
+    if (isTemperedOut) {
+      result.push(first - isTemperedOut);
+    } else {
+      result.push(first);
+    }
+  }
 
   return outputScale(state, result);
 };

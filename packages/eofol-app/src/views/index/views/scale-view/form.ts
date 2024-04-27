@@ -19,6 +19,7 @@ import {
   modifySort,
   modifyStretch,
   modifyApproxEqual,
+  modifyTemper,
 } from "../../../../sheen";
 import { FiddleState, FiddleStateImpl } from "../../../../types";
 import { defineSelectSearch } from "../../../../ui";
@@ -326,6 +327,26 @@ export const formModal = (
         },
       ],
       ({ N }) => modifyApproxEqual(state, N)
+    ),
+    modalImpl(
+      "modal-temper",
+      "Temper",
+      "temper",
+      [
+        {
+          title: "Commas to temper out",
+          type: "string",
+          innerFormName: "commas",
+          id: "commas",
+        },
+        {
+          title: "Epsilon comparison tolerance",
+          type: "number",
+          innerFormName: "epsilon",
+          id: "epsilon",
+        },
+      ],
+      ({ commas, epsilon }) => modifyTemper(state, commas, epsilon)
     ),
     modal(
       "modal-preset",
