@@ -11,6 +11,7 @@ import {
   createHarmonicSeries,
   createJust,
   createRatioChord,
+  modifyTranspose,
 } from "../../../../sheen";
 import { FiddleState, FiddleStateImpl } from "../../../../types";
 import { defineSelectSearch } from "../../../../ui";
@@ -230,6 +231,20 @@ export const formModal = (
         },
       ],
       ({ chord }) => createRatioChord(state, chord)
+    ),
+    modalImpl(
+      "modal-transpose",
+      "Transpose",
+      "transpose",
+      [
+        {
+          title: "Offset cents",
+          type: "string",
+          innerFormName: "t",
+          id: "t",
+        },
+      ],
+      ({ t }) => modifyTranspose(state, t)
     ),
     modal(
       "modal-preset",

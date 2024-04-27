@@ -64,31 +64,29 @@ export type FiddleStateImpl = {
     };
     transpose: {
       open: boolean;
-      N: number;
+      t: number;
     };
     mode: {
       open: boolean;
-      N: number;
+      index: number;
     };
     subset: {
       open: boolean;
-      N: number;
+      subscale: number[];
     };
     multiply: {
       open: boolean;
-      N: number;
+      multiplier: number;
     };
     reverse: {
       open: boolean;
-      N: number;
     };
     sort: {
       open: boolean;
-      N: number;
     };
     stretch: {
       open: boolean;
-      N: number;
+      multiplier: number;
     };
     approxequal: {
       open: boolean;
@@ -96,7 +94,7 @@ export type FiddleStateImpl = {
     };
     temper: {
       open: boolean;
-      N: number;
+      commas: string[];
     };
   };
   recompute: boolean | undefined;

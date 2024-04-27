@@ -91,7 +91,7 @@ export const changeScaleMenu = (
           id: "dropdown-modify-scale-content",
           title: "Modify scale",
           children: [
-            dropdownItem("Transpose", "transpose", true),
+            dropdownItem("Transpose", "transpose"),
             dropdownItem("Mode", "mode", true),
             dropdownItem("Subset", "subset", true),
             dropdownItem("Multiply", "multiply", true),

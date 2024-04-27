@@ -65,31 +65,29 @@ export const initialState = {
     },
     transpose: {
       open: false,
-      N: 12,
+      t: 100,
     },
     mode: {
       open: false,
-      N: 12,
+      index: 5,
     },
     subset: {
       open: false,
-      N: 12,
+      subscale: [2, 2, 1, 2, 1],
     },
     multiply: {
       open: false,
-      N: 12,
+      multiplier: 700,
     },
     reverse: {
       open: false,
-      N: 12,
     },
     sort: {
       open: false,
-      N: 12,
     },
     stretch: {
       open: false,
-      N: 12,
+      multiplier: 1.1,
     },
     approxequal: {
       open: false,
@@ -97,7 +95,7 @@ export const initialState = {
     },
     temper: {
       open: false,
-      N: 12,
+      commas: ["81/80"],
     },
   },
   recompute: false,
