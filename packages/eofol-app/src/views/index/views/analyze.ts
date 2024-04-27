@@ -1,8 +1,10 @@
 import { FiddleState } from "../../../types";
-import { div, h3, h2, p } from "../../../extract";
+import { div, h2, p, h1 } from "../../../extract";
 import { parseScala } from "../../../sheen";
 import { createElement, getTheme, sx } from "@eofol/eofol";
 import { p as pImpl, unorderedList } from "@eofol/eofol-simple";
+
+const INTERVAL_COMPARE_EPSILON = 0.15;
 
 const pSecondary = (title: string) => {
   const theme = getTheme();
@@ -19,7 +21,7 @@ const propertyLabel = (property: boolean, title: string) => {
   const theme = getTheme();
 
   return property
-    ? [div(sx({ marginTop: theme.spacing.space4 }), pSecondary(title))]
+    ? [div(sx({ marginTop: theme.spacing.space2 }), pSecondary(title))]
     : [];
 };
 
@@ -29,6 +31,7 @@ const intervalMatrix = (data: IntervalVectorData) => {
   const tableStyle = sx({
     border: `1px solid grey`,
     minWidth: "80px",
+    height: "40px",
   });
 
   return createElement(
@@ -64,6 +67,70 @@ const intervalMatrix = (data: IntervalVectorData) => {
   );
 };
 
+const intervalBasicView = (intervalVectorData: IntervalVectorData) => {
+  return [
+    p(`Scale length: ${intervalVectorData.scaleLength}`),
+    p(`Total interval count: ${intervalVectorData.intervalMatrix.length}`),
+    p(`Distinct interval count: ${intervalVectorData.intervalTypes.length}`),
+    ...propertyLabel(
+      intervalVectorData.isPeriodic && !intervalVectorData.isMaximallyPeriodic,
+      `Scale is periodic with period length ${intervalVectorData.period} (period is equal to scale length)`
+    ),
+    ...propertyLabel(
+      intervalVectorData.isMaximallyPeriodic,
+      "Scale is maximally periodic (period length is 1)"
+    ),
+  ];
+};
+
+const intervalVectorView = (intervalVectorData: IntervalVectorData) => {
+  return [
+    h2("Interval types"),
+    unorderedList({
+      type: "none",
+      spacing: 4,
+      paddingInline: "0",
+      data: intervalVectorData.intervalTypes,
+      render: (interval) => p(`${interval.interval} (${interval.count}x)`),
+    }),
+    ...propertyLabel(
+      intervalVectorData.isDeepScale,
+      "Deep scale condition satisfied (multiplicities of interval types are unique)"
+    ),
+  ];
+};
+
+const intervalSpectrumView = (intervalVectorData: IntervalVectorData) => {
+  return [
+    h2("Interval spectrum"),
+    unorderedList({
+      type: "none",
+      spacing: 4,
+      paddingInline: "0",
+      data: intervalVectorData.intervalSpectrum,
+      render: (spectrum, i) => [
+        // @ts-ignore
+        p(`Form ${i + 1} (size ${spectrum.length}):`),
+        div(
+          sx({ margin: "8px 0 8px 0" }),
+          spectrum.map((s) => p(s))
+        ),
+      ],
+    }),
+    ...propertyLabel(
+      intervalVectorData.isMyhillsProperty,
+      "Myhill's property condition satisfied (all spectrum components have size 2 or less)"
+    ),
+  ];
+};
+
+const intervalMatrixView = (intervalVectorData: IntervalVectorData) => {
+  return div(sx({ marginTop: "64px" }), [
+    h2("Interval matrix"),
+    intervalMatrix(intervalVectorData),
+  ]);
+};
+
 type IntervalVectorData = {
   intervalVectorLength: number;
   intervalMatrix: { i: number; j: number; interval: string }[];
@@ -73,46 +140,41 @@ type IntervalVectorData = {
   isDeepScale: boolean;
   intervalSpectrum: string[][];
   isMyhillsProperty: boolean;
+  isPeriodic: boolean;
+  isMaximallyPeriodic: boolean;
+  period: number;
 };
+
 const intervalVector = (
   state: FiddleState,
   intervalVectorData: IntervalVectorData
 ) => {
-  return div(undefined, [
-    h2("Interval vector"),
-    p(`Scale length: ${intervalVectorData.scaleLength}`),
-    p(`Total interval count: ${intervalVectorData.intervalMatrix.length}`),
-    p(`Distinct interval count: ${intervalVectorData.intervalTypes.length}`),
-    h3("Interval types"),
-    unorderedList({
-      type: "none",
-      spacing: 4,
-      data: intervalVectorData.intervalTypes,
-      render: (interval) => p(`${interval.interval} (${interval.count}x)`),
-    }),
-    ...propertyLabel(
-      intervalVectorData.isDeepScale,
-      "Deep scale condition satisfied"
-    ),
-    h3("Interval spectrum"),
-    unorderedList({
-      type: "none",
-      spacing: 4,
-      data: intervalVectorData.intervalSpectrum,
-      render: (spectrum, i) => [
-        // @ts-ignore
-        p(`Form ${i + 1} (size ${spectrum.length}):`),
-        ...spectrum.map((s) => p(s)),
-      ],
-    }),
-    ...propertyLabel(
-      intervalVectorData.isMyhillsProperty,
-      "Myhill's property condition satisfied"
-    ),
-    h3("Interval matrix"),
-    intervalMatrix(intervalVectorData),
-    div(sx({ height: "64px" }), ""),
-  ]);
+  return div(
+    sx({ display: "flex", flexDirection: "column", justifyContent: "center" }),
+    [
+      h1("Interval vector"),
+      ...intervalBasicView(intervalVectorData),
+      div(
+        sx({
+          flexDirection: "row",
+          display: "flex",
+          justifyContent: "center",
+        }),
+        [
+          div(
+            sx({ display: "block", flex: 1 }),
+            intervalVectorView(intervalVectorData)
+          ),
+          div(
+            sx({ display: "block", flex: 1 }),
+            intervalSpectrumView(intervalVectorData)
+          ),
+        ]
+      ),
+      intervalMatrixView(intervalVectorData),
+      div(sx({ height: "64px" }), ""),
+    ]
+  );
 };
 
 export const analyzeTab = (
@@ -155,7 +217,7 @@ export const analyzeTab = (
       // @ts-ignore
       const thisIntervalIndex = acc.findIndex(
         // @ts-ignore
-        (x) => x.interval === next.interval
+        (x) => Math.abs(x.interval - next.interval) < INTERVAL_COMPARE_EPSILON
       );
       if (thisIntervalIndex != -1) {
         const result = acc;
@@ -197,11 +259,23 @@ export const analyzeTab = (
       return acc;
     }
 
+    const includesApprox = (list: number[], itemToCompare: number) => {
+      let isIncluded = false;
+      for (let i = 0; i < list.length; i++) {
+        const listItem = list[i];
+        if (Math.abs(listItem - itemToCompare) < INTERVAL_COMPARE_EPSILON) {
+          isIncluded = true;
+          break;
+        }
+      }
+      return isIncluded;
+    };
+
     const nextAcc = acc;
     const last = nextAcc[index - 1];
     if (Array.isArray(last)) {
       // @ts-ignore
-      if (!last.includes(next.interval)) {
+      if (!includesApprox(last, next.interval)) {
         // @ts-ignore
         last.push(next.interval);
 
@@ -225,6 +299,20 @@ export const analyzeTab = (
     true
   );
 
+  let isMaximallyPeriodic = true;
+  for (let i = 0; i < intervalSpectrum.length; i++) {
+    // @ts-ignore
+    if (intervalSpectrum[i].length > 1) {
+      isMaximallyPeriodic = false;
+      break;
+    }
+  }
+
+  // @TODO
+  const period = scaleLength;
+
+  const isPeriodic = scaleLength > period;
+
   const intervalVectorData = {
     scaleLength,
     scaleValues,
@@ -234,6 +322,9 @@ export const analyzeTab = (
     isDeepScale,
     intervalSpectrum,
     isMyhillsProperty,
+    isPeriodic,
+    isMaximallyPeriodic,
+    period,
   };
 
   return [div(undefined, [intervalVector(state, intervalVectorData)])];
