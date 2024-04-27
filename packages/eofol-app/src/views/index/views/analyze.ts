@@ -1,7 +1,7 @@
 import { FiddleState } from "../../../types";
 import { div, h2, p, h1 } from "../../../extract";
 import { parseScala } from "../../../sheen";
-import { createElement, getTheme, sx } from "@eofol/eofol";
+import { createElement, getBreakpoint, getTheme, sx } from "@eofol/eofol";
 import { p as pImpl, unorderedList } from "@eofol/eofol-simple";
 
 const INTERVAL_COMPARE_EPSILON = 0.15;
@@ -30,13 +30,18 @@ const intervalMatrix = (data: IntervalVectorData) => {
 
   const tableStyle = sx({
     border: `1px solid grey`,
-    minWidth: "80px",
+    width: "80px",
     height: "40px",
   });
 
   return createElement(
     "table",
-    [sx({ margin: "0 auto 0 auto", borderCollapse: "collapse" })],
+    [
+      sx({
+        margin: "0 auto 0 auto",
+        borderCollapse: "collapse",
+      }),
+    ],
     [
       createElement("tr", undefined, [
         createElement("td", tableStyle, ""),
@@ -125,7 +130,7 @@ const intervalSpectrumView = (intervalVectorData: IntervalVectorData) => {
 };
 
 const intervalMatrixView = (intervalVectorData: IntervalVectorData) => {
-  return div(sx({ marginTop: "64px" }), [
+  return div(sx({ marginTop: "32px" }), [
     h2("Interval matrix"),
     intervalMatrix(intervalVectorData),
   ]);
@@ -149,6 +154,8 @@ const intervalVector = (
   state: FiddleState,
   intervalVectorData: IntervalVectorData
 ) => {
+  const breakpoint = getBreakpoint();
+
   return div(
     sx({ display: "flex", flexDirection: "column", justifyContent: "center" }),
     [
@@ -156,9 +163,9 @@ const intervalVector = (
       ...intervalBasicView(intervalVectorData),
       div(
         sx({
-          flexDirection: "row",
+          flexDirection: !breakpoint.sm ? "row" : "column",
           display: "flex",
-          justifyContent: "center",
+          margin: "32px auto 0 auto",
         }),
         [
           div(
