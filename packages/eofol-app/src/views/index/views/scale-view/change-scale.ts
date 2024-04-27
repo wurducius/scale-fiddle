@@ -8,7 +8,7 @@ import {
 } from "@eofol/eofol-simple";
 import { getTheme, sx } from "@eofol/eofol";
 import { DEFAULT_SCALE_INPUT } from "../../../../data";
-import { div, p } from "../../../../extract";
+import { div, flex, p } from "../../../../extract";
 import { FiddleState } from "../../../../types";
 
 const theme = getTheme();
@@ -61,15 +61,48 @@ export const changeScaleMenu = (
       setState({ ...state, scales: newScales });
     },
   });
-  scaleNameInputElement.setAttribute("spellcheck", "false");
 
   return [
     div(sx({ display: "flex" }), [
-      dropdown("dropdown-new-scale-content", "Create scale", sx({ flex: 1 })),
-      dropdown(
-        "dropdown-modify-scale-content",
-        "Modify scale",
-        sx({ flex: 1 })
+      flex(
+        { grow: 1 },
+        dropdown({
+          id: "dropdown-new-scale-content",
+          title: "Create scale",
+          children: [
+            dropdownItem("Equal temperament (EDO)", "edo"),
+            dropdownItem("Moment of symmetry (MOS)", "mos"),
+            dropdownItem("Rank-2 temperament (1-generated)", "linear"),
+            dropdownItem("Meantone temperament", "meantone"),
+            dropdownItem("Harmonic series", "harm"),
+            dropdownItem("Just temperament", "just"),
+            dropdownItem("Ratio chord", "ratiochord", true),
+            dropdownItem("Tempered limit", "limit", true),
+            dropdownItem("Higher rank temperament", "higher", true),
+            dropdownItem("Euler-Fokker genus form", "eulerfokker", true),
+            dropdownItem("Preset scale", "preset"),
+          ],
+          classname: sx({ flex: 1 }),
+        })
+      ),
+      flex(
+        { grow: 1 },
+        dropdown({
+          id: "dropdown-modify-scale-content",
+          title: "Modify scale",
+          children: [
+            dropdownItem("Transpose", "transpose", true),
+            dropdownItem("Mode", "mode", true),
+            dropdownItem("Subset", "subset", true),
+            dropdownItem("Multiply", "multiply", true),
+            dropdownItem("Reverse", "reverse", true),
+            dropdownItem("Sort", "sort", true),
+            dropdownItem("Stretch", "stretch", true),
+            dropdownItem("Approximate by equal", "approxequal", true),
+            dropdownItem("Temper", "temper", true),
+          ],
+          classname: sx({ flex: 1 }),
+        })
       ),
     ]),
     div(sx({ marginTop: theme.spacing.space2 }), p("Select scale")),
@@ -161,38 +194,6 @@ export const changeScaleMenu = (
             });
           },
         }),
-      ]
-    ),
-    dropdownContent(
-      "dropdown-new-scale-content",
-      sx({ top: "75px", left: "4px", width: "calc(12.5% - 4px)" }),
-      [
-        dropdownItem("Equal temperament (EDO)", "edo"),
-        dropdownItem("Moment of symmetry (MOS)", "mos"),
-        dropdownItem("Rank-2 temperament (1-generated)", "linear"),
-        dropdownItem("Meantone temperament", "meantone"),
-        dropdownItem("Harmonic series", "harm"),
-        dropdownItem("Just temperament", "just"),
-        dropdownItem("Ratio chord", "ratiochord", true),
-        dropdownItem("Tempered limit", "limit", true),
-        dropdownItem("Higher rank temperament", "higher", true),
-        dropdownItem("Euler-Fokker genus form", "eulerfokker", true),
-        dropdownItem("Preset scale", "preset"),
-      ]
-    ),
-    dropdownContent(
-      "dropdown-modify-scale-content",
-      sx({ top: "75px", left: "12.5%", width: "calc(12.5% - 4px)" }),
-      [
-        dropdownItem("Transpose", "transpose", true),
-        dropdownItem("Mode", "mode", true),
-        dropdownItem("Subset", "subset", true),
-        dropdownItem("Multiply", "multiply", true),
-        dropdownItem("Reverse", "reverse", true),
-        dropdownItem("Sort", "sort", true),
-        dropdownItem("Stretch", "stretch", true),
-        dropdownItem("Approximate by equal", "approxequal", true),
-        dropdownItem("Temper", "temper", true),
       ]
     ),
   ];

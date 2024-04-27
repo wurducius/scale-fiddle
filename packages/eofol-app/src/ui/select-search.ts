@@ -185,7 +185,6 @@ const searchSelect = (
   searchSelectInputElement.onmouseover = () => {
     openMenu();
   };
-  searchSelectInputElement.setAttribute("spellcheck", "false");
 
   return div(
     undefined,
