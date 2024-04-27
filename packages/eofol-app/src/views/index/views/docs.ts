@@ -1,5 +1,5 @@
-import { sx } from "@eofol/eofol";
-import { div, t, h1, p } from "../../../extract";
+import { sx, t } from "@eofol/eofol";
+import { div, h1, p } from "../../../extract";
 import { FiddleState } from "../../../types";
 
 export const docsTab = (

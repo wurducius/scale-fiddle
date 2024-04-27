@@ -1,6 +1,6 @@
-import { sx } from "@eofol/eofol";
+import { sx, t } from "@eofol/eofol";
 import { FiddleState } from "../../../types";
-import { p, h1, t, div } from "../../../extract";
+import { p, h1, div } from "../../../extract";
 
 export const analyzeTab = (
   state: FiddleState,

@@ -23,6 +23,13 @@ import {
   analyzeTab,
 } from "./views";
 
+/*
+initTranslation([
+  { title: "English", id: "en" },
+  { title: "Čeština", id: "cs" },
+]);
+*/
+
 const storage = localStorage.getItem("scale-fiddle-data");
 
 const initialTheme = storage

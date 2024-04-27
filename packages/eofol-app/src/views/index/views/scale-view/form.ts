@@ -1,7 +1,7 @@
-import { modal, input } from "@eofol/eofol-simple";
+import { modal, input, textarea } from "@eofol/eofol-simple";
 import { sx, e, createStore, setStore, getTheme } from "@eofol/eofol";
 import { scalePresets, scalePresetsFlat } from "../../../../data";
-import { div, textarea } from "../../../../extract";
+import { div } from "../../../../extract";
 import {
   updateScale,
   createEdo,

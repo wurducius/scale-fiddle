@@ -1,7 +1,7 @@
 import { FiddleState } from "../../../types";
-import { h1, h3, div, t } from "../../../extract";
+import { h1, h3, div } from "../../../extract";
 import { a } from "@eofol/eofol-simple";
-import { sx } from "@eofol/eofol";
+import { sx, t } from "@eofol/eofol";
 
 export const aboutTab = (
   state: FiddleState,

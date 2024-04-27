@@ -5,9 +5,13 @@ import {
   getTheme,
   mediaQueryMaxWidth,
   sx,
+  t,
+  setLanguage,
+  getLanguage,
+  getLanguages,
 } from "@eofol/eofol";
 import { button, notify, a, select } from "@eofol/eofol-simple";
-import { div, t, languages, setLanguage, language } from "../../../extract";
+import { div } from "../../../extract";
 import { panic } from "../../../synth";
 import { FiddleState } from "../../../types";
 
@@ -47,6 +51,9 @@ export const appbar = (
 ) => {
   const theme = getTheme();
   const breakpoint = getBreakpoint();
+
+  const language = getLanguage();
+  const languages = getLanguages();
 
   // @ts-ignore
   const tabIndex = state.tab;
@@ -155,9 +162,7 @@ export const appbar = (
     select({
       options: languages,
       onChange: (nextVal) => {
-        setLanguage(nextVal).then(() => {
-          forceRerender();
-        });
+        setLanguage(nextVal);
       },
       value: language,
       name: "select-language",
