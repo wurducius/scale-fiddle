@@ -72,7 +72,7 @@ export type FiddleStateImpl = {
     };
     subset: {
       open: boolean;
-      subscale: number[];
+      subscale: string;
     };
     multiply: {
       open: boolean;

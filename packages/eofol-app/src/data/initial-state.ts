@@ -73,11 +73,11 @@ export const initialState = {
     },
     subset: {
       open: false,
-      subscale: [2, 2, 1, 2, 1],
+      subscale: "2, 2, 1, 2, 1",
     },
     multiply: {
       open: false,
-      multiplier: 700,
+      multiplier: 1.1,
     },
     reverse: {
       open: false,

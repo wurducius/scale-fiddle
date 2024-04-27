@@ -12,6 +12,13 @@ import {
   createJust,
   createRatioChord,
   modifyTranspose,
+  modifyMode,
+  modifySubscale,
+  modifyMultiply,
+  modifyReverse,
+  modifySort,
+  modifyStretch,
+  modifyApproxEqual,
 } from "../../../../sheen";
 import { FiddleState, FiddleStateImpl } from "../../../../types";
 import { defineSelectSearch } from "../../../../ui";
@@ -239,12 +246,86 @@ export const formModal = (
       [
         {
           title: "Offset cents",
-          type: "string",
+          type: "number",
           innerFormName: "t",
           id: "t",
         },
       ],
       ({ t }) => modifyTranspose(state, t)
+    ),
+    modalImpl(
+      "modal-mode",
+      "Mode",
+      "mode",
+      [
+        {
+          title: "Mode",
+          type: "number",
+          innerFormName: "index",
+          id: "mode-index",
+        },
+      ],
+      ({ index }) => modifyMode(state, index)
+    ),
+    modalImpl(
+      "modal-subset",
+      "Subset",
+      "subset",
+      [
+        {
+          title: "Subset",
+          type: "string",
+          innerFormName: "subscale",
+          id: "subscale",
+        },
+      ],
+      ({ subscale }) => modifySubscale(state, subscale)
+    ),
+    modalImpl(
+      "modal-multiply",
+      "Multiply",
+      "multiply",
+      [
+        {
+          title: "Multiplier",
+          type: "number",
+          innerFormName: "multiplier",
+          id: "multiplier",
+        },
+      ],
+      ({ multiplier }) => modifyMultiply(state, multiplier)
+    ),
+    modalImpl("modal-reverse", "Reverse", "reverse", [], () =>
+      modifyReverse(state)
+    ),
+    modalImpl("modal-sort", "Sort", "sort", [], () => modifySort(state)),
+    modalImpl(
+      "modal-stretch",
+      "Stretch",
+      "stretch",
+      [
+        {
+          title: "Multiplier",
+          type: "number",
+          innerFormName: "multiplier",
+          id: "multiplier",
+        },
+      ],
+      ({ multiplier }) => modifyStretch(state, multiplier)
+    ),
+    modalImpl(
+      "modal-approxequal",
+      "Approximate by equal",
+      "approxequal",
+      [
+        {
+          title: "N",
+          type: "number",
+          innerFormName: "N",
+          id: "N",
+        },
+      ],
+      ({ N }) => modifyApproxEqual(state, N)
     ),
     modal(
       "modal-preset",
