@@ -13,6 +13,20 @@ export const initModify = (state: FiddleState) => {
   return parsedScale.map((tone: number) => 1200 * Math.log2(tone));
 };
 
+export const outputScaleCents = (state: FiddleState, result: number[]) => {
+  // @ts-ignore
+  const decimalDigitsCent = state.options.decimalDigitsCent;
+
+  return result
+    .map((tone) => {
+      const normalized = mod(tone, 1200);
+      return normalized === 0 ? 1200 : normalized;
+    })
+    .filter(onlyUnique)
+    .map((tone: number) => tone.toFixed(decimalDigitsCent))
+    .map((tone) => (tone.includes(".") ? tone : tone + "."));
+};
+
 export const outputScale = (state: FiddleState, result: number[]) => {
   // @ts-ignore
   const decimalDigitsCent = state.options.decimalDigitsCent;

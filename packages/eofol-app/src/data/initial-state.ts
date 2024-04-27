@@ -53,7 +53,11 @@ export const initialState = {
     },
     higher: {
       open: false,
-      N: 12,
+      generatorCount: 2,
+      generators: "700.,200.",
+      stepsUp: "12,3",
+      stepsDown: "0,0",
+      offset: "0.,0.",
     },
     eulerfokker: {
       open: false,

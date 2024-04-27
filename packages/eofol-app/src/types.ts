@@ -52,7 +52,11 @@ export type FiddleStateImpl = {
     };
     higher: {
       open: boolean;
-      N: number;
+      generatorCount: number;
+      generators: string;
+      stepsUp: string;
+      stepsDown: string;
+      offset: string;
     };
     eulerfokker: {
       open: boolean;

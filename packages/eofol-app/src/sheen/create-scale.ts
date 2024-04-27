@@ -1,7 +1,8 @@
 import { FiddleState } from "../types";
-import { mod } from "../util";
+import { mod, onlyUnique, trimWhitespace } from "../util";
+import { parseScala } from "./scala";
 import { normalizePeriod } from "./sheen";
-import { outputScale } from "./sheen-util";
+import { outputScale, outputScaleCents } from "./sheen-util";
 
 export const linearScale = (T: number, g: number) =>
   Array.from({ length: T }).map((item, index) => index * g);
@@ -80,4 +81,74 @@ export const createRatioChord = (state: FiddleState, chord: string) => {
       )
   );
   return outputScale(state, vals);
+};
+
+export const createHigherRankTemperament = (
+  state: FiddleState,
+  setState: any,
+  higher: any
+) => {
+  // @ts-ignore
+  const parser = parseScala(state);
+  const generators = higher.generators
+    .split(",")
+    .map(trimWhitespace)
+    .map(parser)
+    // @ts-ignore
+    .map((tone) => 1200 * Math.log2(tone));
+  const stepsUp = higher.stepsUp.split(",").map(trimWhitespace).map(Number);
+  const stepsDown = higher.stepsDown.split(",").map(trimWhitespace).map(Number);
+  const offsets = higher.offset
+    .split(",")
+    .map(trimWhitespace)
+    // @ts-ignore
+    .map(parser)
+    // @ts-ignore
+    .map((tone) => 1200 * Math.log2(tone));
+
+  let result: string[] = [];
+  for (let i = 0; i < higher.generatorCount; i++) {
+    const generatedUp = outputScaleCents(
+      state,
+      linearScale(stepsUp[i], generators[i]).map((tone) =>
+        mod(tone + offsets[i], 1200)
+      )
+    );
+    const generatedDown = outputScaleCents(
+      state,
+      linearScale(stepsDown[i], 1200 - generators[i]).map((tone) =>
+        mod(tone + offsets[i], 1200)
+      )
+    );
+
+    result = [...result, ...generatedUp, ...generatedDown];
+  }
+
+  const nextScaleInput = result
+    .filter(onlyUnique)
+    .map((tone) => Number(tone))
+    .sort((a, b) => a - b)
+    .map((tone) => tone.toFixed(1))
+    .join("\n");
+
+  // @ts-ignore
+  const nextScales = state.scales;
+  // @ts-ignore
+  nextScales[state.scaleIndex] = {
+    name: "Higher rank scale",
+    scaleInput: nextScaleInput,
+  };
+
+  // @ts-ignore
+  setState({
+    ...state,
+    recompute: true,
+    scaleInput: nextScaleInput,
+    scales: nextScales,
+    form: {
+      // @ts-ignore
+      ...state.form, // @ts-ignore
+      higher: { ...state.form.higher, open: false },
+    },
+  });
 };

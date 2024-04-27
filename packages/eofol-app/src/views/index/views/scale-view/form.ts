@@ -1,7 +1,14 @@
 import { modal, input, textarea } from "@eofol/eofol-simple";
-import { sx, e, createStore, setStore, getTheme } from "@eofol/eofol";
+import {
+  sx,
+  e,
+  createStore,
+  setStore,
+  getTheme,
+  mergeDeep,
+} from "@eofol/eofol";
 import { scalePresets, scalePresetsFlat } from "../../../../data";
-import { div } from "../../../../extract";
+import { div, p } from "../../../../extract";
 import {
   updateScale,
   createEdo,
@@ -20,9 +27,16 @@ import {
   modifyStretch,
   modifyApproxEqual,
   modifyTemper,
+  linearScale,
+  outputScaleCents,
+  parseScala,
+  createHigherRankTemperament,
 } from "../../../../sheen";
 import { FiddleState, FiddleStateImpl } from "../../../../types";
 import { defineSelectSearch } from "../../../../ui";
+import { mod, onlyUnique, trimWhitespace } from "../../../../util";
+
+const HIGHER_RANK_TEMPERAMENT_MAX_GENERATOR_COUNT = 100;
 
 createStore("select-search-preset", {
   onChange: undefined,
@@ -349,6 +363,152 @@ export const formModal = (
       ({ commas, epsilon }) => modifyTemper(state, commas, epsilon)
     ),
     modal(
+      "modal-higher-rank-temperament",
+      "Higher rank temperament",
+      div(
+        sx({
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }),
+        div(sx({}), [
+          ...[
+            div(
+              sx({ fontSize: theme.typography.heading.fontSize }),
+              "Generator count"
+            ),
+            input({
+              name: "input-form-higher-generator-count",
+              // @ts-ignore
+              value: state.form.higher.generatorCount,
+              onChange: (nextVal) => {
+                const val = Number(nextVal);
+                // @ts-ignore
+                setState(
+                  mergeDeep(state, {
+                    form: {
+                      higher: {
+                        generatorCount: val,
+                      },
+                    },
+                  })
+                );
+              },
+            }),
+          ],
+          // @ts-ignore
+          ...(state.form.higher.generatorCount > 0 &&
+          // @ts-ignore
+          state.form.higher.generatorCount <=
+            HIGHER_RANK_TEMPERAMENT_MAX_GENERATOR_COUNT &&
+          // @ts-ignore
+          Number.isFinite(state.form.higher.generatorCount) &&
+          // @ts-ignore
+          Number.isInteger(state.form.higher.generatorCount)
+            ? [
+                p("Generators"),
+                input({
+                  // @ts-ignore
+                  value: state.form.higher.generators,
+                  name: "input-form-higher-generators",
+                  onChange: (nextVal) => {
+                    // @ts-ignore
+                    setState(
+                      mergeDeep(state, {
+                        form: {
+                          higher: {
+                            generators: nextVal,
+                          },
+                        },
+                      })
+                    );
+                  },
+                }),
+                p("Steps up"),
+                input({
+                  // @ts-ignore
+                  value: state.form.higher.stepsUp,
+                  name: "input-form-higher-steps-up",
+                  onChange: (nextVal) => {
+                    // @ts-ignore
+                    setState(
+                      mergeDeep(state, {
+                        form: {
+                          higher: {
+                            stepsUp: nextVal,
+                          },
+                        },
+                      })
+                    );
+                  },
+                }),
+                p("Steps down"),
+                input({
+                  // @ts-ignore
+                  value: state.form.higher.stepsDown,
+                  name: "input-form-higher-steps-down",
+                  onChange: (nextVal) => {
+                    // @ts-ignore
+                    setState(
+                      mergeDeep(state, {
+                        form: {
+                          higher: {
+                            stepsDown: nextVal,
+                          },
+                        },
+                      })
+                    );
+                  },
+                }),
+                p("Offsets"),
+                input({
+                  // @ts-ignore
+                  value: state.form.higher.offset,
+                  name: "input-form-higher-offset",
+                  onChange: (nextVal) => {
+                    // @ts-ignore
+                    setState(
+                      mergeDeep(state, {
+                        form: {
+                          higher: {
+                            offset: nextVal,
+                          },
+                        },
+                      })
+                    );
+                  },
+                }),
+              ]
+            : [
+                p(
+                  `Generator count has illegal value. Allowed values are finite integer positive numbers lesser or equal to ${HIGHER_RANK_TEMPERAMENT_MAX_GENERATOR_COUNT}`
+                ),
+              ]),
+        ])
+      ),
+      // @ts-ignore
+      state.form.higher.open,
+      () => {
+        // @ts-ignore
+        setState(
+          mergeDeep(state, {
+            form: {
+              higher: { open: false },
+            },
+          })
+        );
+      },
+      () => {
+        // @ts-ignore
+        createHigherRankTemperament(state, setState, state.form.higher);
+      },
+      undefined,
+      sx({
+        backgroundColor: theme.color.backgroundModal,
+        border: `2px solid ${theme.color.primary}`,
+      })
+    ),
+    modal(
       "modal-preset",
       "Preset scale",
       div(
@@ -379,15 +539,13 @@ export const formModal = (
       state.form.preset.open,
       () => {
         // @ts-ignore
-        setState({
-          ...state,
-          form: {
-            // @ts-ignore
-            ...state.form,
-            // @ts-ignore
-            preset: { ...state.form.preset, open: false },
-          },
-        });
+        setState(
+          mergeDeep(state, {
+            form: {
+              preset: { open: false },
+            },
+          })
+        );
       },
       () => {
         const presetScale = scalePresetsFlat.find(
