@@ -1,6 +1,5 @@
-import { tooltip } from "@eofol/eofol-simple";
-import { sx } from "@eofol/eofol";
-import { div, breakpoint, p, theme } from "../../../../extract";
+import { getBreakpoint, getTheme, sx } from "@eofol/eofol";
+import { div, p } from "../../../../extract";
 import { FiddleState } from "../../../../types";
 import { trimWhitespace } from "../../../../util";
 
@@ -10,6 +9,9 @@ export const scaleOverview = (
 ) => {
   // @ts-ignore
   const overview = state.overview;
+
+  const theme = getTheme();
+  const breakpoint = getBreakpoint();
 
   return div(
     sx({
@@ -53,7 +55,7 @@ export const scaleOverview = (
             [
               div(
                 sx({ display: "flex", justifyContent: "center", flex: 1 }),
-                tooltip(displayIndex, p(displayIndex))
+                p(displayIndex)
               ),
               div(
                 sx({
@@ -61,7 +63,7 @@ export const scaleOverview = (
                   justifyContent: "center",
                   flex: 3,
                 }),
-                tooltip(displayFreq, p(displayFreq))
+                p(displayFreq)
               ),
               div(
                 sx({
@@ -69,7 +71,7 @@ export const scaleOverview = (
                   justifyContent: "center",
                   flex: 3,
                 }),
-                tooltip(displayCent, p(displayCent))
+                p(displayCent)
               ),
               div(
                 sx({
@@ -77,7 +79,7 @@ export const scaleOverview = (
                   justifyContent: "center",
                   flex: 2,
                 }),
-                tooltip(tone.ratio, p(tone.ratio))
+                p(tone.ratio)
               ),
               div(
                 sx({
@@ -85,7 +87,7 @@ export const scaleOverview = (
                   justifyContent: "center",
                   flex: 2,
                 }),
-                tooltip(tone.name, p(trimWhitespace(tone.name)))
+                p(trimWhitespace(tone.name))
               ),
             ]
           );

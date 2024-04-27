@@ -1,4 +1,4 @@
-import { mergeDeep } from "../extract";
+import { mergeDeep } from "@eofol/eofol";
 
 const commonTheme = {
   typography: {

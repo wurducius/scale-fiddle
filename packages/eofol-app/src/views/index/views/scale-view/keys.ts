@@ -1,5 +1,5 @@
-import { sx } from "@eofol/eofol";
-import { div, breakpoint, theme } from "../../../../extract";
+import { getBreakpoint, getTheme, sx } from "@eofol/eofol";
+import { div } from "../../../../extract";
 import {
   keyActiveHoverStyle,
   mouseHandlers,
@@ -66,6 +66,9 @@ const renderKey = (
 };
 
 export const keys = (state: FiddleState) => {
+  const theme = getTheme();
+  const breakpoint = getBreakpoint();
+
   const playToneImpl = playTone(state);
   const releaseNoteImpl = releaseNote(state);
 

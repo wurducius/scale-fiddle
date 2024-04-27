@@ -1,28 +1,46 @@
-import { Theme, clearStyle, createStyle, createStyleObj } from "../extract";
+import { clearStyle, createStyleObj, createStyle } from "@eofol/eofol";
+import { Theme } from "@eofol/eofol-types";
 import { keyActiveHoverStyle } from "../synth";
 
 export const initStyles = (theme: Theme) => {
   clearStyle();
 
-  createStyle(`#eofol { color: ${theme.color.font}; }`);
+  createStyleObj({ color: theme.color.font }, "#eofol");
 
-  createStyle(`a { color: ${theme.color.secondaryDark}}`);
-  createStyle(`a:hover { color: ${theme.color.secondaryLighter}}`);
+  createStyleObj({ color: theme.color.secondaryDark }, "a");
+  createStyleObj({ color: theme.color.secondaryLighter }, "a:hover");
 
-  createStyle(`body { background-color: ${theme.color.background}; }`);
+  createStyleObj({ backgroundColor: theme.color.background }, "body");
 
-  createStyle(
-    `input[type="checkbox"] { width: 24px; height: 24px; accent-color: ${theme.color.secondary}; cursor: pointer; color: ${theme.color.backgroundElevation}; }`
+  createStyleObj(
+    {
+      width: "24px",
+      height: "24px",
+      accentColor: theme.color.secondary,
+      cursor: "pointer",
+      color: theme.color.backgroundElevation,
+    },
+    `input[type="checkbox"]`
   );
-  createStyle(
-    `input[type="checkbox"]:hover { accent-color: ${theme.color.secondaryDarker}; }`
+  createStyleObj(
+    { accentColor: theme.color.secondaryDarker },
+    `input[type="checkbox"]:hover`
   );
 
-  createStyle(
-    `input[type="range"] { margin-top: ${theme.spacing.space1}; padding: 0 0 0 0; width: 256px; height: 24px; accent-color: ${theme.color.secondary}; cursor: pointer; }`
+  createStyleObj(
+    {
+      marginTop: theme.spacing.space1,
+      padding: "0 0 0 0",
+      width: "256px",
+      height: "24px",
+      accentColor: theme.color.secondary,
+      cursor: "pointer",
+    },
+    `input[type="range"]`
   );
-  createStyle(
-    `input[type="range"]:hover { accent-color: ${theme.color.secondaryDarker}; }`
+  createStyleObj(
+    { accentColor: theme.color.secondaryDarker },
+    `input[type="range"]:hover`
   );
 
   createStyle('input[type="range"].lg { max-width: 500px; width: 100%; }');

@@ -1,6 +1,6 @@
 import { input } from "@eofol/eofol-simple";
-import { cx, createElement, sy } from "@eofol/eofol";
-import { div, theme } from "../extract";
+import { cx, createElement } from "@eofol/eofol";
+import { div } from "../extract";
 
 export const sliderInput = (
   label: string,

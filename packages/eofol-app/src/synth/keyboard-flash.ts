@@ -1,5 +1,6 @@
-import { sx } from "@eofol/eofol";
-import { theme } from "../extract";
+import { getTheme, sx } from "@eofol/eofol";
+
+const theme = getTheme();
 
 export let keyElementsMap: Record<string, Element> = {};
 export const clearKeyElementMap = () => {

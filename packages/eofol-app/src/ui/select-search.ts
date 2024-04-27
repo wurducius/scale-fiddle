@@ -1,7 +1,16 @@
 import { input, button } from "@eofol/eofol-simple";
-import { sy, sx, defineBuiltinElement, cx, selector } from "@eofol/eofol";
-import { div, flex, h2, theme } from "../extract";
+import {
+  sy,
+  sx,
+  defineBuiltinElement,
+  cx,
+  selector,
+  getTheme,
+} from "@eofol/eofol";
+import { div, flex, h2 } from "../extract";
 import { scalePresetsFlat } from "../data";
+
+const theme = getTheme();
 
 type Option = { title: string; id: string };
 

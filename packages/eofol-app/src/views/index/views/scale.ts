@@ -1,6 +1,6 @@
 import { button } from "@eofol/eofol-simple";
-import { sx } from "@eofol/eofol";
-import { breakpoint, div } from "../../../extract";
+import { getBreakpoint, getTheme, sx } from "@eofol/eofol";
+import { div } from "../../../extract";
 import { FiddleState } from "../../../types";
 import {
   changeScaleMenu,
@@ -10,9 +10,10 @@ import {
   keys,
   formModal,
 } from "./scale-view";
-import { theme } from "../../../extract";
 
-const getMenuHeight = () => {
+const theme = getTheme();
+
+const getMenuHeight = (breakpoint: any) => {
   if (breakpoint.xs) {
     return "1200px";
   }
@@ -26,6 +27,8 @@ const inputMenu = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
 ) => {
+  const breakpoint = getBreakpoint();
+
   const changeScaleMenuElement = div(
     sx({ flex: 1, padding: "0 0 0 0", height: "300px" }),
     [div(undefined, changeScaleMenu(state, setState))]
@@ -46,7 +49,7 @@ const inputMenu = (
   return div(
     sx({
       display: "flex",
-      height: getMenuHeight(),
+      height: getMenuHeight(breakpoint),
       flexDirection: breakpoint.sm ? "column" : "row",
     }),
     !breakpoint.xs
@@ -116,6 +119,8 @@ export const scaleTab = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
 ) => {
+  const breakpoint = getBreakpoint();
+
   return !breakpoint.sm
     ? desktopScaleTab(state, setState)
     : mobileScaleTab(state, setState);

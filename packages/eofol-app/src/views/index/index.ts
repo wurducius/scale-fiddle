@@ -1,8 +1,14 @@
 import "../../styles/base.css";
 import "./index.css";
-import { defineBuiltinElement, sx, registerServiceWorker } from "@eofol/eofol";
+import {
+  defineBuiltinElement,
+  sx,
+  registerServiceWorker,
+  setTheme,
+  getTheme,
+} from "@eofol/eofol";
 import { initialState } from "../../data";
-import { div, setTheme, theme } from "../../extract";
+import { div } from "../../extract";
 import { updateScale } from "../../sheen";
 import { defaultTheme, initStyles, themes } from "../../styles";
 import { mapKeyboardKeys } from "../../synth";
@@ -28,6 +34,7 @@ const initialTheme = storage
 
 setTheme(initialTheme);
 
+const theme = getTheme();
 initStyles(theme);
 
 defineBuiltinElement<FiddleStateImpl>({

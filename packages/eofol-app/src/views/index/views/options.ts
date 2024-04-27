@@ -1,10 +1,11 @@
 import { input, select } from "@eofol/eofol-simple";
-import { forceRerender, sx } from "@eofol/eofol";
+import { getBreakpoint, getTheme, setTheme, sx } from "@eofol/eofol";
 import { keyLabelOptions } from "../../../data";
-import { div, flex, breakpoint, h2, p, setTheme } from "../../../extract";
+import { div, flex, h2, p } from "../../../extract";
 import { FiddleState } from "../../../types";
-import { theme } from "../../../extract";
 import { defaultTheme, initStyles, themes } from "../../../styles";
+
+const theme = getTheme();
 
 export const optionsTab = (
   state: FiddleState,
@@ -12,6 +13,7 @@ export const optionsTab = (
 ) => {
   // @ts-ignore
   const options = state.options;
+  const breakpoint = getBreakpoint();
 
   return [
     div(undefined, [
@@ -184,7 +186,8 @@ export const optionsTab = (
                 ).theme;
 
                 setTheme(nextTheme);
-                initStyles(theme);
+                const themeImpl = getTheme();
+                initStyles(themeImpl);
 
                 // @ts-ignore
                 setState({

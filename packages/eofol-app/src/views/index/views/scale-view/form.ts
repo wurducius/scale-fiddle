@@ -1,7 +1,7 @@
 import { modal, input } from "@eofol/eofol-simple";
-import { sx, e, createStore, setStore } from "@eofol/eofol";
+import { sx, e, createStore, setStore, getTheme } from "@eofol/eofol";
 import { scalePresets, scalePresetsFlat } from "../../../../data";
-import { div, textarea, theme } from "../../../../extract";
+import { div, textarea } from "../../../../extract";
 import {
   updateScale,
   createEdo,
@@ -39,6 +39,8 @@ const generalFormModal =
   ) => {
     // @ts-ignore
     const resultScale = result(state.form[formName]);
+
+    const theme = getTheme();
 
     return modal(
       id,
@@ -146,6 +148,8 @@ export const formModal = (
       });
     },
   });
+
+  const theme = getTheme();
 
   return [
     modalImpl(

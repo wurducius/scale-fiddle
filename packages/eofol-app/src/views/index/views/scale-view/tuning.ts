@@ -1,8 +1,10 @@
 import { input } from "@eofol/eofol-simple";
-import { sx } from "@eofol/eofol";
+import { getTheme, sx } from "@eofol/eofol";
 import { FiddleState } from "../../../../types";
-import { p, div, flex, h3, theme } from "../../../../extract";
+import { p, div, flex, h3 } from "../../../../extract";
 import { waveformSelect } from "../synth-view";
+
+const theme = getTheme();
 
 export const scaleTuning = (
   state: FiddleState,

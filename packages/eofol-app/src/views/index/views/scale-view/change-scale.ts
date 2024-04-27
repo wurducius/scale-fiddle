@@ -6,10 +6,12 @@ import {
   dropdownContent,
   notify,
 } from "@eofol/eofol-simple";
-import { sx } from "@eofol/eofol";
+import { getTheme, sx } from "@eofol/eofol";
 import { DEFAULT_SCALE_INPUT } from "../../../../data";
-import { div, p, theme } from "../../../../extract";
+import { div, p } from "../../../../extract";
 import { FiddleState } from "../../../../types";
+
+const theme = getTheme();
 
 const menuButtonOpensModal =
   (

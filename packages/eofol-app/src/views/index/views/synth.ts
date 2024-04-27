@@ -1,12 +1,13 @@
-import { sx } from "@eofol/eofol";
+import { getBreakpoint, getTheme, sx } from "@eofol/eofol";
 import { select, checkbox } from "@eofol/eofol-simple";
-import { div, breakpoint, h2, p, h1, h3 } from "../../../extract";
+import { div, h2, p, h1, h3 } from "../../../extract";
 import { setTotalGain } from "../../../synth";
 import { FiddleState } from "../../../types";
 import { sliderInput } from "../../../ui";
 import { envelopeCurveOptions, envelopeTypeOptions } from "../../../data";
-import { theme } from "../../../extract";
 import { waveformSelect } from "./synth-view";
+
+const theme = getTheme();
 
 const envelopeCurveSelect = (
   value: string,
@@ -30,6 +31,8 @@ const envelopeADSRMenu = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
 ) => {
+  const breakpoint = getBreakpoint();
+
   // @ts-ignore
   const synth = state.synth;
 
@@ -282,6 +285,7 @@ export const synthTab = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
 ) => {
+  const breakpoint = getBreakpoint();
   // @ts-ignore
   const synth = state.synth;
 

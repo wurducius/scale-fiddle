@@ -1,15 +1,13 @@
-import { cx, forceRerender, sx, sy } from "@eofol/eofol";
-import { button, notify, a, select } from "@eofol/eofol-simple";
 import {
+  getBreakpoint,
+  cx,
+  forceRerender,
+  getTheme,
   mediaQueryMaxWidth,
-  div,
-  breakpoint,
-  t,
-  languages,
-  setLanguage,
-  language,
-  theme,
-} from "../../../extract";
+  sx,
+} from "@eofol/eofol";
+import { button, notify, a, select } from "@eofol/eofol-simple";
+import { div, t, languages, setLanguage, language } from "../../../extract";
 import { panic } from "../../../synth";
 import { FiddleState } from "../../../types";
 
@@ -47,6 +45,9 @@ export const appbar = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
 ) => {
+  const theme = getTheme();
+  const breakpoint = getBreakpoint();
+
   // @ts-ignore
   const tabIndex = state.tab;
 
