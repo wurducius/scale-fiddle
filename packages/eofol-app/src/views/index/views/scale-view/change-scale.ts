@@ -1,11 +1,4 @@
-import {
-  input,
-  dropdown,
-  select,
-  button,
-  dropdownContent,
-  notify,
-} from "@eofol/eofol-simple";
+import { input, dropdown, select, button, notify } from "@eofol/eofol-simple";
 import { getTheme, sx } from "@eofol/eofol";
 import { DEFAULT_SCALE_INPUT } from "../../../../data";
 import { div, flex, p } from "../../../../extract";

@@ -1,8 +1,9 @@
 import { createElement, cx, sx as sxx, sy } from "@eofol/eofol";
+import { EofolClassname, EofolElementNode } from "@eofol/eofol-types";
 
 export const div = (
-  classname?: string | string[] | undefined,
-  children?: string | Element | Element[],
+  classname?: EofolClassname,
+  children?: EofolElementNode,
   attributes?: any,
   properties?: any
 ) => createElement("div", classname, children, attributes, properties);
@@ -49,5 +50,5 @@ const CenterStyleBase = sy(
   "center-base"
 );
 
-export const center = (children: string | Element | Element[]) =>
+export const center = (children: EofolElementNode) =>
   div(CenterStyleBase, children);
