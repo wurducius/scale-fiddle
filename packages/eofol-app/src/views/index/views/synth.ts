@@ -38,9 +38,13 @@ const envelopeADSRMenu = (
 
   return [
     div(
-      sx({ display: "flex", flexDirection: breakpoint.md ? "column" : "row" }),
+      sx({
+        display: "flex",
+        flexDirection: breakpoint.md ? "column" : "row",
+        margin: "64px auto 0 auto",
+      }),
       [
-        div(sx({ flex: 1 }), [
+        div(sx({ flex: 1, margin: "0 64px 0 64px" }), [
           h2("Attack phase"),
           sliderInput(
             "Volume",
@@ -140,7 +144,7 @@ const envelopeADSRMenu = (
             }),
           ]),
         ]),
-        div(sx({ flex: 1 }), [
+        div(sx({ flex: 1, margin: "0 64px 0 64px" }), [
           h2("Sustain phase"),
           sliderInput(
             "Volume",
@@ -270,7 +274,7 @@ const envelopeMenu = (
   // @ts-ignore
   const synth = state.synth;
 
-  return div(undefined, [
+  return div(sx({ display: "flex", justifyContent: "center" }), [
     ...(synth.envelopeType === "adsr" ? envelopeADSRMenu(state, setState) : []),
     ...(synth.envelopeType === "preset"
       ? envelopePresetMenu(state, setState)
@@ -290,38 +294,48 @@ export const synthTab = (
   const synth = state.synth;
 
   return [
-    div(undefined, [
+    div(sx({ display: "flex", justifyContent: "center" }), [
       div(
         sx({
           display: "flex",
           flexDirection: breakpoint.md ? "column" : "row",
+          justifyContent: "center",
+          margin: "0 auto 0 auto",
+          flex: 2,
         }),
         [
-          div(sx({ flex: 1 }), [
-            sliderInput(
-              "Master volume",
-              (synth.totalGain * 100).toFixed(0).toString(),
-              (nextValue) => {
-                const val = Number(Number(nextValue).toFixed(0));
-                const newTotalGain = val / 100;
-                // @ts-ignore
-                setState({
-                  ...state,
-                  synth: {
-                    ...synth,
-                    totalGain: newTotalGain,
-                  },
-                });
-                setTotalGain(newTotalGain);
-              },
-              "h1",
-              (val) => `${val}%`,
-              true,
-              sx({ margin: `0 ${theme.spacing.space4}` }),
-              "master-gain"
-            ),
-          ]),
-          div(sx({ flex: 1 }), [
+          div(
+            sx({
+              display: "flex",
+              justifyContent: "center",
+              margin: "0 64px 0 64px",
+            }),
+            [
+              sliderInput(
+                "Master volume",
+                (synth.totalGain * 100).toFixed(0).toString(),
+                (nextValue) => {
+                  const val = Number(Number(nextValue).toFixed(0));
+                  const newTotalGain = val / 100;
+                  // @ts-ignore
+                  setState({
+                    ...state,
+                    synth: {
+                      ...synth,
+                      totalGain: newTotalGain,
+                    },
+                  });
+                  setTotalGain(newTotalGain);
+                },
+                "h1",
+                (val) => `${val}%`,
+                true,
+                sx({ margin: `0 ${theme.spacing.space4}` }),
+                "master-gain"
+              ),
+            ]
+          ),
+          div(sx({ margin: "0 64px 0 64px" }), [
             h1("Organ (sustain)"),
             checkbox({
               name: "checkbox-organ",
@@ -335,7 +349,10 @@ export const synthTab = (
               },
             }),
           ]),
-          div(sx({ flex: 1 }), [h1("Timbre"), waveformSelect(state, setState)]),
+          div(sx({ margin: "0 64px 0 64px" }), [
+            h1("Timbre"),
+            waveformSelect(state, setState),
+          ]),
         ]
       ),
     ]),

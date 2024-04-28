@@ -43,7 +43,7 @@ export const createHarmonicSeries = (state: FiddleState, T: number) => {
 
 export const createJust = (state: FiddleState, T: number, limit: number) => {
   const vals = [0];
-  for (let i = 1; i < T + 1; i++) {
+  for (let i = 1; i < Number(T) + 1; i++) {
     // @ts-ignore
     vals.push(
       1200 *

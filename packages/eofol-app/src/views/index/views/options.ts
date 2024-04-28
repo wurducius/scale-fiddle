@@ -16,147 +16,154 @@ export const optionsTab = (
   const breakpoint = getBreakpoint();
 
   return [
-    div(undefined, [
-      flex({ flexDirection: !breakpoint.xs ? "row" : "column" }, [
-        div(sx({ flex: 1 }), [
-          h2("Precision"),
-          p("Frequency"),
-          input({
-            value: options.decimalDigitsFreq,
-            onChange: (nextValue) => {
-              if (Number(nextValue) < 0) return;
-              // @ts-ignore
-              setState({
-                ...state,
-                recompute: true,
-                options: {
-                  ...options,
-                  decimalDigitsFreq: nextValue,
-                },
-              });
-            },
-          }),
-          p("Cent"),
-          input({
-            value: options.decimalDigitsCent,
-            onChange: (nextValue) => {
-              if (Number(nextValue) < 0) return;
-              // @ts-ignore
-              setState({
-                ...state,
-                recompute: true,
-                options: {
-                  ...options,
-                  decimalDigitsCent: nextValue,
-                },
-              });
-            },
-          }),
-          p("Ratio"),
-          input({
-            value: options.decimalDigitsRatio,
-            onChange: (nextValue) => {
-              if (Number(nextValue) < 0) return;
-              // @ts-ignore
-              setState({
-                ...state,
-                recompute: true,
-                options: {
-                  ...options,
-                  decimalDigitsRatio: nextValue,
-                },
-              });
-            },
-          }),
-          p("Frequency on keys"),
-          input({
-            value: options.decimalDigitsFreqOnKeys,
-            onChange: (nextValue) => {
-              if (Number(nextValue) < 0) return;
-              // @ts-ignore
-              setState({
-                ...state,
-                recompute: true,
-                options: {
-                  ...options,
-                  decimalDigitsFreqOnKeys: nextValue,
-                },
-              });
-            },
-          }),
-        ]),
-        div(sx({ flex: 1 }), [
-          h2("Synth configuration"),
-          p("Start gain"),
-          input({
-            value: options.startGain,
-            onChange: (nextValue) => {
-              if (Number(nextValue) < 0 || Number(nextValue) > 1) return;
-              // @ts-ignore
-              setState({
-                ...state,
-                options: {
-                  ...options,
-                  startGain: nextValue,
-                },
-              });
-            },
-          }),
-          p("Start time"),
-          input({
-            value: options.startTime,
-            onChange: (nextValue) => {
-              if (Number(nextValue) < 0) return;
-              // @ts-ignore
-              setState({
-                ...state,
-                options: {
-                  ...options,
-                  startTime: nextValue,
-                },
-              });
-            },
-          }),
-          p("End gain"),
-          input({
-            value: options.endGain,
-            onChange: (nextValue) => {
-              if (Number(nextValue) < 0 || Number(nextValue) > 1) return;
-              // @ts-ignore
-              setState({
-                ...state,
-                options: {
-                  ...options,
-                  endGain: nextValue,
-                },
-              });
-            },
-          }),
-          p("End time"),
-          input({
-            value: options.endTime,
-            onChange: (nextValue) => {
-              if (Number(nextValue) < 0) return;
-              // @ts-ignore
-              setState({
-                ...state,
-                options: {
-                  ...options,
-                  endTime: nextValue,
-                },
-              });
-            },
-          }),
-        ]),
-      ]),
+    div(sx({ display: "flex", flexDirection: "column" }), [
       div(
         sx({
           display: "flex",
           flexDirection: !breakpoint.xs ? "row" : "column",
-          marginTop: theme.spacing.space4,
+          margin: "0 auto 0 auto",
         }),
         [
-          div(sx({ flex: 1 }), [
+          div(sx({ flex: 1, margin: "0 64px 0 64px" }), [
+            h2("Precision"),
+            p("Frequency"),
+            input({
+              value: options.decimalDigitsFreq,
+              onChange: (nextValue) => {
+                if (Number(nextValue) < 0) return;
+                // @ts-ignore
+                setState({
+                  ...state,
+                  recompute: true,
+                  options: {
+                    ...options,
+                    decimalDigitsFreq: nextValue,
+                  },
+                });
+              },
+            }),
+            p("Cent"),
+            input({
+              value: options.decimalDigitsCent,
+              onChange: (nextValue) => {
+                if (Number(nextValue) < 0) return;
+                // @ts-ignore
+                setState({
+                  ...state,
+                  recompute: true,
+                  options: {
+                    ...options,
+                    decimalDigitsCent: nextValue,
+                  },
+                });
+              },
+            }),
+            p("Ratio"),
+            input({
+              value: options.decimalDigitsRatio,
+              onChange: (nextValue) => {
+                if (Number(nextValue) < 0) return;
+                // @ts-ignore
+                setState({
+                  ...state,
+                  recompute: true,
+                  options: {
+                    ...options,
+                    decimalDigitsRatio: nextValue,
+                  },
+                });
+              },
+            }),
+            p("Frequency on keys"),
+            input({
+              value: options.decimalDigitsFreqOnKeys,
+              onChange: (nextValue) => {
+                if (Number(nextValue) < 0) return;
+                // @ts-ignore
+                setState({
+                  ...state,
+                  recompute: true,
+                  options: {
+                    ...options,
+                    decimalDigitsFreqOnKeys: nextValue,
+                  },
+                });
+              },
+            }),
+          ]),
+          div(sx({ flex: 1, margin: "0 64px 0 64px" }), [
+            h2("Synth configuration"),
+            p("Start gain"),
+            input({
+              value: options.startGain,
+              onChange: (nextValue) => {
+                if (Number(nextValue) < 0 || Number(nextValue) > 1) return;
+                // @ts-ignore
+                setState({
+                  ...state,
+                  options: {
+                    ...options,
+                    startGain: nextValue,
+                  },
+                });
+              },
+            }),
+            p("Start time"),
+            input({
+              value: options.startTime,
+              onChange: (nextValue) => {
+                if (Number(nextValue) < 0) return;
+                // @ts-ignore
+                setState({
+                  ...state,
+                  options: {
+                    ...options,
+                    startTime: nextValue,
+                  },
+                });
+              },
+            }),
+            p("End gain"),
+            input({
+              value: options.endGain,
+              onChange: (nextValue) => {
+                if (Number(nextValue) < 0 || Number(nextValue) > 1) return;
+                // @ts-ignore
+                setState({
+                  ...state,
+                  options: {
+                    ...options,
+                    endGain: nextValue,
+                  },
+                });
+              },
+            }),
+            p("End time"),
+            input({
+              value: options.endTime,
+              onChange: (nextValue) => {
+                if (Number(nextValue) < 0) return;
+                // @ts-ignore
+                setState({
+                  ...state,
+                  options: {
+                    ...options,
+                    endTime: nextValue,
+                  },
+                });
+              },
+            }),
+          ]),
+        ]
+      ),
+      div(
+        sx({
+          display: "flex",
+          flexDirection: !breakpoint.xs ? "row" : "column",
+          margin: `${theme.spacing.space4} auto 0 auto`,
+        }),
+        [
+          div(sx({ flex: 1, margin: "0 64px 0 64px" }), [
             h2("Key labels"),
             select({
               name: "select-key-labels",
@@ -173,7 +180,7 @@ export const optionsTab = (
               },
             }),
           ]),
-          div(sx({ flex: 1 }), [
+          div(sx({ flex: 1, margin: "0 64px 0 64px" }), [
             h2("Theme"),
             select({
               name: "select-theme",

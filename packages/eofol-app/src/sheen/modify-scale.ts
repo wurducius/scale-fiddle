@@ -111,7 +111,8 @@ export const modifyTemper = (
     .map(trimWhitespace)
     // @ts-ignore
     .map(parseScala(state)) // @ts-ignore
-    .map((tone) => normalizePeriod(tone, state.tuning.period));
+    .map((tone) => normalizePeriod(tone, state.tuning.period))
+    .map((c) => 1200 * Math.log2(c));
 
   const result: number[] = [];
   for (let i = 0; i < centsScale.length; i++) {

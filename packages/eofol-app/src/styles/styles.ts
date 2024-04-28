@@ -43,7 +43,7 @@ export const initStyles = (theme: Theme) => {
     `input[type="range"]:hover`
   );
 
-  createStyle('input[type="range"].lg { max-width: 500px; width: 100%; }');
+  createStyle('input[type="range"].lg { width: 500px; }');
 
   createStyle(
     `input { cursor: text; padding: 2px 10px; margin-top: 8px; margin-bottom: 8px; font-size: ${theme.typography.text.fontSize}; width: 256px; height: 24px; background-color: ${theme.color.backgroundElevation}; color: ${theme.color.secondary}; border: 1px solid ${theme.color.secondary}; }`

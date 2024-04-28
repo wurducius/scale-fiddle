@@ -73,33 +73,35 @@ const generalFormModal =
         div(
           undefined,
           form
-            .map((item) => [
-              div(
-                sx({ fontSize: theme.typography.heading.fontSize }),
-                item.title
-              ),
-              input({
-                name: "input-form-" + id,
-                // @ts-ignore
-                value: state.form[formName][item.innerFormName],
-                onChange: (nextVal) => {
+            .map((item) =>
+              div(sx({ marginBottom: "16px" }), [
+                div(
+                  sx({ fontSize: theme.typography.heading.fontSize }),
+                  item.title
+                ),
+                input({
+                  name: "input-form-" + id,
                   // @ts-ignore
-                  setState({
-                    ...state,
-                    form: {
-                      // @ts-ignore
-                      ...state.form,
-                      // @ts-ignore
-                      [formName]: {
+                  value: state.form[formName][item.innerFormName],
+                  onChange: (nextVal) => {
+                    // @ts-ignore
+                    setState({
+                      ...state,
+                      form: {
                         // @ts-ignore
-                        ...state.form[formName],
-                        [item.innerFormName]: nextVal,
+                        ...state.form,
+                        // @ts-ignore
+                        [formName]: {
+                          // @ts-ignore
+                          ...state.form[formName],
+                          [item.innerFormName]: nextVal,
+                        },
                       },
-                    },
-                  });
-                },
-              }),
-            ])
+                    });
+                  },
+                }),
+              ])
+            )
             .flat()
         ),
         textarea({
