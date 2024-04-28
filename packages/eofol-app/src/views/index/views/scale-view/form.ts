@@ -69,12 +69,12 @@ const generalFormModal =
     return modal(
       id,
       title,
-      div(undefined, [
+      div(sx({ marginTop: "16px" }), [
         div(
           undefined,
           form
             .map((item) =>
-              div(sx({ marginBottom: "16px" }), [
+              div(undefined, [
                 div(
                   sx({ fontSize: theme.typography.heading.fontSize }),
                   item.title
@@ -107,7 +107,11 @@ const generalFormModal =
         textarea({
           name: "result-scale",
           value: resultScale,
-          classname: sx({ height: "300px", marginTop: theme.spacing.space2 }),
+          classname: sx({
+            height: "300px",
+            marginTop: theme.spacing.space2,
+            marginBottom: "16px",
+          }),
           onChange: () => {},
         }),
       ]),
