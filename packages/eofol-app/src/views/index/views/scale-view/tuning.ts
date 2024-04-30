@@ -2,7 +2,7 @@ import { input } from "@eofol/eofol-simple";
 import { getTheme, sx } from "@eofol/eofol";
 import { FiddleState } from "../../../../types";
 import { p, div, flex, h3 } from "../../../../extract";
-import { waveformSelect } from "../synth-view";
+import { waveformPresetSelect } from "../synth-view";
 
 const theme = getTheme();
 
@@ -109,7 +109,7 @@ export const scaleTuning = (
       div(sx({ marginTop: theme.spacing.space2 }), [
         h3("Timbre", true),
         div(sx({ marginTop: theme.spacing.space1 })),
-        waveformSelect(state, setState),
+        waveformPresetSelect(state, setState),
       ]),
     ]
   );

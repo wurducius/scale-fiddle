@@ -1,5 +1,6 @@
 import { FiddleState } from "../types";
 import { parseScala } from "./scala";
+import { normalizePeriod } from "./sheen";
 
 const INTERVAL_COMPARE_EPSILON = 0.15;
 

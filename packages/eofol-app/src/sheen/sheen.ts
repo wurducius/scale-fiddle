@@ -1,13 +1,13 @@
-import { FiddleState, FiddleStateImpl } from "../types";
-import { mod, onlyUnique } from "../util";
+import { FiddleStateImpl } from "../types";
+import { mod } from "../util";
 import { parseScala } from "./scala";
 
 export function normalizePeriod(value: number, period: number) {
-  if (value <= 0) {
+  if (!Number.isFinite(value) || Number.isNaN(value) || value <= 0) {
     return value;
   }
   let val = value;
-  while (val > period) {
+  while (val >= period) {
     val = val / period;
   }
   while (val < 1) {
@@ -51,15 +51,17 @@ export const scaleToOverview = (state: FiddleStateImpl) => {
           (mod(raw.length + i - 1, raw.length) === raw.length - 1 ? 1 : 0)
       ) *
       intervalMap[mod(raw.length + i - 1, raw.length)];
-    const ratio = intervalMap[mod(raw.length + i - 1, raw.length)];
-    const ratioImpl = ratio === period ? 1 : ratio;
+    const ratio = normalizePeriod(
+      intervalMap[mod(raw.length + i - 1, raw.length)],
+      period
+    );
 
     freq[downKeys + i + 1] = {
       freq: f,
-      ratio: ratioImpl,
+      ratio,
       name: raw[mod(raw.length + i - 1, raw.length)],
       cent: Math.log2(f / baseFreq) * 1200,
-      isOctave: ratioImpl === 1,
+      isOctave: ratio === 1,
     };
   }
 
@@ -69,15 +71,17 @@ export const scaleToOverview = (state: FiddleStateImpl) => {
         baseFreq *
         Math.pow(period, -(1 + Math.floor((i - 1) / raw.length))) *
         intervalMap[mod(raw.length - i, raw.length)];
-      const ratio = intervalMap[mod(raw.length - i, raw.length)];
-      const ratioImpl = ratio === period ? 1 : ratio;
+      const ratio = normalizePeriod(
+        intervalMap[mod(raw.length - i, raw.length)],
+        period
+      );
 
       freq[i] = {
         freq: f,
-        ratio: ratioImpl,
+        ratio,
         name: raw[mod(raw.length - i, raw.length)],
         cent: Math.log2(f / baseFreq) * 1200,
-        isOctave: ratioImpl === 1,
+        isOctave: ratio === 1,
       };
     }
   }

@@ -3,7 +3,7 @@ import { WAVEFORM_SERIES_LENGTH } from "./constants";
 
 const array = Array.from({ length: WAVEFORM_SERIES_LENGTH });
 
-const sine = { title: "Sine", id: "sine", real: [0, 1], imag: [] };
+const sine = { title: "Sine", id: "sine", real: [0, 1], imag: [0, 0] };
 
 const triangle = {
   title: "Triangle",

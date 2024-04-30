@@ -5,7 +5,7 @@ import { setTotalGain } from "../../../synth";
 import { FiddleState } from "../../../types";
 import { sliderInput } from "../../../ui";
 import { envelopeCurveOptions, envelopeTypeOptions } from "../../../data";
-import { waveformSelect } from "./synth-view";
+import { waveformTypeSelect, waveformValueMenu } from "./synth-view";
 
 const theme = getTheme();
 
@@ -351,7 +351,8 @@ export const synthTab = (
           ]),
           div(sx({ margin: "0 64px 0 64px" }), [
             h1("Timbre"),
-            waveformSelect(state, setState),
+            waveformTypeSelect(state, setState),
+            div(sx({ marginTop: "16px" }), waveformValueMenu(state, setState)),
           ]),
         ]
       ),

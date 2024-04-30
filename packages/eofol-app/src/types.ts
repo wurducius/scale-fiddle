@@ -121,6 +121,8 @@ export type FiddleStateImpl = {
     releaseCurve: string;
     waveformType: string;
     waveformPreset: string;
+    fromTuningLength: number;
+    fromTuningIterations: number;
   };
   options: {
     decimalDigitsFreq: number;

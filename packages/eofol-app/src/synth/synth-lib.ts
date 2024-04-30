@@ -3,7 +3,7 @@ import {
   WAVEFORM_ID_DEFAULT,
   timbrePresetsFlat,
 } from "../data";
-import { FiddleState } from "../types";
+import { FiddleState, Timbre } from "../types";
 
 const getCurve = (shape: string | undefined) => {
   if (shape == "exponential") {
@@ -50,10 +50,7 @@ let sineTerms;
 let cosineTerms;
 let customWaveform: PeriodicWave;
 
-export const setWaveform = (waveformId: string) => {
-  waveform =
-    timbrePresetsFlat.find((item) => item.id === waveformId) ??
-    timbrePresetsFlat[0];
+export const setWaveformValue = (waveform: Timbre) => {
   sineTerms = new Float32Array(waveform.real.length);
   sineTerms = waveform.real;
   cosineTerms = new Float32Array(waveform.imag.length);
@@ -62,7 +59,14 @@ export const setWaveform = (waveformId: string) => {
   panic();
 };
 
-setWaveform(WAVEFORM_ID_DEFAULT);
+export const setWaveformPreset = (waveformId: string) => {
+  waveform =
+    timbrePresetsFlat.find((item) => item.id === waveformId) ??
+    timbrePresetsFlat[0];
+  setWaveformValue(waveform);
+};
+
+setWaveformPreset(WAVEFORM_ID_DEFAULT);
 
 export const setTotalGain = (totalGain: number) => {
   mainGainNode.gain.value = totalGain;

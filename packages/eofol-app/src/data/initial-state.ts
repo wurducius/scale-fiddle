@@ -122,6 +122,8 @@ export const initialState = {
     releaseCurve: "linear",
     waveformType: "preset",
     waveformPreset: "distorted-organ",
+    fromTuningLength: 7,
+    fromTuningIterations: 20,
   },
   options: {
     decimalDigitsFreq: 3,

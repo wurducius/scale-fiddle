@@ -16,3 +16,9 @@ export const envelopeTypeOptions = [
   { title: "Preset envelope", id: "preset" },
   { title: "Custom envelope", id: "custom" },
 ];
+
+export const waveformTypeOptions = [
+  { title: "Preset", id: "preset" },
+  { title: "From tuning", id: "from-tuning" },
+  { title: "Custom", id: "custom" },
+];
