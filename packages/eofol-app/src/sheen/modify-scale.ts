@@ -3,6 +3,7 @@ import { mod, trimWhitespace } from "../util";
 import { parseScala } from "./scala";
 import { normalizePeriod } from "./sheen";
 import { initModify, outputScale } from "./sheen-util";
+import { normPrimeTuning } from "./tempering";
 
 export const modifyTranspose = (state: FiddleState, t: number) => {
   const centsScale = initModify(state);
@@ -115,11 +116,12 @@ export const modifyTemper = (
     .map((c) => 1200 * Math.log2(c));
 
   const result: number[] = [];
+  const closePairs: number[][] = [];
   for (let i = 0; i < centsScale.length; i++) {
     const first = centsScale[i];
     const second = centsScale[mod(i + 1, centsScale.length)];
     const deltaForward = Math.abs(second - first);
-    const deltaBackward = Math.abs(1200 - second + first);
+    const deltaBackward = 1200 - deltaForward;
 
     let isTemperedOut = undefined;
     for (let j = 0; j < parsedCommas.length; j++) {
@@ -133,11 +135,40 @@ export const modifyTemper = (
     }
 
     if (isTemperedOut) {
-      result.push(first - isTemperedOut);
+      closePairs.push([first, second]);
+      result.push(mod(first, 1200) === 0 ? first : second);
     } else {
-      result.push(first);
+      result.push(second);
     }
   }
 
-  return outputScale(state, result);
+  const resolvedPairs = closePairs.reduce((acc, next) => {
+    if (acc.includes(next[0])) {
+      return [...acc, next[1]];
+    }
+    if (acc.includes(next[1])) {
+      return [...acc, next[0]];
+    }
+
+    if (mod(next[0], 1200) === 0) {
+      return [...acc, next[1]];
+    }
+    if (mod(next[1], 1200) === 0) {
+      return [...acc, next[0]];
+    }
+
+    const firstNextScale = centsScale.filter((x: number) => x != next[0]);
+    const secondNextScale = centsScale.filter((x: number) => x != next[1]);
+
+    const firstNorm = normPrimeTuning(firstNextScale);
+    const secondNorm = normPrimeTuning(secondNextScale);
+
+    const isFirstNormLesser = firstNorm < secondNorm;
+
+    return [...acc, next[isFirstNormLesser ? 0 : 1]];
+  }, []);
+
+  const resultx = centsScale.filter((c: number) => !resolvedPairs.includes(c));
+
+  return outputScale(state, resultx);
 };
