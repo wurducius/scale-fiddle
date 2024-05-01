@@ -1,4 +1,5 @@
 import { Timbre } from "../types";
+import { onlyUnique } from "../util";
 import { normalizePeriod } from "./sheen";
 
 const OPTIMIZATION_STEP = 0.0001;
@@ -136,4 +137,32 @@ export async function tuningToTimbre(
   };
 
   return timbre;
+}
+
+export function timbreToTuning(timbre: Timbre, period: number) {
+  let tuning: number[] = [];
+
+  const array = Array.from({ length: timbre.real.length })
+    .map((item, i) => i + 1)
+    .filter((item, i) => timbre.real[i] != 0 || timbre.imag[i] != 0)
+    .map((item) => normalizePeriod(item, period))
+    .filter(onlyUnique);
+
+  console.log(array, timbre);
+  tuning.push(1);
+
+  for (let i = 0; i < array.length; i++) {
+    for (let j = 0; j < array.length; j++) {
+      tuning.push(normalizePeriod(array[i] / array[j], period));
+      tuning.push(normalizePeriod(array[j] / array[i], period));
+    }
+  }
+
+  tuning = tuning.filter(onlyUnique).sort((a, b) => a - b);
+
+  return tuning
+    .map((item) => (item === 1 ? period : item))
+    .map((item) => 1200 * Math.log2(item))
+    .sort((a, b) => a - b)
+    .map((item) => item.toFixed(1));
 }

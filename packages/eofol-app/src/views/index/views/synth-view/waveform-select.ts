@@ -3,7 +3,12 @@ import { timbrePresets, waveformTypeOptions } from "../../../../data";
 import { setWaveformPreset, setWaveformValue } from "../../../../synth";
 import { FiddleState, Timbre } from "../../../../types";
 import { div, h2, h3, h4, p } from "../../../../extract";
-import { normalizePeriod, parseScala, tuningToTimbre } from "../../../../sheen";
+import {
+  normalizePeriod,
+  parseScala,
+  timbreToTuning,
+  tuningToTimbre,
+} from "../../../../sheen";
 import { sx } from "@eofol/eofol";
 
 const setCustomWaveform = (customCoefficients: [number, number][]) => {
@@ -194,6 +199,31 @@ export const waveformCustomMenu = (state: FiddleState, setState: any) => {
             ]),
           ]),
         ]);
+      }),
+      button({
+        children: "Scale from timbre",
+        styles: sx({ marginTop: "48px" }),
+        onClick: () => {
+          const timbre: Timbre = {
+            id: "from-tuning",
+            title: "Optimal timbre", // @ts-ignore
+            real: [0, ...state.synth.customCoefficients.map((item) => item[0])], // @ts-ignore
+            imag: [0, ...state.synth.customCoefficients.map((item) => item[1])],
+          };
+
+          const timbralScale = timbreToTuning(
+            timbre, // @ts-ignore
+            state.tuning.period
+          );
+
+          // @ts-ignore
+          setState({
+            ...state,
+            recompute: true,
+            scaleLength: timbralScale.length,
+            scaleInput: timbralScale.join("\n"),
+          });
+        },
       }),
     ]
   );
