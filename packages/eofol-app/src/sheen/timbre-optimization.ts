@@ -70,12 +70,14 @@ const getFiniteDifference =
     return (getCostImpl(offsetWaveform) - baseCost) / DERIVATIVE_STEP;
   };
 
-export const tuningToTimbre = (
+export async function tuningToTimbre(
   tuning: number[],
   period: number,
   timbreLength: number,
-  iterations: number
-) => {
+  iterations: number,
+  progressElement: Element | null,
+  progressbarElement: Element | null
+) {
   let waveform = Array.from({ length: timbreLength - 1 }).map(
     () => (Math.random() - 0.5) * 2
   );
@@ -85,18 +87,34 @@ export const tuningToTimbre = (
   const initialCost = getCostImpl(waveform);
 
   for (let i = 0; i < iterations; i++) {
-    const cost = getCostImpl(waveform);
+    await new Promise((resolve) => {
+      console.log("iteration = " + i);
+      const cost = getCostImpl(waveform);
 
-    const getDerivative = getFiniteDifference(getCostImpl, waveform, cost);
+      const getDerivative = getFiniteDifference(getCostImpl, waveform, cost);
 
-    const gradient = waveform.map((waveformComponent, index) =>
-      getDerivative(index)
-    );
+      const gradient = waveform.map((waveformComponent, index) =>
+        getDerivative(index)
+      );
 
-    waveform = waveform.map(
-      (waveformComponent, i) =>
-        waveformComponent - OPTIMIZATION_STEP * gradient[i]
-    );
+      waveform = waveform.map(
+        (waveformComponent, i) =>
+          waveformComponent - OPTIMIZATION_STEP * gradient[i]
+      );
+
+      setTimeout(resolve, 0);
+    });
+
+    setTimeout(() => {
+      const progressValue = (((i + 1) / iterations) * 100).toFixed(0);
+      if (progressElement) {
+        progressElement.textContent = `${progressValue}%`;
+      }
+      if (progressbarElement) {
+        progressbarElement.setAttribute("value", progressValue);
+        progressbarElement.textContent = `${progressValue}%`;
+      }
+    }, 0);
   }
 
   const waveformMax = waveform.reduce(
@@ -109,14 +127,13 @@ export const tuningToTimbre = (
 
   const normedCost = getCostImpl(normedWaveform);
 
-  console.log("Reduced cost by " + (initialCost - normedCost));
-
   const timbre: Timbre = {
     id: "from-tuning",
     title: "Optimal timbre",
     real: [0, ...normedWaveform],
     imag: [0, ...normedWaveform.map((waveformComponent) => 0)],
+    errorDelta: initialCost - normedCost,
   };
 
   return timbre;
-};
+}

@@ -307,7 +307,8 @@ export const synthTab = (
           div(
             sx({
               display: "flex",
-              justifyContent: "center",
+              flexDirection: "column",
+              alignItems: "center",
               margin: "0 64px 0 64px",
             }),
             [
@@ -333,22 +334,20 @@ export const synthTab = (
                 sx({ margin: `0 ${theme.spacing.space4}` }),
                 "master-gain"
               ),
+              h1("Organ (sustain)"),
+              checkbox({
+                name: "checkbox-organ",
+                value: synth.organ,
+                onChange: () => {
+                  // @ts-ignore
+                  setState({
+                    ...state,
+                    synth: { ...synth, organ: !synth.organ },
+                  });
+                },
+              }),
             ]
           ),
-          div(sx({ margin: "0 64px 0 64px" }), [
-            h1("Organ (sustain)"),
-            checkbox({
-              name: "checkbox-organ",
-              value: synth.organ,
-              onChange: () => {
-                // @ts-ignore
-                setState({
-                  ...state,
-                  synth: { ...synth, organ: !synth.organ },
-                });
-              },
-            }),
-          ]),
           div(sx({ margin: "0 64px 0 64px" }), [
             h1("Timbre"),
             waveformTypeSelect(state, setState),

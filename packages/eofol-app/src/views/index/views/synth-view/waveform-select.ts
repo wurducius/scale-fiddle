@@ -1,7 +1,7 @@
 import { button, input, notify, select } from "@eofol/eofol-simple";
 import { timbrePresets, waveformTypeOptions } from "../../../../data";
 import { setWaveformPreset, setWaveformValue } from "../../../../synth";
-import { FiddleState } from "../../../../types";
+import { FiddleState, Timbre } from "../../../../types";
 import { div, h2, h3, p } from "../../../../extract";
 import { normalizePeriod, parseScala, tuningToTimbre } from "../../../../sheen";
 import { sx } from "@eofol/eofol";
@@ -114,21 +114,55 @@ export const waveformFromTuningMenu = (state: FiddleState, setState: any) =>
           .map((tone: number) => normalizePeriod(tone, period))
           .sort((a: number, b: number) => a - b);
 
-        notify({
-          title:
-            "Computing optimal timbre for given tuning. This might take a while according to selected length and number of iterations.",
-        });
+        const overlayElement = document.getElementById("overlay-loading");
+        if (overlayElement) {
+          overlayElement.className = "overlay-loading overlay-loading-active";
+        }
 
-        const result = tuningToTimbre(
-          ratioVals,
-          period,
-          fromTuningLength,
-          fromTuningIterations
+        const progressElement = document.getElementById(
+          "overlay-loading-progress"
+        );
+        const progressbarElement = document.getElementById(
+          "overlay-loading-progressbar"
         );
 
-        setWaveformValue(result);
+        setTimeout(() => {
+          new Promise((resolve) => {
+            return resolve(true);
+          })
+            .then(() => {
+              return tuningToTimbre(
+                ratioVals,
+                period,
+                fromTuningLength,
+                fromTuningIterations,
+                progressElement,
+                progressbarElement
+              );
+            })
+            .then((result) => {
+              // @ts-ignore
+              const resultDelta = result.errorDelta ?? 0;
 
-        notify({ title: "Finished computing optimal timbre." });
+              if (overlayElement) {
+                overlayElement.className =
+                  "overlay-loading overlay-loading-inactive";
+              }
+
+              notify({
+                title: `Finished computing optimal timbre with reduced error by ${resultDelta.toFixed(
+                  1
+                )}.${
+                  resultDelta < 0
+                    ? " Because the error was actually increased, you might want to try to compute an optimal timbre again."
+                    : ""
+                }`,
+              });
+
+              // @ts-ignore
+              setWaveformValue(result);
+            });
+        }, 20);
       },
     }),
   ]);

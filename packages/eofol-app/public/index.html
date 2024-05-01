@@ -29,6 +29,27 @@
   </head>
   <body>
     <div id="eofol" class="container">
+      <div
+        class="overlay-loading overlay-loading-inactive"
+        id="overlay-loading"
+      >
+        <div>
+          <div class="loader"></div>
+          <h1>
+            Computing optimal timbre for given tuning. This might take a while
+            according to selected length and number of iterations.
+          </h1>
+          <h1 id="overlay-progress-please-wait">Please wait...</h1>
+          <div>
+            <progress
+              id="overlay-loading-progressbar"
+              value="0"
+              max="100"
+            ></progress>
+            <h1 id="overlay-loading-progress">0%</h1>
+          </div>
+        </div>
+      </div>
       <div is="fiddle-keyboard"></div>
     </div>
 

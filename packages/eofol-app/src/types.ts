@@ -145,6 +145,7 @@ export type Timbre = {
   title: string;
   real: number[];
   imag: number[];
+  errorDelta?: number;
 };
 
 export type KeyLabel = "freq" | "cent" | "ratio" | "name" | "index";
