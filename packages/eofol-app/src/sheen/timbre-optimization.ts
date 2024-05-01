@@ -76,7 +76,8 @@ export async function tuningToTimbre(
   timbreLength: number,
   iterations: number,
   progressElement: Element | null,
-  progressbarElement: Element | null
+  progressbarElement: Element | null,
+  remainingElement: Element | null
 ) {
   let waveform = Array.from({ length: timbreLength - 1 }).map(
     () => (Math.random() - 0.5) * 2
@@ -87,8 +88,9 @@ export async function tuningToTimbre(
   const initialCost = getCostImpl(waveform);
 
   for (let i = 0; i < iterations; i++) {
+    const start = new Date();
+
     await new Promise((resolve) => {
-      console.log("iteration = " + i);
       const cost = getCostImpl(waveform);
 
       const getDerivative = getFiniteDifference(getCostImpl, waveform, cost);
@@ -105,14 +107,22 @@ export async function tuningToTimbre(
       setTimeout(resolve, 0);
     });
 
+    const end = new Date();
+
     setTimeout(() => {
       const progressValue = (((i + 1) / iterations) * 100).toFixed(0);
+      const timeGuessSeconds = // @ts-ignore
+        (((iterations - i - 1) * (end - start)) / 1000).toFixed(0);
+
       if (progressElement) {
         progressElement.textContent = `${progressValue}%`;
       }
       if (progressbarElement) {
         progressbarElement.setAttribute("value", progressValue);
         progressbarElement.textContent = `${progressValue}%`;
+      }
+      if (remainingElement) {
+        remainingElement.textContent = `Estimated time remaining: ${timeGuessSeconds}s`;
       }
     }, 0);
   }

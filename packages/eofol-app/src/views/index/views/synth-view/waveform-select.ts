@@ -125,6 +125,9 @@ export const waveformFromTuningMenu = (state: FiddleState, setState: any) =>
         const progressbarElement = document.getElementById(
           "overlay-loading-progressbar"
         );
+        const remainingElement = document.getElementById(
+          "overlay-loading-remaining"
+        );
 
         setTimeout(() => {
           new Promise((resolve) => {
@@ -137,7 +140,8 @@ export const waveformFromTuningMenu = (state: FiddleState, setState: any) =>
                 fromTuningLength,
                 fromTuningIterations,
                 progressElement,
-                progressbarElement
+                progressbarElement,
+                remainingElement
               );
             })
             .then((result) => {

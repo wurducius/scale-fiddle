@@ -54,6 +54,11 @@ a {
   margin-top: 32px;
 }
 
+#overlay-loading-remaining {
+  margin-top: 32px;
+  color: #86b1ff;
+}
+
 progress {
   width: 100%;
   background-color: #3567c5;
