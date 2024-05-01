@@ -48,7 +48,12 @@ export const initStyles = (theme: Theme) => {
   createStyle(
     `input { cursor: text; padding: 2px 10px; margin-top: 8px; margin-bottom: 8px; font-size: ${theme.typography.text.fontSize}; width: 256px; height: 24px; background-color: ${theme.color.backgroundElevation}; color: ${theme.color.secondary}; border: 1px solid ${theme.color.secondary}; }`
   );
-  createStyle(`input:focus { outline: 2px solid ${theme.color.secondary}; }`);
+  createStyle(
+    `input:focus:not(.input-base-invalid) { outline: 2px solid ${theme.color.secondary}; }`
+  );
+  createStyle(
+    `.number-input-hide-arrows::-webkit-outer-spin-button, .number-input-hide-arrows::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; } .number-input-hide-arrows { -moz-appearance: textfield; }`
+  );
 
   createStyle(
     `textarea { cursor: text; margin-right: 0; padding: 8px 0 8px 8px; font-size: ${theme.typography.text.fontSize}; width: 256px; height: 24px; background-color: ${theme.color.backgroundElevation}; color: ${theme.color.secondary}; border: 1px solid ${theme.color.secondary}; }`

@@ -1,5 +1,17 @@
-import { button, input, notify, select } from "@eofol/eofol-simple";
-import { timbrePresets, waveformTypeOptions } from "../../../../data";
+import {
+  button,
+  input,
+  notify,
+  numberInput,
+  select,
+} from "@eofol/eofol-simple";
+import {
+  TIMBRE_CUSTOM_COEFFICIENTS_LENGTH_MAX,
+  TIMBRE_FROM_TUNING_COEFFICIENTS_LENGTH_MAX,
+  TIMBRE_FROM_TUNING_ITERATIONS_MAX,
+  timbrePresets,
+  waveformTypeOptions,
+} from "../../../../data";
 import { setWaveformPreset, setWaveformValue } from "../../../../synth";
 import { FiddleState, Timbre } from "../../../../types";
 import { div, h2, h3, h4, p } from "../../../../extract";
@@ -9,7 +21,15 @@ import {
   timbreToTuning,
   tuningToTimbre,
 } from "../../../../sheen";
-import { sx } from "@eofol/eofol";
+import { createElement, sx } from "@eofol/eofol";
+import {
+  validateIsInteger,
+  validateIsNumber,
+  validateIsOverMin,
+  validateIsRequired,
+  validateIsUnderMax,
+} from "../../../../util/validation";
+import { decimalInput, integerInput } from "../../../../ui";
 
 const setCustomWaveform = (customCoefficients: [number, number][]) => {
   // @ts-ignore
@@ -84,20 +104,13 @@ export const waveformCustomMenu = (state: FiddleState, setState: any) => {
     sx({ display: "flex", flexDirection: "column", alignItems: "center" }),
     [
       h3("Timbre coefficients length"),
-      input({
+      integerInput({
         name: "waveform-custom-length",
         value: customLength,
+        min: 1,
+        max: TIMBRE_CUSTOM_COEFFICIENTS_LENGTH_MAX,
         onChange: (nextVal) => {
           const val = Number(nextVal);
-          if (
-            !Number.isFinite(val) ||
-            Number.isNaN(val) ||
-            !Number.isInteger(val) ||
-            val < 1
-          ) {
-            return;
-          }
-
           const nextCustomCoefficients = Array.from({ length: val }).map(
             (item, i) =>
               i < customCoefficients.length
@@ -125,7 +138,9 @@ export const waveformCustomMenu = (state: FiddleState, setState: any) => {
           div(sx({ display: "flex" }), [
             div(sx({ display: "block", marginRight: "32px" }), [
               h4("Real coefficient"),
-              input({
+              decimalInput({
+                min: -1,
+                max: 1,
                 name: "waveform-custom-coefficient-real-" + index,
                 classname: sx({ width: "128px" }),
                 value: customCoefficients[index][0],
@@ -162,7 +177,9 @@ export const waveformCustomMenu = (state: FiddleState, setState: any) => {
             ]),
             div(sx({ display: "block", marginLeft: "32px" }), [
               h4("Imaginary coefficient"),
-              input({
+              decimalInput({
+                min: -1,
+                max: 1,
                 name: "waveform-custom-coefficient-imag-" + index,
                 classname: sx({ width: "128px" }),
                 value: customCoefficients[index][1],
@@ -201,20 +218,23 @@ export const waveformCustomMenu = (state: FiddleState, setState: any) => {
         ]);
       }),
       button({
-        children: "Scale from timbre",
+        children: "Compute optimal scale from timbre",
         styles: sx({ marginTop: "48px" }),
         onClick: () => {
           const timbre: Timbre = {
-            id: "from-tuning",
-            title: "Optimal timbre", // @ts-ignore
+            id: "",
+            title: "", // @ts-ignore
             real: [0, ...state.synth.customCoefficients.map((item) => item[0])], // @ts-ignore
             imag: [0, ...state.synth.customCoefficients.map((item) => item[1])],
           };
 
           const timbralScale = timbreToTuning(
             timbre, // @ts-ignore
-            state.tuning.period
+            state.tuning.period, // @ts-ignore
+            state.options.decimalDigitsCent
           );
+
+          notify({ title: "Set timbral scale for given custom timbre." });
 
           // @ts-ignore
           setState({
@@ -229,23 +249,17 @@ export const waveformCustomMenu = (state: FiddleState, setState: any) => {
   );
 };
 
-const timbreLengthInput = (state: FiddleState, setState: any) => {
+const timbreFromTuningLengthInput = (state: FiddleState, setState: any) => {
   return [
     h3("Timbre coefficients length"),
-    input({
+    integerInput({
+      min: 1,
+      max: TIMBRE_FROM_TUNING_COEFFICIENTS_LENGTH_MAX,
       // @ts-ignore
       value: state.synth.fromTuningLength,
       name: "waveform-from-tuning-length",
       onChange: (nextVal) => {
         const val = Number(nextVal);
-        if (
-          !Number.isFinite(val) ||
-          Number.isNaN(val) ||
-          !Number.isInteger(val) ||
-          val < 1
-        ) {
-          return;
-        }
         // @ts-ignore
         setState({
           ...state, // @ts-ignore
@@ -256,23 +270,17 @@ const timbreLengthInput = (state: FiddleState, setState: any) => {
   ];
 };
 
-const timbreIterationsInput = (state: FiddleState, setState: any) => {
+const timbreFromTuningIterationsInput = (state: FiddleState, setState: any) => {
   return [
     h3("Timbre optimization iterations"),
-    input({
+    integerInput({
+      min: 1,
+      max: TIMBRE_FROM_TUNING_ITERATIONS_MAX,
       // @ts-ignore
       value: state.synth.fromTuningIterations,
       name: "waveform-from-tuning-iterations",
       onChange: (nextVal) => {
         const val = Number(nextVal);
-        if (
-          !Number.isFinite(val) ||
-          Number.isNaN(val) ||
-          !Number.isInteger(val) ||
-          val < 1
-        ) {
-          return;
-        }
         // @ts-ignore
         setState({
           ...state, // @ts-ignore
@@ -283,7 +291,7 @@ const timbreIterationsInput = (state: FiddleState, setState: any) => {
   ];
 };
 
-const timbreScaleToTimbreButton = (state: FiddleState, setState: any) => {
+const timbreFromTuningButton = (state: FiddleState, setState: any) => {
   return button({
     styles: sx({ marginTop: "48px" }),
     children: "Compute optimal timbre from tuning",
@@ -394,9 +402,9 @@ export const waveformFromTuningMenu = (state: FiddleState, setState: any) => {
   return div(
     sx({ display: "flex", flexDirection: "column", alignItems: "center" }),
     [
-      ...timbreLengthInput(state, setState),
-      ...timbreIterationsInput(state, setState),
-      timbreScaleToTimbreButton(state, setState),
+      ...timbreFromTuningLengthInput(state, setState),
+      ...timbreFromTuningIterationsInput(state, setState),
+      timbreFromTuningButton(state, setState),
     ]
   );
 };

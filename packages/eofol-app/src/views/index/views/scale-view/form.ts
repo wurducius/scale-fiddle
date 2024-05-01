@@ -7,7 +7,12 @@ import {
   getTheme,
   mergeDeep,
 } from "@eofol/eofol";
-import { scalePresets, scalePresetsFlat } from "../../../../data";
+import {
+  HIGHER_RANK_GENERATORS_MAX,
+  STEPS_UP_DOWN_MAX,
+  scalePresets,
+  scalePresetsFlat,
+} from "../../../../data";
 import { div, p } from "../../../../extract";
 import {
   updateScale,
@@ -27,16 +32,10 @@ import {
   modifyStretch,
   modifyApproxEqual,
   modifyTemper,
-  linearScale,
-  outputScaleCents,
-  parseScala,
   createHigherRankTemperament,
 } from "../../../../sheen";
 import { FiddleState, FiddleStateImpl } from "../../../../types";
-import { defineSelectSearch } from "../../../../ui";
-import { mod, onlyUnique, trimWhitespace } from "../../../../util";
-
-const HIGHER_RANK_TEMPERAMENT_MAX_GENERATOR_COUNT = 100;
+import { defineSelectSearch, integerInput } from "../../../../ui";
 
 createStore("select-search-preset", {
   onChange: undefined,
@@ -383,7 +382,9 @@ export const formModal = (
               sx({ fontSize: theme.typography.heading.fontSize }),
               "Generator count"
             ),
-            input({
+            integerInput({
+              min: 1,
+              max: HIGHER_RANK_GENERATORS_MAX,
               name: "input-form-higher-generator-count",
               // @ts-ignore
               value: state.form.higher.generatorCount,
@@ -405,8 +406,7 @@ export const formModal = (
           // @ts-ignore
           ...(state.form.higher.generatorCount > 0 &&
           // @ts-ignore
-          state.form.higher.generatorCount <=
-            HIGHER_RANK_TEMPERAMENT_MAX_GENERATOR_COUNT &&
+          state.form.higher.generatorCount <= HIGHER_RANK_GENERATORS_MAX &&
           // @ts-ignore
           Number.isFinite(state.form.higher.generatorCount) &&
           // @ts-ignore
@@ -431,7 +431,9 @@ export const formModal = (
                   },
                 }),
                 p("Steps up"),
-                input({
+                integerInput({
+                  min: 0,
+                  max: STEPS_UP_DOWN_MAX,
                   // @ts-ignore
                   value: state.form.higher.stepsUp,
                   name: "input-form-higher-steps-up",
@@ -449,7 +451,9 @@ export const formModal = (
                   },
                 }),
                 p("Steps down"),
-                input({
+                integerInput({
+                  min: 0,
+                  max: STEPS_UP_DOWN_MAX,
                   // @ts-ignore
                   value: state.form.higher.stepsDown,
                   name: "input-form-higher-steps-down",
@@ -487,7 +491,7 @@ export const formModal = (
               ]
             : [
                 p(
-                  `Generator count has illegal value. Allowed values are finite integer positive numbers lesser or equal to ${HIGHER_RANK_TEMPERAMENT_MAX_GENERATOR_COUNT}`
+                  `Generator count has illegal value. Allowed values are finite integer positive numbers lesser or equal to ${HIGHER_RANK_GENERATORS_MAX}`
                 ),
               ]),
         ])

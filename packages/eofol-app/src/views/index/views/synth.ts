@@ -3,8 +3,14 @@ import { select, checkbox, input } from "@eofol/eofol-simple";
 import { div, h2, h1, h3, h4 } from "../../../extract";
 import { setTotalGain } from "../../../synth";
 import { FiddleState } from "../../../types";
-import { sliderInput } from "../../../ui";
-import { envelopeCurveOptions, envelopeTypeOptions } from "../../../data";
+import { decimalInput, integerInput, sliderInput } from "../../../ui";
+import {
+  ENVELOPE_CUSTOM_MAX_LENGTH,
+  ENVELOPE_CUSTOM_TIME_MAX,
+  ENVELOPE_CUSTOM_TIME_MIN,
+  envelopeCurveOptions,
+  envelopeTypeOptions,
+} from "../../../data";
 import { waveformTypeSelect, waveformValueMenu } from "./synth-view";
 
 const envelopeCurveSelect = (
@@ -274,7 +280,9 @@ const envelopeCustomMenu = (
 
   return div(sx({ marginTop: theme.spacing.space4 }), [
     h3("Envelope phase length"),
-    input({
+    integerInput({
+      min: 1,
+      max: ENVELOPE_CUSTOM_MAX_LENGTH,
       // @ts-ignore
       value: state.synth.customEnvelopeLength,
       name: "select-envelope-custom-length",
@@ -315,7 +323,9 @@ const envelopeCustomMenu = (
         .map((item, index) => [
           h3("Envelope phase #" + (index + 1)),
           h4("Gain"),
-          input({
+          decimalInput({
+            min: 0,
+            max: 1,
             // @ts-ignore
             value: state.synth.customEnvelopeGain[index],
             name: "select-envelope-custom-gain-" + index,
@@ -335,7 +345,10 @@ const envelopeCustomMenu = (
             },
           }),
           h4("Time"),
-          input({
+          decimalInput({
+            min: ENVELOPE_CUSTOM_TIME_MIN,
+            max: ENVELOPE_CUSTOM_TIME_MAX,
+            step: 1,
             // @ts-ignore
             value: state.synth.customEnvelopeTime[index],
             name: "select-envelope-custom-time-" + index,

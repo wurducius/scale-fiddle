@@ -1,0 +1,27 @@
+export const TIMBRE_FROM_TUNING_COEFFICIENTS_LENGTH_MAX = 100;
+
+export const TIMBRE_CUSTOM_COEFFICIENTS_LENGTH_MAX = 100;
+
+export const TIMBRE_FROM_TUNING_ITERATIONS_MAX = 10000;
+
+export const PRECISION_MAX_DIGITS = 15;
+
+export const BASE_FREQUENCY_MIN = 10;
+
+export const BASE_FREQUENCY_MAX = 10000;
+
+export const PERIOD_MAX = 100;
+
+export const KEYS_UP_DOWN_MAX = 256;
+
+export const ENVELOPE_CUSTOM_MAX_LENGTH = 10;
+
+export const ENVELOPE_CUSTOM_TIME_MIN = 0.0001;
+
+export const ENVELOPE_CUSTOM_TIME_MAX = 1000;
+
+export const GAIN_MIN = 0.000000001;
+
+export const HIGHER_RANK_GENERATORS_MAX = 30;
+
+export const STEPS_UP_DOWN_MAX = 256;

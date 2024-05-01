@@ -139,7 +139,11 @@ export async function tuningToTimbre(
   return timbre;
 }
 
-export function timbreToTuning(timbre: Timbre, period: number) {
+export function timbreToTuning(
+  timbre: Timbre,
+  period: number,
+  precisionCents: number
+) {
   let tuning: number[] = [];
 
   const array = Array.from({ length: timbre.real.length })
@@ -148,7 +152,6 @@ export function timbreToTuning(timbre: Timbre, period: number) {
     .map((item) => normalizePeriod(item, period))
     .filter(onlyUnique);
 
-  console.log(array, timbre);
   tuning.push(1);
 
   for (let i = 0; i < array.length; i++) {
@@ -164,5 +167,5 @@ export function timbreToTuning(timbre: Timbre, period: number) {
     .map((item) => (item === 1 ? period : item))
     .map((item) => 1200 * Math.log2(item))
     .sort((a, b) => a - b)
-    .map((item) => item.toFixed(1));
+    .map((item) => item.toFixed(precisionCents));
 }

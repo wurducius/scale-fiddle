@@ -1,4 +1,4 @@
-import { input } from "@eofol/eofol-simple";
+import { inputBase } from "@eofol/eofol-simple";
 import { cx, createElement } from "@eofol/eofol";
 import { div } from "../extract";
 
@@ -21,7 +21,7 @@ export const sliderInput = (
     [
       createElement(labelTag ?? "p", undefined, label),
       div("input-slider-parent", [
-        input({
+        inputBase({
           name: "input-slider-" + label,
           value,
           onChange: (nextVal) => {

@@ -3,6 +3,13 @@ import { getTheme, sx } from "@eofol/eofol";
 import { FiddleState } from "../../../../types";
 import { p, div, flex, h3 } from "../../../../extract";
 import { waveformPresetSelect } from "../synth-view";
+import { decimalInput, integerInput } from "../../../../ui";
+import {
+  BASE_FREQUENCY_MAX,
+  BASE_FREQUENCY_MIN,
+  KEYS_UP_DOWN_MAX,
+  PERIOD_MAX,
+} from "../../../../data";
 
 const theme = getTheme();
 
@@ -22,20 +29,20 @@ export const scaleTuning = (
         p("Base frequency Hz"),
         div(
           sx({ width: "64px", margin: "0 0 0 auto", display: "flex" }),
-          input({
+          decimalInput({
+            min: BASE_FREQUENCY_MIN,
+            max: BASE_FREQUENCY_MAX,
             name: "input-basefreq",
             value: tuning.baseFreq,
             classname: sx({ width: "100%", margin: "4px 0 4px 0" }),
             onChange: (nextVal) => {
               const val = Number(nextVal);
-              if (Number.isFinite(val)) {
-                // @ts-ignore
-                setState({
-                  ...state,
-                  tuning: { ...tuning, baseFreq: val },
-                  recompute: true,
-                });
-              }
+              // @ts-ignore
+              setState({
+                ...state,
+                tuning: { ...tuning, baseFreq: val },
+                recompute: true,
+              });
             },
           })
         ),
@@ -44,20 +51,20 @@ export const scaleTuning = (
         p("Period interval ratio"),
         div(
           sx({ width: "64px", margin: "0 0 0 auto", display: "flex" }),
-          input({
+          decimalInput({
+            min: 1,
+            max: PERIOD_MAX,
             name: "input-period",
             value: tuning.period,
             classname: sx({ width: "100%", margin: "4px 0 4px 0" }),
             onChange: (nextVal) => {
               const val = Number(nextVal);
-              if (Number.isFinite(val)) {
-                // @ts-ignore
-                setState({
-                  ...state,
-                  tuning: { ...tuning, period: val },
-                  recompute: true,
-                });
-              }
+              // @ts-ignore
+              setState({
+                ...state,
+                tuning: { ...tuning, period: val },
+                recompute: true,
+              });
             },
           })
         ),
@@ -66,20 +73,20 @@ export const scaleTuning = (
         p("Number of keys up"),
         div(
           sx({ width: "64px", margin: "0 0 0 auto", display: "flex" }),
-          input({
+          integerInput({
+            min: 0,
+            max: KEYS_UP_DOWN_MAX,
             name: "input-keys-up",
             value: tuning.keysUp,
             classname: sx({ width: "100%", margin: "4px 0 4px 0" }),
             onChange: (nextVal) => {
               const val = Number(nextVal);
-              if (Number.isFinite(val) && val >= 0) {
-                // @ts-ignore
-                setState({
-                  ...state,
-                  tuning: { ...tuning, keysUp: val },
-                  recompute: true,
-                });
-              }
+              // @ts-ignore
+              setState({
+                ...state,
+                tuning: { ...tuning, keysUp: val },
+                recompute: true,
+              });
             },
           })
         ),
@@ -88,20 +95,20 @@ export const scaleTuning = (
         p("Number of keys down"),
         div(
           sx({ width: "64px", margin: "0 0 0 auto", display: "flex" }),
-          input({
+          integerInput({
+            min: 0,
+            max: KEYS_UP_DOWN_MAX,
             name: "input-keys-down",
             value: tuning.keysDown,
             classname: sx({ width: "100%", margin: "4px 0 4px 0" }),
             onChange: (nextVal) => {
               const val = Number(nextVal);
-              if (Number.isFinite(val) && val >= 0) {
-                // @ts-ignore
-                setState({
-                  ...state,
-                  tuning: { ...tuning, keysDown: val },
-                  recompute: true,
-                });
-              }
+              // @ts-ignore
+              setState({
+                ...state,
+                tuning: { ...tuning, keysDown: val },
+                recompute: true,
+              });
             },
           })
         ),
