@@ -351,7 +351,7 @@ export const synthTab = (
           div(sx({ margin: "0 64px 0 64px" }), [
             h1("Timbre"),
             waveformTypeSelect(state, setState),
-            div(sx({ marginTop: "16px" }), waveformValueMenu(state, setState)),
+            div(sx({ marginTop: "48px" }), waveformValueMenu(state, setState)),
           ]),
         ]
       ),

@@ -124,6 +124,14 @@ export const initialState = {
     waveformPreset: "distorted-organ",
     fromTuningLength: 7,
     fromTuningIterations: 20,
+    customLength: 5,
+    customCoefficients: [
+      [1, 0],
+      [0, 1],
+      [1, 0],
+      [0, 1],
+      [1, 0],
+    ],
   },
   options: {
     decimalDigitsFreq: 3,

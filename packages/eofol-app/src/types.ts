@@ -123,6 +123,8 @@ export type FiddleStateImpl = {
     waveformPreset: string;
     fromTuningLength: number;
     fromTuningIterations: number;
+    customLength: number;
+    customCoefficients: [number, number][];
   };
   options: {
     decimalDigitsFreq: number;
