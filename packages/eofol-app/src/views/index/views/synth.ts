@@ -1,13 +1,11 @@
 import { getBreakpoint, getTheme, sx } from "@eofol/eofol";
-import { select, checkbox } from "@eofol/eofol-simple";
-import { div, h2, p, h1, h3 } from "../../../extract";
+import { select, checkbox, input } from "@eofol/eofol-simple";
+import { div, h2, h1, h3, h4 } from "../../../extract";
 import { setTotalGain } from "../../../synth";
 import { FiddleState } from "../../../types";
 import { sliderInput } from "../../../ui";
 import { envelopeCurveOptions, envelopeTypeOptions } from "../../../data";
 import { waveformTypeSelect, waveformValueMenu } from "./synth-view";
-
-const theme = getTheme();
 
 const envelopeCurveSelect = (
   value: string,
@@ -31,6 +29,7 @@ const envelopeADSRMenu = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
 ) => {
+  const theme = getTheme();
   const breakpoint = getBreakpoint();
 
   // @ts-ignore
@@ -253,8 +252,17 @@ const envelopePresetMenu = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
 ) => {
+  const theme = getTheme();
+
   return [
-    div(sx({ marginTop: theme.spacing.space4 }), [p("UNDER CONSTRUCTION")]),
+    div(sx({ marginTop: theme.spacing.space4 }), [
+      select({
+        value: "",
+        name: "select-envelope-preset",
+        onChange: (nextVal) => {},
+        options: [],
+      }),
+    ]),
   ];
 };
 
@@ -262,9 +270,114 @@ const envelopeCustomMenu = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
 ) => {
-  return [
-    div(sx({ marginTop: theme.spacing.space4 }), [p("UNDER CONSTRUCTION")]),
-  ];
+  const theme = getTheme();
+
+  return div(sx({ marginTop: theme.spacing.space4 }), [
+    h3("Envelope phase length"),
+    input({
+      // @ts-ignore
+      value: state.synth.customEnvelopeLength,
+      name: "select-envelope-custom-length",
+      onChange: (nextVal) => {
+        const val = Number(nextVal);
+        const array = Array.from({ length: val });
+
+        // @ts-ignore
+        const customEnvelopeGain = state.synth.customEnvelopeGain;
+        // @ts-ignore
+        const customEnvelopeTime = state.synth.customEnvelopeTime;
+        // @ts-ignore
+        const customEnvelopeCurve = state.synth.customEnvelopeCurve;
+
+        // @ts-ignore
+        setState({
+          ...state,
+          synth: {
+            // @ts-ignore
+            ...state.synth,
+            customEnvelopeLength: val,
+            customEnvelopeGain: array.map((item, i) =>
+              i < customEnvelopeGain.length ? customEnvelopeGain[i] : 1
+            ),
+            customEnvelopeTime: array.map((item, i) =>
+              i < customEnvelopeTime.length ? customEnvelopeTime[i] : 50
+            ),
+            customEnvelopeCurve: array.map((item, i) =>
+              i < customEnvelopeCurve.length ? customEnvelopeCurve[i] : "linear"
+            ),
+          },
+        });
+      },
+    }),
+    div(
+      undefined, // @ts-ignore
+      Array.from({ length: state.synth.customEnvelopeLength })
+        .map((item, index) => [
+          h3("Envelope phase #" + (index + 1)),
+          h4("Gain"),
+          input({
+            // @ts-ignore
+            value: state.synth.customEnvelopeGain[index],
+            name: "select-envelope-custom-gain-" + index,
+            onChange: (nextVal) => {
+              // @ts-ignore
+              setState({
+                ...state,
+                synth: {
+                  // @ts-ignore
+                  ...state.synth, // @ts-ignore
+                  customEnvelopeGain: state.synth.customEnvelopeGain.map(
+                    // @ts-ignore
+                    (item, i) => (i === index ? nextVal : item)
+                  ),
+                },
+              });
+            },
+          }),
+          h4("Time"),
+          input({
+            // @ts-ignore
+            value: state.synth.customEnvelopeTime[index],
+            name: "select-envelope-custom-time-" + index,
+            onChange: (nextVal) => {
+              // @ts-ignore
+              setState({
+                ...state,
+                synth: {
+                  // @ts-ignore
+                  ...state.synth, // @ts-ignore
+                  customEnvelopeTime: state.synth.customEnvelopeTime.map(
+                    // @ts-ignore
+                    (item, i) => (i === index ? nextVal : item)
+                  ),
+                },
+              });
+            },
+          }),
+          h4("Curve"),
+          select({
+            name: "select-envelope-custom-curve-" + index, // @ts-ignore
+            value: state.synth.customEnvelopeCurve[index],
+            onChange: (nextVal) => {
+              // @ts-ignore
+              setState({
+                ...state,
+                synth: {
+                  // @ts-ignore
+                  ...state.synth, // @ts-ignore
+                  customEnvelopeCurve: state.synth.customEnvelopeCurve.map(
+                    // @ts-ignore
+                    (item, i) => (i === index ? nextVal : item)
+                  ),
+                },
+              });
+            },
+            options: envelopeCurveOptions,
+          }),
+        ])
+        .flat()
+    ),
+  ]);
 };
 
 const envelopeMenu = (
@@ -280,7 +393,7 @@ const envelopeMenu = (
       ? envelopePresetMenu(state, setState)
       : []),
     ...(synth.envelopeType === "custom"
-      ? envelopeCustomMenu(state, setState)
+      ? [envelopeCustomMenu(state, setState)]
       : []),
   ]);
 };
@@ -289,6 +402,7 @@ export const synthTab = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
 ) => {
+  const theme = getTheme();
   const breakpoint = getBreakpoint();
   // @ts-ignore
   const synth = state.synth;

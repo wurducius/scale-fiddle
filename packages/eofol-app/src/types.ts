@@ -125,6 +125,10 @@ export type FiddleStateImpl = {
     fromTuningIterations: number;
     customLength: number;
     customCoefficients: [number, number][];
+    customEnvelopeLength: number;
+    customEnvelopeGain: number[];
+    customEnvelopeTime: number[];
+    customEnvelopeCurve: string[];
   };
   options: {
     decimalDigitsFreq: number;
