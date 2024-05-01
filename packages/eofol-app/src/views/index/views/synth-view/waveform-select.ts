@@ -286,7 +286,7 @@ const timbreIterationsInput = (state: FiddleState, setState: any) => {
 const timbreScaleToTimbreButton = (state: FiddleState, setState: any) => {
   return button({
     styles: sx({ marginTop: "48px" }),
-    children: "Compute timbre from tuning",
+    children: "Compute optimal timbre from tuning",
     onClick: () => {
       // @ts-ignore
       const parser = parseScala(state);
@@ -304,10 +304,6 @@ const timbreScaleToTimbreButton = (state: FiddleState, setState: any) => {
         .sort((a: number, b: number) => a - b);
 
       const overlayElement = document.getElementById("overlay-loading");
-      if (overlayElement) {
-        overlayElement.className = "overlay-loading overlay-loading-active";
-      }
-
       const progressElement = document.getElementById(
         "overlay-loading-progress"
       );
@@ -339,6 +335,20 @@ const timbreScaleToTimbreButton = (state: FiddleState, setState: any) => {
           remainingElement.textContent = `Estimated time remaining: ${timeGuessSeconds}s`;
         }
       };
+
+      if (overlayElement) {
+        overlayElement.className = "overlay-loading overlay-loading-active";
+      }
+      if (progressElement) {
+        progressElement.textContent = `0%`;
+      }
+      if (progressbarElement) {
+        progressbarElement.setAttribute("value", "0");
+        progressbarElement.textContent = `0%`;
+      }
+      if (remainingElement) {
+        remainingElement.textContent = `Estimated time remaining:`;
+      }
 
       setTimeout(() => {
         new Promise((resolve) => {
