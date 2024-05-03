@@ -4,11 +4,10 @@ import { normalizePeriod } from "./sheen";
 type IntervalRecord = { interval: number; count: number };
 
 const intervalNorm = (interval: number) => {
+  const normalizer = normalizePeriod(2);
+
   const justIntervals = Array.from({ length: 10 })
-    .map((tone, i) => [
-      normalizePeriod(Math.pow(3, i), 2),
-      normalizePeriod(Math.pow(3, -i), 2),
-    ])
+    .map((tone, i) => [normalizer(Math.pow(3, i)), normalizer(Math.pow(3, -i))])
     .flat()
     .filter(onlyUnique);
 

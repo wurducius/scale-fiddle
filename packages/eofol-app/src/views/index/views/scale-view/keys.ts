@@ -11,6 +11,7 @@ import {
 } from "../../../../synth";
 import { FiddleState } from "../../../../types";
 import { trimWhitespace } from "../../../../util";
+import { toFixedCent, toFixedRatio } from "../../../../sheen";
 
 const getKeyLabel = (state: FiddleState, i: number) => {
   // @ts-ignore
@@ -26,11 +27,11 @@ const getKeyLabel = (state: FiddleState, i: number) => {
   }
   if (keyLabel === "cent") {
     // @ts-ignore
-    return Number(tone.cent).toFixed(state.options.decimalDigitsCent) + "c";
+    return toFixedCent(state, Number(tone.cent)) + "c";
   }
   if (keyLabel === "ratio") {
     // @ts-ignore
-    return Number(tone.ratio).toFixed(state.options.decimalDigitsRatio);
+    return toFixedRatio(state, Number(tone.ratio));
   }
   if (keyLabel === "name") {
     return trimWhitespace(tone.name);

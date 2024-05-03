@@ -1,17 +1,19 @@
+import { forceDecimalPoint, joinScale } from "../sheen";
 import { SCALE_PRESET_PRECISION_DIGITS_CENT } from "./constants";
 
-const valuesArray = (array: string[]) => array.join("\n");
+const valuesArray = (array: string[]) => joinScale(array);
 
 const valuesMap = (length: number, mapper: (n: number) => string | number) =>
-  Array.from({ length })
-    .map((item, n) => mapper(n).toString())
-    .map((item) => (item.includes(".") ? item : item + "."))
-    .join("\n");
+  joinScale(
+    Array.from({ length })
+      .map((item, n) => mapper(n).toString())
+      .map(forceDecimalPoint)
+  );
 
 const map = (length: number, mapper: (n: number) => string | number) =>
   Array.from({ length })
     .map((item, n) => mapper(n).toString())
-    .map((item) => (item.includes(".") ? item : item + "."));
+    .map(forceDecimalPoint);
 
 const pickRelative = (values: string[], rel: number[]) => {
   let i = 0;

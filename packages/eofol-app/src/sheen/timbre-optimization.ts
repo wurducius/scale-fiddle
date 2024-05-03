@@ -1,6 +1,7 @@
 import { Timbre } from "../types";
 import { onlyUnique } from "../util";
 import { normalizePeriod } from "./sheen";
+import { ratioToCent, sortNumbers } from "./sheen-util";
 
 const OPTIMIZATION_STEP = 0.0001;
 
@@ -16,9 +17,9 @@ const normalizeRatioDistance = (first: number, second: number) => {
 };
 
 const partial =
-  (scale: number[], weights: number[], period: number) =>
+  (scale: number[], weights: number[], normalizer: (val: number) => number) =>
   (i: number, k: number) =>
-    normalizePeriod(i * scale[k] * weights[i - 2], period);
+    normalizer(i * scale[k] * weights[i - 2]);
 
 const approxByScale = (tuning: number[], point: number) => {
   let error = Number.MAX_VALUE;
@@ -33,29 +34,31 @@ const approxByScale = (tuning: number[], point: number) => {
   return tuning[index];
 };
 
-const getCost = (tuning: number[], period: number) => (waveform: number[]) => {
-  const numberOfPoints = tuning.length;
-  const p = partial(tuning, waveform, period);
+const getCost =
+  (tuning: number[], normalizer: (val: number) => number) =>
+  (waveform: number[]) => {
+    const numberOfPoints = tuning.length;
+    const p = partial(tuning, waveform, normalizer);
 
-  let dissonance = 0;
-  for (let i = 2; i <= waveform.length + 1; i++) {
-    for (let j = 2; j <= waveform.length + 1; j++) {
-      for (let k = 0; k < tuning.length; k++) {
-        for (let l = 0; l < tuning.length; l++) {
-          const partialRatio = normalizePeriod(p(i, k) / p(j, l), period);
-          dissonance += Math.abs(
-            approxByScale(tuning, partialRatio) / partialRatio
-          );
+    let dissonance = 0;
+    for (let i = 2; i <= waveform.length + 1; i++) {
+      for (let j = 2; j <= waveform.length + 1; j++) {
+        for (let k = 0; k < tuning.length; k++) {
+          for (let l = 0; l < tuning.length; l++) {
+            const partialRatio = normalizer(p(i, k) / p(j, l));
+            dissonance += Math.abs(
+              approxByScale(tuning, partialRatio) / partialRatio
+            );
+          }
         }
       }
     }
-  }
 
-  const cost =
-    WEIGHT_DISSONANCE * dissonance + WEIGHT_CARDINALITY * numberOfPoints;
+    const cost =
+      WEIGHT_DISSONANCE * dissonance + WEIGHT_CARDINALITY * numberOfPoints;
 
-  return cost;
-};
+    return cost;
+  };
 
 const getFiniteDifference =
   (
@@ -71,6 +74,14 @@ const getFiniteDifference =
     return (getCostImpl(offsetWaveform) - baseCost) / DERIVATIVE_STEP;
   };
 
+const normWaveform = (waveform: number[]) => {
+  const waveformMax = waveform.reduce(
+    (acc, next) => (Math.abs(next) > acc ? Math.abs(next) : acc),
+    Number.MIN_VALUE
+  );
+  return waveform.map((waveformComponent) => waveformComponent / waveformMax);
+};
+
 export async function tuningToTimbre(
   tuning: number[],
   period: number,
@@ -83,11 +94,15 @@ export async function tuningToTimbre(
     end: Date
   ) => void
 ) {
-  let waveform = Array.from({ length: timbreLength - 1 }).map(
-    () => (Math.random() - 0.5) * 2
+  let waveform = normWaveform(
+    Array.from({ length: timbreLength - 1 }).map(
+      () => (Math.random() - 0.5) * 2
+    )
   );
 
-  const getCostImpl = getCost(tuning, period);
+  const normalizer = normalizePeriod(period);
+
+  const getCostImpl = getCost(tuning, normalizer);
 
   const initialCost = getCostImpl(waveform);
 
@@ -103,9 +118,11 @@ export async function tuningToTimbre(
         getDerivative(index)
       );
 
-      waveform = waveform.map(
-        (waveformComponent, i) =>
-          waveformComponent - OPTIMIZATION_STEP * gradient[i]
+      waveform = normWaveform(
+        waveform.map(
+          (waveformComponent, i) =>
+            waveformComponent - OPTIMIZATION_STEP * gradient[i]
+        )
       );
 
       setTimeout(resolve, 0);
@@ -118,21 +135,13 @@ export async function tuningToTimbre(
     }, 0);
   }
 
-  const waveformMax = waveform.reduce(
-    (acc, next) => (Math.abs(next) > acc ? Math.abs(next) : acc),
-    Number.MIN_VALUE
-  );
-  const normedWaveform = waveform.map(
-    (waveformComponent) => waveformComponent / waveformMax
-  );
-
-  const normedCost = getCostImpl(normedWaveform);
+  const normedCost = getCostImpl(waveform);
 
   const timbre: Timbre = {
     id: "from-tuning",
     title: "Optimal timbre",
-    real: [0, ...normedWaveform],
-    imag: [0, ...normedWaveform.map((waveformComponent) => 0)],
+    real: [0, ...waveform],
+    imag: [0, ...waveform.map((waveformComponent) => 0)],
     errorDelta: initialCost - normedCost,
   };
 
@@ -146,26 +155,28 @@ export function timbreToTuning(
 ) {
   let tuning: number[] = [];
 
+  const normalizer = normalizePeriod(period);
+
   const array = Array.from({ length: timbre.real.length })
     .map((item, i) => i + 1)
     .filter((item, i) => timbre.real[i] != 0 || timbre.imag[i] != 0)
-    .map((item) => normalizePeriod(item, period))
+    .map((item) => normalizer(item))
     .filter(onlyUnique);
 
   tuning.push(1);
 
   for (let i = 0; i < array.length; i++) {
     for (let j = 0; j < array.length; j++) {
-      tuning.push(normalizePeriod(array[i] / array[j], period));
-      tuning.push(normalizePeriod(array[j] / array[i], period));
+      tuning.push(normalizer(array[i] / array[j]));
+      tuning.push(normalizer(array[j] / array[i]));
     }
   }
 
-  tuning = tuning.filter(onlyUnique).sort((a, b) => a - b);
+  tuning = tuning.filter(onlyUnique).sort(sortNumbers);
 
   return tuning
     .map((item) => (item === 1 ? period : item))
-    .map((item) => 1200 * Math.log2(item))
-    .sort((a, b) => a - b)
+    .map(ratioToCent)
+    .sort(sortNumbers)
     .map((item) => item.toFixed(precisionCents));
 }

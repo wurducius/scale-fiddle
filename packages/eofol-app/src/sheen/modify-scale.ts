@@ -2,7 +2,7 @@ import { FiddleState } from "../types";
 import { mod, trimWhitespace } from "../util";
 import { parseScala } from "./scala";
 import { normalizePeriod } from "./sheen";
-import { initModify, outputScale } from "./sheen-util";
+import { initModify, outputScale, ratioToCent } from "./sheen-util";
 import { normPrimeTuning } from "./tempering";
 
 export const modifyTranspose = (state: FiddleState, t: number) => {
@@ -113,8 +113,8 @@ export const modifyTemper = (
     .map(trimWhitespace)
     // @ts-ignore
     .map(parseScala(state)) // @ts-ignore
-    .map((tone) => normalizePeriod(tone, state.tuning.period))
-    .map((c) => 1200 * Math.log2(c));
+    .map(normalizePeriod(state.tuning.period))
+    .map(ratioToCent);
 
   const result: number[] = [];
   const closePairs: number[][] = [];

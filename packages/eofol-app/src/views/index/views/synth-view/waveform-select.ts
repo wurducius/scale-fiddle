@@ -16,8 +16,10 @@ import { setWaveformPreset, setWaveformValue } from "../../../../synth";
 import { FiddleState, Timbre } from "../../../../types";
 import { div, h2, h3, h4, p } from "../../../../extract";
 import {
+  joinScale,
   normalizePeriod,
   parseScala,
+  sortNumbers,
   timbreToTuning,
   tuningToTimbre,
 } from "../../../../sheen";
@@ -241,7 +243,7 @@ export const waveformCustomMenu = (state: FiddleState, setState: any) => {
             ...state,
             recompute: true,
             scaleLength: timbralScale.length,
-            scaleInput: timbralScale.join("\n"),
+            scaleInput: joinScale(timbralScale),
           });
         },
       }),
@@ -304,12 +306,12 @@ const timbreFromTuningButton = (state: FiddleState, setState: any) => {
       const fromTuningLength = state.synth.fromTuningLength;
       // @ts-ignore
       const fromTuningIterations = state.synth.fromTuningIterations;
+      const normalizer = normalizePeriod(period);
       // @ts-ignore
-      const ratioVals = state.scaleInput
-        .split("\n")
+      const ratioVals = splitScale(state.scaleInput)
         .map(parser)
-        .map((tone: number) => normalizePeriod(tone, period))
-        .sort((a: number, b: number) => a - b);
+        .map(normalizer)
+        .sort(sortNumbers);
 
       const overlayElement = document.getElementById("overlay-loading");
       const progressElement = document.getElementById(

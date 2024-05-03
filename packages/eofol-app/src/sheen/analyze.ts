@@ -1,23 +1,18 @@
 import { FiddleState } from "../types";
 import { parseScala } from "./scala";
-import { normalizePeriod } from "./sheen";
+import { ratioToCent, toFixedCent } from "./sheen-util";
 
 const INTERVAL_COMPARE_EPSILON = 0.15;
 
 export const getIntervalVectorData = (state: FiddleState) => {
   // @ts-ignore
-  const decimalDigitsCent = state.options.decimalDigitsCent;
-  // @ts-ignore
   const scaleLength = state.scaleLength;
   // @ts-ignore
-  const scaleValues = state.scaleInput.split("\n");
+  const scaleValues = splitScale(state.scaleInput);
   // @ts-ignore
   const parser = parseScala(state);
   // @ts-ignore
-  const scaleVals = state.scaleInput
-    .split("\n")
-    .map(parser)
-    .map((tone: number) => 1200 * Math.log2(tone));
+  const scaleVals = splitScale(state.scaleInput).map(parser).map(ratioToCent);
 
   const intervalVectorLength = (scaleLength * (scaleLength - 1)) / 2;
 
@@ -30,7 +25,7 @@ export const getIntervalVectorData = (state: FiddleState) => {
       intervalMatrix.push({
         i,
         j,
-        interval: deltaMin.toFixed(decimalDigitsCent),
+        interval: toFixedCent(state, deltaMin),
       });
     }
   }
@@ -62,7 +57,7 @@ export const getIntervalVectorData = (state: FiddleState) => {
     .sort((a: any, b: any) => a.interval - b.interval)
     .map((tone: any) => ({
       ...tone,
-      interval: tone.interval.toFixed(decimalDigitsCent),
+      interval: toFixedCent(state, tone.interval),
     }));
 
   let isDeepScale = true;
@@ -104,9 +99,9 @@ export const getIntervalVectorData = (state: FiddleState) => {
         last.push(next.interval);
 
         const sortedLast = last // @ts-ignore
-          .map((tone) => Number(tone)) // @ts-ignore
-          .sort((a, b) => a - b) // @ts-ignore
-          .map((tone) => tone.toFixed(state.options.decimalDigitsCent));
+          .map(Number) // @ts-ignore
+          .sort(sortNumbers) // @ts-ignore
+          .map((tone) => toFixedCent(state, tone));
         // @ts-ignore
         nextAcc[index - 1] = sortedLast;
       }

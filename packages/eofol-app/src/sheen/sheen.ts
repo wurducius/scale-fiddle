@@ -1,8 +1,15 @@
 import { FiddleStateImpl } from "../types";
 import { mod } from "../util";
 import { parseScala } from "./scala";
+import {
+  ratioToCent,
+  splitScale,
+  toFixedCent,
+  toFixedFreq,
+  toFixedRatio,
+} from "./sheen-util";
 
-export function normalizePeriod(value: number, period: number) {
+export const normalizePeriod = (period: number) => (value: number) => {
   if (!Number.isFinite(value) || Number.isNaN(value) || value <= 0) {
     return value;
   }
@@ -14,10 +21,10 @@ export function normalizePeriod(value: number, period: number) {
     val = val * period;
   }
   return val;
-}
+};
 
 export const getScaleLength = (scaleInput: string) => {
-  const raw = scaleInput.split("\n");
+  const raw = splitScale(scaleInput);
   return raw.length;
 };
 
@@ -30,8 +37,10 @@ export const scaleToOverview = (state: FiddleStateImpl) => {
   const { decimalDigitsCent, decimalDigitsFreq, decimalDigitsRatio } =
     state.options;
 
-  const raw = scaleInput.split("\n").filter(Boolean);
+  const raw = splitScale(scaleInput).filter(Boolean);
   const intervalMap = raw.map(parseScala(state));
+
+  const normalizer = normalizePeriod(period);
 
   const freq = [];
   freq[downKeys] = {
@@ -51,16 +60,13 @@ export const scaleToOverview = (state: FiddleStateImpl) => {
           (mod(raw.length + i - 1, raw.length) === raw.length - 1 ? 1 : 0)
       ) *
       intervalMap[mod(raw.length + i - 1, raw.length)];
-    const ratio = normalizePeriod(
-      intervalMap[mod(raw.length + i - 1, raw.length)],
-      period
-    );
+    const ratio = normalizer(intervalMap[mod(raw.length + i - 1, raw.length)]);
 
     freq[downKeys + i + 1] = {
       freq: f,
       ratio,
       name: raw[mod(raw.length + i - 1, raw.length)],
-      cent: Math.log2(f / baseFreq) * 1200,
+      cent: ratioToCent(f / baseFreq),
       isOctave: ratio === 1,
     };
   }
@@ -71,16 +77,13 @@ export const scaleToOverview = (state: FiddleStateImpl) => {
         baseFreq *
         Math.pow(period, -(1 + Math.floor((i - 1) / raw.length))) *
         intervalMap[mod(raw.length - i, raw.length)];
-      const ratio = normalizePeriod(
-        intervalMap[mod(raw.length - i, raw.length)],
-        period
-      );
+      const ratio = normalizer(intervalMap[mod(raw.length - i, raw.length)]);
 
       freq[i] = {
         freq: f,
         ratio,
         name: raw[mod(raw.length - i, raw.length)],
-        cent: Math.log2(f / baseFreq) * 1200,
+        cent: ratioToCent(f / baseFreq),
         isOctave: ratio === 1,
       };
     }
@@ -90,9 +93,9 @@ export const scaleToOverview = (state: FiddleStateImpl) => {
     .sort((a, b) => Number(a.freq) - Number(b.freq))
     .map((tone) => ({
       ...tone,
-      freq: Number(tone.freq).toFixed(decimalDigitsFreq),
-      cent: Number(tone.cent).toFixed(decimalDigitsCent),
-      ratio: Number(tone.ratio).toFixed(decimalDigitsRatio),
+      freq: toFixedFreq(state, Number(tone.freq)),
+      cent: toFixedCent(state, Number(tone.cent)),
+      ratio: toFixedRatio(state, Number(tone.ratio)),
     }))
     .filter(Boolean);
 };

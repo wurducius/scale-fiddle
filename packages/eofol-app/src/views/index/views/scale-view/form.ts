@@ -351,7 +351,7 @@ export const formModal = (
           id: "up",
         },
         {
-          title: "Steps down. comma separated",
+          title: "Steps down, comma separated",
           type: "string",
           validation: [csvValidation(integerValidation(0, STEPS_UP_DOWN_MAX))],
           innerFormName: "down",

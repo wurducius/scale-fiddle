@@ -9,8 +9,8 @@ export const initModify = (state: FiddleState) => {
   // @ts-ignore
   const parser = parseScala(state);
 
-  const parsedScale = scale.split("\n").map(parser);
-  return parsedScale.map((tone: number) => 1200 * Math.log2(tone));
+  const parsedScale = splitScale(scale).map(parser);
+  return parsedScale.map(ratioToCent);
 };
 
 export const outputScaleCents = (state: FiddleState, result: number[]) => {
@@ -23,22 +23,46 @@ export const outputScaleCents = (state: FiddleState, result: number[]) => {
       return normalized === 0 ? 1200 : normalized;
     })
     .filter(onlyUnique)
-    .map((tone: number) => tone.toFixed(decimalDigitsCent))
-    .map((tone) => (tone.includes(".") ? tone : tone + "."));
+    .map((tone: number) => toFixedCent(state, tone))
+    .map(forceDecimalPoint);
 };
 
 export const outputScale = (state: FiddleState, result: number[]) => {
-  // @ts-ignore
-  const decimalDigitsCent = state.options.decimalDigitsCent;
-
-  return result
-    .map((tone) => {
-      const normalized = mod(tone, 1200);
-      return normalized === 0 ? 1200 : normalized;
-    })
-    .filter(onlyUnique)
-    .sort((a, b) => a - b)
-    .map((tone: number) => tone.toFixed(decimalDigitsCent))
-    .map((tone) => (tone.includes(".") ? tone : tone + "."))
-    .join("\n");
+  return joinScale(
+    result
+      .map((tone) => {
+        const normalized = mod(tone, 1200);
+        return normalized === 0 ? 1200 : normalized;
+      })
+      .filter(onlyUnique)
+      .sort(sortNumbers)
+      .map((tone: number) => toFixedCent(state, tone))
+      .map(forceDecimalPoint)
+  );
 };
+
+export const ratioToCent = (tone: number) => 1200 * Math.log2(tone);
+
+export const sortNumbers = (a: number, b: number) => a - b;
+
+export const splitScale = (scaleInput: string) => scaleInput.split("\n");
+
+export const joinScale = (scale: string[]) => scale.join("\n");
+
+export const toFixedCent = (
+  state: FiddleState,
+  val: number // @ts-ignore
+) => val.toFixed(state.options.decimalDigitsCent);
+
+export const toFixedFreq = (
+  state: FiddleState,
+  val: number // @ts-ignore
+) => val.toFixed(state.options.decimalDigitsFreq);
+
+export const toFixedRatio = (
+  state: FiddleState,
+  val: number // @ts-ignore
+) => val.toFixed(state.options.decimalDigitsRatio);
+
+export const forceDecimalPoint = (tone: string) =>
+  tone.includes(".") ? tone : tone + ".";
