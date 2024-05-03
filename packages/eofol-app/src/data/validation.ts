@@ -25,3 +25,13 @@ export const GAIN_MIN = 0.000000001;
 export const HIGHER_RANK_GENERATORS_MAX = 30;
 
 export const STEPS_UP_DOWN_MAX = 256;
+
+export const EDO_N_MAX = 12000;
+
+export const OFFSET_CENT_MAX = 1200000;
+
+export const OFFSET_MODE_MAX = 12000;
+
+export const MULTIPLIER_MAX = 12000;
+
+export const PRIME_LIMIT_MAX = 12000;

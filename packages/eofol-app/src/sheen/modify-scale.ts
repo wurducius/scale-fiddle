@@ -8,7 +8,7 @@ import { normPrimeTuning } from "./tempering";
 export const modifyTranspose = (state: FiddleState, t: number) => {
   const centsScale = initModify(state);
 
-  const result: number[] = centsScale.map((tone: number) => tone + t);
+  const result: number[] = centsScale.map((tone: number) => tone + Number(t));
 
   return outputScale(state, result);
 };
@@ -16,9 +16,10 @@ export const modifyTranspose = (state: FiddleState, t: number) => {
 export const modifyMode = (state: FiddleState, index: number) => {
   const centsScale = initModify(state);
 
-  const result: number[] = centsScale.map(
-    (tone: number) => tone - centsScale[0]
-  );
+  const parsedIndex = mod(Number(index) - 2, centsScale.length);
+  const floor = centsScale[parsedIndex];
+
+  const result: number[] = centsScale.map((tone: number) => tone - floor);
 
   return outputScale(state, result);
 };

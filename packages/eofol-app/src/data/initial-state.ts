@@ -26,22 +26,26 @@ export const initialState = {
     },
     linear: {
       open: false,
-      T: 12,
-      g: 700,
+      up: 12,
+      down: 0,
+      g: "700.",
     },
     meantone: {
       open: false,
-      T: 12,
+      up: 6,
+      down: 6,
       comma: 4,
     },
     harm: {
       open: false,
-      T: 12,
+      up: 12,
+      down: 0,
     },
     just: {
       open: false,
-      T: 12,
-      limit: 3,
+      up: "6",
+      down: "6",
+      limit: "3",
     },
     ratiochord: {
       open: false,
@@ -49,7 +53,11 @@ export const initialState = {
     },
     limit: {
       open: false,
-      N: 12,
+      limit: "3,5",
+      up: "6,4",
+      down: "6,0",
+      commas: "81/80,23.46",
+      epsilon: 1,
     },
     higher: {
       open: false,
@@ -58,10 +66,6 @@ export const initialState = {
       stepsUp: "12,3",
       stepsDown: "0,0",
       offset: "0.,0.",
-    },
-    eulerfokker: {
-      open: false,
-      N: 12,
     },
     preset: {
       open: false,

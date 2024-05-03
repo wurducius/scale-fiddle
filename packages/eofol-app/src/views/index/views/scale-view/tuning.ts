@@ -34,7 +34,6 @@ export const scaleTuning = (
             max: BASE_FREQUENCY_MAX,
             name: "input-basefreq",
             value: tuning.baseFreq,
-            classname: sx({ width: "100%", margin: "4px 0 4px 0" }),
             onChange: (nextVal) => {
               const val = Number(nextVal);
               // @ts-ignore
@@ -56,7 +55,6 @@ export const scaleTuning = (
             max: PERIOD_MAX,
             name: "input-period",
             value: tuning.period,
-            classname: sx({ width: "100%", margin: "4px 0 4px 0" }),
             onChange: (nextVal) => {
               const val = Number(nextVal);
               // @ts-ignore
@@ -78,7 +76,7 @@ export const scaleTuning = (
             max: KEYS_UP_DOWN_MAX,
             name: "input-keys-up",
             value: tuning.keysUp,
-            classname: sx({ width: "100%", margin: "4px 0 4px 0" }),
+            classname: sx({ margin: "8px 0 8px 0" }),
             onChange: (nextVal) => {
               const val = Number(nextVal);
               // @ts-ignore
@@ -100,7 +98,7 @@ export const scaleTuning = (
             max: KEYS_UP_DOWN_MAX,
             name: "input-keys-down",
             value: tuning.keysDown,
-            classname: sx({ width: "100%", margin: "4px 0 4px 0" }),
+            classname: sx({ margin: "8px 0 8px 0" }),
             onChange: (nextVal) => {
               const val = Number(nextVal);
               // @ts-ignore
@@ -112,11 +110,6 @@ export const scaleTuning = (
             },
           })
         ),
-      ]),
-      div(sx({ marginTop: theme.spacing.space2 }), [
-        h3("Timbre", true),
-        div(sx({ marginTop: theme.spacing.space1 })),
-        waveformPresetSelect(state, setState),
       ]),
     ]
   );

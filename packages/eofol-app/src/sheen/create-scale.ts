@@ -4,13 +4,29 @@ import { parseScala } from "./scala";
 import { normalizePeriod } from "./sheen";
 import { outputScale, outputScaleCents } from "./sheen-util";
 
-export const linearScale = (T: number, g: number) =>
-  Array.from({ length: T }).map((item, index) => index * g);
+export const linearScale =
+  (state: FiddleState) => (g: string, up: number, down: number) => {
+    // @ts-ignore
+    const parsedG = parseScala(state)(g);
+    const centGenerator = 1200 * Math.log2(parsedG);
+    return linearScaleCents(centGenerator, up, down);
+  };
+
+const linearScaleCents = (g: number, up: number, down: number) => {
+  const result = [0];
+  for (let i = 0; i < up; i++) {
+    result.push((i + 1) * g);
+  }
+  for (let i = 0; i < down; i++) {
+    result.push(-(i + 1) * g);
+  }
+  return result;
+};
 
 export const createEdo = (state: FiddleState, N: number) =>
   outputScale(
     state, // @ts-ignore
-    linearScale(N, (1200 * Math.log2(state.tuning.period)) / N)
+    linearScaleCents((1200 * Math.log2(state.tuning.period)) / N, N - 1, 0)
   );
 
 export const createMOS = (state: FiddleState, N: number, T: number) => {
@@ -22,17 +38,35 @@ export const createMOS = (state: FiddleState, N: number, T: number) => {
   return outputScale(state, vals);
 };
 
-export const createLinear = (state: FiddleState, T: number, g: number) =>
-  outputScale(state, linearScale(T, g));
+export const createLinear = (
+  state: FiddleState,
+  g: string,
+  up: number,
+  down: number
+) => outputScale(state, linearScale(state)(g, up, down));
 
-export const createMeantone = (state: FiddleState, T: number, comma: number) =>
-  outputScale(state, linearScale(T, 1200 * Math.log2(Math.pow(5, 1 / comma))));
+export const createMeantone = (
+  state: FiddleState,
+  comma: number,
+  up: number,
+  down: number
+) =>
+  outputScale(
+    state,
+    linearScaleCents(1200 * Math.log2(Math.pow(5, 1 / comma)), up, down)
+  );
 
-export const createHarmonicSeries = (state: FiddleState, T: number) => {
+export const createHarmonicSeries = (
+  state: FiddleState,
+  up: number,
+  down: number
+) => {
   const vals = [0];
-  for (let i = 1; i < T + 1; i++) {
+  for (let i = 1; i < Number(up) + 1; i++) {
     // @ts-ignore
     vals.push(1200 * Math.log2(normalizePeriod(i, state.tuning.period)));
+  }
+  for (let i = 1; i < Number(down) + 1; i++) {
     vals.push(
       // @ts-ignore
       1200 * Math.log2(normalizePeriod(1 / i, state.tuning.period))
@@ -41,23 +75,48 @@ export const createHarmonicSeries = (state: FiddleState, T: number) => {
   return outputScale(state, vals);
 };
 
-export const createJust = (state: FiddleState, T: number, limit: number) => {
+const addJustScale =
+  (vals: number[], state: FiddleState) =>
+  (limit: number, up: number, down: number) => {
+    for (let i = 1; i < up + 1; i++) {
+      // @ts-ignore
+      vals.push(
+        1200 *
+          Math.log2(
+            // @ts-ignore
+            normalizePeriod(Math.pow(limit, i), state.tuning.period)
+          )
+      );
+    }
+    for (let i = 1; i < down + 1; i++) {
+      vals.push(
+        1200 *
+          Math.log2(
+            // @ts-ignore
+            normalizePeriod(1 / Math.pow(limit, i), state.tuning.period)
+          )
+      );
+    }
+    return vals;
+  };
+
+export const createJust = (
+  state: FiddleState,
+  limit: string,
+  up: string,
+  down: string
+) => {
+  const parsedUp = up.split(",");
+  const parsedDown = down.split(",");
+  const parsedLimit = limit.split(",");
+
   const vals = [0];
-  for (let i = 1; i < Number(T) + 1; i++) {
-    // @ts-ignore
-    vals.push(
-      1200 *
-        Math.log2(
-          // @ts-ignore
-          normalizePeriod(Math.pow(limit, i), state.tuning.period)
-        )
-    );
-    vals.push(
-      1200 *
-        Math.log2(
-          // @ts-ignore
-          normalizePeriod(1 / Math.pow(limit, i), state.tuning.period)
-        )
+  const justScaleAdder = addJustScale(vals, state);
+  for (let i = 0; i < parsedLimit.length; i++) {
+    justScaleAdder(
+      Number(parsedLimit[i]),
+      Number(parsedUp[i]),
+      Number(parsedDown[i])
     );
   }
 
@@ -110,13 +169,13 @@ export const createHigherRankTemperament = (
   for (let i = 0; i < higher.generatorCount; i++) {
     const generatedUp = outputScaleCents(
       state,
-      linearScale(stepsUp[i], generators[i]).map((tone) =>
+      linearScaleCents(generators[i], stepsUp[i], 0).map((tone) =>
         mod(tone + offsets[i], 1200)
       )
     );
     const generatedDown = outputScaleCents(
       state,
-      linearScale(stepsDown[i], 1200 - generators[i]).map((tone) =>
+      linearScaleCents(1200 - generators[i], stepsDown[i], 0).map((tone) =>
         mod(tone + offsets[i], 1200)
       )
     );

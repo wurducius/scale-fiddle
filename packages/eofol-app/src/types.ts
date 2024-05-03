@@ -25,22 +25,26 @@ export type FiddleStateImpl = {
     };
     linear: {
       open: boolean;
-      T: number;
-      g: number;
+      up: number;
+      down: number;
+      g: string;
     };
     meantone: {
       open: boolean;
-      T: number;
+      up: number;
+      down: number;
       comma: number;
     };
     harm: {
       open: boolean;
-      T: number;
+      up: number;
+      down: number;
     };
     just: {
       open: boolean;
-      T: number;
-      limit: number;
+      up: string;
+      down: string;
+      limit: string;
     };
     ratiochord: {
       open: boolean;
@@ -48,7 +52,11 @@ export type FiddleStateImpl = {
     };
     limit: {
       open: boolean;
-      N: number;
+      limit: string;
+      up: string;
+      down: string;
+      commas: string;
+      epsilon: number;
     };
     higher: {
       open: boolean;
@@ -57,10 +65,6 @@ export type FiddleStateImpl = {
       stepsUp: string;
       stepsDown: string;
       offset: string;
-    };
-    eulerfokker: {
-      open: boolean;
-      N: number;
     };
     preset: {
       open: boolean;

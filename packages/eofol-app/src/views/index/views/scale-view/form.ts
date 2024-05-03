@@ -8,7 +8,12 @@ import {
   mergeDeep,
 } from "@eofol/eofol";
 import {
+  EDO_N_MAX,
   HIGHER_RANK_GENERATORS_MAX,
+  MULTIPLIER_MAX,
+  OFFSET_CENT_MAX,
+  OFFSET_MODE_MAX,
+  PRIME_LIMIT_MAX,
   STEPS_UP_DOWN_MAX,
   scalePresets,
   scalePresetsFlat,
@@ -36,12 +41,24 @@ import {
 } from "../../../../sheen";
 import { FiddleState, FiddleStateImpl } from "../../../../types";
 import { defineSelectSearch, integerInput } from "../../../../ui";
+import {
+  scaleNValidation,
+  stepsValidation,
+  decimalValidation,
+  integerValidation,
+  csvValidation,
+  splitValidation,
+  decimalPositiveValidation,
+} from "../../../../util/validation";
 
 createStore("select-search-preset", {
   onChange: undefined,
 });
 
 defineSelectSearch({ options: scalePresets });
+
+// @TODO
+const scalaValidation: (val: string) => true | string = (val: string) => true;
 
 const generalFormModal =
   (
@@ -55,10 +72,12 @@ const generalFormModal =
     form: {
       title: string;
       type: string;
+      validation: ((val: any) => true | string)[];
       innerFormName: string;
       id: string;
     }[],
-    result: (params: Record<string, any>) => string
+    result: (params: Record<string, any>) => string,
+    long?: boolean
   ) => {
     // @ts-ignore
     const resultScale = result(state.form[formName]);
@@ -70,36 +89,49 @@ const generalFormModal =
       title,
       div(sx({ marginTop: "16px" }), [
         div(
-          undefined,
+          sx({
+            display: "flex",
+            justifyContent: "center",
+          }),
           form
             .map((item) =>
-              div(undefined, [
-                div(
-                  sx({ fontSize: theme.typography.heading.fontSize }),
-                  item.title
-                ),
-                input({
-                  name: "input-form-" + id,
-                  // @ts-ignore
-                  value: state.form[formName][item.innerFormName],
-                  onChange: (nextVal) => {
-                    // @ts-ignore
-                    setState({
-                      ...state,
-                      form: {
-                        // @ts-ignore
-                        ...state.form,
-                        // @ts-ignore
-                        [formName]: {
-                          // @ts-ignore
-                          ...state.form[formName],
-                          [item.innerFormName]: nextVal,
-                        },
-                      },
-                    });
-                  },
+              div(
+                sx({
+                  width: "266px",
+                  margin: "0 16px 0 16px",
                 }),
-              ])
+                [
+                  div(
+                    sx({
+                      fontSize: theme.typography.heading.fontSize,
+                      height: long ? "64px" : "32px",
+                    }),
+                    item.title
+                  ),
+                  input({
+                    name: "input-form-" + id,
+                    // @ts-ignore
+                    value: state.form[formName][item.innerFormName],
+                    validation: item.validation,
+                    onChange: (nextVal) => {
+                      // @ts-ignore
+                      setState({
+                        ...state,
+                        form: {
+                          // @ts-ignore
+                          ...state.form,
+                          // @ts-ignore
+                          [formName]: {
+                            // @ts-ignore
+                            ...state.form[formName],
+                            [item.innerFormName]: nextVal,
+                          },
+                        },
+                      });
+                    },
+                  }),
+                ]
+              )
             )
             .flat()
         ),
@@ -185,7 +217,15 @@ export const formModal = (
       "modal-edo",
       "Equal division of octave (EDO)",
       "edo",
-      [{ title: "N", type: "number", innerFormName: "N", id: "edo" }],
+      [
+        {
+          title: "N",
+          type: "number",
+          validation: scaleNValidation,
+          innerFormName: "N",
+          id: "edo",
+        },
+      ],
       ({ N }) => createEdo(state, N)
     ),
     modalImpl(
@@ -193,8 +233,20 @@ export const formModal = (
       "Moment of symmetry (MOS)",
       "mos",
       [
-        { title: "N", type: "number", innerFormName: "N", id: "n" },
-        { title: "T", type: "number", innerFormName: "T", id: "t" },
+        {
+          title: "N",
+          type: "number",
+          validation: scaleNValidation,
+          innerFormName: "N",
+          id: "n",
+        },
+        {
+          title: "T",
+          type: "number",
+          validation: scaleNValidation,
+          innerFormName: "T",
+          id: "t",
+        },
       ],
       ({ N, T }) => createMOS(state, N, T)
     ),
@@ -203,47 +255,111 @@ export const formModal = (
       "Linear temperament (1-generated)",
       "linear",
       [
-        { title: "T", type: "number", innerFormName: "T", id: "t" },
         {
-          title: "Generator (cents)",
-          type: "number",
+          title: "Generator in Scala format",
+          type: "string",
+          validation: [scalaValidation],
           innerFormName: "g",
           id: "g",
         },
+        {
+          title: "Steps up",
+          type: "number",
+          validation: stepsValidation,
+          innerFormName: "up",
+          id: "up",
+        },
+        {
+          title: "Steps down",
+          type: "number",
+          validation: stepsValidation,
+          innerFormName: "down",
+          id: "down",
+        },
       ],
-      ({ T, g }) => createLinear(state, T, g)
+      ({ g, up, down }) => createLinear(state, g, up, down),
+      true
     ),
     modalImpl(
       "modal-meantone",
       "Equal division of octave (EDO)",
       "meantone",
       [
-        { title: "T", type: "number", innerFormName: "T", id: "t" },
         {
           title: "Comma fraction",
           type: "number",
+          validation: decimalPositiveValidation(12),
           innerFormName: "comma",
           id: "comma",
         },
+        {
+          title: "Steps up",
+          type: "number",
+          validation: stepsValidation,
+          innerFormName: "up",
+          id: "up",
+        },
+        {
+          title: "Steps down",
+          type: "number",
+          validation: stepsValidation,
+          innerFormName: "down",
+          id: "down",
+        },
       ],
-      ({ T, comma }) => createMeantone(state, T, comma)
+      ({ up, down, comma }) => createMeantone(state, comma, up, down)
     ),
     modalImpl(
       "modal-harm",
       "Harmonic series",
       "harm",
-      [{ title: "T", type: "number", innerFormName: "T", id: "t" }],
-      ({ T }) => createHarmonicSeries(state, T)
+      [
+        {
+          title: "Steps up",
+          type: "number",
+          validation: stepsValidation,
+          innerFormName: "up",
+          id: "up",
+        },
+        {
+          title: "Steps down",
+          type: "number",
+          validation: stepsValidation,
+          innerFormName: "down",
+          id: "down",
+        },
+      ],
+      ({ up, down }) => createHarmonicSeries(state, up, down)
     ),
     modalImpl(
       "modal-just",
       "Just tuning",
       "just",
       [
-        { title: "T", type: "number", innerFormName: "T", id: "t" },
-        { title: "Limit", type: "number", innerFormName: "limit", id: "limit" },
+        {
+          title: "Limits in Scala format, comma separated",
+          type: "string",
+          validation: [csvValidation(integerValidation(2, PRIME_LIMIT_MAX))],
+          innerFormName: "limit",
+          id: "limit",
+        },
+        {
+          title: "Steps up, comma separated",
+          type: "string",
+          validation: [csvValidation(integerValidation(0, STEPS_UP_DOWN_MAX))],
+          innerFormName: "up",
+          id: "up",
+        },
+        {
+          title: "Steps down. comma separated",
+          type: "string",
+          validation: [csvValidation(integerValidation(0, STEPS_UP_DOWN_MAX))],
+          innerFormName: "down",
+          id: "down",
+        },
       ],
-      ({ T, limit }) => createJust(state, T, limit)
+      ({ limit, up, down }) => createJust(state, limit, up, down),
+      true
     ),
     modalImpl(
       "modal-ratiochord",
@@ -251,13 +367,17 @@ export const formModal = (
       "ratiochord",
       [
         {
-          title: "Chord",
+          title: "Chord ratios separated by :",
           type: "string",
+          validation: [
+            splitValidation(":")(decimalValidation(1, PRIME_LIMIT_MAX)),
+          ],
           innerFormName: "chord",
           id: "chord",
         },
       ],
-      ({ chord }) => createRatioChord(state, chord)
+      ({ chord }) => createRatioChord(state, chord),
+      true
     ),
     modalImpl(
       "modal-transpose",
@@ -267,6 +387,7 @@ export const formModal = (
         {
           title: "Offset cents",
           type: "number",
+          validation: decimalValidation(-OFFSET_CENT_MAX, OFFSET_CENT_MAX),
           innerFormName: "t",
           id: "t",
         },
@@ -281,6 +402,7 @@ export const formModal = (
         {
           title: "Mode",
           type: "number",
+          validation: integerValidation(1, OFFSET_MODE_MAX),
           innerFormName: "index",
           id: "mode-index",
         },
@@ -293,13 +415,15 @@ export const formModal = (
       "subset",
       [
         {
-          title: "Subset",
+          title: "Subset offset values separated by comma",
           type: "string",
+          validation: [csvValidation(integerValidation(1, EDO_N_MAX))],
           innerFormName: "subscale",
           id: "subscale",
         },
       ],
-      ({ subscale }) => modifySubscale(state, subscale)
+      ({ subscale }) => modifySubscale(state, subscale),
+      true
     ),
     modalImpl(
       "modal-multiply",
@@ -309,6 +433,7 @@ export const formModal = (
         {
           title: "Multiplier",
           type: "number",
+          validation: decimalPositiveValidation(MULTIPLIER_MAX),
           innerFormName: "multiplier",
           id: "multiplier",
         },
@@ -327,6 +452,7 @@ export const formModal = (
         {
           title: "Multiplier",
           type: "number",
+          validation: decimalPositiveValidation(MULTIPLIER_MAX),
           innerFormName: "multiplier",
           id: "multiplier",
         },
@@ -341,6 +467,7 @@ export const formModal = (
         {
           title: "N",
           type: "number",
+          validation: scaleNValidation,
           innerFormName: "N",
           id: "N",
         },
@@ -353,19 +480,22 @@ export const formModal = (
       "temper",
       [
         {
-          title: "Commas to temper out",
+          title: "Commas to temper out, Scala format separated by comma",
           type: "string",
+          validation: [csvValidation([scalaValidation])],
           innerFormName: "commas",
           id: "commas",
         },
         {
           title: "Epsilon comparison tolerance",
           type: "number",
+          validation: decimalPositiveValidation(Number.MAX_VALUE),
           innerFormName: "epsilon",
           id: "epsilon",
         },
       ],
-      ({ commas, epsilon }) => modifyTemper(state, commas, epsilon)
+      ({ commas, epsilon }) => modifyTemper(state, commas, epsilon),
+      true
     ),
     modal(
       "modal-higher-rank-temperament",
@@ -412,7 +542,7 @@ export const formModal = (
           // @ts-ignore
           Number.isInteger(state.form.higher.generatorCount)
             ? [
-                p("Generators"),
+                p("Generators in Scala format separated by commas"),
                 input({
                   // @ts-ignore
                   value: state.form.higher.generators,
@@ -430,7 +560,7 @@ export const formModal = (
                     );
                   },
                 }),
-                p("Steps up"),
+                p("Steps up, separated by commas"),
                 integerInput({
                   min: 0,
                   max: STEPS_UP_DOWN_MAX,
@@ -450,7 +580,7 @@ export const formModal = (
                     );
                   },
                 }),
-                p("Steps down"),
+                p("Steps down, separated by commas"),
                 integerInput({
                   min: 0,
                   max: STEPS_UP_DOWN_MAX,
@@ -470,7 +600,7 @@ export const formModal = (
                     );
                   },
                 }),
-                p("Offsets"),
+                p("Offsets cents, separated by commas"),
                 input({
                   // @ts-ignore
                   value: state.form.higher.offset,
