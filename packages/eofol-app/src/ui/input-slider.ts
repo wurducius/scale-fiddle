@@ -10,14 +10,18 @@ export const sliderInput = (
   adornmentMap?: (val: string) => string,
   large?: boolean,
   classname?: string,
-  id?: string
+  id?: string,
+  isPrimary?: boolean
 ) => {
   const getDisplayValue = (val: string) =>
     adornmentMap ? adornmentMap(val) : val;
   const displayId = "input-slider-value-display-" + id;
 
   return div(
-    ["input-slider-base", cx(classname)],
+    [
+      isPrimary ? "input-slider-base-primary" : "input-slider-base",
+      cx(classname),
+    ],
     [
       createElement(labelTag ?? "p", undefined, label),
       div("input-slider-parent", [

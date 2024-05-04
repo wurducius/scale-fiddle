@@ -122,6 +122,8 @@ export const initStyles = (theme: Theme) => {
   createStyleObj(getButtonHoverStyle(true), ".button-secondary:hover");
 
   createStyleObj({ color: theme.color.secondary }, ".input-slider-base");
+  createStyleObj({ color: theme.color.primary }, ".input-slider-base-primary");
+
   createStyleObj(
     {
       display: "flex",

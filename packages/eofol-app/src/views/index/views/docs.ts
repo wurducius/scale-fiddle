@@ -122,7 +122,7 @@ export const docsTab = (
   const docsTab = state.docsTab;
 
   return [
-    div(sx({ maxWidth: "640px", margin: "0 auto 0 auto" }), [
+    div(sx({ maxWidth: "640px", margin: "0 auto 0 auto", padding: "0 32px" }), [
       div(undefined, [
         ...(docsTab === 0 ? [intro(state, setState)] : []),
         ...(docsTab === 1 ? [createScales(state, setState)] : []),

@@ -421,68 +421,79 @@ export const synthTab = (
   const synth = state.synth;
 
   return [
-    div(sx({ display: "flex", justifyContent: "center" }), [
-      div(
-        sx({
-          display: "flex",
-          flexDirection: breakpoint.md ? "column" : "row",
-          justifyContent: "center",
-          margin: "0 auto 0 auto",
-          flex: 2,
-        }),
-        [
-          div(
-            sx({
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              margin: "0 64px 0 64px",
-            }),
-            [
-              sliderInput(
-                "Master volume",
-                (synth.totalGain * 100).toFixed(0).toString(),
-                (nextValue) => {
-                  const val = Number(Number(nextValue).toFixed(0));
-                  const newTotalGain = val / 100;
-                  // @ts-ignore
-                  setState({
-                    ...state,
-                    synth: {
-                      ...synth,
-                      totalGain: newTotalGain,
-                    },
-                  });
-                  setTotalGain(newTotalGain);
-                },
-                "h1",
-                (val) => `${val}%`,
-                true,
-                sx({ margin: `0 ${theme.spacing.space4}` }),
-                "master-gain"
-              ),
-              h1("Organ (sustain)"),
-              checkbox({
-                name: "checkbox-organ",
-                value: synth.organ,
-                onChange: () => {
-                  // @ts-ignore
-                  setState({
-                    ...state,
-                    synth: { ...synth, organ: !synth.organ },
-                  });
-                },
+    div(
+      sx({
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+      }),
+      [
+        div(
+          sx({
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            margin: "0 auto 0 auto",
+            flex: 2,
+          }),
+          [
+            div(
+              sx({
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                margin: "0 64px 0 64px",
               }),
-            ]
-          ),
-          div(sx({ margin: "0 64px 0 64px" }), [
-            h1("Timbre"),
-            waveformTypeSelect(state, setState),
-            div(sx({ marginTop: "48px" }), waveformValueMenu(state, setState)),
-          ]),
-        ]
-      ),
-    ]),
+              [
+                sliderInput(
+                  "Master volume",
+                  (synth.totalGain * 100).toFixed(0).toString(),
+                  (nextValue) => {
+                    const val = Number(Number(nextValue).toFixed(0));
+                    const newTotalGain = val / 100;
+                    // @ts-ignore
+                    setState({
+                      ...state,
+                      synth: {
+                        ...synth,
+                        totalGain: newTotalGain,
+                      },
+                    });
+                    setTotalGain(newTotalGain);
+                  },
+                  "h1",
+                  (val) => `${val}%`,
+                  true,
+                  sx({ margin: `0 ${theme.spacing.space4}` }),
+                  "master-gain",
+                  true
+                ),
+                h1("Organ (sustain)"),
+                checkbox({
+                  name: "checkbox-organ",
+                  value: synth.organ,
+                  onChange: () => {
+                    // @ts-ignore
+                    setState({
+                      ...state,
+                      synth: { ...synth, organ: !synth.organ },
+                    });
+                  },
+                }),
+              ]
+            ),
+            div(sx({ margin: "0 64px 0 64px" }), [
+              h1("Timbre"),
+              waveformTypeSelect(state, setState),
+              div(
+                sx({ marginTop: "48px" }),
+                waveformValueMenu(state, setState)
+              ),
+            ]),
+          ]
+        ),
+      ]
+    ),
     div(sx({ marginTop: theme.spacing.space8 }), h1("Envelope")),
     select({
       name: "select-envelope-type",

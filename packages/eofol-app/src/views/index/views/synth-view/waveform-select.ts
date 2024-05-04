@@ -1,10 +1,4 @@
-import {
-  button,
-  input,
-  notify,
-  numberInput,
-  select,
-} from "@eofol/eofol-simple";
+import { button, notify, select } from "@eofol/eofol-simple";
 import {
   TIMBRE_CUSTOM_COEFFICIENTS_LENGTH_MAX,
   TIMBRE_FROM_TUNING_COEFFICIENTS_LENGTH_MAX,
@@ -14,24 +8,20 @@ import {
 } from "../../../../data";
 import { setWaveformPreset, setWaveformValue } from "../../../../synth";
 import { FiddleState, Timbre } from "../../../../types";
-import { div, h2, h3, h4, p } from "../../../../extract";
+import { div, h2, h3, h4 } from "../../../../extract";
 import {
   joinScale,
   normalizePeriod,
   parseScala,
   sortNumbers,
+  splitScale,
   timbreToTuning,
   tuningToTimbre,
 } from "../../../../sheen";
-import { createElement, sx } from "@eofol/eofol";
-import {
-  validateIsInteger,
-  validateIsNumber,
-  validateIsOverMin,
-  validateIsRequired,
-  validateIsUnderMax,
-} from "../../../../util/validation";
+import { mergeDeep, sx } from "@eofol/eofol";
 import { decimalInput, integerInput } from "../../../../ui";
+
+const PRECISION_TIMBRE_DIGITS = 3;
 
 const setCustomWaveform = (customCoefficients: [number, number][]) => {
   // @ts-ignore
@@ -63,6 +53,14 @@ export const waveformTypeSelect = (state: FiddleState, setState: any) => {
     value: state.synth.waveformType,
     options: waveformTypeOptions,
     onChange: (nextVal) => {
+      if (nextVal === "preset") {
+        // @ts-ignore
+        setWaveformPreset(state.synth.waveformPreset);
+      } else if (nextVal === "custom") {
+        // @ts-ignore
+        setCustomWaveform(state.synth.customCoefficients);
+      }
+
       // @ts-ignore
       setState({
         ...state,
@@ -106,34 +104,37 @@ export const waveformCustomMenu = (state: FiddleState, setState: any) => {
     sx({ display: "flex", flexDirection: "column", alignItems: "center" }),
     [
       h3("Timbre coefficients length"),
-      integerInput({
-        name: "waveform-custom-length",
-        value: customLength,
-        min: 1,
-        max: TIMBRE_CUSTOM_COEFFICIENTS_LENGTH_MAX,
-        onChange: (nextVal) => {
-          const val = Number(nextVal);
-          const nextCustomCoefficients = Array.from({ length: val }).map(
-            (item, i) =>
-              i < customCoefficients.length
-                ? [customCoefficients[i][0], customCoefficients[i][1]]
-                : [0, 0]
-          ) as [number, number][];
+      div(
+        sx({ width: "266px" }),
+        integerInput({
+          name: "waveform-custom-length",
+          value: customLength,
+          min: 1,
+          max: TIMBRE_CUSTOM_COEFFICIENTS_LENGTH_MAX,
+          onChange: (nextVal) => {
+            const val = Number(nextVal);
+            const nextCustomCoefficients = Array.from({ length: val }).map(
+              (item, i) =>
+                i < customCoefficients.length
+                  ? [customCoefficients[i][0], customCoefficients[i][1]]
+                  : [0, 0]
+            ) as [number, number][];
 
-          setCustomWaveform(nextCustomCoefficients);
+            setCustomWaveform(nextCustomCoefficients);
 
-          // @ts-ignore
-          setState({
-            ...state,
-            synth: {
-              // @ts-ignore
-              ...state.synth,
-              customLength: val,
-              customCoefficients: nextCustomCoefficients,
-            },
-          });
-        },
-      }),
+            // @ts-ignore
+            setState({
+              ...state,
+              synth: {
+                // @ts-ignore
+                ...state.synth,
+                customLength: val,
+                customCoefficients: nextCustomCoefficients,
+              },
+            });
+          },
+        })
+      ),
       ...Array.from({ length: customLength }).map((item, index) => {
         return div(sx({ marginTop: "32px" }), [
           h3("Timbre coefficient #" + (index + 2)),
@@ -306,8 +307,7 @@ const timbreFromTuningButton = (state: FiddleState, setState: any) => {
       const fromTuningLength = state.synth.fromTuningLength;
       // @ts-ignore
       const fromTuningIterations = state.synth.fromTuningIterations;
-      const normalizer = normalizePeriod(period);
-      // @ts-ignore
+      const normalizer = normalizePeriod(period); // @ts-ignore
       const ratioVals = splitScale(state.scaleInput)
         .map(parser)
         .map(normalizer)
@@ -394,6 +394,26 @@ const timbreFromTuningButton = (state: FiddleState, setState: any) => {
 
             // @ts-ignore
             setWaveformValue(result);
+
+            const customLength = result.real.length;
+            const customCoefficients = [];
+            for (let i = 0; i < customLength; i++) {
+              customCoefficients[i] = [
+                Number(result.real[i].toFixed(PRECISION_TIMBRE_DIGITS)),
+                Number(result.imag[i].toFixed(PRECISION_TIMBRE_DIGITS)),
+              ];
+            }
+
+            setState({
+              ...state,
+              synth: {
+                // @ts-ignore
+                ...state.synth,
+                waveformType: "custom",
+                customLength,
+                customCoefficients,
+              },
+            });
           });
       }, 20);
     },

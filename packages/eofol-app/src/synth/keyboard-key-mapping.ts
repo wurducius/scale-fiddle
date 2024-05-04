@@ -2,6 +2,7 @@ import { playTone, releaseNote } from "./synth-lib";
 import { FiddleState } from "../types";
 import { keyDownHandlers, keyUpHandlers } from "./key-handlers";
 import { flashKeyDownByValue, flashKeyUpByValue } from "./keyboard-flash";
+import { getBreakpoint } from "@eofol/eofol/dist";
 
 export const keysDown: Record<number, boolean | undefined> = {};
 
@@ -38,11 +39,25 @@ export const mapKeyboardKeys = (state: FiddleState) => (freq: string[]) => {
   const handleKeyDown = handleKeyDownImpl(state);
   const handleKeyUp = handleKeyUpImpl(state);
 
+  const breakpoint = getBreakpoint();
+  // @ts-ignore
+  const isScaleTab = state.tab === 0;
+  // @ts-ignore
+  const isKeysSmallTab = state.smallTab === 1;
+  const small = breakpoint.sm; // @ts-ignore
+  const isInvalid = state.scaleInvalid;
+  const isKeyboardActive =
+    isScaleTab && ((small && isKeysSmallTab) || !small) && !isInvalid;
+
   document.onkeydown = (event) => {
-    keyDownHandlers(event, freq, handleKeyDown);
+    if (isKeyboardActive) {
+      keyDownHandlers(event, freq, handleKeyDown);
+    }
   };
 
   document.onkeyup = (event) => {
-    keyUpHandlers(event, freq, handleKeyUp);
+    if (isKeyboardActive) {
+      keyUpHandlers(event, freq, handleKeyUp);
+    }
   };
 };
