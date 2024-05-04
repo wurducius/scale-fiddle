@@ -61,7 +61,6 @@ export const initialState = {
     },
     higher: {
       open: false,
-      generatorCount: 2,
       generators: "700.,200.",
       stepsUp: "12,3",
       stepsDown: "0,0",

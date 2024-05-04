@@ -3,7 +3,7 @@ import { mod, trimWhitespace } from "../util";
 import { parseScala } from "./scala";
 import { normalizePeriod } from "./sheen";
 import { initModify, outputScale, ratioToCent } from "./sheen-util";
-import { normPrimeTuning } from "./tempering";
+import { normPrimeTuning, temper } from "./tempering";
 
 export const modifyTranspose = (state: FiddleState, t: number) => {
   const centsScale = initModify(state);
@@ -107,69 +107,6 @@ export const modifyTemper = (
   epsilon: number
 ) => {
   const centsScale = initModify(state);
-
-  const parsedCommas = commas
-    .split(",")
-    .map(trimWhitespace)
-    // @ts-ignore
-    .map(parseScala(state)) // @ts-ignore
-    .map(normalizePeriod(state.tuning.period))
-    .map(ratioToCent);
-
-  const result: number[] = [];
-  const closePairs: number[][] = [];
-  for (let i = 0; i < centsScale.length; i++) {
-    const first = centsScale[i];
-    const second = centsScale[mod(i + 1, centsScale.length)];
-    const deltaForward = Math.abs(second - first);
-    const deltaBackward = 1200 - deltaForward;
-
-    let isTemperedOut = undefined;
-    for (let j = 0; j < parsedCommas.length; j++) {
-      if (
-        Math.abs(deltaForward - parsedCommas[j]) < epsilon ||
-        Math.abs(deltaBackward - parsedCommas[j]) < epsilon
-      ) {
-        isTemperedOut = parsedCommas[j];
-        break;
-      }
-    }
-
-    if (isTemperedOut) {
-      closePairs.push([first, second]);
-      result.push(mod(first, 1200) === 0 ? first : second);
-    } else {
-      result.push(second);
-    }
-  }
-
-  const resolvedPairs = closePairs.reduce((acc, next) => {
-    if (acc.includes(next[0])) {
-      return [...acc, next[1]];
-    }
-    if (acc.includes(next[1])) {
-      return [...acc, next[0]];
-    }
-
-    if (mod(next[0], 1200) === 0) {
-      return [...acc, next[1]];
-    }
-    if (mod(next[1], 1200) === 0) {
-      return [...acc, next[0]];
-    }
-
-    const firstNextScale = centsScale.filter((x: number) => x != next[0]);
-    const secondNextScale = centsScale.filter((x: number) => x != next[1]);
-
-    const firstNorm = normPrimeTuning(firstNextScale);
-    const secondNorm = normPrimeTuning(secondNextScale);
-
-    const isFirstNormLesser = firstNorm < secondNorm;
-
-    return [...acc, next[isFirstNormLesser ? 0 : 1]];
-  }, []);
-
-  const resultx = centsScale.filter((c: number) => !resolvedPairs.includes(c));
-
-  return outputScale(state, resultx);
+  const result = temper(state, centsScale, commas, epsilon);
+  return outputScale(state, result);
 };

@@ -18,7 +18,7 @@ import {
   scalePresets,
   scalePresetsFlat,
 } from "../../../../data";
-import { div, p } from "../../../../extract";
+import { div, flex, p } from "../../../../extract";
 import {
   updateScale,
   createEdo,
@@ -38,6 +38,11 @@ import {
   modifyApproxEqual,
   modifyTemper,
   createHigherRankTemperament,
+  splitScale,
+  ratioToCent,
+  temper,
+  outputScale,
+  parseScala,
 } from "../../../../sheen";
 import { FiddleState, FiddleStateImpl } from "../../../../types";
 import { defineSelectSearch, integerInput } from "../../../../ui";
@@ -59,6 +64,584 @@ defineSelectSearch({ options: scalePresets });
 
 // @TODO
 const scalaValidation: (val: string) => true | string = (val: string) => true;
+
+const temperModal = (
+  state: FiddleState,
+  setState: undefined | ((nextState: FiddleState) => void)
+) => {
+  const theme = getTheme();
+
+  // @ts-ignore
+  const commas = state.form.temper.commas;
+  // @ts-ignore
+  const epsilon = state.form.temper.epsilon;
+
+  const temperResult = modifyTemper(state, commas, epsilon);
+  // @ts-ignore
+  const temperedOutResult = state.scaleLength - splitScale(temperResult).length;
+
+  return modal(
+    "modal-temper",
+    "Temper",
+    div(sx({ marginTop: "24px" }), [
+      flex({ justifyContent: "center" }, [
+        div(sx({ width: "266px", margin: "0 16px 0 16px" }), [
+          div(
+            sx({ height: "96px", fontSize: theme.typography.heading.fontSize }),
+            "Commas to temper out, Scala format separated by comma"
+          ),
+          input({
+            name: "modal-temper-commas", // @ts-ignore
+            value: commas,
+            onChange: (val) => {
+              // @ts-ignore
+              setState({
+                ...state,
+                form: {
+                  // @ts-ignore
+                  ...state.form, // @ts-ignore
+                  temper: { ...state.form.temper, commas: val },
+                },
+              });
+            },
+          }),
+        ]),
+        div(sx({ width: "266px" }), [
+          div(
+            sx({ height: "96px", fontSize: theme.typography.heading.fontSize }),
+            "Epsilon comparison tolerance"
+          ),
+          input({
+            name: "modal-temper-epsilon", // @ts-ignore
+            value: epsilon,
+            onChange: (val) => {
+              // @ts-ignore
+              setState({
+                ...state,
+                form: {
+                  // @ts-ignore
+                  ...state.form, // @ts-ignore
+                  temper: { ...state.form.temper, epsilon: val },
+                },
+              });
+            },
+          }),
+        ]),
+      ]),
+      div(sx({ marginTop: "16px" }), [
+        textarea({
+          name: "modal-temper-preview",
+          value: temperResult,
+          onChange: (val) => {},
+          classname: sx({ height: "256px" }),
+        }),
+        div(
+          sx({
+            marginTop: "16px",
+            marginBottom: "16px",
+            fontSize: theme.typography.heading.fontSize,
+          }),
+          `Tones tempered out: ${temperedOutResult}`
+        ),
+      ]),
+    ]), // @ts-ignore
+    state.form.temper.open,
+    () => {
+      // @ts-ignore
+      setState(
+        mergeDeep(state, {
+          form: {
+            temper: { open: false },
+          },
+        })
+      );
+    },
+    () => {
+      // @ts-ignore
+      setState({
+        ...state,
+        scaleInput: temperResult,
+        recompute: true,
+      });
+    },
+    undefined,
+    sx({
+      backgroundColor: theme.color.backgroundModal,
+      border: `2px solid ${theme.color.primary}`,
+    })
+  );
+};
+
+const higherModal = (
+  state: FiddleState,
+  setState: undefined | ((nextState: FiddleState) => void)
+) => {
+  const theme = getTheme();
+
+  const higherResult = // @ts-ignore
+    createHigherRankTemperament(state, setState, state.form.higher);
+
+  return modal(
+    "modal-higher-rank-temperament",
+    "Higher rank temperament",
+    div(
+      sx({
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        marginTop: "24px",
+      }),
+      [
+        div(sx({ display: "flex" }), [
+          div(sx({ margin: "0 16px 0 16px" }), [
+            div(
+              sx({
+                height: "96px",
+                fontSize: theme.typography.heading.fontSize,
+              }),
+              "Generators in Scala format separated by commas"
+            ),
+            input({
+              // @ts-ignore
+              value: state.form.higher.generators,
+              name: "input-form-higher-generators",
+              onChange: (nextVal) => {
+                // @ts-ignore
+                setState(
+                  mergeDeep(state, {
+                    form: {
+                      higher: {
+                        generators: nextVal,
+                      },
+                    },
+                  })
+                );
+              },
+            }),
+          ]),
+          div(sx({ margin: "0 16px 0 16px" }), [
+            div(
+              sx({
+                height: "96px",
+                fontSize: theme.typography.heading.fontSize,
+              }),
+              "Steps up, separated by commas"
+            ),
+            input({
+              // @ts-ignore
+              value: state.form.higher.stepsUp,
+              name: "input-form-higher-steps-up",
+              onChange: (nextVal) => {
+                // @ts-ignore
+                setState(
+                  mergeDeep(state, {
+                    form: {
+                      higher: {
+                        stepsUp: nextVal,
+                      },
+                    },
+                  })
+                );
+              },
+            }),
+          ]),
+          div(sx({ margin: "0 16px 0 16px" }), [
+            div(
+              sx({
+                height: "96px",
+                fontSize: theme.typography.heading.fontSize,
+              }),
+              "Steps down, separated by commas"
+            ),
+            input({
+              // @ts-ignore
+              value: state.form.higher.stepsDown,
+              name: "input-form-higher-steps-down",
+              onChange: (nextVal) => {
+                // @ts-ignore
+                setState(
+                  mergeDeep(state, {
+                    form: {
+                      higher: {
+                        stepsDown: nextVal,
+                      },
+                    },
+                  })
+                );
+              },
+            }),
+          ]),
+          div(sx({ margin: "0 16px 0 16px" }), [
+            div(
+              sx({
+                height: "96px",
+                fontSize: theme.typography.heading.fontSize,
+              }),
+              "Offsets in Scala format, separated by commas"
+            ),
+            input({
+              // @ts-ignore
+              value: state.form.higher.offset,
+              name: "input-form-higher-offset",
+              onChange: (nextVal) => {
+                // @ts-ignore
+                setState(
+                  mergeDeep(state, {
+                    form: {
+                      higher: {
+                        offset: nextVal,
+                      },
+                    },
+                  })
+                );
+              },
+            }),
+          ]),
+        ]),
+        div(
+          sx({ marginTop: "16px", marginBottom: "16px" }),
+          textarea({
+            name: "modal-higher-preview",
+            onChange: () => {},
+            value: higherResult,
+            classname: sx({ height: "256px" }),
+          })
+        ),
+      ]
+    ),
+    // @ts-ignore
+    state.form.higher.open,
+    () => {
+      // @ts-ignore
+      setState(
+        mergeDeep(state, {
+          form: {
+            higher: { open: false },
+          },
+        })
+      );
+    },
+    () => {
+      // @ts-ignore
+      const nextScales = state.scales;
+      // @ts-ignore
+      nextScales[state.scaleIndex] = {
+        name: "Higher rank scale",
+        scaleInput: higherResult,
+      };
+
+      // @ts-ignore
+      setState({
+        ...state,
+        recompute: true,
+        scaleInput: higherResult,
+        scales: nextScales,
+        form: {
+          // @ts-ignore
+          ...state.form, // @ts-ignore
+          higher: { ...state.form.higher, open: false },
+        },
+      });
+    },
+    undefined,
+    sx({
+      backgroundColor: theme.color.backgroundModal,
+      border: `2px solid ${theme.color.primary}`,
+    })
+  );
+};
+
+const presetModal = (
+  state: FiddleState,
+  setState: undefined | ((nextState: FiddleState) => void)
+) => {
+  const theme = getTheme();
+
+  return modal(
+    "modal-preset",
+    "Preset scale",
+    div(
+      sx({
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }),
+      [
+        e("select-search"),
+        textarea({
+          name: "result-preset-scale",
+          value:
+            scalePresetsFlat.find(
+              // @ts-ignore
+              (item) => item.id === state.form.preset.id
+            )?.value ?? "",
+          onChange: () => {},
+          classname: sx({
+            height: "300px",
+            marginTop: theme.spacing.space2,
+            marginBottom: theme.spacing.space1,
+          }),
+        }),
+      ]
+    ),
+    // @ts-ignore
+    state.form.preset.open,
+    () => {
+      // @ts-ignore
+      setState(
+        mergeDeep(state, {
+          form: {
+            preset: { open: false },
+          },
+        })
+      );
+    },
+    () => {
+      const presetScale = scalePresetsFlat.find(
+        // @ts-ignore
+        (item) => item.id === state.form.preset.id
+      );
+      if (presetScale) {
+        // @ts-ignore
+        setState({
+          ...state,
+          recompute: true,
+          // @ts-ignore
+          scales: state.scales.map((scale, index) =>
+            // @ts-ignore
+            index === state.scaleIndex
+              ? { ...scale, name: presetScale.title }
+              : scale
+          ),
+          // @ts-ignore
+          scaleInput: presetScale.value,
+          form: {
+            // @ts-ignore
+            ...state.form,
+            // @ts-ignore
+            preset: { ...state.form.preset, open: false },
+          },
+        });
+      }
+    },
+    undefined,
+    sx({
+      backgroundColor: theme.color.backgroundModal,
+      border: `2px solid ${theme.color.primary}`,
+    })
+  );
+};
+
+const temperedLimitModal = (
+  state: FiddleState,
+  setState: undefined | ((nextState: FiddleState) => void)
+) => {
+  const theme = getTheme();
+
+  // @ts-ignore
+  const commas = state.form.limit.commas;
+  // @ts-ignore
+  const epsilon = state.form.limit.epsilon;
+  // @ts-ignore
+  const limit = state.form.limit.limit;
+  // @ts-ignore
+  const up = state.form.limit.up;
+  // @ts-ignore
+  const down = state.form.limit.down;
+
+  // @ts-ignore
+  const scale = createJust(state, limit, up, down);
+
+  // @ts-ignore
+  const parser = parseScala(state);
+
+  const parsedScale = splitScale(scale).map(parser);
+  // @ts-ignore
+  const centsScale = parsedScale.map(ratioToCent);
+
+  const temperResult = outputScale(
+    state,
+    temper(state, centsScale, commas, epsilon)
+  );
+  // @ts-ignore
+  const temperedOutResult = centsScale.length - splitScale(temperResult).length;
+
+  return modal(
+    "modal-limit",
+    "Tempered limit",
+    div(sx({ marginTop: "24px" }), [
+      flex({ justifyContent: "center" }, [
+        div(sx({ width: "266px", margin: "0 16px 0 16px" }), [
+          div(
+            sx({
+              height: "128px",
+              fontSize: theme.typography.heading.fontSize,
+            }),
+            "Limit primes, separated by comma"
+          ),
+          input({
+            name: "modal-limit-limit", // @ts-ignore
+            value: limit,
+            onChange: (val) => {
+              // @ts-ignore
+              setState({
+                ...state,
+                form: {
+                  // @ts-ignore
+                  ...state.form, // @ts-ignore
+                  limit: { ...state.form.limit, limit: val },
+                },
+              });
+            },
+          }),
+        ]),
+        div(sx({ width: "266px", margin: "0 16px 0 16px" }), [
+          div(
+            sx({
+              height: "128px",
+              fontSize: theme.typography.heading.fontSize,
+            }),
+            "Commas to temper out, Scala format separated by comma"
+          ),
+          input({
+            name: "modal-limit-commas", // @ts-ignore
+            value: commas,
+            onChange: (val) => {
+              // @ts-ignore
+              setState({
+                ...state,
+                form: {
+                  // @ts-ignore
+                  ...state.form, // @ts-ignore
+                  limit: { ...state.form.limit, commas: val },
+                },
+              });
+            },
+          }),
+        ]),
+        div(sx({ width: "266px", margin: "0 16px 0 16px" }), [
+          div(
+            sx({
+              height: "128px",
+              fontSize: theme.typography.heading.fontSize,
+            }),
+            "Epsilon comparison tolerance"
+          ),
+          input({
+            name: "modal-limit-epsilon", // @ts-ignore
+            value: epsilon,
+            onChange: (val) => {
+              // @ts-ignore
+              setState({
+                ...state,
+                form: {
+                  // @ts-ignore
+                  ...state.form, // @ts-ignore
+                  limit: { ...state.form.limit, epsilon: val },
+                },
+              });
+            },
+          }),
+        ]),
+        div(sx({ width: "266px", margin: "0 16px 0 16px" }), [
+          div(
+            sx({
+              height: "128px",
+              fontSize: theme.typography.heading.fontSize,
+            }),
+            "Steps up, separated by comma"
+          ),
+          input({
+            name: "modal-limit-up", // @ts-ignore
+            value: up,
+            onChange: (val) => {
+              // @ts-ignore
+              setState({
+                ...state,
+                form: {
+                  // @ts-ignore
+                  ...state.form, // @ts-ignore
+                  limit: { ...state.form.limit, up: val },
+                },
+              });
+            },
+          }),
+        ]),
+        div(sx({ width: "266px", margin: "0 16px 0 16px" }), [
+          div(
+            sx({
+              height: "128px",
+              fontSize: theme.typography.heading.fontSize,
+            }),
+            "Steps down, separated by comma"
+          ),
+          input({
+            name: "modal-limit-down", // @ts-ignore
+            value: down,
+            onChange: (val) => {
+              // @ts-ignore
+              setState({
+                ...state,
+                form: {
+                  // @ts-ignore
+                  ...state.form, // @ts-ignore
+                  limit: { ...state.form.limit, down: val },
+                },
+              });
+            },
+          }),
+        ]),
+      ]),
+      div(sx({ marginTop: "16px" }), [
+        textarea({
+          name: "modal-limit-preview",
+          value: temperResult,
+          onChange: (val) => {},
+          classname: sx({ height: "256px" }),
+        }),
+        div(
+          sx({
+            marginTop: "16px",
+            marginBottom: "16px",
+            fontSize: theme.typography.heading.fontSize,
+          }),
+          `Tones tempered out: ${temperedOutResult}`
+        ),
+      ]),
+    ]), // @ts-ignore
+    state.form.limit.open,
+    () => {
+      // @ts-ignore
+      setState(
+        mergeDeep(state, {
+          form: {
+            limit: { open: false },
+          },
+        })
+      );
+    },
+    () => {
+      const nextState = {
+        ...state,
+        // @ts-ignore
+        scaleInput: temperResult,
+      } as FiddleStateImpl;
+
+      // @ts-ignore
+      setState({
+        ...state,
+        ...updateScale(nextState),
+        recompute: true, // @ts-ignore
+        form: { ...state.form, limit: { ...state.form.limit, open: false } },
+      });
+    },
+    undefined,
+    sx({
+      backgroundColor: theme.color.backgroundModal,
+      border: `2px solid ${theme.color.primary}`,
+    })
+  );
+};
 
 const generalFormModal =
   (
@@ -474,252 +1057,9 @@ export const formModal = (
       ],
       ({ N }) => modifyApproxEqual(state, N)
     ),
-    modalImpl(
-      "modal-temper",
-      "Temper",
-      "temper",
-      [
-        {
-          title: "Commas to temper out, Scala format separated by comma",
-          type: "string",
-          validation: [csvValidation([scalaValidation])],
-          innerFormName: "commas",
-          id: "commas",
-        },
-        {
-          title: "Epsilon comparison tolerance",
-          type: "number",
-          validation: decimalPositiveValidation(Number.MAX_VALUE),
-          innerFormName: "epsilon",
-          id: "epsilon",
-        },
-      ],
-      ({ commas, epsilon }) => modifyTemper(state, commas, epsilon),
-      true
-    ),
-    modal(
-      "modal-higher-rank-temperament",
-      "Higher rank temperament",
-      div(
-        sx({
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }),
-        div(sx({}), [
-          ...[
-            div(
-              sx({ fontSize: theme.typography.heading.fontSize }),
-              "Generator count"
-            ),
-            integerInput({
-              min: 1,
-              max: HIGHER_RANK_GENERATORS_MAX,
-              name: "input-form-higher-generator-count",
-              // @ts-ignore
-              value: state.form.higher.generatorCount,
-              onChange: (nextVal) => {
-                const val = Number(nextVal);
-                // @ts-ignore
-                setState(
-                  mergeDeep(state, {
-                    form: {
-                      higher: {
-                        generatorCount: val,
-                      },
-                    },
-                  })
-                );
-              },
-            }),
-          ],
-          // @ts-ignore
-          ...(state.form.higher.generatorCount > 0 &&
-          // @ts-ignore
-          state.form.higher.generatorCount <= HIGHER_RANK_GENERATORS_MAX &&
-          // @ts-ignore
-          Number.isFinite(state.form.higher.generatorCount) &&
-          // @ts-ignore
-          Number.isInteger(state.form.higher.generatorCount)
-            ? [
-                p("Generators in Scala format separated by commas"),
-                input({
-                  // @ts-ignore
-                  value: state.form.higher.generators,
-                  name: "input-form-higher-generators",
-                  onChange: (nextVal) => {
-                    // @ts-ignore
-                    setState(
-                      mergeDeep(state, {
-                        form: {
-                          higher: {
-                            generators: nextVal,
-                          },
-                        },
-                      })
-                    );
-                  },
-                }),
-                p("Steps up, separated by commas"),
-                integerInput({
-                  min: 0,
-                  max: STEPS_UP_DOWN_MAX,
-                  // @ts-ignore
-                  value: state.form.higher.stepsUp,
-                  name: "input-form-higher-steps-up",
-                  onChange: (nextVal) => {
-                    // @ts-ignore
-                    setState(
-                      mergeDeep(state, {
-                        form: {
-                          higher: {
-                            stepsUp: nextVal,
-                          },
-                        },
-                      })
-                    );
-                  },
-                }),
-                p("Steps down, separated by commas"),
-                integerInput({
-                  min: 0,
-                  max: STEPS_UP_DOWN_MAX,
-                  // @ts-ignore
-                  value: state.form.higher.stepsDown,
-                  name: "input-form-higher-steps-down",
-                  onChange: (nextVal) => {
-                    // @ts-ignore
-                    setState(
-                      mergeDeep(state, {
-                        form: {
-                          higher: {
-                            stepsDown: nextVal,
-                          },
-                        },
-                      })
-                    );
-                  },
-                }),
-                p("Offsets cents, separated by commas"),
-                input({
-                  // @ts-ignore
-                  value: state.form.higher.offset,
-                  name: "input-form-higher-offset",
-                  onChange: (nextVal) => {
-                    // @ts-ignore
-                    setState(
-                      mergeDeep(state, {
-                        form: {
-                          higher: {
-                            offset: nextVal,
-                          },
-                        },
-                      })
-                    );
-                  },
-                }),
-              ]
-            : [
-                p(
-                  `Generator count has illegal value. Allowed values are finite integer positive numbers lesser or equal to ${HIGHER_RANK_GENERATORS_MAX}`
-                ),
-              ]),
-        ])
-      ),
-      // @ts-ignore
-      state.form.higher.open,
-      () => {
-        // @ts-ignore
-        setState(
-          mergeDeep(state, {
-            form: {
-              higher: { open: false },
-            },
-          })
-        );
-      },
-      () => {
-        // @ts-ignore
-        createHigherRankTemperament(state, setState, state.form.higher);
-      },
-      undefined,
-      sx({
-        backgroundColor: theme.color.backgroundModal,
-        border: `2px solid ${theme.color.primary}`,
-      })
-    ),
-    modal(
-      "modal-preset",
-      "Preset scale",
-      div(
-        sx({
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }),
-        [
-          e("select-search"),
-          textarea({
-            name: "result-preset-scale",
-            value:
-              scalePresetsFlat.find(
-                // @ts-ignore
-                (item) => item.id === state.form.preset.id
-              )?.value ?? "",
-            onChange: () => {},
-            classname: sx({
-              height: "300px",
-              marginTop: theme.spacing.space2,
-              marginBottom: theme.spacing.space1,
-            }),
-          }),
-        ]
-      ),
-      // @ts-ignore
-      state.form.preset.open,
-      () => {
-        // @ts-ignore
-        setState(
-          mergeDeep(state, {
-            form: {
-              preset: { open: false },
-            },
-          })
-        );
-      },
-      () => {
-        const presetScale = scalePresetsFlat.find(
-          // @ts-ignore
-          (item) => item.id === state.form.preset.id
-        );
-        if (presetScale) {
-          // @ts-ignore
-          setState({
-            ...state,
-            recompute: true,
-            // @ts-ignore
-            scales: state.scales.map((scale, index) =>
-              // @ts-ignore
-              index === state.scaleIndex
-                ? { ...scale, name: presetScale.title }
-                : scale
-            ),
-            // @ts-ignore
-            scaleInput: presetScale.value,
-            form: {
-              // @ts-ignore
-              ...state.form,
-              // @ts-ignore
-              preset: { ...state.form.preset, open: false },
-            },
-          });
-        }
-      },
-      undefined,
-      sx({
-        backgroundColor: theme.color.backgroundModal,
-        border: `2px solid ${theme.color.primary}`,
-      })
-    ),
+    temperModal(state, setState),
+    temperedLimitModal(state, setState),
+    higherModal(state, setState),
+    presetModal(state, setState),
   ];
 };

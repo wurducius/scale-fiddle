@@ -60,7 +60,6 @@ export type FiddleStateImpl = {
     };
     higher: {
       open: boolean;
-      generatorCount: number;
       generators: string;
       stepsUp: string;
       stepsDown: string;

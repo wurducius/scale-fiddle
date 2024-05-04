@@ -169,7 +169,7 @@ export const createHigherRankTemperament = (
     .map(ratioToCent);
 
   let result: string[] = [];
-  for (let i = 0; i < higher.generatorCount; i++) {
+  for (let i = 0; i < higher.generators.length; i++) {
     const generatedUp = outputScaleCents(
       state,
       linearScaleCents(generators[i], stepsUp[i], 0).map((tone) =>
@@ -188,30 +188,12 @@ export const createHigherRankTemperament = (
 
   const nextScaleInput = joinScale(
     result
+      .map((tone) => mod(Number(tone), 1200))
+      .map((tone) => (Number(tone) === 0 ? 1200 : Number(tone)))
       .filter(onlyUnique)
-      .map(Number)
       .sort(sortNumbers)
       .map((tone) => toFixedCent(state, tone))
   );
 
-  // @ts-ignore
-  const nextScales = state.scales;
-  // @ts-ignore
-  nextScales[state.scaleIndex] = {
-    name: "Higher rank scale",
-    scaleInput: nextScaleInput,
-  };
-
-  // @ts-ignore
-  setState({
-    ...state,
-    recompute: true,
-    scaleInput: nextScaleInput,
-    scales: nextScales,
-    form: {
-      // @ts-ignore
-      ...state.form, // @ts-ignore
-      higher: { ...state.form.higher, open: false },
-    },
-  });
+  return nextScaleInput;
 };
