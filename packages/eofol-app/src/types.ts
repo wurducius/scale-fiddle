@@ -4,9 +4,11 @@ export type FiddleStateImpl = {
   scaleLength: number;
   scales: { name: string; scaleInput: string }[];
   scaleIndex: number;
+  scaleInvalid: boolean;
   overview: { freq: string; name: string; cent: string; ratio: string }[];
   tab: number;
   smallTab: number;
+  docsTab: number;
   tuning: {
     baseFreq: number;
     period: number;

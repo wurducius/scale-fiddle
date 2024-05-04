@@ -1,6 +1,11 @@
 import { FiddleState } from "../types";
 import { parseScala } from "./scala";
-import { ratioToCent, toFixedCent } from "./sheen-util";
+import {
+  ratioToCent,
+  sortNumbers,
+  splitScale,
+  toFixedCent,
+} from "./sheen-util";
 
 const INTERVAL_COMPARE_EPSILON = 0.15;
 

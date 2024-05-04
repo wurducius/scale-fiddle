@@ -1,5 +1,5 @@
 import { getBreakpoint, getTheme, sx } from "@eofol/eofol";
-import { div } from "../../../../extract";
+import { bubble, div } from "../../../../extract";
 import {
   keyActiveHoverStyle,
   mouseHandlers,
@@ -70,6 +70,9 @@ export const keys = (state: FiddleState) => {
   const theme = getTheme();
   const breakpoint = getBreakpoint();
 
+  // @ts-ignore
+  const scaleInvalid = state.scaleInvalid;
+
   const playToneImpl = playTone(state);
   const releaseNoteImpl = releaseNote(state);
 
@@ -82,25 +85,40 @@ export const keys = (state: FiddleState) => {
 
   clearKeyElementMap();
 
+  const keysContentElement = scaleInvalid
+    ? div(
+        sx({
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "calc(100% - 21px)",
+          position: "relative",
+          width: "128px",
+          margin: "128px auto 0 auto",
+        }),
+        bubble("Cannot render synth keyboard because scale is invalid.", true)
+      )
+    : div(
+        sx({
+          display: "grid",
+          gridTemplateColumns: breakpoint.md
+            ? "1fr 1fr 1fr 1fr 1fr 1fr 1fr"
+            : "1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr",
+          columnGap: 0,
+          rowGap: 0,
+          gridAutoFlow: "dense",
+          direction: "rtl",
+        }),
+        freq.map((val: string, i: number) =>
+          renderKey(state, freq.length - 1 - i, playToneImpl, releaseNoteImpl)
+        )
+      );
+
   return div(
     sx({
       maxHeight: "100%",
       paddingTop: theme.spacing.space3,
     }),
-    div(
-      sx({
-        display: "grid",
-        gridTemplateColumns: breakpoint.md
-          ? "1fr 1fr 1fr 1fr 1fr 1fr 1fr"
-          : "1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr",
-        columnGap: 0,
-        rowGap: 0,
-        gridAutoFlow: "dense",
-        direction: "rtl",
-      }),
-      freq.map((val: string, i: number) =>
-        renderKey(state, freq.length - 1 - i, playToneImpl, releaseNoteImpl)
-      )
-    )
+    keysContentElement
   );
 };

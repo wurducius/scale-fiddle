@@ -51,7 +51,7 @@ export const scaleTuning = (
         div(
           sx({ width: "64px", margin: "0 0 0 auto", display: "flex" }),
           decimalInput({
-            min: 1,
+            min: 1 + Number.MIN_SAFE_INTEGER,
             max: PERIOD_MAX,
             name: "input-period",
             value: tuning.period,

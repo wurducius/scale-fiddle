@@ -35,6 +35,8 @@ const cyanTheme = mergeDeep(commonTheme, {
     background: "#121212",
     backgroundElevation: "#333333",
     backgroundModal: "#2d3748",
+
+    error: "rgb(252, 129, 129)",
   },
 });
 
@@ -55,6 +57,8 @@ const fuchsiaTheme = mergeDeep(commonTheme, {
     background: "#121212",
     backgroundElevation: "#333333",
     backgroundModal: "#2d3748",
+
+    error: "rgb(252, 129, 129)",
   },
 });
 

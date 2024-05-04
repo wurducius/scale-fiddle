@@ -10,7 +10,7 @@ import {
 } from "./sheen-util";
 
 export const normalizePeriod = (period: number) => (value: number) => {
-  if (!Number.isFinite(value) || Number.isNaN(value) || value <= 0) {
+  if (!Number.isFinite(value) || Number.isNaN(value) || value <= 1) {
     return value;
   }
   let val = value;
@@ -34,8 +34,6 @@ export const scaleToOverview = (state: FiddleStateImpl) => {
   const period = state.tuning.period;
   const upKeys = state.tuning.keysUp;
   const downKeys = state.tuning.keysDown;
-  const { decimalDigitsCent, decimalDigitsFreq, decimalDigitsRatio } =
-    state.options;
 
   const raw = splitScale(scaleInput).filter(Boolean);
   const intervalMap = raw.map(parseScala(state));
