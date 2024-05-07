@@ -6,6 +6,7 @@ export const initialState = {
   scaleInput: DEFAULT_SCALE_INPUT,
   scales: [{ name: DEFAULT_SCALE_NAME, scaleInput: DEFAULT_SCALE_INPUT }],
   scaleIndex: 0,
+  periodCent: 1200,
   scaleInvalid: false,
   scaleError: "",
   tab: 0,

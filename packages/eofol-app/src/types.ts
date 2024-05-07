@@ -22,6 +22,7 @@ export type FiddleStateImpl = {
   scaleLength: number;
   scales: { name: string; scaleInput: string }[];
   scaleIndex: number;
+  periodCent: number;
   scaleInvalid: boolean;
   scaleError: string;
   overview: { freq: string; name: string; cent: string; ratio: string }[];

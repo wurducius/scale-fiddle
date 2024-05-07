@@ -1,4 +1,5 @@
 import { FiddleStateImpl } from "../types";
+import { ratioToCent } from "./sheen-util";
 
 const SCALA_MAX_LINES = 1200;
 
@@ -9,8 +10,8 @@ const SCALE_VALIDATION_ERROR_EMPTY = "Please specify a scale.";
 const errorInvalidScala = (line: string) =>
   `Scale data is invalid. Please specify a valid scale according to Scala format. Invalid line: "${line}".`;
 
-const errorOverPeriod = (line: string) =>
-  `Scale data is invalid. A scale step is above period interval. Invalid line: "${line}".`;
+const errorOverPeriod = (line: string, period: number) =>
+  `Scale data is invalid. A scale step is above period interval. Invalid line: "${line}". Period: ${period}`;
 
 const errorUnderOne = (line: string) =>
   `Scale data is invalid. A scale step is below interval 1/1. Invalid line: "${line}".`;
@@ -41,7 +42,7 @@ const parseScalaCent = (line: string, period: number) => {
   if (isInvalidNumber(val)) {
     return errorInvalidScala(line);
   }
-  return Math.pow(period, val / 1200);
+  return Math.pow(period, val / ratioToCent(period));
 };
 
 const parseScalaRational = (line: string) => {
@@ -121,11 +122,15 @@ export const parseScalaValidate =
       result = parseScalaRatio(line);
     }
 
+    const parsedResult = Number(
+      Number(result).toFixed(state.options.decimalDigitsRatio)
+    );
+
     // @ts-ignore
-    if (typeof result === "number" && result > state.tuning.period) {
-      return errorOverPeriod(line);
+    if (typeof result === "number" && parsedResult > state.tuning.period) {
+      return errorOverPeriod(line, state.tuning.period);
     }
-    if (typeof result === "number" && result < 1) {
+    if (typeof result === "number" && parsedResult < 1) {
       return errorUnderOne(line);
     }
 

@@ -105,4 +105,5 @@ export const updateScale = (state: FiddleStateImpl) => ({
     state.scaleIndex === index ? { ...s, scaleInput: state.scaleInput } : s
   ),
   overview: scaleToOverview(state),
+  periodCent: ratioToCent(state.tuning.period),
 });

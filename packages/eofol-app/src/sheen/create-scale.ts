@@ -33,13 +33,13 @@ const linearScaleCents = (g: number, up: number, down: number) => {
 export const createEdo = (state: FiddleState, N: number) =>
   outputScale(
     state, // @ts-ignore
-    linearScaleCents(ratioToCent(state.tuning.period) / N, N - 1, 0)
+    linearScaleCents(state.periodCent / N, N - 1, 0)
   );
 
 export const createMOS = (state: FiddleState, N: number, T: number) => {
   const vals = Array.from({ length: T }).map((item, i) => {
     // @ts-ignore
-    const periodCent = ratioToCent(state.tuning.period);
+    const periodCent = state.periodCent;
     return mod((Math.floor(((i + 1) * N) / T) * periodCent) / N, periodCent);
   });
   return outputScale(state, vals);
@@ -152,6 +152,8 @@ export const createHigherRankTemperament = (
 ) => {
   // @ts-ignore
   const parser = parseScala(state);
+  // @ts-ignore
+  const periodCent = state.periodCent;
   const generators = higher.generators
     .split(",")
     .map(trimWhitespace)
@@ -173,13 +175,13 @@ export const createHigherRankTemperament = (
     const generatedUp = outputScaleCents(
       state,
       linearScaleCents(generators[i], stepsUp[i], 0).map((tone) =>
-        mod(tone + offsets[i], 1200)
+        mod(tone + offsets[i], periodCent)
       )
     );
     const generatedDown = outputScaleCents(
       state,
-      linearScaleCents(1200 - generators[i], stepsDown[i], 0).map((tone) =>
-        mod(tone + offsets[i], 1200)
+      linearScaleCents(periodCent - generators[i], stepsDown[i], 0).map(
+        (tone) => mod(tone + offsets[i], periodCent)
       )
     );
 
@@ -188,8 +190,8 @@ export const createHigherRankTemperament = (
 
   const nextScaleInput = joinScale(
     result
-      .map((tone) => mod(Number(tone), 1200))
-      .map((tone) => (Number(tone) === 0 ? 1200 : Number(tone)))
+      .map((tone) => mod(Number(tone), periodCent))
+      .map((tone) => (Number(tone) === 0 ? periodCent : Number(tone)))
       .filter(onlyUnique)
       .sort(sortNumbers)
       .map((tone) => toFixedCent(state, tone))

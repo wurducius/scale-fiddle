@@ -15,7 +15,7 @@ export const initModify = (state: FiddleState) => {
 
 export const outputScaleCents = (state: FiddleState, result: number[]) => {
   // @ts-ignore
-  const periodCent = ratioToCent(state.tuning.period);
+  const periodCent = state.periodCent;
 
   return result
     .map((tone) => {
@@ -29,7 +29,7 @@ export const outputScaleCents = (state: FiddleState, result: number[]) => {
 
 export const outputScale = (state: FiddleState, result: number[]) => {
   // @ts-ignore
-  const periodCent = ratioToCent(state.tuning.period);
+  const periodCent = state.periodCent;
 
   return joinScale(
     result

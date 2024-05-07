@@ -63,7 +63,7 @@ export const temper = (
   // @ts-ignore
   const normalizer = normalizePeriod(state.tuning.period);
   // @ts-ignore
-  const periodCent = ratioToCent(state.tuning.period);
+  const periodCent = state.periodCent;
 
   const parsedCommas = commas
     .split(",")

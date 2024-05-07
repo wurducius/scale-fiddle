@@ -42,9 +42,11 @@ export const modifySubscale = (state: FiddleState, subscale: string) => {
 
 export const modifyMultiply = (state: FiddleState, multiplier: number) => {
   const centsScale = initModify(state);
+  // @ts-ignore
+  const periodCent = state.periodCent;
 
   const result = centsScale.map((tone: number) =>
-    mod(tone, 1200) === 0 ? tone : tone * multiplier
+    mod(tone, periodCent) === 0 ? tone : tone * multiplier
   );
 
   return outputScale(state, result);
@@ -52,10 +54,12 @@ export const modifyMultiply = (state: FiddleState, multiplier: number) => {
 
 export const modifyReverse = (state: FiddleState) => {
   const centsScale = initModify(state);
+  // @ts-ignore
+  const periodCent = state.periodCent;
 
   const result = [0];
   for (let i = 0; i < centsScale.length; i++) {
-    result.push(1200 - centsScale[centsScale.length - 1 - i]);
+    result.push(periodCent - centsScale[centsScale.length - 1 - i]);
   }
 
   return outputScale(state, result);
@@ -76,14 +80,16 @@ export const modifyStretch = (state: FiddleState, multiplier: number) => {
 
 export const modifyApproxEqual = (state: FiddleState, N: number) => {
   const centsScale = initModify(state);
+  // @ts-ignore
+  const periodCent = state.periodCent;
 
-  const equal = Array.from({ length: N }).map((n, i) => (i * 1200) / N);
+  const equal = Array.from({ length: N }).map((n, i) => (i * periodCent) / N);
   const result = centsScale.map((tone: number) => {
     let delta = Number.POSITIVE_INFINITY;
     let deltaIndex = undefined;
     for (let i = 0; i < equal.length; i++) {
       const thisDelta = Math.abs(tone - equal[i]);
-      const thisReverseDelta = Math.abs(1200 - tone + equal[i]);
+      const thisReverseDelta = Math.abs(periodCent - tone + equal[i]);
       if (thisDelta < delta) {
         delta = thisDelta;
         deltaIndex = i;

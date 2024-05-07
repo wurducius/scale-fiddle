@@ -18,6 +18,8 @@ export const getIntervalVectorData = (state: FiddleState) => {
   const parser = parseScala(state);
   // @ts-ignore
   const scaleVals = splitScale(state.scaleInput).map(parser).map(ratioToCent);
+  // @ts-ignore
+  const periodCent = state.periodCent;
 
   const intervalVectorLength = (scaleLength * (scaleLength - 1)) / 2;
 
@@ -25,7 +27,7 @@ export const getIntervalVectorData = (state: FiddleState) => {
   for (let i = 0; i < scaleLength; i++) {
     for (let j = i + 1; j < scaleLength; j++) {
       const deltaForward = Math.abs(scaleVals[i] - scaleVals[j]);
-      const deltaBackward = Math.abs(1200 - deltaForward);
+      const deltaBackward = Math.abs(periodCent - deltaForward);
       const deltaMin = Math.min(deltaForward, deltaBackward);
       intervalMatrix.push({
         i,
