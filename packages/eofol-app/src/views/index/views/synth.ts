@@ -445,28 +445,31 @@ export const synthTab = (
                 margin: "0 64px 0 64px",
               }),
               [
-                sliderInput(
-                  "Master volume",
-                  (synth.totalGain * 100).toFixed(0).toString(),
-                  (nextValue) => {
-                    const val = Number(Number(nextValue).toFixed(0));
-                    const newTotalGain = val / 100;
-                    // @ts-ignore
-                    setState({
-                      ...state,
-                      synth: {
-                        ...synth,
-                        totalGain: newTotalGain,
-                      },
-                    });
-                    setTotalGain(newTotalGain);
-                  },
-                  "h1",
-                  (val) => `${val}%`,
-                  true,
-                  sx({ margin: `0 ${theme.spacing.space4}` }),
-                  "master-gain",
-                  true
+                div(
+                  sx({ width: "500px" }),
+                  sliderInput(
+                    "Master volume",
+                    (synth.totalGain * 100).toFixed(0).toString(),
+                    (nextValue) => {
+                      const val = Number(Number(nextValue).toFixed(0));
+                      const newTotalGain = val / 100;
+                      // @ts-ignore
+                      setState({
+                        ...state,
+                        synth: {
+                          ...synth,
+                          totalGain: newTotalGain,
+                        },
+                      });
+                      setTotalGain(newTotalGain);
+                    },
+                    "h1",
+                    (val) => `${val}%`,
+                    true,
+                    sx({ width: "100%" }),
+                    "master-gain",
+                    true
+                  )
                 ),
                 h1("Organ (sustain)"),
                 checkbox({

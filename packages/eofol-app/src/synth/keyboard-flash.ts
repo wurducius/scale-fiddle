@@ -15,7 +15,7 @@ export const keyActiveHoverStyle = sx(
     border: `2px solid ${theme.color.primaryLighter}`,
     backgroundColor: theme.color.backgroundElevation,
   },
-  "hover"
+  ":hover"
 );
 
 export const flashKeyDownByValue = (freq: string) => {

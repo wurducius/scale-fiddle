@@ -69,7 +69,7 @@ const searchSelectMenuItem = (
           color: "#000000",
           fontWeight: 700,
         },
-        "hover"
+        ":hover"
       ),
     ],
     item.title,
@@ -208,7 +208,7 @@ const searchSelect = (
                 color: "#000000",
                 border: `1px solid ${theme.color.secondary}`,
               },
-              "hover"
+              ":hover"
             )
           ),
         }),

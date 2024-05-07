@@ -55,7 +55,7 @@ const getRows = (
               justifyContent: "center",
               flex: 2,
             }),
-            p(trimWhitespace(tone.name))
+            p(trimWhitespace(tone.name ?? ""))
           ),
         ]
       );

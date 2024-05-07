@@ -7,6 +7,7 @@ export const initialState = {
   scales: [{ name: DEFAULT_SCALE_NAME, scaleInput: DEFAULT_SCALE_INPUT }],
   scaleIndex: 0,
   scaleInvalid: false,
+  scaleError: "",
   tab: 0,
   smallTab: 0,
   docsTab: 0,
@@ -153,5 +154,8 @@ export const initialState = {
     endTime: 0.001,
     keyLabel: "freq",
     theme: "dark-cyan",
+  },
+  analyze: {
+    intervalMatrixUnits: "cent",
   },
 } as FiddleStateImpl;

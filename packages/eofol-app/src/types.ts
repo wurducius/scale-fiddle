@@ -5,6 +5,7 @@ export type FiddleStateImpl = {
   scales: { name: string; scaleInput: string }[];
   scaleIndex: number;
   scaleInvalid: boolean;
+  scaleError: string;
   overview: { freq: string; name: string; cent: string; ratio: string }[];
   tab: number;
   smallTab: number;
@@ -146,6 +147,9 @@ export type FiddleStateImpl = {
     endTime: number;
     keyLabel: KeyLabel;
     theme: string;
+  };
+  analyze: {
+    intervalMatrixUnits: string;
   };
 };
 

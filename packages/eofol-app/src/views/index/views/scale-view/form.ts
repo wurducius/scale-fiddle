@@ -128,7 +128,7 @@ const temperModal = (
           }),
         ]),
       ]),
-      div(sx({ marginTop: "16px" }), [
+      div(sx({ marginTop: "16px", width: "266px" }), [
         textarea({
           name: "modal-temper-preview",
           value: temperResult,
@@ -299,7 +299,7 @@ const higherModal = (
           ]),
         ]),
         div(
-          sx({ marginTop: "16px", marginBottom: "16px" }),
+          sx({ marginTop: "16px", marginBottom: "16px", width: "266px" }),
           textarea({
             name: "modal-higher-preview",
             onChange: () => {},
@@ -365,6 +365,7 @@ const presetModal = (
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        width: "266px",
       }),
       [
         e("select-search"),
@@ -592,7 +593,7 @@ const temperedLimitModal = (
           }),
         ]),
       ]),
-      div(sx({ marginTop: "16px" }), [
+      div(sx({ marginTop: "16px", width: "266px" }), [
         textarea({
           name: "modal-limit-preview",
           value: temperResult,
@@ -718,16 +719,20 @@ const generalFormModal =
             )
             .flat()
         ),
-        textarea({
-          name: "result-scale",
-          value: resultScale,
-          classname: sx({
-            height: "300px",
+        div(
+          sx({
+            width: "266px",
+            margin: "0 auto 0 auto",
             marginTop: theme.spacing.space2,
             marginBottom: "16px",
           }),
-          onChange: () => {},
-        }),
+          textarea({
+            name: "result-scale",
+            value: resultScale,
+            onChange: () => {},
+            classname: sx({ height: "300px" }),
+          })
+        ),
       ]),
       // @ts-ignore
       state.form[formName].open,

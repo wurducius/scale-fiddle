@@ -139,84 +139,98 @@ export const waveformCustomMenu = (state: FiddleState, setState: any) => {
         return div(sx({ marginTop: "32px" }), [
           h3("Timbre coefficient #" + (index + 2)),
           div(sx({ display: "flex" }), [
-            div(sx({ display: "block", marginRight: "32px" }), [
-              h4("Real coefficient"),
-              decimalInput({
-                min: -1,
-                max: 1,
-                name: "waveform-custom-coefficient-real-" + index,
-                classname: sx({ width: "128px" }),
-                value: customCoefficients[index][0],
-                onChange: (nextVal) => {
-                  const val = Number(nextVal);
-                  if (
-                    !Number.isFinite(val) ||
-                    Number.isNaN(val) ||
-                    val < -1 ||
-                    val > 1
-                  ) {
-                    return;
-                  }
-
-                  const nextCustomCoefficients = // @ts-ignore
-                    state.synth.customCoefficients.map(
-                      // @ts-ignore
-                      (item, i) => (index === i ? [val, item[1]] : item)
-                    );
-
-                  setCustomWaveform(nextCustomCoefficients);
-
-                  // @ts-ignore
-                  setState({
-                    ...state,
-                    synth: {
-                      // @ts-ignore
-                      ...state.synth, // @ts-ignore
-                      customCoefficients: nextCustomCoefficients,
-                    },
-                  });
-                },
+            div(
+              sx({
+                display: "block",
+                marginRight: "32px",
+                flex: 1,
               }),
-            ]),
-            div(sx({ display: "block", marginLeft: "32px" }), [
-              h4("Imaginary coefficient"),
-              decimalInput({
-                min: -1,
-                max: 1,
-                name: "waveform-custom-coefficient-imag-" + index,
-                classname: sx({ width: "128px" }),
-                value: customCoefficients[index][1],
-                onChange: (nextVal) => {
-                  const val = Number(nextVal);
-                  if (
-                    !Number.isFinite(val) ||
-                    Number.isNaN(val) ||
-                    val < -1 ||
-                    val > 1
-                  ) {
-                    return;
-                  }
+              [
+                div(sx({ height: "40px" }), h4("Real coefficient")),
+                decimalInput({
+                  min: -1,
+                  max: 1,
+                  name: "waveform-custom-coefficient-real-" + index,
+                  classname: sx({ width: "128px" }),
+                  value: customCoefficients[index][0],
+                  onChange: (nextVal) => {
+                    const val = Number(nextVal);
+                    if (
+                      !Number.isFinite(val) ||
+                      Number.isNaN(val) ||
+                      val < -1 ||
+                      val > 1
+                    ) {
+                      return;
+                    }
 
-                  const nextCustomCoefficients = // @ts-ignore
-                    state.synth.customCoefficients.map(
-                      // @ts-ignore
-                      (item, i) => (index === i ? [item[0], val] : item)
-                    );
+                    const nextCustomCoefficients = // @ts-ignore
+                      state.synth.customCoefficients.map(
+                        // @ts-ignore
+                        (item, i) => (index === i ? [val, item[1]] : item)
+                      );
 
-                  setCustomWaveform(nextCustomCoefficients);
+                    setCustomWaveform(nextCustomCoefficients);
 
-                  // @ts-ignore
-                  setState({
-                    ...state,
-                    synth: {
-                      // @ts-ignore
-                      ...state.synth, // @ts-ignore
-                      customCoefficients: nextCustomCoefficients,
-                    },
-                  });
-                },
+                    // @ts-ignore
+                    setState({
+                      ...state,
+                      synth: {
+                        // @ts-ignore
+                        ...state.synth, // @ts-ignore
+                        customCoefficients: nextCustomCoefficients,
+                      },
+                    });
+                  },
+                }),
+              ]
+            ),
+            div(
+              sx({
+                display: "block",
+                marginLeft: "32px",
+                flex: 1,
               }),
-            ]),
+              [
+                div(sx({ height: "40px" }), h4("Imaginary coefficient")),
+                decimalInput({
+                  min: -1,
+                  max: 1,
+                  name: "waveform-custom-coefficient-imag-" + index,
+                  classname: sx({ width: "128px" }),
+                  value: customCoefficients[index][1],
+                  onChange: (nextVal) => {
+                    const val = Number(nextVal);
+                    if (
+                      !Number.isFinite(val) ||
+                      Number.isNaN(val) ||
+                      val < -1 ||
+                      val > 1
+                    ) {
+                      return;
+                    }
+
+                    const nextCustomCoefficients = // @ts-ignore
+                      state.synth.customCoefficients.map(
+                        // @ts-ignore
+                        (item, i) => (index === i ? [item[0], val] : item)
+                      );
+
+                    setCustomWaveform(nextCustomCoefficients);
+
+                    // @ts-ignore
+                    setState({
+                      ...state,
+                      synth: {
+                        // @ts-ignore
+                        ...state.synth, // @ts-ignore
+                        customCoefficients: nextCustomCoefficients,
+                      },
+                    });
+                  },
+                }),
+              ]
+            ),
           ]),
         ]);
       }),

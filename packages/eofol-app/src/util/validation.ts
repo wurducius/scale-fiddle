@@ -45,6 +45,15 @@ export const validateIsPositive = (val: number) => {
   }
 };
 
+export const validateIsStrictlyOverMin = (min: number) => (val: number) => {
+  const parsedVal = Number(val);
+  if (parsedVal <= min) {
+    return "Please specify a number strictly greather than " + min + ".";
+  } else {
+    return true;
+  }
+};
+
 export const validateIsRequired = (val: number) => {
   if (!val) {
     return "Please specify a value.";

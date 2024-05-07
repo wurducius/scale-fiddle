@@ -1,8 +1,6 @@
-import { input } from "@eofol/eofol-simple";
 import { getTheme, sx } from "@eofol/eofol";
 import { FiddleState } from "../../../../types";
 import { p, div, flex, h3 } from "../../../../extract";
-import { waveformPresetSelect } from "../synth-view";
 import { decimalInput, integerInput } from "../../../../ui";
 import {
   BASE_FREQUENCY_MAX,
@@ -51,7 +49,8 @@ export const scaleTuning = (
         div(
           sx({ width: "64px", margin: "0 0 0 auto", display: "flex" }),
           decimalInput({
-            min: 1 + Number.MIN_SAFE_INTEGER,
+            min: 1,
+            minNotIncluded: true,
             max: PERIOD_MAX,
             name: "input-period",
             value: tuning.period,

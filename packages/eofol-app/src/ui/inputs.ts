@@ -6,6 +6,7 @@ import {
   validateIsInteger,
   validateIsOverMin,
   validateIsUnderMax,
+  validateIsStrictlyOverMin,
 } from "../util/validation";
 
 export const integerInput = (props: NumberInputProps) =>
@@ -22,13 +23,17 @@ export const integerInput = (props: NumberInputProps) =>
     ...props,
   });
 
-export const decimalInput = (props: NumberInputProps) =>
+export const decimalInput = (
+  props: NumberInputProps & { minNotIncluded?: boolean }
+) =>
   numberInput({
     // @ts-ignore
     validation: [
       validateIsRequired,
       validateIsNumber,
-      validateIsOverMin(props.min ?? 0),
+      props.minNotIncluded
+        ? validateIsStrictlyOverMin(props.min ?? 0)
+        : validateIsOverMin(props.min ?? 0),
       props.max && validateIsUnderMax(props.max),
     ].filter(Boolean),
     hideArrows: true,

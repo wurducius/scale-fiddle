@@ -1,7 +1,6 @@
 import {
   getBreakpoint,
   cx,
-  forceRerender,
   getTheme,
   mediaQueryMaxWidth,
   sx,
@@ -22,14 +21,10 @@ export const appbarButton = (
   isSecondary?: boolean
 ) =>
   button({
-    styles: cx(
-      "button-base",
-      `button-${isSecondary ? "secondary" : "primary"}${
-        isActive ? "-active" : ""
-      }`
-    ),
     children: label,
     onClick: onclick,
+    scheme: isSecondary ? "secondary" : "primary",
+    active: isActive,
   });
 
 const getAppbarHeight = (large: boolean, middle: boolean, small: boolean) => {

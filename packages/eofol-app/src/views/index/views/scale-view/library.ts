@@ -1,8 +1,14 @@
 import { cx, getTheme, sx } from "@eofol/eofol";
-import { updateScale, parseScalaValidate, splitScale } from "../../../../sheen";
+import {
+  updateScale,
+  parseScalaValidate,
+  splitScale,
+  softValidate,
+} from "../../../../sheen";
 import { FiddleState, FiddleStateImpl } from "../../../../types";
 import { textarea } from "@eofol/eofol-simple";
 import { bubble, div } from "../../../../extract";
+import { trimWhitespace } from "../../../../util";
 
 export const scaleLibrary = (
   state: FiddleState,
@@ -15,53 +21,69 @@ export const scaleLibrary = (
 
   // @ts-ignore
   const scaleInvalid = state.scaleInvalid;
+  // @ts-ignore
+  const scaleError = state.scaleError;
 
-  const bubbleElement = bubble(
-    "Scale data is invalid. Please specify a valid scale according to Scala format.",
-    scaleInvalid
-  );
+  const bubbleElement = bubble(scaleError, scaleInvalid);
+
+  console.log(document.styleSheets.item(1)?.cssRules);
 
   const textareaElement = textarea({
     name: "scale-library",
     // @ts-ignore
     value: state.scaleInput,
     onChange: (nextVal) => {
-      const parsedVal = splitScale(nextVal).map(parser);
+      const split = splitScale(nextVal).map(trimWhitespace).filter(Boolean);
+      const parsedVal = split.map(parser);
+      const validationError = parsedVal.reduce(
+        (acc: string | false, next) => (typeof next === "string" ? next : acc),
+        false
+      );
 
-      const nextState = {
+      const softValidation = softValidate(split);
+
+      const hasSoftError = softValidation !== false;
+      const hasHardError = validationError !== false;
+      const isError = hasSoftError || hasHardError;
+
+      const nextStateScaleInput = {
         ...state,
-        scaleInput: nextVal,
+        scaleInput: split.join("\n"),
       } as FiddleStateImpl;
+      const nextState = {
+        ...nextStateScaleInput,
+        ...updateScale(nextStateScaleInput),
+      };
 
-      if (!parsedVal.includes(false)) {
+      if (!isError) {
         // @ts-ignore
         setState({
           ...nextState,
-          ...updateScale(nextState),
           scaleInvalid: false,
         });
       } else {
-        // @ts-ignore
-        setState({
-          ...nextState,
-          ...updateScale(nextState),
-          scaleInvalid: true,
-        });
+        if (hasSoftError) {
+          // @ts-ignore
+          setState({
+            ...nextState,
+            scaleInvalid: true,
+            scaleError: softValidation,
+          });
+        } else if (hasHardError) {
+          // @ts-ignore
+          setState({
+            ...nextState,
+            scaleInvalid: true,
+            scaleError: validationError,
+          });
+        }
       }
     },
     classname: cx(
+      scaleInvalid ? "input-invalid" : "input-valid",
       sx({
         height: "284px",
-        width: "100%",
-        border: `1px solid inherit`,
-        outline: scaleInvalid ? `2px solid ${theme.color.error}` : "inherit",
-      }),
-      sx(
-        {
-          outline: scaleInvalid ? `2px solid ${theme.color.error}` : "inherit",
-        },
-        "focus"
-      )
+      })
     ),
   });
 

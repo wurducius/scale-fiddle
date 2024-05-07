@@ -3,6 +3,7 @@ import { getTheme, sx } from "@eofol/eofol";
 import { DEFAULT_SCALE_INPUT } from "../../../../data";
 import { div, flex, p } from "../../../../extract";
 import { FiddleState } from "../../../../types";
+import { cx } from "@eofol/eofol/dist";
 
 const theme = getTheme();
 
@@ -74,7 +75,7 @@ export const changeScaleMenu = (
             dropdownItem("Higher rank temperament", "higher"),
             dropdownItem("Preset scale", "preset"),
           ],
-          classname: sx({ flex: 1 }),
+          classname: cx(sx({ flex: 1 })),
         })
       ),
       flex(

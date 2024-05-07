@@ -36,7 +36,7 @@ const cyanTheme = mergeDeep(commonTheme, {
     backgroundElevation: "#333333",
     backgroundModal: "#2d3748",
 
-    error: "rgb(252, 129, 129)",
+    error: "#fc8181",
   },
 });
 
@@ -58,27 +58,7 @@ const fuchsiaTheme = mergeDeep(commonTheme, {
     backgroundElevation: "#333333",
     backgroundModal: "#2d3748",
 
-    error: "rgb(252, 129, 129)",
-  },
-});
-
-const testTheme = mergeDeep(commonTheme, {
-  color: {
-    primary: "red",
-    primaryLighter: "red",
-    primaryDarker: "red",
-
-    secondary: "green",
-    secondaryDarker: "green",
-    secondaryLighter: "green",
-
-    secondaryDark: "green",
-
-    font: "black",
-
-    background: "#121212",
-    backgroundElevation: "#333333",
-    backgroundModal: "#2d3748",
+    error: "#fc8181",
   },
 });
 
