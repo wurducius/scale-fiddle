@@ -1,6 +1,5 @@
-import { button } from "@eofol/eofol-simple";
+import { button, div } from "@eofol/eofol-simple";
 import { getBreakpoint, getTheme, sx } from "@eofol/eofol";
-import { div } from "../../../extract";
 import { FiddleState } from "../../../types";
 import {
   changeScaleMenu,
@@ -10,8 +9,6 @@ import {
   keys,
   formModal,
 } from "./scale-view";
-
-const theme = getTheme();
 
 const getMenuHeight = (breakpoint: any) => {
   if (breakpoint.xs) {

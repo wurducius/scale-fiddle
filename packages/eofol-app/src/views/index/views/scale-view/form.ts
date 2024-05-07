@@ -1,4 +1,4 @@
-import { modal, input, textarea } from "@eofol/eofol-simple";
+import { modal, input, textarea, bubble, div, flex } from "@eofol/eofol-simple";
 import {
   sx,
   e,
@@ -18,7 +18,6 @@ import {
   scalePresets,
   scalePresetsFlat,
 } from "../../../../data";
-import { bubble, div, flex, p } from "../../../../extract";
 import {
   updateScale,
   createEdo,
@@ -45,7 +44,7 @@ import {
   parseScala,
 } from "../../../../sheen";
 import { FiddleState, FiddleStateImpl } from "../../../../types";
-import { decimalInput, defineSelectSearch, integerInput } from "../../../../ui";
+import { decimalInput, defineSelectSearchScalePreset } from "../../../../ui";
 import {
   scaleNValidation,
   stepsValidation,
@@ -60,7 +59,7 @@ createStore("select-search-preset", {
   onChange: undefined,
 });
 
-defineSelectSearch({ options: scalePresets });
+defineSelectSearchScalePreset({ options: scalePresets });
 
 // @TODO
 const scalaValidation: (val: string) => true | string = (val: string) => true;

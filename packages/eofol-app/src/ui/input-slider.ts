@@ -1,83 +1,7 @@
-import { inputBase } from "@eofol/eofol-simple";
 import { cx, createElement, getTheme, sx } from "@eofol/eofol";
-import { div } from "../extract";
+import { div, sliderInput } from "@eofol/eofol-simple";
 
-const sliderInputX = ({
-  value,
-  name,
-  onChange,
-  onInput,
-  onBlur,
-  onFocus,
-  classname,
-  min,
-  max,
-  step,
-  disabled,
-  readonly,
-  scheme,
-}: {
-  value: string;
-  name: string;
-  onChange: (nextVal: number) => void;
-  onInput?: (nextVal: number) => void;
-  onBlur?: (nextVal: number) => void;
-  onFocus?: (nextVal: number) => void;
-  min?: number;
-  max?: number;
-  step?: number;
-  disabled?: boolean;
-  readonly?: boolean;
-  scheme?: "primary" | "secondary";
-  classname?: string;
-}) => {
-  const theme = getTheme();
-
-  const baseStyle = sx({
-    color: scheme === "primary" ? theme.color.primary : theme.color.secondary,
-  });
-
-  const parentStyle = sx({
-    display: "flex",
-    alignItems: "center",
-    gap: theme.spacing.space2,
-    justifyContent: "center",
-  });
-
-  return inputBase({
-    name,
-    value,
-    onChange: (nextVal: string) => onChange(Number(nextVal)),
-    onInput: onInput
-      ? (nextVal: string) => onInput(Number(nextVal))
-      : undefined,
-    onBlur: onBlur ? (nextVal: string) => onBlur(Number(nextVal)) : undefined,
-    onFocus: onFocus
-      ? (nextVal: string) => onFocus(Number(nextVal))
-      : undefined,
-    type: "range",
-    min: min ?? 0,
-    max: max ?? 100,
-    step: step ?? 1,
-    disabled,
-    readonly,
-    classname: cx(
-      baseStyle,
-      classname,
-      sx({
-        marginTop: theme.spacing.space1,
-        padding: "0 0 0 0",
-        width: "256px",
-        height: "24px",
-        accentColor: theme.color.secondary,
-        cursor: "pointer",
-      }),
-      sx({ accentColor: theme.color.secondaryDarker }, ":hover")
-    ),
-  });
-};
-
-export const sliderInput = (
+export const sliderInputCustom = (
   label: string,
   value: string,
   setter: (nextValue: string) => void,
@@ -102,7 +26,7 @@ export const sliderInput = (
     [
       createElement(labelTag ?? "p", undefined, label),
       div(cx(large && sx({ width: "500px" })), [
-        sliderInputX({
+        sliderInput({
           scheme: isPrimary ? "primary" : "secondary",
           name: "input-slider-" + label,
           value,

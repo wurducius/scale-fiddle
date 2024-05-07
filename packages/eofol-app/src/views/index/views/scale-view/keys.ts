@@ -1,5 +1,4 @@
 import { getBreakpoint, getTheme, sx } from "@eofol/eofol";
-import { bubble, div } from "../../../../extract";
 import {
   mouseHandlers,
   setKeyElementMap,
@@ -11,6 +10,7 @@ import {
 import { FiddleState } from "../../../../types";
 import { trimWhitespace } from "../../../../util";
 import { toFixedCent, toFixedRatio } from "../../../../sheen";
+import { bubble, div } from "@eofol/eofol-simple";
 
 const getKeyLabel = (state: FiddleState, i: number) => {
   // @ts-ignore

@@ -1,9 +1,9 @@
 import { getBreakpoint, getTheme, sx } from "@eofol/eofol";
-import { select, checkbox } from "@eofol/eofol-simple";
-import { div, h2, h1, h3, h4 } from "../../../extract";
+import { select, checkbox, div } from "@eofol/eofol-simple";
+import { h2, h1, h3, h4 } from "../../../extract";
 import { setTotalGain } from "../../../synth";
 import { FiddleState } from "../../../types";
-import { decimalInput, integerInput, sliderInput } from "../../../ui";
+import { decimalInput, integerInput, sliderInputCustom } from "../../../ui";
 import {
   ENVELOPE_CUSTOM_MAX_LENGTH,
   ENVELOPE_CUSTOM_TIME_MAX,
@@ -51,7 +51,7 @@ const envelopeADSRMenu = (
       [
         div(sx({ flex: 1, margin: "0 64px 0 64px" }), [
           h2("Attack phase"),
-          sliderInput(
+          sliderInputCustom(
             "Volume",
             (synth.attackGain * 100).toFixed(0).toString(),
             (nextValue) => {
@@ -73,7 +73,7 @@ const envelopeADSRMenu = (
           ),
           div(
             sx({ marginTop: "32px" }),
-            sliderInput(
+            sliderInputCustom(
               "Time",
               (synth.attackTime * 1000).toFixed(0).toString(),
               (nextValue) => {
@@ -106,7 +106,7 @@ const envelopeADSRMenu = (
           ),
           div(sx({ marginTop: theme.spacing.space8 }), [
             h2("Decay phase"),
-            sliderInput(
+            sliderInputCustom(
               "Volume",
               (synth.decayGain * 100).toFixed(0).toString(),
               (nextValue) => {
@@ -128,7 +128,7 @@ const envelopeADSRMenu = (
             ),
             div(
               sx({ marginTop: "32px" }),
-              sliderInput(
+              sliderInputCustom(
                 "Time",
                 (synth.decayTime * 1000).toFixed(0).toString(),
                 (nextValue) => {
@@ -163,7 +163,7 @@ const envelopeADSRMenu = (
         ]),
         div(sx({ flex: 1, margin: "0 64px 0 64px" }), [
           h2("Sustain phase"),
-          sliderInput(
+          sliderInputCustom(
             "Volume",
             (synth.sustainGain * 100).toFixed(0).toString(),
             (nextValue) => {
@@ -185,7 +185,7 @@ const envelopeADSRMenu = (
           ),
           div(
             sx({ marginTop: "32px" }),
-            sliderInput(
+            sliderInputCustom(
               "Time",
               (synth.sustainTime * 1000).toFixed(0).toString(),
               (nextValue) => {
@@ -218,7 +218,7 @@ const envelopeADSRMenu = (
           ),
           div(sx({ marginTop: theme.spacing.space8 }), [
             h2("Release phase"),
-            sliderInput(
+            sliderInputCustom(
               "Volume",
               (synth.releaseGain * 100).toFixed(0).toString(),
               (nextValue) => {
@@ -240,7 +240,7 @@ const envelopeADSRMenu = (
             ),
             div(
               sx({ marginTop: "32px" }),
-              sliderInput(
+              sliderInputCustom(
                 "Time",
                 (synth.releaseTime * 1000).toFixed(0).toString(),
                 (nextValue) => {
@@ -479,7 +479,7 @@ export const synthTab = (
               [
                 div(
                   sx({ width: "500px" }),
-                  sliderInput(
+                  sliderInputCustom(
                     "Master volume",
                     (synth.totalGain * 100).toFixed(0).toString(),
                     (nextValue) => {

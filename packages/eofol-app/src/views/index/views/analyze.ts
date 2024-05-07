@@ -1,8 +1,8 @@
 import { FiddleState } from "../../../types";
-import { div, h2, p, h1 } from "../../../extract";
-import { getIntervalVectorData, parseScala } from "../../../sheen";
+import { h2, p, h1 } from "../../../extract";
+import { getIntervalVectorData } from "../../../sheen";
 import { createElement, getBreakpoint, getTheme, sx } from "@eofol/eofol";
-import { p as pImpl, unorderedList } from "@eofol/eofol-simple";
+import { p as pImpl, unorderedList, div } from "@eofol/eofol-simple";
 
 const pSecondary = (title: string) => {
   const theme = getTheme();

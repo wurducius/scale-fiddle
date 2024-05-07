@@ -1,6 +1,6 @@
 import { getTheme, sx } from "@eofol/eofol";
 import { FiddleState } from "../../../../types";
-import { p, div, flex, h3 } from "../../../../extract";
+import { p, h3 } from "../../../../extract";
 import { decimalInput, integerInput } from "../../../../ui";
 import {
   BASE_FREQUENCY_MAX,
@@ -8,13 +8,14 @@ import {
   KEYS_UP_DOWN_MAX,
   PERIOD_MAX,
 } from "../../../../data";
-
-const theme = getTheme();
+import { div, flex } from "@eofol/eofol-simple";
 
 export const scaleTuning = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
 ) => {
+  const theme = getTheme();
+
   // @ts-ignore
   const tuning = state.tuning;
 

@@ -1,6 +1,5 @@
 import {
   getBreakpoint,
-  cx,
   getTheme,
   mediaQueryMaxWidth,
   sx,
@@ -9,8 +8,7 @@ import {
   getLanguage,
   getLanguages,
 } from "@eofol/eofol";
-import { button, notify, a, select } from "@eofol/eofol-simple";
-import { div } from "../../../extract";
+import { button, notify, a, select, div } from "@eofol/eofol-simple";
 import { panic } from "../../../synth";
 import { FiddleState } from "../../../types";
 

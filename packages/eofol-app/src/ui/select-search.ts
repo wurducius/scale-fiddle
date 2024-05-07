@@ -1,4 +1,4 @@
-import { input, button } from "@eofol/eofol-simple";
+import { input, button, div, flex } from "@eofol/eofol-simple";
 import {
   sy,
   sx,
@@ -7,10 +7,8 @@ import {
   selector,
   getTheme,
 } from "@eofol/eofol";
-import { div, flex, h2 } from "../extract";
+import { h2 } from "../extract";
 import { scalePresetsFlat } from "../data";
-
-const theme = getTheme();
 
 type Option = { title: string; id: string };
 
@@ -21,48 +19,52 @@ type SelectSearchProps = {
   value: string;
   defaultOptions: SelectOptions;
   onChange: undefined | ((nextVal: string) => void);
+  inputElementId: string;
 };
 
-type DefineSelectSearchProps = { options: SelectOptions };
+type DefineSelectSearchProps = {
+  options: SelectOptions;
+  storeName: string;
+  tagName: string;
+  inputElementId: string;
+};
 
-sy(
-  {
-    position: "relative",
-    left: 0,
-    right: 0,
-    marginLeft: "auto",
-    marginRight: "auto",
-    textAlign: "left",
-    backgroundColor: "#121212",
-    overflow: "auto",
-    height: "400px",
-    padding: `${theme.spacing.space1} 0`,
-    width: "475px",
-  },
-  "search-select-menu"
-);
+const searchSelectMenu = (children: Element[]) => {
+  const theme = getTheme();
 
-const searchSelectMenu = (children: Element[]) =>
-  div("search-select-menu", children);
-
-sy(
-  {
-    color: theme.color.secondary,
-    cursor: "pointer",
-    padding: `2px 0 2px ${theme.spacing.space4}`,
-  },
-  "search-select-menu-item-base"
-);
+  return div(
+    sx({
+      position: "relative",
+      left: 0,
+      right: 0,
+      marginLeft: "auto",
+      marginRight: "auto",
+      textAlign: "left",
+      backgroundColor: "#121212",
+      overflow: "auto",
+      height: "400px",
+      padding: `${theme.spacing.space1} 0`,
+      width: "475px",
+    }),
+    children
+  );
+};
 
 const searchSelectMenuItem = (
   item: Option,
   onChange: any,
   state: any,
   setState: any
-) =>
-  div(
+) => {
+  const theme = getTheme();
+
+  return div(
     [
-      "search-select-menu-item-base",
+      sx({
+        color: theme.color.secondary,
+        cursor: "pointer",
+        padding: `2px 0 2px ${theme.spacing.space4}`,
+      }),
       sx(
         {
           backgroundColor: theme.color.secondaryDarker,
@@ -86,14 +88,16 @@ const searchSelectMenuItem = (
       },
     }
   );
+};
 
-sy(
-  { padding: `${theme.spacing.space1} ${theme.spacing.space2}` },
-  "select-search-opt-group"
-);
+const searchSelectOptGroup = (group: string) => {
+  const theme = getTheme();
 
-const searchSelectOptGroup = (group: string) =>
-  div("select-search-opt-group", group);
+  return div(
+    sx({ padding: `${theme.spacing.space1} ${theme.spacing.space2}` }),
+    group
+  );
+};
 
 sy({ position: "absolute" }, "select-search-menu-base");
 
@@ -111,9 +115,17 @@ sy(
 );
 
 const searchSelect = (
-  { options, value, defaultOptions, onChange }: SelectSearchProps,
+  {
+    options,
+    value,
+    defaultOptions,
+    onChange,
+    inputElementId,
+  }: SelectSearchProps,
   setState: any
 ) => {
+  const theme = getTheme();
+
   const state = { options, value, defaultOptions, onChange };
 
   const openMenu = () => {
@@ -175,7 +187,7 @@ const searchSelect = (
 
   const searchSelectInputElement = input({
     value,
-    name: "select-search-preset-scale",
+    name: inputElementId,
     onInput: (nextVal) => {
       filterOptions(nextVal);
     },
@@ -257,20 +269,26 @@ const searchSelect = (
   );
 };
 
-export const defineSelectSearch = ({ options }: DefineSelectSearchProps) => {
+const defineSelectSearch = ({
+  options,
+  storeName,
+  tagName,
+  inputElementId,
+}: DefineSelectSearchProps) => {
   defineBuiltinElement<SelectSearchProps>({
-    tagName: "select-search",
+    tagName,
     initialState: { options, value: "", defaultOptions: options },
-    subscribe: ["select-search-preset"],
+    subscribe: [storeName],
     render: (state, setState) => {
-      const data = selector("select-search-preset");
-      // @ts-ignore
-      return searchSelect({ ...state, onChange: data.onChange }, setState);
+      const data = selector(storeName);
+      return searchSelect(
+        // @ts-ignore
+        { ...state, onChange: data.onChange, inputElementId },
+        setState
+      );
     },
     effect: (state) => {
-      const inputElement = document.getElementById(
-        "select-search-preset-scale"
-      );
+      const inputElement = document.getElementById(inputElementId);
       if (inputElement) {
         inputElement.focus();
         // @ts-ignore
@@ -279,5 +297,18 @@ export const defineSelectSearch = ({ options }: DefineSelectSearchProps) => {
         inputElement.value = state.value;
       }
     },
+  });
+};
+
+export const defineSelectSearchScalePreset = ({
+  options,
+}: {
+  options: SelectOptions;
+}) => {
+  defineSelectSearch({
+    tagName: "select-search",
+    options,
+    storeName: "select-search-preset",
+    inputElementId: "select-search-preset-scale",
   });
 };

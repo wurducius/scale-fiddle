@@ -6,16 +6,13 @@ import {
   softValidate,
 } from "../../../../sheen";
 import { FiddleState, FiddleStateImpl } from "../../../../types";
-import { textarea } from "@eofol/eofol-simple";
-import { bubble, div } from "../../../../extract";
+import { textarea, bubble, div } from "@eofol/eofol-simple";
 import { trimWhitespace } from "../../../../util";
 
 export const scaleLibrary = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
 ) => {
-  const theme = getTheme();
-
   // @ts-ignore
   const parser = parseScalaValidate(state);
 

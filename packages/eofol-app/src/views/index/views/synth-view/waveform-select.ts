@@ -1,4 +1,4 @@
-import { button, notify, select } from "@eofol/eofol-simple";
+import { button, notify, select, div } from "@eofol/eofol-simple";
 import {
   TIMBRE_CUSTOM_COEFFICIENTS_LENGTH_MAX,
   TIMBRE_FROM_TUNING_COEFFICIENTS_LENGTH_MAX,
@@ -8,7 +8,7 @@ import {
 } from "../../../../data";
 import { setWaveformPreset, setWaveformValue } from "../../../../synth";
 import { FiddleState, Timbre } from "../../../../types";
-import { div, h2, h3, h4 } from "../../../../extract";
+import { h2, h3, h4 } from "../../../../extract";
 import {
   joinScale,
   normalizePeriod,
@@ -18,7 +18,7 @@ import {
   timbreToTuning,
   tuningToTimbre,
 } from "../../../../sheen";
-import { mergeDeep, sx } from "@eofol/eofol";
+import { sx } from "@eofol/eofol";
 import { decimalInput, integerInput } from "../../../../ui";
 
 const PRECISION_TIMBRE_DIGITS = 3;

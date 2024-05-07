@@ -7,7 +7,6 @@ import {
   getTheme,
 } from "@eofol/eofol";
 import { initialState } from "../../data";
-import { div } from "../../extract";
 import { updateScale } from "../../sheen";
 import { defaultTheme, initStyles, themes } from "../../styles";
 import { mapKeyboardKeys } from "../../synth";
@@ -21,6 +20,7 @@ import {
   aboutTab,
   analyzeTab,
 } from "./views";
+import { div } from "@eofol/eofol-simple";
 
 /*
 initTranslation([
