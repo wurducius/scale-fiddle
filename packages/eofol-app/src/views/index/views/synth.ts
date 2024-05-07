@@ -1,5 +1,5 @@
 import { getBreakpoint, getTheme, sx } from "@eofol/eofol";
-import { select, checkbox, input } from "@eofol/eofol-simple";
+import { select, checkbox } from "@eofol/eofol-simple";
 import { div, h2, h1, h3, h4 } from "../../../extract";
 import { setTotalGain } from "../../../synth";
 import { FiddleState } from "../../../types";
@@ -71,33 +71,39 @@ const envelopeADSRMenu = (
             undefined,
             "attack-gain"
           ),
-          sliderInput(
-            "Time",
-            (synth.attackTime * 1000).toFixed(0).toString(),
-            (nextValue) => {
-              const val = Number(Number(nextValue).toFixed(0));
+          div(
+            sx({ marginTop: "32px" }),
+            sliderInput(
+              "Time",
+              (synth.attackTime * 1000).toFixed(0).toString(),
+              (nextValue) => {
+                const val = Number(Number(nextValue).toFixed(0));
+                // @ts-ignore
+                setState({
+                  ...state,
+                  synth: {
+                    ...synth,
+                    attackTime: val / 1000,
+                  },
+                });
+              },
+              "h3",
+              (val) => `${val} ms`,
+              false,
+              undefined,
+              "attack-time"
+            )
+          ),
+          div(
+            sx({ marginTop: "32px" }),
+            envelopeCurveSelect(synth.attackCurve, "attack", (nextValue) => {
               // @ts-ignore
               setState({
                 ...state,
-                synth: {
-                  ...synth,
-                  attackTime: val / 1000,
-                },
+                synth: { ...synth, attackCurve: nextValue },
               });
-            },
-            "h3",
-            (val) => `${val} ms`,
-            false,
-            undefined,
-            "attack-time"
+            })
           ),
-          envelopeCurveSelect(synth.attackCurve, "attack", (nextValue) => {
-            // @ts-ignore
-            setState({
-              ...state,
-              synth: { ...synth, attackCurve: nextValue },
-            });
-          }),
           div(sx({ marginTop: theme.spacing.space8 }), [
             h2("Decay phase"),
             sliderInput(
@@ -120,33 +126,39 @@ const envelopeADSRMenu = (
               undefined,
               "decay-gain"
             ),
-            sliderInput(
-              "Time",
-              (synth.decayTime * 1000).toFixed(0).toString(),
-              (nextValue) => {
-                const val = Number(Number(nextValue).toFixed(0));
+            div(
+              sx({ marginTop: "32px" }),
+              sliderInput(
+                "Time",
+                (synth.decayTime * 1000).toFixed(0).toString(),
+                (nextValue) => {
+                  const val = Number(Number(nextValue).toFixed(0));
+                  // @ts-ignore
+                  setState({
+                    ...state,
+                    synth: {
+                      ...synth,
+                      decayTime: val / 1000,
+                    },
+                  });
+                },
+                "h3",
+                (val) => `${val} ms`,
+                false,
+                undefined,
+                "decay-time"
+              )
+            ),
+            div(
+              sx({ marginTop: "32px" }),
+              envelopeCurveSelect(synth.decayCurve, "decay", (nextValue) => {
                 // @ts-ignore
                 setState({
                   ...state,
-                  synth: {
-                    ...synth,
-                    decayTime: val / 1000,
-                  },
+                  synth: { ...synth, decayCurve: nextValue },
                 });
-              },
-              "h3",
-              (val) => `${val} ms`,
-              false,
-              undefined,
-              "decay-time"
+              })
             ),
-            envelopeCurveSelect(synth.decayCurve, "decay", (nextValue) => {
-              // @ts-ignore
-              setState({
-                ...state,
-                synth: { ...synth, decayCurve: nextValue },
-              });
-            }),
           ]),
         ]),
         div(sx({ flex: 1, margin: "0 64px 0 64px" }), [
@@ -171,33 +183,39 @@ const envelopeADSRMenu = (
             undefined,
             "sustain-gain"
           ),
-          sliderInput(
-            "Time",
-            (synth.sustainTime * 1000).toFixed(0).toString(),
-            (nextValue) => {
-              const val = Number(Number(nextValue).toFixed(0));
+          div(
+            sx({ marginTop: "32px" }),
+            sliderInput(
+              "Time",
+              (synth.sustainTime * 1000).toFixed(0).toString(),
+              (nextValue) => {
+                const val = Number(Number(nextValue).toFixed(0));
+                // @ts-ignore
+                setState({
+                  ...state,
+                  synth: {
+                    ...synth,
+                    sustainTime: val / 1000,
+                  },
+                });
+              },
+              "h3",
+              (val) => `${val} ms`,
+              false,
+              undefined,
+              "sustain-time"
+            )
+          ),
+          div(
+            sx({ marginTop: "32px" }),
+            envelopeCurveSelect(synth.sustainCurve, "sustain", (nextValue) => {
               // @ts-ignore
               setState({
                 ...state,
-                synth: {
-                  ...synth,
-                  sustainTime: val / 1000,
-                },
+                synth: { ...synth, sustainCurve: nextValue },
               });
-            },
-            "h3",
-            (val) => `${val} ms`,
-            false,
-            undefined,
-            "sustain-time"
+            })
           ),
-          envelopeCurveSelect(synth.sustainCurve, "sustain", (nextValue) => {
-            // @ts-ignore
-            setState({
-              ...state,
-              synth: { ...synth, sustainCurve: nextValue },
-            });
-          }),
           div(sx({ marginTop: theme.spacing.space8 }), [
             h2("Release phase"),
             sliderInput(
@@ -220,33 +238,43 @@ const envelopeADSRMenu = (
               undefined,
               "release-gain"
             ),
-            sliderInput(
-              "Time",
-              (synth.releaseTime * 1000).toFixed(0).toString(),
-              (nextValue) => {
-                const val = Number(Number(nextValue).toFixed(0));
-                // @ts-ignore
-                setState({
-                  ...state,
-                  synth: {
-                    ...synth,
-                    releaseTime: val / 1000,
-                  },
-                });
-              },
-              "h3",
-              (val) => `${val} ms`,
-              false,
-              undefined,
-              "release-time"
+            div(
+              sx({ marginTop: "32px" }),
+              sliderInput(
+                "Time",
+                (synth.releaseTime * 1000).toFixed(0).toString(),
+                (nextValue) => {
+                  const val = Number(Number(nextValue).toFixed(0));
+                  // @ts-ignore
+                  setState({
+                    ...state,
+                    synth: {
+                      ...synth,
+                      releaseTime: val / 1000,
+                    },
+                  });
+                },
+                "h3",
+                (val) => `${val} ms`,
+                false,
+                undefined,
+                "release-time"
+              )
             ),
-            envelopeCurveSelect(synth.releaseCurve, "release", (nextValue) => {
-              // @ts-ignore
-              setState({
-                ...state,
-                synth: { ...synth, releaseCurve: nextValue },
-              });
-            }),
+            div(
+              sx({ marginTop: "32px" }),
+              envelopeCurveSelect(
+                synth.releaseCurve,
+                "release",
+                (nextValue) => {
+                  // @ts-ignore
+                  setState({
+                    ...state,
+                    synth: { ...synth, releaseCurve: nextValue },
+                  });
+                }
+              )
+            ),
           ]),
         ]),
       ]
@@ -344,49 +372,53 @@ const envelopeCustomMenu = (
               });
             },
           }),
-          h4("Time"),
-          decimalInput({
-            min: ENVELOPE_CUSTOM_TIME_MIN,
-            max: ENVELOPE_CUSTOM_TIME_MAX,
-            step: 1,
-            // @ts-ignore
-            value: state.synth.customEnvelopeTime[index],
-            name: "select-envelope-custom-time-" + index,
-            onChange: (nextVal) => {
+          div(sx({ marginTop: "32px" }), [
+            h4("Time"),
+            decimalInput({
+              min: ENVELOPE_CUSTOM_TIME_MIN,
+              max: ENVELOPE_CUSTOM_TIME_MAX,
+              step: 1,
               // @ts-ignore
-              setState({
-                ...state,
-                synth: {
-                  // @ts-ignore
-                  ...state.synth, // @ts-ignore
-                  customEnvelopeTime: state.synth.customEnvelopeTime.map(
+              value: state.synth.customEnvelopeTime[index],
+              name: "select-envelope-custom-time-" + index,
+              onChange: (nextVal) => {
+                // @ts-ignore
+                setState({
+                  ...state,
+                  synth: {
                     // @ts-ignore
-                    (item, i) => (i === index ? nextVal : item)
-                  ),
-                },
-              });
-            },
-          }),
-          h4("Curve"),
-          select({
-            name: "select-envelope-custom-curve-" + index, // @ts-ignore
-            value: state.synth.customEnvelopeCurve[index],
-            onChange: (nextVal) => {
-              // @ts-ignore
-              setState({
-                ...state,
-                synth: {
-                  // @ts-ignore
-                  ...state.synth, // @ts-ignore
-                  customEnvelopeCurve: state.synth.customEnvelopeCurve.map(
+                    ...state.synth, // @ts-ignore
+                    customEnvelopeTime: state.synth.customEnvelopeTime.map(
+                      // @ts-ignore
+                      (item, i) => (i === index ? nextVal : item)
+                    ),
+                  },
+                });
+              },
+            }),
+          ]),
+          div(sx({ marginTop: "32px" }), [
+            h4("Curve"),
+            select({
+              name: "select-envelope-custom-curve-" + index, // @ts-ignore
+              value: state.synth.customEnvelopeCurve[index],
+              onChange: (nextVal) => {
+                // @ts-ignore
+                setState({
+                  ...state,
+                  synth: {
                     // @ts-ignore
-                    (item, i) => (i === index ? nextVal : item)
-                  ),
-                },
-              });
-            },
-            options: envelopeCurveOptions,
-          }),
+                    ...state.synth, // @ts-ignore
+                    customEnvelopeCurve: state.synth.customEnvelopeCurve.map(
+                      // @ts-ignore
+                      (item, i) => (i === index ? nextVal : item)
+                    ),
+                  },
+                });
+              },
+              options: envelopeCurveOptions,
+            }),
+          ]),
         ])
         .flat()
     ),
@@ -468,7 +500,7 @@ export const synthTab = (
                     true,
                     sx({ width: "100%" }),
                     "master-gain",
-                    true
+                    false
                   )
                 ),
                 h1("Organ (sustain)"),

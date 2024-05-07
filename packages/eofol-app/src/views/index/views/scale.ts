@@ -98,14 +98,16 @@ const mobileScaleTab = (
         onClick: () => {
           // @ts-ignore
           setState({ ...state, smallTab: 0 });
-        },
+        }, // @ts-ignore
+        active: state.smallTab === 0,
         children: "Scale",
       }),
       button({
         onClick: () => {
           // @ts-ignore
           setState({ ...state, smallTab: 1 });
-        },
+        }, // @ts-ignore
+        active: state.smallTab === 1,
         children: "Keyboard",
       }),
     ]),

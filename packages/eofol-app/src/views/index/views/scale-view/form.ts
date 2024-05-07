@@ -128,7 +128,7 @@ const temperModal = (
           }),
         ]),
       ]),
-      div(sx({ marginTop: "16px", width: "266px" }), [
+      div(sx({ margin: "16px auto 0 auto", width: "266px" }), [
         textarea({
           name: "modal-temper-preview",
           value: temperResult,
@@ -366,23 +366,25 @@ const presetModal = (
         flexDirection: "column",
         alignItems: "center",
         width: "266px",
+        margin: "16px auto 16px auto",
       }),
       [
         e("select-search"),
-        textarea({
-          name: "result-preset-scale",
-          value:
-            scalePresetsFlat.find(
-              // @ts-ignore
-              (item) => item.id === state.form.preset.id
-            )?.value ?? "",
-          onChange: () => {},
-          classname: sx({
-            height: "300px",
-            marginTop: theme.spacing.space2,
-            marginBottom: theme.spacing.space1,
-          }),
-        }),
+        div(
+          sx({ marginTop: "16px" }),
+          textarea({
+            name: "result-preset-scale",
+            value:
+              scalePresetsFlat.find(
+                // @ts-ignore
+                (item) => item.id === state.form.preset.id
+              )?.value ?? "",
+            onChange: () => {},
+            classname: sx({
+              height: "300px",
+            }),
+          })
+        ),
       ]
     ),
     // @ts-ignore
@@ -475,7 +477,7 @@ const temperedLimitModal = (
         div(sx({ width: "266px", margin: "0 16px 0 16px" }), [
           div(
             sx({
-              height: "128px",
+              height: "160px",
               fontSize: theme.typography.heading.fontSize,
             }),
             "Limit primes, separated by comma"
@@ -499,7 +501,7 @@ const temperedLimitModal = (
         div(sx({ width: "266px", margin: "0 16px 0 16px" }), [
           div(
             sx({
-              height: "128px",
+              height: "160px",
               fontSize: theme.typography.heading.fontSize,
             }),
             "Commas to temper out, Scala format separated by comma"
@@ -523,7 +525,7 @@ const temperedLimitModal = (
         div(sx({ width: "266px", margin: "0 16px 0 16px" }), [
           div(
             sx({
-              height: "128px",
+              height: "160px",
               fontSize: theme.typography.heading.fontSize,
             }),
             "Epsilon comparison tolerance"
@@ -547,7 +549,7 @@ const temperedLimitModal = (
         div(sx({ width: "266px", margin: "0 16px 0 16px" }), [
           div(
             sx({
-              height: "128px",
+              height: "160px",
               fontSize: theme.typography.heading.fontSize,
             }),
             "Steps up, separated by comma"
@@ -571,7 +573,7 @@ const temperedLimitModal = (
         div(sx({ width: "266px", margin: "0 16px 0 16px" }), [
           div(
             sx({
-              height: "128px",
+              height: "160px",
               fontSize: theme.typography.heading.fontSize,
             }),
             "Steps down, separated by comma"
@@ -593,7 +595,7 @@ const temperedLimitModal = (
           }),
         ]),
       ]),
-      div(sx({ marginTop: "16px", width: "266px" }), [
+      div(sx({ margin: "16px auto 0 auto", width: "266px" }), [
         textarea({
           name: "modal-limit-preview",
           value: temperResult,

@@ -101,6 +101,7 @@ defineBuiltinElement<FiddleStateImpl>({
         ...(tab === 4 ? aboutTab(state, setState) : []),
         ...(tab === 5 ? analyzeTab(state, setState) : []),
       ]),
+      div(sx({ height: "64px" })),
     ]);
   },
 });

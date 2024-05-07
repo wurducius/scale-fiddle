@@ -88,6 +88,8 @@ export const sliderInput = (
   id?: string,
   isPrimary?: boolean
 ) => {
+  const theme = getTheme();
+
   const getDisplayValue = (val: string) =>
     adornmentMap ? adornmentMap(val) : val;
   const displayId = "input-slider-value-display-" + id;
@@ -115,9 +117,16 @@ export const sliderInput = (
           },
           classname,
         }),
-        createElement("h3", undefined, getDisplayValue(value), {
-          id: displayId,
-        }),
+        createElement(
+          "h3",
+          sx({
+            color: isPrimary ? theme.color.primary : theme.color.secondary,
+          }),
+          getDisplayValue(value),
+          {
+            id: displayId,
+          }
+        ),
       ]),
     ]
   );

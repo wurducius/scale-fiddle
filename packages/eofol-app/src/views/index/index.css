@@ -10,10 +10,7 @@ body {
   background-blend-mode: multiply;
   background-attachment: fixed;
   font-family: "Roboto", sans-serif;
-}
-
-#eofol {
-  padding: 0 0;
+  text-align: center;
 }
 
 p {
@@ -24,10 +21,6 @@ p {
 a {
   text-decoration: none;
   font-weight: 700;
-}
-
-.container {
-  text-align: center;
 }
 
 .overlay-loading {
