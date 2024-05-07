@@ -1,3 +1,21 @@
+export type ScalaUnit = "cent" | "freq" | "ratio";
+
+export type EnvelopeCurve = "linear" | "exponential";
+
+export type EnvelopeType = "adsr" | "custom" | "preset";
+
+export type WaveformType = "preset" | "custom" | "from-tuning";
+
+export type KeyLabel = "cent" | "freq" | "ratio" | "index" | "name";
+
+export type Timbre = {
+  id: string;
+  title: string;
+  real: number[];
+  imag: number[];
+  errorDelta?: number;
+};
+
 export type FiddleStateImpl = {
   init: boolean;
   scaleInput: string;
@@ -108,24 +126,24 @@ export type FiddleStateImpl = {
       epsilon: number;
     };
   };
-  recompute: boolean | undefined;
+  recompute?: boolean;
   synth: {
     totalGain: number;
     organ: boolean;
-    envelopeType: string;
+    envelopeType: EnvelopeType;
     attackGain: number;
     attackTime: number;
-    attackCurve: string;
+    attackCurve: EnvelopeCurve;
     decayGain: number;
     decayTime: number;
-    decayCurve: string;
+    decayCurve: EnvelopeCurve;
     sustainGain: number;
     sustainTime: number;
-    sustainCurve: string;
+    sustainCurve: EnvelopeCurve;
     releaseGain: number;
     releaseTime: number;
-    releaseCurve: string;
-    waveformType: string;
+    releaseCurve: EnvelopeCurve;
+    waveformType: WaveformType;
     waveformPreset: string;
     fromTuningLength: number;
     fromTuningIterations: number;
@@ -134,7 +152,7 @@ export type FiddleStateImpl = {
     customEnvelopeLength: number;
     customEnvelopeGain: number[];
     customEnvelopeTime: number[];
-    customEnvelopeCurve: string[];
+    customEnvelopeCurve: EnvelopeCurve[];
   };
   options: {
     decimalDigitsFreq: number;
@@ -149,18 +167,8 @@ export type FiddleStateImpl = {
     theme: string;
   };
   analyze: {
-    intervalMatrixUnits: string;
+    intervalMatrixUnits: ScalaUnit;
   };
 };
 
 export type FiddleState = FiddleStateImpl | undefined | {};
-
-export type Timbre = {
-  id: string;
-  title: string;
-  real: number[];
-  imag: number[];
-  errorDelta?: number;
-};
-
-export type KeyLabel = "freq" | "cent" | "ratio" | "name" | "index";

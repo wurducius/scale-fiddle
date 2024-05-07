@@ -81,7 +81,7 @@ export const scaleOverview = (
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          height: "calc(100% - 21px)",
+          height: "calc(100% - 1px)",
           position: "relative",
           width: "128px",
           margin: "0 auto 0 auto",
@@ -92,8 +92,8 @@ export const scaleOverview = (
 
   return div(
     sx({
-      height: "300px",
-      padding: `0 ${theme.spacing.space2}`,
+      height: "299px",
+      padding: `0 0 0 18px`,
       fontSize:
         breakpoint.md && !breakpoint.sm
           ? theme.typography.tableSmall.fontSize
@@ -106,6 +106,7 @@ export const scaleOverview = (
           display: "flex",
           justifyContent: "space-between",
           borderBottom: `2px solid ${theme.color.primary}`,
+          marginRight: "18px",
         }),
         [
           div(sx({ color: theme.color.secondary, flex: 1 }), "Index"),

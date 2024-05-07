@@ -34,7 +34,7 @@ const inputMenu = (
     [div(undefined, changeScaleMenu(state, setState))]
   );
   const scaleLibraryElement = div(
-    sx({ flex: 1, padding: `0 ${theme.spacing.space1}` }),
+    sx({ flex: 1, padding: `0 0` }),
     scaleLibrary(state, setState)
   );
   const scaleOverviewElement = div(

@@ -1,4 +1,3 @@
-import "../../styles/base.css";
 import "./index.css";
 import {
   defineBuiltinElement,

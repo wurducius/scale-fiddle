@@ -1,7 +1,6 @@
 import { getBreakpoint, getTheme, sx } from "@eofol/eofol";
 import { bubble, div } from "../../../../extract";
 import {
-  keyActiveHoverStyle,
   mouseHandlers,
   setKeyElementMap,
   touchHandlers,
@@ -55,7 +54,7 @@ const renderKey = (
   const keyElement = div(
     [
       "key-inactive",
-      keyActiveHoverStyle,
+      "key-active-hover",
       isOctave ? "key-color-octave" : "key-color-nonoctave",
     ],
     keyLabel,

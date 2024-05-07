@@ -26,8 +26,6 @@ export const scaleLibrary = (
 
   const bubbleElement = bubble(scaleError, scaleInvalid);
 
-  console.log(document.styleSheets.item(1)?.cssRules);
-
   const textareaElement = textarea({
     name: "scale-library",
     // @ts-ignore
@@ -82,7 +80,7 @@ export const scaleLibrary = (
     classname: cx(
       scaleInvalid ? "input-invalid" : "input-valid",
       sx({
-        height: "284px",
+        height: "279px",
       })
     ),
   });

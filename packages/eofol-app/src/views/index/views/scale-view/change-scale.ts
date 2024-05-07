@@ -1,11 +1,8 @@
 import { input, dropdown, select, button, notify } from "@eofol/eofol-simple";
-import { getTheme, sx } from "@eofol/eofol";
+import { getTheme, sx, cx } from "@eofol/eofol";
 import { DEFAULT_SCALE_INPUT } from "../../../../data";
 import { div, flex, p } from "../../../../extract";
 import { FiddleState } from "../../../../types";
-import { cx } from "@eofol/eofol/dist";
-
-const theme = getTheme();
 
 const menuButtonOpensModal =
   (
@@ -13,6 +10,8 @@ const menuButtonOpensModal =
     setState: undefined | ((nextState: FiddleState) => void)
   ) =>
   (title: string, formName: string, notImplemented?: boolean) => {
+    const theme = getTheme();
+
     return button({
       styles: sx({ width: "256px", height: theme.spacing.space5 }),
       children: title,
@@ -39,6 +38,8 @@ export const changeScaleMenu = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
 ) => {
+  const theme = getTheme();
+
   const dropdownItem = menuButtonOpensModal(state, setState);
 
   const scaleNameInputElement = input({

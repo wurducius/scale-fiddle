@@ -1,7 +1,7 @@
 import { sx } from "@eofol/eofol";
 import { div, h1, p } from "../../../extract";
 import { FiddleState } from "../../../types";
-import { button } from "@eofol/eofol-simple/dist";
+import { button } from "@eofol/eofol-simple";
 
 const loremIpsum =
   "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Aenean fermentum risus id tortor. Nullam at arcu a est sollicitudin euismod. Duis bibendum, lectus ut viverra rhoncus, dolor nunc faucibus libero, eget facilisis enim ipsum id lacus. Vivamus luctus egestas leo. In convallis. Sed ac dolor sit amet purus malesuada congue. Cras pede libero, dapibus nec, pretium sit amet, tempor quis. Pellentesque arcu. Nullam lectus justo, vulputate eget mollis sed, tempor sed magna. Ut tempus purus at lorem. Aliquam in lorem sit amet leo accumsan lacinia. Duis pulvinar. Maecenas libero. Integer imperdiet lectus quis justo.";

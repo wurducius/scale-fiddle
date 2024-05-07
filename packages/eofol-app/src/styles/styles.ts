@@ -1,10 +1,13 @@
 import { createStyle } from "@eofol/eofol";
 import { Theme } from "@eofol/eofol-types";
-import { keyActiveHoverStyle } from "../synth";
 
 export const initStyles = (theme: Theme) => {
   createStyle(
-    `@media (hover: hover) and (pointer: fine) { .${keyActiveHoverStyle}:hover { border: 2px solid ${theme.color.secondaryLighter}; background-color: ${theme.color.secondaryLighter}; } }`
+    `@media (hover: hover) and (pointer: fine) { .key-active-hover:hover { border: 2px solid ${theme.color.primaryLighter}; background-color: ${theme.color.backgroundElevation}; } }`
+  );
+
+  createStyle(
+    `.key-active-hover:hover { border: 2px solid ${theme.color.primaryLighter}; background-color: ${theme.color.backgroundElevation}; }`
   );
 
   createStyle(

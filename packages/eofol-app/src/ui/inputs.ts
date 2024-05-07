@@ -1,4 +1,4 @@
-import { numberInput } from "@eofol/eofol-simple/dist";
+import { numberInput } from "@eofol/eofol-simple";
 import { NumberInputProps } from "@eofol/eofol-types";
 import {
   validateIsRequired,

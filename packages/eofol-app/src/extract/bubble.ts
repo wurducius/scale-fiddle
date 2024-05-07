@@ -1,4 +1,4 @@
-import { getTheme, sx } from "@eofol/eofol/dist";
+import { getTheme, sx } from "@eofol/eofol";
 import { div } from "./primitive";
 
 export const bubble = (title: string, open: boolean) => {

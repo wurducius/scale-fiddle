@@ -2,7 +2,7 @@ import { playTone, releaseNote } from "./synth-lib";
 import { FiddleState } from "../types";
 import { keyDownHandlers, keyUpHandlers } from "./key-handlers";
 import { flashKeyDownByValue, flashKeyUpByValue } from "./keyboard-flash";
-import { getBreakpoint } from "@eofol/eofol/dist";
+import { getBreakpoint } from "@eofol/eofol";
 
 export const keysDown: Record<number, boolean | undefined> = {};
 
