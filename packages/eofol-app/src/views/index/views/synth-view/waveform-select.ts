@@ -1,4 +1,4 @@
-import { button, notify, select, div } from "@eofol/eofol-simple";
+import { button, notify, select, div, h2, h3, h4 } from "@eofol/eofol-simple";
 import {
   TIMBRE_CUSTOM_COEFFICIENTS_LENGTH_MAX,
   TIMBRE_FROM_TUNING_COEFFICIENTS_LENGTH_MAX,
@@ -8,7 +8,6 @@ import {
 } from "../../../../data";
 import { setWaveformPreset, setWaveformValue } from "../../../../synth";
 import { FiddleState, Timbre } from "../../../../types";
-import { h2, h3, h4 } from "../../../../extract";
 import {
   joinScale,
   normalizePeriod,

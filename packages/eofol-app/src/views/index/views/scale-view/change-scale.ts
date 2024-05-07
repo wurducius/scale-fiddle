@@ -6,10 +6,10 @@ import {
   notify,
   div,
   flex,
+  p,
 } from "@eofol/eofol-simple";
 import { getTheme, sx, cx } from "@eofol/eofol";
 import { DEFAULT_SCALE_INPUT } from "../../../../data";
-import { p } from "../../../../extract";
 import { FiddleState } from "../../../../types";
 
 const menuButtonOpensModal =

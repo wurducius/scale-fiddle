@@ -1,6 +1,5 @@
 import { FiddleState } from "../../../types";
-import { h1, h3 } from "../../../extract";
-import { a, div } from "@eofol/eofol-simple";
+import { a, div, h1, h3 } from "@eofol/eofol-simple";
 import { sx, t } from "@eofol/eofol";
 
 export const aboutTab = (

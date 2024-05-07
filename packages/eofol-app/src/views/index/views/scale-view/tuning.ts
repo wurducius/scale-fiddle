@@ -1,6 +1,5 @@
 import { getTheme, sx } from "@eofol/eofol";
 import { FiddleState } from "../../../../types";
-import { p, h3 } from "../../../../extract";
 import { decimalInput, integerInput } from "../../../../ui";
 import {
   BASE_FREQUENCY_MAX,
@@ -8,7 +7,7 @@ import {
   KEYS_UP_DOWN_MAX,
   PERIOD_MAX,
 } from "../../../../data";
-import { div, flex } from "@eofol/eofol-simple";
+import { div, flex, p, h3 } from "@eofol/eofol-simple";
 
 export const scaleTuning = (
   state: FiddleState,
@@ -22,7 +21,7 @@ export const scaleTuning = (
   return div(
     sx({ margin: `${theme.spacing.space2} ${theme.spacing.space4}` }),
     [
-      h3("Tuning", true),
+      h3("Tuning", undefined, true),
       div(sx({ marginTop: theme.spacing.space1 })),
       flex({ alignItems: "center", justifyContent: "center" }, [
         p("Base frequency Hz"),

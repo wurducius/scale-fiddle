@@ -1,6 +1,5 @@
 import { getBreakpoint, getTheme, sx } from "@eofol/eofol";
-import { select, checkbox, div } from "@eofol/eofol-simple";
-import { h2, h1, h3, h4 } from "../../../extract";
+import { select, checkbox, div, h2, h1, h3, h4 } from "@eofol/eofol-simple";
 import { setTotalGain } from "../../../synth";
 import { FiddleState } from "../../../types";
 import { decimalInput, integerInput, sliderInputCustom } from "../../../ui";

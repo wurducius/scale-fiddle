@@ -1,4 +1,4 @@
-import { select, div } from "@eofol/eofol-simple";
+import { select, div, h2, p } from "@eofol/eofol-simple";
 import { getBreakpoint, getTheme, setTheme, sx } from "@eofol/eofol";
 import {
   ENVELOPE_CUSTOM_TIME_MAX,
@@ -7,7 +7,6 @@ import {
   PRECISION_MAX_DIGITS,
   keyLabelOptions,
 } from "../../../data";
-import { h2, p } from "../../../extract";
 import { FiddleState } from "../../../types";
 import { defaultTheme, initStyles, themes } from "../../../styles";
 import { decimalInput, integerInput } from "../../../ui";

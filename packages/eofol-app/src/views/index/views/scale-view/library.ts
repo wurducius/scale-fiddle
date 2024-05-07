@@ -1,4 +1,4 @@
-import { cx, getTheme, sx } from "@eofol/eofol";
+import { cx, sx } from "@eofol/eofol";
 import {
   updateScale,
   parseScalaValidate,

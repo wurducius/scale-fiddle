@@ -1,18 +1,17 @@
 import { FiddleState } from "../../../types";
-import { h2, p, h1 } from "../../../extract";
 import { getIntervalVectorData } from "../../../sheen";
 import { createElement, getBreakpoint, getTheme, sx } from "@eofol/eofol";
-import { p as pImpl, unorderedList, div } from "@eofol/eofol-simple";
+import { p, unorderedList, div, h1, h2 } from "@eofol/eofol-simple";
 
 const pSecondary = (title: string) => {
   const theme = getTheme();
 
-  return pImpl({
-    children: title,
-    styles: sx({
+  return p(
+    title,
+    sx({
       color: theme.color.secondary,
-    }),
-  });
+    })
+  );
 };
 
 const propertyLabel = (property: boolean, title: string) => {

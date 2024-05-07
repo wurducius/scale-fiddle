@@ -1,5 +1,5 @@
 import { button, div } from "@eofol/eofol-simple";
-import { getBreakpoint, getTheme, sx } from "@eofol/eofol";
+import { getBreakpoint, sx } from "@eofol/eofol";
 import { FiddleState } from "../../../types";
 import {
   changeScaleMenu,

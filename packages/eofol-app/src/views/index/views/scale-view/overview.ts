@@ -1,8 +1,7 @@
 import { getBreakpoint, getTheme, sx } from "@eofol/eofol";
-import { p } from "../../../../extract";
 import { FiddleState } from "../../../../types";
 import { trimWhitespace } from "../../../../util";
-import { div, bubble } from "@eofol/eofol-simple";
+import { div, bubble, p } from "@eofol/eofol-simple";
 
 const getRows = (
   overview: { freq: string; name: string; cent: string; ratio: string }[]
