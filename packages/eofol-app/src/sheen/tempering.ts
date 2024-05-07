@@ -2,7 +2,7 @@ import { FiddleState } from "../types";
 import { mod, onlyUnique, trimWhitespace } from "../util";
 import { parseScala } from "./scala";
 import { normalizePeriod } from "./sheen";
-import { ratioToCent, outputScale } from "./sheen-util";
+import { ratioToCent } from "./sheen-util";
 
 type IntervalRecord = { interval: number; count: number };
 
@@ -62,6 +62,8 @@ export const temper = (
   const parser = parseScala(state);
   // @ts-ignore
   const normalizer = normalizePeriod(state.tuning.period);
+  // @ts-ignore
+  const periodCent = ratioToCent(state.tuning.period);
 
   const parsedCommas = commas
     .split(",")
@@ -76,7 +78,7 @@ export const temper = (
     const first = centsScale[i];
     const second = centsScale[mod(i + 1, centsScale.length)];
     const deltaForward = Math.abs(second - first);
-    const deltaBackward = 1200 - deltaForward;
+    const deltaBackward = periodCent - deltaForward;
 
     let isTemperedOut = undefined;
     for (let j = 0; j < parsedCommas.length; j++) {
@@ -91,7 +93,7 @@ export const temper = (
 
     if (isTemperedOut) {
       closePairs.push([first, second]);
-      result.push(mod(first, 1200) === 0 ? first : second);
+      result.push(mod(first, periodCent) === 0 ? first : second);
     } else {
       result.push(second);
     }
@@ -105,10 +107,10 @@ export const temper = (
       return [...acc, next[0]];
     }
 
-    if (mod(next[0], 1200) === 0) {
+    if (mod(next[0], periodCent) === 0) {
       return [...acc, next[1]];
     }
-    if (mod(next[1], 1200) === 0) {
+    if (mod(next[1], periodCent) === 0) {
       return [...acc, next[0]];
     }
 

@@ -26,7 +26,7 @@ export const scaleTuning = (
       flex({ alignItems: "center", justifyContent: "center" }, [
         p("Base frequency Hz"),
         div(
-          sx({ width: "64px", margin: "0 0 0 auto", display: "flex" }),
+          sx({ width: "96px", margin: "0 0 0 auto", display: "flex" }),
           decimalInput({
             min: BASE_FREQUENCY_MIN,
             max: BASE_FREQUENCY_MAX,
@@ -47,7 +47,7 @@ export const scaleTuning = (
       flex({ alignItems: "center", justifyContent: "center" }, [
         p("Period interval ratio"),
         div(
-          sx({ width: "64px", margin: "0 0 0 auto", display: "flex" }),
+          sx({ width: "96px", margin: "0 0 0 auto", display: "flex" }),
           decimalInput({
             min: 1,
             minNotIncluded: true,
@@ -69,7 +69,7 @@ export const scaleTuning = (
       flex({ alignItems: "center", justifyContent: "center" }, [
         p("Number of keys up"),
         div(
-          sx({ width: "64px", margin: "0 0 0 auto", display: "flex" }),
+          sx({ width: "96px", margin: "0 0 0 auto", display: "flex" }),
           integerInput({
             min: 0,
             max: KEYS_UP_DOWN_MAX,
@@ -91,7 +91,7 @@ export const scaleTuning = (
       flex({ alignItems: "center", justifyContent: "center" }, [
         p("Number of keys down"),
         div(
-          sx({ width: "64px", margin: "0 0 0 auto", display: "flex" }),
+          sx({ width: "96px", margin: "0 0 0 auto", display: "flex" }),
           integerInput({
             min: 0,
             max: KEYS_UP_DOWN_MAX,

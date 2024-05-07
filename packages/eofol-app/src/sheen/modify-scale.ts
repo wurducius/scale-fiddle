@@ -69,9 +69,7 @@ export const modifySort = (state: FiddleState) => {
 export const modifyStretch = (state: FiddleState, multiplier: number) => {
   const centsScale = initModify(state);
 
-  const result = centsScale.map((tone: number) =>
-    mod(tone, 1200) === 0 ? tone : tone * multiplier
-  );
+  const result = centsScale.map((tone: number) => tone * multiplier);
 
   return outputScale(state, result);
 };

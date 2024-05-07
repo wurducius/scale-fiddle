@@ -18,7 +18,7 @@ import {
   scalePresets,
   scalePresetsFlat,
 } from "../../../../data";
-import { div, flex, p } from "../../../../extract";
+import { bubble, div, flex, p } from "../../../../extract";
 import {
   updateScale,
   createEdo,
@@ -45,7 +45,7 @@ import {
   parseScala,
 } from "../../../../sheen";
 import { FiddleState, FiddleStateImpl } from "../../../../types";
-import { defineSelectSearch, integerInput } from "../../../../ui";
+import { decimalInput, defineSelectSearch, integerInput } from "../../../../ui";
 import {
   scaleNValidation,
   stepsValidation,
@@ -64,6 +64,149 @@ defineSelectSearch({ options: scalePresets });
 
 // @TODO
 const scalaValidation: (val: string) => true | string = (val: string) => true;
+
+/*
+  modalImpl(
+      "modal-stretch",
+      "Stretch",
+      "stretch",
+      [
+        {
+          title: "Multiplier",
+          type: "number",
+          validation: decimalPositiveValidation(MULTIPLIER_MAX),
+          innerFormName: "multiplier",
+          id: "multiplier",
+        },
+      ],
+      ({ multiplier }) => modifyStretch(state, multiplier)
+    ),
+    */
+
+const stretchModal = (
+  state: FiddleState,
+  setState: undefined | ((nextState: FiddleState) => void)
+) => {
+  const theme = getTheme();
+
+  // @ts-ignore
+  const multiplier = state.form.stretch.multiplier;
+  // @ts-ignore
+  const period = state.tuning.period;
+
+  const periodResult = Number(
+    (period * multiplier).toFixed(
+      // @ts-ignore
+      state.options.decimalDigitsRatio
+    )
+  );
+  const isInvalid = periodResult <= 1;
+  const nextState = {
+    ...state, // @ts-ignore
+    tuning: { ...state.tuning, period: periodResult },
+  };
+  const stretchResult = modifyStretch(nextState, multiplier);
+
+  return modal(
+    "modal-stretch",
+    "Stretch",
+    div(sx({ marginTop: "24px" }), [
+      flex({ justifyContent: "center" }, [
+        div(sx({ width: "266px", margin: "0 16px 0 16px" }), [
+          div(
+            sx({ height: "32px", fontSize: theme.typography.heading.fontSize }),
+            "Multiplier"
+          ),
+          decimalInput({
+            name: "modal-stretch-multiplier", // @ts-ignore
+            min: 0,
+            minNotIncluded: true,
+            max: MULTIPLIER_MAX,
+            value: multiplier,
+            onChange: (val) => {
+              // @ts-ignore
+              setState({
+                ...state,
+                form: {
+                  // @ts-ignore
+                  ...state.form, // @ts-ignore
+                  stretch: { ...state.form.stretch, multiplier: Number(val) },
+                },
+              });
+            },
+          }),
+        ]),
+      ]),
+      div(
+        sx({
+          margin: "16px auto 0 auto",
+          width: "266px",
+          position: "relative",
+        }),
+        [
+          textarea({
+            name: "modal-stretch-preview",
+            value: isInvalid ? "" : stretchResult,
+            onChange: (val) => {},
+            classname: sx({ height: "256px" }),
+          }),
+          bubble(
+            "Invalid result. Stretched period lesser or equal to 1/1.",
+            isInvalid
+          ),
+          div(
+            sx({
+              marginTop: "16px",
+              marginBottom: "16px",
+              fontSize: theme.typography.heading.fontSize,
+            }),
+            isInvalid ? "" : `Stretched period: ${periodResult}`
+          ),
+        ]
+      ),
+    ]), // @ts-ignore
+    state.form.stretch.open,
+    () => {
+      // @ts-ignore
+      setState(
+        mergeDeep(state, {
+          form: {
+            stretch: { open: false },
+          },
+        })
+      );
+    },
+    () => {
+      if (!isInvalid) {
+        // @ts-ignore
+        setState({
+          ...state,
+          tuning: {
+            // @ts-ignore
+            ...state.tuning,
+            period: periodResult,
+          },
+          scaleInput: stretchResult,
+          recompute: true,
+          form: {
+            // @ts-ignore
+            ...state.form,
+            stretch: {
+              // @ts-ignore
+              ...state.form.stretch,
+              open: false,
+            },
+          },
+        });
+      }
+    },
+    undefined,
+    sx({
+      backgroundColor: theme.color.backgroundModal,
+      border: `2px solid ${theme.color.primary}`,
+    })
+  );
+};
 
 const temperModal = (
   state: FiddleState,
@@ -1035,21 +1178,6 @@ export const formModal = (
     ),
     modalImpl("modal-sort", "Sort", "sort", [], () => modifySort(state)),
     modalImpl(
-      "modal-stretch",
-      "Stretch",
-      "stretch",
-      [
-        {
-          title: "Multiplier",
-          type: "number",
-          validation: decimalPositiveValidation(MULTIPLIER_MAX),
-          innerFormName: "multiplier",
-          id: "multiplier",
-        },
-      ],
-      ({ multiplier }) => modifyStretch(state, multiplier)
-    ),
-    modalImpl(
       "modal-approxequal",
       "Approximate by equal",
       "approxequal",
@@ -1064,6 +1192,7 @@ export const formModal = (
       ],
       ({ N }) => modifyApproxEqual(state, N)
     ),
+    stretchModal(state, setState),
     temperModal(state, setState),
     temperedLimitModal(state, setState),
     higherModal(state, setState),

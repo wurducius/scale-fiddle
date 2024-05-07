@@ -15,12 +15,12 @@ export const initModify = (state: FiddleState) => {
 
 export const outputScaleCents = (state: FiddleState, result: number[]) => {
   // @ts-ignore
-  const decimalDigitsCent = state.options.decimalDigitsCent;
+  const periodCent = ratioToCent(state.tuning.period);
 
   return result
     .map((tone) => {
-      const normalized = mod(tone, 1200);
-      return normalized === 0 ? 1200 : normalized;
+      const normalized = mod(tone, periodCent);
+      return normalized === 0 ? periodCent : normalized;
     })
     .filter(onlyUnique)
     .map((tone: number) => toFixedCent(state, tone))
@@ -28,11 +28,14 @@ export const outputScaleCents = (state: FiddleState, result: number[]) => {
 };
 
 export const outputScale = (state: FiddleState, result: number[]) => {
+  // @ts-ignore
+  const periodCent = ratioToCent(state.tuning.period);
+
   return joinScale(
     result
       .map((tone) => {
-        const normalized = mod(tone, 1200);
-        return normalized === 0 ? 1200 : normalized;
+        const normalized = mod(tone, periodCent);
+        return normalized === 0 ? periodCent : normalized;
       })
       .filter(onlyUnique)
       .sort(sortNumbers)
