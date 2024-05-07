@@ -3,7 +3,7 @@ export const DEFAULT_SCALE_INPUT =
 
 export const DEFAULT_SCALE_NAME = "Initial scale";
 
-export const SCALE_PRESET_PRECISION_DIGITS_CENT = 3;
+export const SCALE_PRESET_PRECISION_DIGITS_CENT = 1;
 
 export const WAVEFORM_SERIES_LENGTH = 20;
 

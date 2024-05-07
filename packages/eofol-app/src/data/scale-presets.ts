@@ -27,7 +27,10 @@ const pickRelative = (values: string[], rel: number[]) => {
 
 const ed2 = (n: number) => map(n, (k) => truncate(((k + 1) * 1200) / n));
 
-const truncate = (n: number) => n.toFixed(SCALE_PRESET_PRECISION_DIGITS_CENT);
+const truncate = (n: number) => {
+  const parsedVal = n.toFixed(SCALE_PRESET_PRECISION_DIGITS_CENT);
+  return parsedVal.includes(".") ? parsedVal : `${parsedVal}.`;
+};
 
 const majorScale = {
   id: "major-scale",
@@ -58,13 +61,13 @@ const wholeToneScale = {
 const edo12 = {
   id: "12-edo",
   title: "12edo",
-  value: valuesMap(12, (n) => `${truncate(100 * (n + 1))}.`),
+  value: valuesMap(12, (n) => `${truncate(100 * (n + 1))}`),
 };
 
 const edo24 = {
   id: "24-edo",
   title: "24edo",
-  value: valuesMap(24, (n) => `${truncate(50 * (n + 1))}.`),
+  value: valuesMap(24, (n) => `${truncate(50 * (n + 1))}`),
 };
 
 const pelog4tone = {
