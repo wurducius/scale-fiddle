@@ -18,7 +18,12 @@ import {
   tuningToTimbre,
 } from "../../../../sheen";
 import { sx } from "@eofol/eofol";
-import { decimalInput, integerInput, smallInputField } from "../../../../ui";
+import {
+  decimalInput,
+  integerInput,
+  largeInputField,
+  smallInputField,
+} from "../../../../ui";
 
 const PRECISION_TIMBRE_DIGITS = 3;
 
@@ -103,8 +108,7 @@ export const waveformCustomMenu = (state: FiddleState, setState: any) => {
     sx({ display: "flex", flexDirection: "column", alignItems: "center" }),
     [
       h3("Timbre coefficients length"),
-      div(
-        sx({ width: "266px" }),
+      largeInputField(
         integerInput({
           name: "waveform-custom-length",
           value: customLength,

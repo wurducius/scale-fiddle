@@ -54,7 +54,11 @@ import {
   parseScala,
 } from "../../../../sheen";
 import { FiddleState, FiddleStateImpl } from "../../../../types";
-import { decimalInput, defineSelectSearchScalePreset } from "../../../../ui";
+import {
+  decimalInput,
+  defineSelectSearchScalePreset,
+  largeInputField,
+} from "../../../../ui";
 import {
   scaleNValidation,
   stepsValidation,
@@ -255,7 +259,7 @@ const temperModal = (
             },
           }),
         ]),
-        div(sx({ width: "266px" }), [
+        largeInputField([
           div(
             sx({ height: "96px", fontSize: theme.typography.heading.fontSize }),
             "Epsilon comparison tolerance"

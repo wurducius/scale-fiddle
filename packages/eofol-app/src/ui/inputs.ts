@@ -42,11 +42,8 @@ export const decimalInput = (
     ...props,
   });
 
-export const smallInputField = (inputChild: Element) =>
+export const smallInputField = (inputChild: Element | Element[]) =>
   div(sx({ width: "96px" }), inputChild);
 
-export const largeInputField = (inputChild: Element) =>
+export const largeInputField = (inputChild: Element | Element[]) =>
   div(sx({ width: "256px" }), inputChild);
-
-export const largeWithPaddingInputField = (inputChild: Element) =>
-  div(sx({ width: "266px" }), inputChild);
