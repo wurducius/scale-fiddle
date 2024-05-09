@@ -16,6 +16,7 @@ import {
   setStore,
   getTheme,
   mergeDeep,
+  sy,
 } from "@eofol/eofol";
 import {
   EDO_N_MAX,
@@ -75,6 +76,8 @@ defineSelectSearchScalePreset({ options: scalePresets });
 // @TODO
 const scalaValidation: (val: string) => true | string = (val: string) => true;
 
+const fieldMarginStyle = sy({ margin: "0 16px 0 16px" }, "input-field-margin");
+
 /*
   modalImpl(
       "modal-stretch",
@@ -122,37 +125,38 @@ const stretchModal = (
     "Stretch",
     div(sx({ marginTop: "24px" }), [
       flex({ justifyContent: "center" }, [
-        div(sx({ width: "266px", margin: "0 16px 0 16px" }), [
-          div(
-            sx({ height: "32px", fontSize: theme.typography.heading.fontSize }),
-            "Multiplier"
-          ),
-          decimalInput({
-            name: "modal-stretch-multiplier", // @ts-ignore
-            min: 0,
-            minNotIncluded: true,
-            max: MULTIPLIER_MAX,
-            value: multiplier,
-            onChange: (val) => {
-              // @ts-ignore
-              setState({
-                ...state,
-                form: {
-                  // @ts-ignore
-                  ...state.form, // @ts-ignore
-                  stretch: { ...state.form.stretch, multiplier: Number(val) },
-                },
-              });
-            },
-          }),
-        ]),
+        largeInputField(
+          [
+            div(
+              sx({
+                height: "32px",
+                fontSize: theme.typography.heading.fontSize,
+              }),
+              "Multiplier"
+            ),
+            decimalInput({
+              name: "modal-stretch-multiplier", // @ts-ignore
+              min: 0,
+              minNotIncluded: true,
+              max: MULTIPLIER_MAX,
+              value: multiplier,
+              onChange: (val) => {
+                // @ts-ignore
+                setState({
+                  ...state,
+                  form: {
+                    // @ts-ignore
+                    ...state.form, // @ts-ignore
+                    stretch: { ...state.form.stretch, multiplier: Number(val) },
+                  },
+                });
+              },
+            }),
+          ],
+          fieldMarginStyle
+        ),
       ]),
-      div(
-        sx({
-          margin: "16px auto 0 auto",
-          width: "266px",
-          position: "relative",
-        }),
+      largeInputField(
         [
           textarea({
             name: "modal-stretch-preview",
@@ -172,7 +176,11 @@ const stretchModal = (
             }),
             isInvalid ? "" : `Stretched period: ${periodResult}`
           ),
-        ]
+        ],
+        sx({
+          margin: "16px auto 0 auto",
+          position: "relative",
+        })
       ),
     ]), // @ts-ignore
     state.form.stretch.open,
@@ -238,65 +246,80 @@ const temperModal = (
     "Temper",
     div(sx({ marginTop: "24px" }), [
       flex({ justifyContent: "center" }, [
-        div(sx({ width: "266px", margin: "0 16px 0 16px" }), [
-          div(
-            sx({ height: "96px", fontSize: theme.typography.heading.fontSize }),
-            "Commas to temper out, Scala format separated by comma"
-          ),
-          input({
-            name: "modal-temper-commas", // @ts-ignore
-            value: commas,
-            onChange: (val) => {
-              // @ts-ignore
-              setState({
-                ...state,
-                form: {
-                  // @ts-ignore
-                  ...state.form, // @ts-ignore
-                  temper: { ...state.form.temper, commas: val },
-                },
-              });
-            },
-          }),
-        ]),
-        largeInputField([
-          div(
-            sx({ height: "96px", fontSize: theme.typography.heading.fontSize }),
-            "Epsilon comparison tolerance"
-          ),
-          input({
-            name: "modal-temper-epsilon", // @ts-ignore
-            value: epsilon,
-            onChange: (val) => {
-              // @ts-ignore
-              setState({
-                ...state,
-                form: {
-                  // @ts-ignore
-                  ...state.form, // @ts-ignore
-                  temper: { ...state.form.temper, epsilon: val },
-                },
-              });
-            },
-          }),
-        ]),
-      ]),
-      div(sx({ margin: "16px auto 0 auto", width: "266px" }), [
-        textarea({
-          name: "modal-temper-preview",
-          value: temperResult,
-          onChange: (val) => {},
-          classname: sx({ height: "256px" }),
-        }),
-        div(
-          sx({
-            marginTop: "16px",
-            marginBottom: "16px",
-            fontSize: theme.typography.heading.fontSize,
-          }),
-          `Tones tempered out: ${temperedOutResult}`
+        largeInputField(
+          [
+            div(
+              sx({
+                height: "96px",
+                fontSize: theme.typography.heading.fontSize,
+              }),
+              "Commas to temper out, Scala format separated by comma"
+            ),
+            input({
+              name: "modal-temper-commas", // @ts-ignore
+              value: commas,
+              onChange: (val) => {
+                // @ts-ignore
+                setState({
+                  ...state,
+                  form: {
+                    // @ts-ignore
+                    ...state.form, // @ts-ignore
+                    temper: { ...state.form.temper, commas: val },
+                  },
+                });
+              },
+            }),
+          ],
+          fieldMarginStyle
+        ),
+        largeInputField(
+          [
+            div(
+              sx({
+                height: "96px",
+                fontSize: theme.typography.heading.fontSize,
+              }),
+              "Epsilon comparison tolerance"
+            ),
+            input({
+              name: "modal-temper-epsilon", // @ts-ignore
+              value: epsilon,
+              onChange: (val) => {
+                // @ts-ignore
+                setState({
+                  ...state,
+                  form: {
+                    // @ts-ignore
+                    ...state.form, // @ts-ignore
+                    temper: { ...state.form.temper, epsilon: val },
+                  },
+                });
+              },
+            }),
+          ],
+          fieldMarginStyle
         ),
       ]),
+      largeInputField(
+        [
+          textarea({
+            name: "modal-temper-preview",
+            value: temperResult,
+            onChange: (val) => {},
+            classname: sx({ height: "256px" }),
+          }),
+          div(
+            sx({
+              marginTop: "16px",
+              marginBottom: "16px",
+              fontSize: theme.typography.heading.fontSize,
+            }),
+            `Tones tempered out: ${temperedOutResult}`
+          ),
+        ],
+        sx({ margin: "16px auto 0 auto " })
+      ),
     ]), // @ts-ignore
     state.form.temper.open,
     () => {
@@ -451,14 +474,14 @@ const higherModal = (
             }),
           ]),
         ]),
-        div(
-          sx({ marginTop: "16px", marginBottom: "16px", width: "266px" }),
+        largeInputField(
           textarea({
             name: "modal-higher-preview",
             onChange: () => {},
             value: higherResult,
             classname: sx({ height: "256px" }),
-          })
+          }),
+          sx({ marginTop: "16px", marginBottom: "16px" })
         ),
       ]
     ),
@@ -513,14 +536,7 @@ const presetModal = (
   return modal(
     "modal-preset",
     "Preset scale",
-    div(
-      sx({
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        width: "266px",
-        margin: "16px auto 16px auto",
-      }),
+    largeInputField(
       [
         e("select-search"),
         div(
@@ -538,7 +554,13 @@ const presetModal = (
             }),
           })
         ),
-      ]
+      ],
+      sx({
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        margin: "16px auto 16px auto",
+      })
     ),
     // @ts-ignore
     state.form.preset.open,
@@ -627,143 +649,161 @@ const temperedLimitModal = (
     "Tempered limit",
     div(sx({ marginTop: "24px" }), [
       flex({ justifyContent: "center" }, [
-        div(sx({ width: "266px", margin: "0 16px 0 16px" }), [
-          div(
-            sx({
-              height: "160px",
-              fontSize: theme.typography.heading.fontSize,
+        largeInputField(
+          [
+            div(
+              sx({
+                height: "160px",
+                fontSize: theme.typography.heading.fontSize,
+              }),
+              "Limit primes, separated by comma"
+            ),
+            input({
+              name: "modal-limit-limit", // @ts-ignore
+              value: limit,
+              onChange: (val) => {
+                // @ts-ignore
+                setState({
+                  ...state,
+                  form: {
+                    // @ts-ignore
+                    ...state.form, // @ts-ignore
+                    limit: { ...state.form.limit, limit: val },
+                  },
+                });
+              },
             }),
-            "Limit primes, separated by comma"
-          ),
-          input({
-            name: "modal-limit-limit", // @ts-ignore
-            value: limit,
-            onChange: (val) => {
-              // @ts-ignore
-              setState({
-                ...state,
-                form: {
-                  // @ts-ignore
-                  ...state.form, // @ts-ignore
-                  limit: { ...state.form.limit, limit: val },
-                },
-              });
-            },
-          }),
-        ]),
-        div(sx({ width: "266px", margin: "0 16px 0 16px" }), [
-          div(
-            sx({
-              height: "160px",
-              fontSize: theme.typography.heading.fontSize,
+          ],
+          fieldMarginStyle
+        ),
+        largeInputField(
+          [
+            div(
+              sx({
+                height: "160px",
+                fontSize: theme.typography.heading.fontSize,
+              }),
+              "Commas to temper out, Scala format separated by comma"
+            ),
+            input({
+              name: "modal-limit-commas", // @ts-ignore
+              value: commas,
+              onChange: (val) => {
+                // @ts-ignore
+                setState({
+                  ...state,
+                  form: {
+                    // @ts-ignore
+                    ...state.form, // @ts-ignore
+                    limit: { ...state.form.limit, commas: val },
+                  },
+                });
+              },
             }),
-            "Commas to temper out, Scala format separated by comma"
-          ),
-          input({
-            name: "modal-limit-commas", // @ts-ignore
-            value: commas,
-            onChange: (val) => {
-              // @ts-ignore
-              setState({
-                ...state,
-                form: {
-                  // @ts-ignore
-                  ...state.form, // @ts-ignore
-                  limit: { ...state.form.limit, commas: val },
-                },
-              });
-            },
-          }),
-        ]),
-        div(sx({ width: "266px", margin: "0 16px 0 16px" }), [
-          div(
-            sx({
-              height: "160px",
-              fontSize: theme.typography.heading.fontSize,
+          ],
+          fieldMarginStyle
+        ),
+        largeInputField(
+          [
+            div(
+              sx({
+                height: "160px",
+                fontSize: theme.typography.heading.fontSize,
+              }),
+              "Epsilon comparison tolerance"
+            ),
+            input({
+              name: "modal-limit-epsilon", // @ts-ignore
+              value: epsilon,
+              onChange: (val) => {
+                // @ts-ignore
+                setState({
+                  ...state,
+                  form: {
+                    // @ts-ignore
+                    ...state.form, // @ts-ignore
+                    limit: { ...state.form.limit, epsilon: val },
+                  },
+                });
+              },
             }),
-            "Epsilon comparison tolerance"
-          ),
-          input({
-            name: "modal-limit-epsilon", // @ts-ignore
-            value: epsilon,
-            onChange: (val) => {
-              // @ts-ignore
-              setState({
-                ...state,
-                form: {
-                  // @ts-ignore
-                  ...state.form, // @ts-ignore
-                  limit: { ...state.form.limit, epsilon: val },
-                },
-              });
-            },
-          }),
-        ]),
-        div(sx({ width: "266px", margin: "0 16px 0 16px" }), [
-          div(
-            sx({
-              height: "160px",
-              fontSize: theme.typography.heading.fontSize,
+          ],
+          fieldMarginStyle
+        ),
+        largeInputField(
+          [
+            div(
+              sx({
+                height: "160px",
+                fontSize: theme.typography.heading.fontSize,
+              }),
+              "Steps up, separated by comma"
+            ),
+            input({
+              name: "modal-limit-up", // @ts-ignore
+              value: up,
+              onChange: (val) => {
+                // @ts-ignore
+                setState({
+                  ...state,
+                  form: {
+                    // @ts-ignore
+                    ...state.form, // @ts-ignore
+                    limit: { ...state.form.limit, up: val },
+                  },
+                });
+              },
             }),
-            "Steps up, separated by comma"
-          ),
-          input({
-            name: "modal-limit-up", // @ts-ignore
-            value: up,
-            onChange: (val) => {
-              // @ts-ignore
-              setState({
-                ...state,
-                form: {
-                  // @ts-ignore
-                  ...state.form, // @ts-ignore
-                  limit: { ...state.form.limit, up: val },
-                },
-              });
-            },
-          }),
-        ]),
-        div(sx({ width: "266px", margin: "0 16px 0 16px" }), [
-          div(
-            sx({
-              height: "160px",
-              fontSize: theme.typography.heading.fontSize,
+          ],
+          fieldMarginStyle
+        ),
+        largeInputField(
+          [
+            div(
+              sx({
+                height: "160px",
+                fontSize: theme.typography.heading.fontSize,
+              }),
+              "Steps down, separated by comma"
+            ),
+            input({
+              name: "modal-limit-down", // @ts-ignore
+              value: down,
+              onChange: (val) => {
+                // @ts-ignore
+                setState({
+                  ...state,
+                  form: {
+                    // @ts-ignore
+                    ...state.form, // @ts-ignore
+                    limit: { ...state.form.limit, down: val },
+                  },
+                });
+              },
             }),
-            "Steps down, separated by comma"
-          ),
-          input({
-            name: "modal-limit-down", // @ts-ignore
-            value: down,
-            onChange: (val) => {
-              // @ts-ignore
-              setState({
-                ...state,
-                form: {
-                  // @ts-ignore
-                  ...state.form, // @ts-ignore
-                  limit: { ...state.form.limit, down: val },
-                },
-              });
-            },
-          }),
-        ]),
-      ]),
-      div(sx({ margin: "16px auto 0 auto", width: "266px" }), [
-        textarea({
-          name: "modal-limit-preview",
-          value: temperResult,
-          onChange: (val) => {},
-          classname: sx({ height: "256px" }),
-        }),
-        div(
-          sx({
-            marginTop: "16px",
-            marginBottom: "16px",
-            fontSize: theme.typography.heading.fontSize,
-          }),
-          `Tones tempered out: ${temperedOutResult}`
+          ],
+          fieldMarginStyle
         ),
       ]),
+      largeInputField(
+        [
+          textarea({
+            name: "modal-limit-preview",
+            value: temperResult,
+            onChange: (val) => {},
+            classname: sx({ height: "256px" }),
+          }),
+          div(
+            sx({
+              marginTop: "16px",
+              marginBottom: "16px",
+              fontSize: theme.typography.heading.fontSize,
+            }),
+            `Tones tempered out: ${temperedOutResult}`
+          ),
+        ],
+        sx({ margin: "16px auto 0 auto" })
+      ),
     ]), // @ts-ignore
     state.form.limit.open,
     () => {
@@ -834,11 +874,7 @@ const generalFormModal =
           }),
           form
             .map((item) =>
-              div(
-                sx({
-                  width: "266px",
-                  margin: "0 16px 0 16px",
-                }),
+              largeInputField(
                 [
                   div(
                     sx({
@@ -869,23 +905,25 @@ const generalFormModal =
                       });
                     },
                   }),
-                ]
+                ],
+                sx({
+                  margin: "0 16px 0 16px",
+                })
               )
             )
             .flat()
         ),
-        div(
-          sx({
-            width: "266px",
-            margin: "0 auto 0 auto",
-            marginTop: theme.spacing.space2,
-            marginBottom: "16px",
-          }),
+        largeInputField(
           textarea({
             name: "result-scale",
             value: resultScale,
             onChange: () => {},
             classname: sx({ height: "300px" }),
+          }),
+          sx({
+            margin: "0 auto 0 auto",
+            marginTop: theme.spacing.space2,
+            marginBottom: "16px",
           })
         ),
       ]),

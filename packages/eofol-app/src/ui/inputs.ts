@@ -9,7 +9,7 @@ import {
   validateIsUnderMax,
 } from "@eofol/eofol-simple";
 import { NumberInputProps } from "@eofol/eofol-types";
-import { sx } from "@eofol/eofol";
+import { sy } from "@eofol/eofol";
 
 export const integerInput = (props: NumberInputProps) =>
   numberInput({
@@ -42,8 +42,16 @@ export const decimalInput = (
     ...props,
   });
 
-export const smallInputField = (inputChild: Element | Element[]) =>
-  div(sx({ width: "96px" }), inputChild);
+const smallInputWidthStyle = sy({ width: "96px" }, "input-small-field-width");
 
-export const largeInputField = (inputChild: Element | Element[]) =>
-  div(sx({ width: "256px" }), inputChild);
+const largeInputWidthStyle = sy({ width: "256px" }, "input-large-field-width");
+
+export const smallInputField = (
+  inputChild: Element | Element[],
+  styles?: string | undefined
+) => div([smallInputWidthStyle, styles], inputChild);
+
+export const largeInputField = (
+  inputChild: Element | Element[],
+  styles?: string | undefined
+) => div([largeInputWidthStyle, styles], inputChild);
