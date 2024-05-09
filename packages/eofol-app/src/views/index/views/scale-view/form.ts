@@ -1,4 +1,14 @@
-import { modal, input, textarea, bubble, div, flex } from "@eofol/eofol-simple";
+import {
+  modal,
+  input,
+  textarea,
+  bubble,
+  div,
+  flex,
+  decimalPositiveValidation,
+  decimalValidation,
+  integerValidation,
+} from "@eofol/eofol-simple";
 import {
   sx,
   e,
@@ -48,11 +58,8 @@ import { decimalInput, defineSelectSearchScalePreset } from "../../../../ui";
 import {
   scaleNValidation,
   stepsValidation,
-  decimalValidation,
-  integerValidation,
   csvValidation,
   splitValidation,
-  decimalPositiveValidation,
 } from "../../../../util/validation";
 
 createStore("select-search-preset", {

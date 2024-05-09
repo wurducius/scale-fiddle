@@ -9,7 +9,7 @@ import {
 } from "../../../data";
 import { FiddleState } from "../../../types";
 import { defaultTheme, initStyles, themes } from "../../../styles";
-import { decimalInput, integerInput } from "../../../ui";
+import { decimalInput, integerInput, largeInputField } from "../../../ui";
 
 export const optionsTab = (
   state: FiddleState,
@@ -41,8 +41,7 @@ export const optionsTab = (
             [
               div(sx({ height: "64px" }), h2("Precision")),
               p("Frequency"),
-              div(
-                sx({ width: "256px" }),
+              largeInputField(
                 integerInput({
                   min: 0,
                   max: PRECISION_MAX_DIGITS,
@@ -62,8 +61,7 @@ export const optionsTab = (
                 })
               ),
               p("Cent"),
-              div(
-                sx({ width: "256px" }),
+              largeInputField(
                 integerInput({
                   min: 0,
                   max: PRECISION_MAX_DIGITS,
@@ -83,8 +81,7 @@ export const optionsTab = (
                 })
               ),
               p("Ratio"),
-              div(
-                sx({ width: "256px" }),
+              largeInputField(
                 integerInput({
                   min: 0,
                   max: PRECISION_MAX_DIGITS,
@@ -104,8 +101,7 @@ export const optionsTab = (
                 })
               ),
               p("Frequency on keys"),
-              div(
-                sx({ width: "256px" }),
+              largeInputField(
                 integerInput({
                   min: 0,
                   max: PRECISION_MAX_DIGITS,
@@ -137,8 +133,7 @@ export const optionsTab = (
             [
               div(sx({ height: "64px" }), h2("Synth configuration")),
               p("Start gain"),
-              div(
-                sx({ width: "256px" }),
+              largeInputField(
                 decimalInput({
                   min: 0,
                   max: 1,
@@ -157,8 +152,7 @@ export const optionsTab = (
                 })
               ),
               p("Start time"),
-              div(
-                sx({ width: "256px" }),
+              largeInputField(
                 decimalInput({
                   min: ENVELOPE_CUSTOM_TIME_MIN,
                   max: ENVELOPE_CUSTOM_TIME_MAX,
@@ -177,8 +171,7 @@ export const optionsTab = (
                 })
               ),
               p("End gain"),
-              div(
-                sx({ width: "256px" }),
+              largeInputField(
                 decimalInput({
                   min: GAIN_MIN,
                   max: 1,
@@ -197,8 +190,7 @@ export const optionsTab = (
                 })
               ),
               p("End time"),
-              div(
-                sx({ width: "256px" }),
+              largeInputField(
                 decimalInput({
                   min: ENVELOPE_CUSTOM_TIME_MIN,
                   max: ENVELOPE_CUSTOM_TIME_MAX,

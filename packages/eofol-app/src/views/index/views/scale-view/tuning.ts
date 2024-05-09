@@ -1,6 +1,6 @@
 import { getTheme, sx } from "@eofol/eofol";
 import { FiddleState } from "../../../../types";
-import { decimalInput, integerInput } from "../../../../ui";
+import { decimalInput, integerInput, smallInputField } from "../../../../ui";
 import {
   BASE_FREQUENCY_MAX,
   BASE_FREQUENCY_MIN,
@@ -23,10 +23,9 @@ export const scaleTuning = (
     [
       h3("Tuning", undefined, true),
       div(sx({ marginTop: theme.spacing.space1 })),
-      flex({ alignItems: "center", justifyContent: "center" }, [
+      flex({ alignItems: "center", justifyContent: "space-between" }, [
         p("Base frequency Hz"),
-        div(
-          sx({ width: "96px", margin: "0 0 0 auto", display: "flex" }),
+        smallInputField(
           decimalInput({
             min: BASE_FREQUENCY_MIN,
             max: BASE_FREQUENCY_MAX,
@@ -44,10 +43,9 @@ export const scaleTuning = (
           })
         ),
       ]),
-      flex({ alignItems: "center", justifyContent: "center" }, [
+      flex({ alignItems: "center", justifyContent: "space-between" }, [
         p("Period interval ratio"),
-        div(
-          sx({ width: "96px", margin: "0 0 0 auto", display: "flex" }),
+        smallInputField(
           decimalInput({
             min: 1,
             minNotIncluded: true,
@@ -66,10 +64,9 @@ export const scaleTuning = (
           })
         ),
       ]),
-      flex({ alignItems: "center", justifyContent: "center" }, [
+      flex({ alignItems: "center", justifyContent: "space-between" }, [
         p("Number of keys up"),
-        div(
-          sx({ width: "96px", margin: "0 0 0 auto", display: "flex" }),
+        smallInputField(
           integerInput({
             min: 0,
             max: KEYS_UP_DOWN_MAX,
@@ -88,10 +85,9 @@ export const scaleTuning = (
           })
         ),
       ]),
-      flex({ alignItems: "center", justifyContent: "center" }, [
+      flex({ alignItems: "center", justifyContent: "space-between" }, [
         p("Number of keys down"),
-        div(
-          sx({ width: "96px", margin: "0 0 0 auto", display: "flex" }),
+        smallInputField(
           integerInput({
             min: 0,
             max: KEYS_UP_DOWN_MAX,

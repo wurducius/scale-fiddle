@@ -18,7 +18,7 @@ import {
   tuningToTimbre,
 } from "../../../../sheen";
 import { sx } from "@eofol/eofol";
-import { decimalInput, integerInput } from "../../../../ui";
+import { decimalInput, integerInput, smallInputField } from "../../../../ui";
 
 const PRECISION_TIMBRE_DIGITS = 3;
 
@@ -268,42 +268,46 @@ export const waveformCustomMenu = (state: FiddleState, setState: any) => {
 const timbreFromTuningLengthInput = (state: FiddleState, setState: any) => {
   return [
     h3("Timbre coefficients length"),
-    integerInput({
-      min: 1,
-      max: TIMBRE_FROM_TUNING_COEFFICIENTS_LENGTH_MAX,
-      // @ts-ignore
-      value: state.synth.fromTuningLength,
-      name: "waveform-from-tuning-length",
-      onChange: (nextVal) => {
-        const val = Number(nextVal);
+    smallInputField(
+      integerInput({
+        min: 1,
+        max: TIMBRE_FROM_TUNING_COEFFICIENTS_LENGTH_MAX,
         // @ts-ignore
-        setState({
-          ...state, // @ts-ignore
-          synth: { ...state.synth, fromTuningLength: val },
-        });
-      },
-    }),
+        value: state.synth.fromTuningLength,
+        name: "waveform-from-tuning-length",
+        onChange: (nextVal) => {
+          const val = Number(nextVal);
+          // @ts-ignore
+          setState({
+            ...state, // @ts-ignore
+            synth: { ...state.synth, fromTuningLength: val },
+          });
+        },
+      })
+    ),
   ];
 };
 
 const timbreFromTuningIterationsInput = (state: FiddleState, setState: any) => {
   return [
     h3("Timbre optimization iterations"),
-    integerInput({
-      min: 1,
-      max: TIMBRE_FROM_TUNING_ITERATIONS_MAX,
-      // @ts-ignore
-      value: state.synth.fromTuningIterations,
-      name: "waveform-from-tuning-iterations",
-      onChange: (nextVal) => {
-        const val = Number(nextVal);
+    smallInputField(
+      integerInput({
+        min: 1,
+        max: TIMBRE_FROM_TUNING_ITERATIONS_MAX,
         // @ts-ignore
-        setState({
-          ...state, // @ts-ignore
-          synth: { ...state.synth, fromTuningIterations: val },
-        });
-      },
-    }),
+        value: state.synth.fromTuningIterations,
+        name: "waveform-from-tuning-iterations",
+        onChange: (nextVal) => {
+          const val = Number(nextVal);
+          // @ts-ignore
+          setState({
+            ...state, // @ts-ignore
+            synth: { ...state.synth, fromTuningIterations: val },
+          });
+        },
+      })
+    ),
   ];
 };
 

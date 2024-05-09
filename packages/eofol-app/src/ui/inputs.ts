@@ -1,13 +1,15 @@
-import { numberInput } from "@eofol/eofol-simple";
-import { NumberInputProps } from "@eofol/eofol-types";
 import {
-  validateIsRequired,
-  validateIsNumber,
+  div,
+  numberInput,
   validateIsInteger,
+  validateIsNumber,
   validateIsOverMin,
-  validateIsUnderMax,
+  validateIsRequired,
   validateIsStrictlyOverMin,
-} from "../util/validation";
+  validateIsUnderMax,
+} from "@eofol/eofol-simple";
+import { NumberInputProps } from "@eofol/eofol-types";
+import { sx } from "@eofol/eofol";
 
 export const integerInput = (props: NumberInputProps) =>
   numberInput({
@@ -39,3 +41,12 @@ export const decimalInput = (
     hideArrows: true,
     ...props,
   });
+
+export const smallInputField = (inputChild: Element) =>
+  div(sx({ width: "96px" }), inputChild);
+
+export const largeInputField = (inputChild: Element) =>
+  div(sx({ width: "256px" }), inputChild);
+
+export const largeWithPaddingInputField = (inputChild: Element) =>
+  div(sx({ width: "266px" }), inputChild);
