@@ -11,6 +11,7 @@ import {
 import { getTheme, sx, cx } from "@eofol/eofol";
 import { DEFAULT_SCALE_INPUT } from "../../../../data";
 import { FiddleState } from "../../../../types";
+import { largeInputField } from "../../../../ui";
 
 const menuButtonOpensModal =
   (
@@ -65,8 +66,8 @@ export const changeScaleMenu = (
     },
   });
 
-  return [
-    div(sx({ display: "flex" }), [
+  return flex({ flexDirection: "column", alignItems: "center" }, [
+    div(sx({ display: "flex", width: "100%" }), [
       flex(
         { grow: 1 },
         dropdown({
@@ -108,8 +109,7 @@ export const changeScaleMenu = (
       ),
     ]),
     div(sx({ marginTop: theme.spacing.space2 }), p("Select scale")),
-    div(
-      sx({ width: "256px", margin: "0 auto 0 auto", display: "flex" }),
+    largeInputField(
       select({
         // @ts-ignore
         value: state.scaleIndex,
@@ -132,10 +132,7 @@ export const changeScaleMenu = (
       })
     ),
     div(sx({ marginTop: theme.spacing.space1 }), p("Scale name")),
-    div(
-      sx({ width: "256px", margin: "0 auto 0 auto", display: "flex" }),
-      scaleNameInputElement
-    ),
+    largeInputField(scaleNameInputElement),
     div(
       sx({
         display: "flex",
@@ -198,5 +195,5 @@ export const changeScaleMenu = (
         }),
       ]
     ),
-  ];
+  ]);
 };

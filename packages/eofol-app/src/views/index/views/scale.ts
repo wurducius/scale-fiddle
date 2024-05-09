@@ -28,7 +28,7 @@ const inputMenu = (
 
   const changeScaleMenuElement = div(
     sx({ flex: 1, padding: "0 0 0 0", height: "300px" }),
-    [div(undefined, changeScaleMenu(state, setState))]
+    changeScaleMenu(state, setState)
   );
   const scaleLibraryElement = div(
     sx({ flex: 1, padding: `0 0` }),
