@@ -540,7 +540,7 @@ const presetModal = (
       [
         e("select-search"),
         div(
-          sx({ marginTop: "16px" }),
+          sx({ marginTop: "16px", width: "256px" }),
           textarea({
             name: "result-preset-scale",
             value:

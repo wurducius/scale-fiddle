@@ -75,7 +75,7 @@ export const scaleLibrary = (
       }
     },
     classname: cx(
-      scaleInvalid ? "input-invalid" : "input-valid",
+      scaleInvalid && "input-invalid",
       sx({
         height: "279px",
       })
