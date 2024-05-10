@@ -1,5 +1,16 @@
 import { getBreakpoint, getTheme, sx } from "@eofol/eofol";
-import { select, checkbox, div, h2, h1, h3, h4, p } from "@eofol/eofol-simple";
+import {
+  select,
+  checkbox,
+  div,
+  h2,
+  h1,
+  h3,
+  h4,
+  p,
+  input,
+  bubble,
+} from "@eofol/eofol-simple";
 import { setTotalGain } from "../../../synth";
 import { FiddleState } from "../../../types";
 import {
@@ -451,7 +462,44 @@ const pianoKeyboardLayout = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
 ) => {
-  return div(sx({ marginTop: "32px" }), [p("UNDER CONSTRUCTION")]);
+  // @ts-ignore
+  const scaleLength = state.scaleLength;
+  // @ts-ignore
+  const color = state.synth.layoutPianoColor;
+
+  const splitColor = color.split(" ");
+  const isLengthValid = splitColor.length !== scaleLength;
+  const filteredColor = splitColor.filter(
+    (item: string) => item !== "w" && item !== "b"
+  );
+  const isValueInvalid = filteredColor.length !== 0;
+
+  return div(sx({ marginTop: "32px", position: "relative" }), [
+    h2("Black/white pattern"),
+    largeInputField(
+      input({
+        name: "input-synth-layout-piano-color",
+        value: color,
+        onChange: (nextVal) => {
+          // @ts-ignore
+          setState({
+            ...state, // @ts-ignore
+            synth: { ...state.synth, layoutPianoColor: nextVal },
+          });
+        },
+      })
+    ),
+    bubble(
+      "Invalid color layout element: '" +
+        filteredColor[0] +
+        "'. Allowed elements are 'b' and 'w'.",
+      isValueInvalid
+    ),
+    bubble(
+      "Invalid color layout length. Required length is " + scaleLength + ".",
+      isLengthValid
+    ),
+  ]);
 };
 
 const isoKeyboardLayout = (

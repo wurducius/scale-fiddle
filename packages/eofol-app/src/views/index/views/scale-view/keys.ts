@@ -52,6 +52,11 @@ const renderKey = (
   const keyLabel = getKeyLabel(state, i);
 
   // @ts-ignore
+  const layout = state.synth.layout;
+  // @ts-ignore
+  const layoutPianoColor = state.synth.layoutPianoColor;
+
+  // @ts-ignore
   const keyElement = div(
     [
       "key-inactive",

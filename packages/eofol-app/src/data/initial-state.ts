@@ -146,6 +146,7 @@ export const initialState = {
     layout: "linear",
     layoutIsoUp: 5,
     layoutIsoRight: 1,
+    layoutPianoColor: "w b w b w w b w b w b w",
   },
   options: {
     decimalDigitsFreq: 3,

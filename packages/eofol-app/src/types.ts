@@ -159,6 +159,7 @@ export type FiddleStateImpl = {
     layout: SynthLayout;
     layoutIsoUp: number;
     layoutIsoRight: number;
+    layoutPianoColor: string;
   };
   options: {
     decimalDigitsFreq: number;
