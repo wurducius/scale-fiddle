@@ -73,66 +73,66 @@ const edo24 = {
 const pelog4tone = {
   id: "pelog4tone",
   title: "4-tone Pelog Scale, Gamelan Bebonangan, Sayan village, Indonesia",
-  value: valuesArray(["0.", "197.", "570.", "670."]),
+  value: valuesArray(["197.", "570.", "670.", "1200."]),
 };
 
 const pythagorean3tonepentatonic = {
   id: "pythagorean3tonepentatonic",
   title: "3-limit Pythagorean Pentatonic Scale",
-  value: valuesArray(["1 / 1", "9 / 8", "81 / 64", "3 / 2", "27 / 16"]),
+  value: valuesArray(["9 / 8", "81 / 64", "3 / 2", "27 / 16", "2 / 1"]),
 };
 
 const pythagorean3limitdiatonic = {
   id: "pythagorean3limitdiatonic",
   title: "3-limit Pythagorean Diatonic Scale (Ancient Greece)",
   value: valuesArray([
-    "1 / 1",
     "9 / 8",
     "81 / 64",
     "4 / 3",
     "3 / 2",
     "27 / 16",
     "243 / 128",
+    "2 / 1",
   ]),
 };
 
 const pentatonic5limit = {
   id: "pentatonic5limit",
   title: "5-limit Pentatonic Scale",
-  value: valuesArray(["1 / 1", "9 / 8", "5 / 4", "3 / 2", "5 / 3"]),
+  value: valuesArray(["9 / 8", "5 / 4", "3 / 2", "5 / 3", "2 / 1"]),
 };
 
 const ptolemys5limitintensediatonic = {
   id: "ptolemys5limitintensediatonic",
   title: "5-limit Ptolemy's Intense Diatonic Scale (Ancient Greece, India)",
   value: valuesArray([
-    "1 / 1",
     "9 / 8",
     "5 / 4",
     "4 / 3",
     "3 / 2",
     "5 / 3",
     "15 / 8",
+    "2 / 1",
   ]),
 };
 
 const olympos5limitpentatonic = {
   id: "olympos5limitpentatonic",
   title: "5-limit Olympos Pentatonic (Ancient Greece)",
-  value: valuesArray(["1 / 1", "16 / 15", "4 / 3", "64 / 45", "16 / 9"]),
+  value: valuesArray(["16 / 15", "4 / 3", "64 / 45", "16 / 9", "2 / 1"]),
 };
 
 const archytas5limitenharmonicgenus = {
   id: "archytas5limitenharmonicgenus",
   title: "7-limit Archytas Enharmonic Genus (Ancient Greece)",
   value: valuesArray([
-    "1 / 1",
     "28 / 27",
     "16 / 15",
     "4 / 3",
     "3 / 2",
     "14 / 9",
     "8 / 5",
+    "2 / 1",
   ]),
 };
 
@@ -140,13 +140,13 @@ const archytas7limitchromaticgenus = {
   id: "archytas7limitchromaticgenus",
   title: "7-limit Archytas Chromatic Genus (Ancient Greece)",
   value: valuesArray([
-    "1 / 1",
     "28 / 27",
     "9 / 8",
     "4 / 3",
     "3 / 2",
     "14 / 9",
     "27 / 16",
+    "2 / 1",
   ]),
 };
 
@@ -154,27 +154,26 @@ const archytas7limitdiatonicgenus = {
   id: "archytas7limitdiatonicgenus",
   title: "7-limit Archytas Diatonic Genus (Ancient Greece)",
   value: valuesArray([
-    "1 / 1",
     "28 / 27",
     "32 / 27",
     "4 / 3",
     "3 / 2",
     "14 / 9",
     "16 / 9",
+    "2 / 1",
   ]),
 };
 
 const wagogo7limitpentatonic = {
   id: "wagogo7limitpentatonic",
   title: "7-limit Wagogo Pentatonic (Tanzania)",
-  value: valuesArray(["1 / 1", "9 / 8", "5 / 4", "3 / 2", "7 / 4"]),
+  value: valuesArray(["9 / 8", "5 / 4", "3 / 2", "7 / 4", "2 / 1"]),
 };
 
 const centaur7limit12tone = {
   id: "centaur7limit12tone",
   title: "7-limit 12-tone Scale Centaur by Kraig Grady",
   value: valuesArray([
-    "1 / 1",
     "21 / 20",
     "9 / 8",
     "7 / 6",
@@ -186,6 +185,7 @@ const centaur7limit12tone = {
     "5 / 3",
     "7 / 4",
     "15 / 8",
+    "2 / 1",
   ]),
 };
 
@@ -194,7 +194,6 @@ const centaura7limit12toneoriginal = {
   title:
     "7-limit 12-tone Scale Centaura (original subharmonic version) by Kraig Grady",
   value: valuesArray([
-    "1 / 1",
     "15 / 14",
     "10 / 9",
     "40 / 33",
@@ -206,6 +205,7 @@ const centaura7limit12toneoriginal = {
     "5 / 3",
     "20 / 11",
     "15 / 8",
+    "2 / 1",
   ]),
 };
 
@@ -213,7 +213,6 @@ const centaura7limit12toneharmonic = {
   id: "centaura7limit12toneharmonic",
   title: "7-limit 12-tone Scale Centaura (harmonic version) by Kraig Grady",
   value: valuesArray([
-    "1 / 1",
     "33 / 32",
     "9 / 8",
     "7 / 6",
@@ -225,6 +224,7 @@ const centaura7limit12toneharmonic = {
     "5 / 3",
     "7 / 4",
     "15 / 8",
+    "2 / 1",
   ]),
 };
 
@@ -232,7 +232,6 @@ const beekeeper7limit16tone = {
   id: "beekeeper7limit16tone",
   title: "7-limit 16-tone Scale Beekeeper by Joakim Bang Larsen (RIP)",
   value: valuesArray([
-    "1 / 1",
     "135 / 128",
     "35 / 32",
     "9 / 8",
@@ -248,6 +247,7 @@ const beekeeper7limit16tone = {
     "945 / 512",
     "15 / 8",
     "63 / 32",
+    "2 / 1",
   ]),
 };
 
@@ -255,7 +255,6 @@ const hangaslathi7limit19tone = {
   id: "hangaslathi7limit19tone",
   title: "7-limit 19-tone Scale by Olli Hangaslahti",
   value: valuesArray([
-    "1 / 1",
     "28 / 27",
     "16 / 15",
     "10 / 9",
@@ -274,6 +273,7 @@ const hangaslathi7limit19tone = {
     "9 / 5",
     "15 / 8",
     "27 / 14",
+    "2 / 1",
   ]),
 };
 
@@ -281,7 +281,6 @@ const venkatarama11limit15tone = {
   id: "venkatarama11limit15tone",
   title: "11-limit 15-tone Scale by Praveen Venkatarama",
   value: valuesArray([
-    "1 / 1",
     "33 / 32",
     "21 / 20",
     "9 / 8",
@@ -296,6 +295,7 @@ const venkatarama11limit15tone = {
     "55 / 32",
     "7 / 4",
     "15 / 8",
+    "2 / 1",
   ]),
 };
 
@@ -303,7 +303,6 @@ const partch11limit43tone = {
   id: "partch11limit43tone",
   title: "11-limit 43-tone Scale by Harry Partch",
   value: valuesArray([
-    "1 / 1",
     "81 / 80",
     "33 / 32",
     "21 / 20",
@@ -346,6 +345,7 @@ const partch11limit43tone = {
     "40 / 21",
     "64 / 33",
     "160 / 81",
+    "2 / 1",
   ]),
 };
 
@@ -353,7 +353,6 @@ const europeanfolk13limit8tone = {
   id: "europeanfolk13limit8tone",
   title: "13-limit 8-tone European Folk Music Scale",
   value: valuesArray([
-    "1 / 1",
     "9 / 8",
     "5 / 4",
     "11 / 8",
@@ -361,6 +360,7 @@ const europeanfolk13limit8tone = {
     "13 / 8",
     "7 / 4",
     "15 / 8",
+    "2 / 1",
   ]),
 };
 
@@ -368,13 +368,13 @@ const ibina7scale13limit7tone = {
   id: "ibina7scale13limit7tone",
   title: "13-limit 7-tone Scale Ibina7 by Jacques Dudon",
   value: valuesArray([
-    "1 / 1",
     "13 / 12",
     "11 / 9",
     "4 / 3",
     "3 / 2",
     "13 / 8",
     "16 / 9",
+    "2 / 1",
   ]),
 };
 
@@ -382,7 +382,6 @@ const ibina7scale13limit12toneextension = {
   id: "ibina7scale13limit12toneextension",
   title: "13-limit 12-tone Extension of Ibina7 by Jacques Dudon",
   value: valuesArray([
-    "1 / 1",
     "13 / 12",
     "9 / 8",
     "32 / 27",
@@ -394,6 +393,7 @@ const ibina7scale13limit12toneextension = {
     "27 / 16",
     "16 / 9",
     "11 / 6",
+    "2 / 1",
   ]),
 };
 
@@ -401,7 +401,6 @@ const met24ji1scale13limit24tone = {
   id: "met24ji1scale13limit24tone",
   title: "13-limit 24-tone Scale Met24JI1 by Margo Schulter",
   value: valuesArray([
-    "1 / 1",
     "91 / 88",
     "14 / 13",
     "10 / 9",
@@ -425,6 +424,7 @@ const met24ji1scale13limit24tone = {
     "11 / 6",
     "21 / 11",
     "63 / 32",
+    "2 / 1",
   ]),
 };
 
