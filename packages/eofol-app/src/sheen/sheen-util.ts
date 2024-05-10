@@ -52,10 +52,12 @@ export const splitScale = (scaleInput: string) => scaleInput.split("\n");
 
 export const joinScale = (scale: string[]) => scale.join("\n");
 
-export const toFixedCent = (
-  state: FiddleState,
-  val: number // @ts-ignore
-) => val.toFixed(state.options.decimalDigitsCent);
+export const toFixedCent = (state: FiddleState, val: number) => {
+  // @ts-ignore
+  const fixedVal = val.toFixed(state.options.decimalDigitsCent);
+  const parsedFixedVal = Number(fixedVal);
+  return Number.isInteger(parsedFixedVal) ? `${parsedFixedVal}.` : fixedVal;
+};
 
 export const toFixedFreq = (
   state: FiddleState,

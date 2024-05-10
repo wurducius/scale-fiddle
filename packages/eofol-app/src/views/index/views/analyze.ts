@@ -1,7 +1,36 @@
-import { FiddleState } from "../../../types";
+import { FiddleState, ScalaUnit } from "../../../types";
 import { getIntervalVectorData } from "../../../sheen";
 import { createElement, getBreakpoint, getTheme, sx } from "@eofol/eofol";
-import { p, unorderedList, div, h1, h2 } from "@eofol/eofol-simple";
+import { p, unorderedList, div, h1, h2, select } from "@eofol/eofol-simple";
+import { largeInputField } from "../../../ui";
+
+const getMatrixIntervalUnitValue =
+  (unit: ScalaUnit, baseFreq: number) => (val: number) => {
+    let result;
+    if (unit === "freq") {
+      result = (baseFreq * Math.pow(2, val / 1200)).toFixed(1);
+    } else if (unit === "ratio") {
+      result = Math.pow(2, val / 1200).toFixed(3);
+    } else {
+      result = val.toFixed(1);
+    }
+    const parsedResult = Number(result);
+    return Number.isInteger(parsedResult) ? `${parsedResult}.` : result;
+  };
+
+const getMatrixIntervalUnitBase = (unit: ScalaUnit, baseFreq: number) => {
+  if (unit === "freq") {
+    const freqResult = baseFreq.toFixed(1);
+    const parsedFreqResult = Number(freqResult);
+    return Number.isInteger(parsedFreqResult)
+      ? `${parsedFreqResult}.`
+      : freqResult;
+  }
+  if (unit === "ratio") {
+    return "1";
+  }
+  return "0.";
+};
 
 const pSecondary = (title: string) => {
   const theme = getTheme();
@@ -22,7 +51,11 @@ const propertyLabel = (property: boolean, title: string) => {
     : [];
 };
 
-const intervalMatrix = (data: IntervalVectorData) => {
+const intervalMatrix = (
+  intervalMatrixUnit: ScalaUnit,
+  baseFreq: number,
+  data: IntervalVectorData
+) => {
   const array = Array.from({ length: data.scaleLength });
 
   const tableStyle = sx({
@@ -30,6 +63,15 @@ const intervalMatrix = (data: IntervalVectorData) => {
     width: "80px",
     height: "40px",
   });
+
+  const getUnitValue = getMatrixIntervalUnitValue(
+    intervalMatrixUnit,
+    Number(baseFreq)
+  );
+  const unitBase = getMatrixIntervalUnitBase(
+    intervalMatrixUnit,
+    Number(baseFreq)
+  );
 
   return createElement(
     "table",
@@ -57,9 +99,11 @@ const intervalMatrix = (data: IntervalVectorData) => {
                   (matrixItem.i === i && matrixItem.j === j) ||
                   (matrixItem.j === i && matrixItem.i === j)
               );
-              content = matrixItem?.interval ?? "error";
+              content = matrixItem?.interval
+                ? getUnitValue(Number(matrixItem.interval))
+                : "error";
             } else {
-              content = "0.";
+              content = unitBase;
             }
             return createElement("td", tableStyle, p(content));
           }),
@@ -126,10 +170,38 @@ const intervalSpectrumView = (intervalVectorData: IntervalVectorData) => {
   ];
 };
 
-const intervalMatrixView = (intervalVectorData: IntervalVectorData) => {
+const intervalMatrixView = (
+  state: FiddleState,
+  setState: undefined | ((nextState: FiddleState) => void),
+  intervalVectorData: IntervalVectorData
+) => {
+  // @ts-ignore
+  const intervalMatrixUnit = state.analyze.intervalMatrixUnits;
+  // @ts-ignore
+  const baseFreq = state.tuning.baseFreq;
+
   return div(sx({ marginTop: "32px" }), [
     h2("Interval matrix"),
-    intervalMatrix(intervalVectorData),
+    largeInputField(
+      select({
+        options: [
+          { id: "cent", title: "Cent" },
+          { id: "freq", title: "Frequency" },
+          { id: "ratio", title: "Ratio" },
+        ],
+        name: "select-analyze-interval-matrix-unit",
+        value: intervalMatrixUnit,
+        onChange: (nextVal) => {
+          // @ts-ignore
+          setState({
+            ...state, // @ts-ignore
+            analyze: { ...state.analyze, intervalMatrixUnits: nextVal },
+          });
+        },
+      }),
+      sx({ margin: "0 auto 32px auto" })
+    ),
+    intervalMatrix(intervalMatrixUnit, baseFreq, intervalVectorData),
   ]);
 };
 
@@ -149,6 +221,7 @@ type IntervalVectorData = {
 
 const intervalVector = (
   state: FiddleState,
+  setState: undefined | ((nextState: FiddleState) => void),
   intervalVectorData: IntervalVectorData
 ) => {
   const breakpoint = getBreakpoint();
@@ -175,7 +248,7 @@ const intervalVector = (
           ),
         ]
       ),
-      intervalMatrixView(intervalVectorData),
+      intervalMatrixView(state, setState, intervalVectorData),
       div(sx({ height: "64px" }), ""),
     ]
   );
@@ -187,5 +260,7 @@ export const analyzeTab = (
 ) => {
   const intervalVectorData = getIntervalVectorData(state);
 
-  return [div(undefined, [intervalVector(state, intervalVectorData)])];
+  return [
+    div(undefined, [intervalVector(state, setState, intervalVectorData)]),
+  ];
 };
