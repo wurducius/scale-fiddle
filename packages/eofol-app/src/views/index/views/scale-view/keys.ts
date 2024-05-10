@@ -7,10 +7,11 @@ import {
   playTone,
   releaseNote,
 } from "../../../../synth";
-import { FiddleState } from "../../../../types";
+import { FiddleState, SynthLayout } from "../../../../types";
 import { trimWhitespace } from "../../../../util";
 import { toFixedCent, toFixedRatio } from "../../../../sheen";
 import { bubble, div } from "@eofol/eofol-simple";
+import { Breakpoint } from "@eofol/eofol-types";
 
 const getKeyLabel = (state: FiddleState, i: number) => {
   // @ts-ignore
@@ -65,12 +66,41 @@ const renderKey = (
   return keyElement;
 };
 
+const getGridColumns = (
+  synthLayout: SynthLayout,
+  layoutIsoUp: number,
+  layoutIsoRight: number,
+  breakpoint: Breakpoint
+) => {
+  if (synthLayout === "linear") {
+    return breakpoint.md
+      ? "1fr 1fr 1fr 1fr 1fr 1fr 1fr"
+      : "1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr";
+  } else if (synthLayout === "iso") {
+    return Array.from({ length: layoutIsoUp })
+      .map((item, i) => "1fr")
+      .join(" ");
+  } else {
+    // @TODO
+    return breakpoint.md
+      ? "1fr 1fr 1fr 1fr 1fr 1fr 1fr"
+      : "1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr";
+  }
+};
+
 export const keys = (state: FiddleState) => {
   const theme = getTheme();
   const breakpoint = getBreakpoint();
 
   // @ts-ignore
   const scaleInvalid = state.scaleInvalid;
+
+  // @ts-ignore
+  const synthLayout = state.synth.layout;
+  // @ts-ignore
+  const layoutIsoUp = state.synth.layoutIsoUp;
+  // @ts-ignore
+  const layoutIsoRight = state.synth.layoutIsoRight;
 
   const playToneImpl = playTone(state);
   const releaseNoteImpl = releaseNote(state);
@@ -100,9 +130,12 @@ export const keys = (state: FiddleState) => {
     : div(
         sx({
           display: "grid",
-          gridTemplateColumns: breakpoint.md
-            ? "1fr 1fr 1fr 1fr 1fr 1fr 1fr"
-            : "1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr",
+          gridTemplateColumns: getGridColumns(
+            synthLayout,
+            layoutIsoUp,
+            layoutIsoRight,
+            breakpoint
+          ),
           columnGap: 0,
           rowGap: 0,
           gridAutoFlow: "dense",

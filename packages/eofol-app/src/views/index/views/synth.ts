@@ -1,8 +1,13 @@
 import { getBreakpoint, getTheme, sx } from "@eofol/eofol";
-import { select, checkbox, div, h2, h1, h3, h4 } from "@eofol/eofol-simple";
+import { select, checkbox, div, h2, h1, h3, h4, p } from "@eofol/eofol-simple";
 import { setTotalGain } from "../../../synth";
 import { FiddleState } from "../../../types";
-import { decimalInput, integerInput, sliderInputCustom } from "../../../ui";
+import {
+  decimalInput,
+  integerInput,
+  largeInputField,
+  sliderInputCustom,
+} from "../../../ui";
 import {
   ENVELOPE_CUSTOM_MAX_LENGTH,
   ENVELOPE_CUSTOM_TIME_MAX,
@@ -442,6 +447,84 @@ const envelopeMenu = (
   ]);
 };
 
+const pianoKeyboardLayout = (
+  state: FiddleState,
+  setState: undefined | ((nextState: FiddleState) => void)
+) => {
+  return div(sx({ marginTop: "32px" }), [p("UNDER CONSTRUCTION")]);
+};
+
+const isoKeyboardLayout = (
+  state: FiddleState,
+  setState: undefined | ((nextState: FiddleState) => void)
+) => {
+  // @ts-ignore
+  const layoutIsoUp = state.synth.layoutIsoUp;
+  // @ts-ignore
+  const layoutIsoRight = state.synth.layoutIsoRight;
+
+  return div(sx({ marginTop: "32px" }), [
+    h2("Shift up (keys per row)"),
+    largeInputField(
+      integerInput({
+        min: 1,
+        max: 12,
+        name: "input-synth-layout-iso-up",
+        value: layoutIsoUp,
+        onChange: (nextVal) => {
+          // @ts-ignore
+          setState({
+            ...state, // @ts-ignore
+            synth: { ...state.synth, layoutIsoUp: nextVal },
+          });
+        },
+      })
+    ),
+    h2("Shift right", sx({ marginTop: "16px" })),
+    largeInputField(
+      integerInput({
+        min: 1,
+        max: 12,
+        name: "input-synth-layout-iso-right",
+        value: layoutIsoRight,
+        onChange: (nextVal) => {
+          // @ts-ignore
+          setState({
+            ...state, // @ts-ignore
+            synth: { ...state.synth, layoutIsoRight: nextVal },
+          });
+        },
+      })
+    ),
+  ]);
+};
+
+const keyboardLayout = (
+  state: FiddleState,
+  setState: undefined | ((nextState: FiddleState) => void)
+) => {
+  // @ts-ignore
+  const layout = state.synth.layout;
+
+  return div(undefined, [
+    select({
+      name: "select-synth-layout-type", // @ts-ignore
+      value: layout,
+      options: [
+        { id: "linear", title: "Linear" },
+        { id: "iso", title: "Isomorphic" },
+        { id: "piano", title: "Piano layers" },
+      ],
+      onChange: (nextVal) => {
+        // @ts-ignore
+        setState({ ...state, synth: { ...state.synth, layout: nextVal } });
+      },
+    }),
+    ...(layout === "iso" ? [isoKeyboardLayout(state, setState)] : []),
+    ...(layout === "piano" ? [pianoKeyboardLayout(state, setState)] : []),
+  ]);
+};
+
 export const synthTab = (
   state: FiddleState,
   setState: undefined | ((nextState: FiddleState) => void)
@@ -514,9 +597,11 @@ export const synthTab = (
                     });
                   },
                 }),
+                h1("Keyboard layout"),
+                keyboardLayout(state, setState),
               ]
             ),
-            div(sx({ margin: "0 64px 0 64px" }), [
+            div(sx({ margin: "32px 64px 0 64px" }), [
               h1("Timbre"),
               waveformTypeSelect(state, setState),
               div(

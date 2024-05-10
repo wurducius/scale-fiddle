@@ -143,6 +143,9 @@ export const initialState = {
     customEnvelopeGain: [1, 0.7, 0.7, 0.7],
     customEnvelopeTime: [0.002, 0.02, 0.02, 0.1],
     customEnvelopeCurve: ["exponential", "linear", "linear", "linear"],
+    layout: "linear",
+    layoutIsoUp: 5,
+    layoutIsoRight: 1,
   },
   options: {
     decimalDigitsFreq: 3,

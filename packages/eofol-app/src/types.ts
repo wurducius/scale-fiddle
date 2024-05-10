@@ -8,6 +8,8 @@ export type WaveformType = "preset" | "custom" | "from-tuning";
 
 export type KeyLabel = "cent" | "freq" | "ratio" | "index" | "name";
 
+export type SynthLayout = "linear" | "iso" | "piano";
+
 export type Timbre = {
   id: string;
   title: string;
@@ -154,6 +156,9 @@ export type FiddleStateImpl = {
     customEnvelopeGain: number[];
     customEnvelopeTime: number[];
     customEnvelopeCurve: EnvelopeCurve[];
+    layout: SynthLayout;
+    layoutIsoUp: number;
+    layoutIsoRight: number;
   };
   options: {
     decimalDigitsFreq: number;
