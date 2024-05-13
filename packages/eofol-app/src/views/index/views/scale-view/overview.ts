@@ -12,7 +12,7 @@ const getRows = (
   const isEmpty = overview.length === 0;
 
   return div(
-    sx({ overflow: "auto", height: "280px" }),
+    sx({ overflow: "auto", height: "278px" }),
     isEmpty
       ? div(
           sx({
