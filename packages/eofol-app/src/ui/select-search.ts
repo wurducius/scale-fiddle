@@ -10,6 +10,6 @@ export const defineSelectSearchScalePreset = ({
     tagName: "select-search",
     options,
     storeName: "select-search-preset",
-    inputElementId: "select-search-preset-scale",
+    name: "select-search-preset-scale",
   });
 };

@@ -12,3 +12,5 @@ export const TOTAL_GAIN_DEFAULT = 1;
 export const WAVEFORM_ID_DEFAULT = "distorted-organ";
 
 export const TIMEOUT_ATTACH_TOUCH_HANDLERS_MS = 10;
+
+export const SCALE_FIDDLE_LOCAL_STORAGE_NAME = "scale-fiddle-data";

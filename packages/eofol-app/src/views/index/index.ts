@@ -5,8 +5,11 @@ import {
   registerServiceWorker,
   setTheme,
   getTheme,
+  loadLocalStorage,
+  saveLocalStorage,
+  mergeDeep,
 } from "@eofol/eofol";
-import { initialState } from "../../data";
+import { SCALE_FIDDLE_LOCAL_STORAGE_NAME, initialState } from "../../data";
 import { updateScale } from "../../sheen";
 import { defaultTheme, initStyles, themes } from "../../styles";
 import { mapKeyboardKeys, removeKeyHandlers } from "../../synth";
@@ -29,13 +32,11 @@ initTranslation([
 ]);
 */
 
-const storage = localStorage.getItem("scale-fiddle-data");
+const savedStore = loadLocalStorage(SCALE_FIDDLE_LOCAL_STORAGE_NAME);
 
-const initialTheme = storage
-  ? (
-      themes.find((t) => t.id === JSON.parse(storage).options.theme) ??
-      defaultTheme
-    ).theme
+const initialTheme = savedStore // @ts-ignore
+  ? (themes.find((t) => t.id === savedStore.options.theme) ?? defaultTheme)
+      .theme
   : defaultTheme;
 
 setTheme(initialTheme);
@@ -51,37 +52,36 @@ defineBuiltinElement<FiddleStateImpl>({
   },
   effect: (state, setState) => {
     // @ts-ignore
-    const stateImpl = state as FiddleStateImpl;
-
-    if (stateImpl.init) {
-      const data = localStorage.getItem("scale-fiddle-data");
-      if (data) {
-        const json = JSON.parse(data);
-        // @ts-ignore
-        setState({ ...json, init: false });
-      } else {
-        // @ts-ignore
-        setState({ ...state, init: false });
-      }
+    if (state.init) {
+      const storedState = loadLocalStorage(SCALE_FIDDLE_LOCAL_STORAGE_NAME);
+      const storedStateImpl = storedState ?? state;
+      const storedFullState = mergeDeep(initialState, storedStateImpl);
+      // @ts-ignore
+      setState({ ...storedFullState, init: false });
     } else {
-      localStorage.setItem("scale-fiddle-data", JSON.stringify(state));
+      // @ts-ignore
+      const fullStateToSave = mergeDeep(initialState, state); // @ts-ignore
+      saveLocalStorage(SCALE_FIDDLE_LOCAL_STORAGE_NAME, fullStateToSave);
     }
 
-    if (stateImpl.recompute) {
+    // @ts-ignore
+    if (state.recompute) {
       // @ts-ignore
       setState({
         ...state,
-        recompute: false,
-        ...updateScale(stateImpl),
+        recompute: false, // @ts-ignore
+        ...updateScale(state),
       });
     }
 
-    if (stateImpl.form.edo.open) {
+    /*
+    if (state.form.edo.open) {
       const content = document.getElementById("modal-edo");
       if (content) {
         content.setAttribute("style", "display: block;");
       }
     }
+*/
 
     return () => {
       removeKeyHandlers();
