@@ -49,81 +49,83 @@ export const mouseHandlers = (
 export const keyDownHandlers = (
   event: KeyboardEvent,
   freq: string[],
-  handleKeyDown: any
+  handleKeyDown: any,
+  totalNumberOfKeys: number
 ) => {
-  handleKeyDown(event, freq, "z", 0);
-  handleKeyDown(event, freq, "x", 1);
-  handleKeyDown(event, freq, "c", 2);
-  handleKeyDown(event, freq, "v", 3);
-  handleKeyDown(event, freq, "b", 4);
-  handleKeyDown(event, freq, "n", 5);
-  handleKeyDown(event, freq, "m", 6);
-  handleKeyDown(event, freq, ",", 7);
-  handleKeyDown(event, freq, ".", 8);
-  handleKeyDown(event, freq, "/", 9);
-  handleKeyDown(event, freq, "a", 10);
-  handleKeyDown(event, freq, "s", 11);
-  handleKeyDown(event, freq, "d", 12);
-  handleKeyDown(event, freq, "f", 13);
-  handleKeyDown(event, freq, "g", 14);
-  handleKeyDown(event, freq, "h", 15);
-  handleKeyDown(event, freq, "j", 16);
-  handleKeyDown(event, freq, "k", 17);
-  handleKeyDown(event, freq, "l", 18);
-  handleKeyDown(event, freq, ";", 19);
-  handleKeyDown(event, freq, "'", 20);
-  handleKeyDown(event, freq, "q", 21);
-  handleKeyDown(event, freq, "w", 22);
-  handleKeyDown(event, freq, "e", 23);
-  handleKeyDown(event, freq, "r", 24);
-  handleKeyDown(event, freq, "t", 25);
-  handleKeyDown(event, freq, "y", 26);
-  handleKeyDown(event, freq, "u", 27);
-  handleKeyDown(event, freq, "i", 28);
-  handleKeyDown(event, freq, "o", 29);
-  handleKeyDown(event, freq, "p", 30);
-  handleKeyDown(event, freq, "[", 31);
-  handleKeyDown(event, freq, "]", 32);
+  handleKeyDown(event, freq, "z", 0, totalNumberOfKeys);
+  handleKeyDown(event, freq, "x", 1, totalNumberOfKeys);
+  handleKeyDown(event, freq, "c", 2, totalNumberOfKeys);
+  handleKeyDown(event, freq, "v", 3, totalNumberOfKeys);
+  handleKeyDown(event, freq, "b", 4, totalNumberOfKeys);
+  handleKeyDown(event, freq, "n", 5, totalNumberOfKeys);
+  handleKeyDown(event, freq, "m", 6, totalNumberOfKeys);
+  handleKeyDown(event, freq, ",", 7, totalNumberOfKeys);
+  handleKeyDown(event, freq, ".", 8, totalNumberOfKeys);
+  handleKeyDown(event, freq, "/", 9, totalNumberOfKeys);
+  handleKeyDown(event, freq, "a", 10, totalNumberOfKeys);
+  handleKeyDown(event, freq, "s", 11, totalNumberOfKeys);
+  handleKeyDown(event, freq, "d", 12, totalNumberOfKeys);
+  handleKeyDown(event, freq, "f", 13, totalNumberOfKeys);
+  handleKeyDown(event, freq, "g", 14, totalNumberOfKeys);
+  handleKeyDown(event, freq, "h", 15, totalNumberOfKeys);
+  handleKeyDown(event, freq, "j", 16, totalNumberOfKeys);
+  handleKeyDown(event, freq, "k", 17, totalNumberOfKeys);
+  handleKeyDown(event, freq, "l", 18, totalNumberOfKeys);
+  handleKeyDown(event, freq, ";", 19, totalNumberOfKeys);
+  handleKeyDown(event, freq, "'", 20, totalNumberOfKeys);
+  handleKeyDown(event, freq, "q", 21, totalNumberOfKeys);
+  handleKeyDown(event, freq, "w", 22, totalNumberOfKeys);
+  handleKeyDown(event, freq, "e", 23, totalNumberOfKeys);
+  handleKeyDown(event, freq, "r", 24, totalNumberOfKeys);
+  handleKeyDown(event, freq, "t", 25, totalNumberOfKeys);
+  handleKeyDown(event, freq, "y", 26, totalNumberOfKeys);
+  handleKeyDown(event, freq, "u", 27, totalNumberOfKeys);
+  handleKeyDown(event, freq, "i", 28, totalNumberOfKeys);
+  handleKeyDown(event, freq, "o", 29, totalNumberOfKeys);
+  handleKeyDown(event, freq, "p", 30, totalNumberOfKeys);
+  handleKeyDown(event, freq, "[", 31, totalNumberOfKeys);
+  handleKeyDown(event, freq, "]", 32, totalNumberOfKeys);
 };
 
 export const keyUpHandlers = (
   event: KeyboardEvent,
   freq: string[],
-  handleKeyUp: any
+  handleKeyUp: any,
+  totalNumberOfKeys: number
 ) => {
-  handleKeyUp(event, freq, "z", 0);
-  handleKeyUp(event, freq, "x", 1);
-  handleKeyUp(event, freq, "c", 2);
-  handleKeyUp(event, freq, "v", 3);
-  handleKeyUp(event, freq, "b", 4);
-  handleKeyUp(event, freq, "n", 5);
-  handleKeyUp(event, freq, "m", 6);
-  handleKeyUp(event, freq, ",", 7);
-  handleKeyUp(event, freq, ".", 8);
-  handleKeyUp(event, freq, "/", 9);
-  handleKeyUp(event, freq, "a", 10);
-  handleKeyUp(event, freq, "s", 11);
-  handleKeyUp(event, freq, "d", 12);
-  handleKeyUp(event, freq, "f", 13);
-  handleKeyUp(event, freq, "g", 14);
-  handleKeyUp(event, freq, "h", 15);
-  handleKeyUp(event, freq, "j", 16);
-  handleKeyUp(event, freq, "k", 17);
-  handleKeyUp(event, freq, "l", 18);
-  handleKeyUp(event, freq, ";", 19);
-  handleKeyUp(event, freq, "'", 20);
-  handleKeyUp(event, freq, "q", 21);
-  handleKeyUp(event, freq, "w", 22);
-  handleKeyUp(event, freq, "e", 23);
-  handleKeyUp(event, freq, "r", 24);
-  handleKeyUp(event, freq, "t", 25);
-  handleKeyUp(event, freq, "y", 26);
-  handleKeyUp(event, freq, "u", 27);
-  handleKeyUp(event, freq, "i", 28);
-  handleKeyUp(event, freq, "o", 29);
-  handleKeyUp(event, freq, "p", 30);
-  handleKeyUp(event, freq, "[", 31);
-  handleKeyUp(event, freq, "]", 32);
+  handleKeyUp(event, freq, "z", 0, totalNumberOfKeys);
+  handleKeyUp(event, freq, "x", 1, totalNumberOfKeys);
+  handleKeyUp(event, freq, "c", 2, totalNumberOfKeys);
+  handleKeyUp(event, freq, "v", 3, totalNumberOfKeys);
+  handleKeyUp(event, freq, "b", 4, totalNumberOfKeys);
+  handleKeyUp(event, freq, "n", 5, totalNumberOfKeys);
+  handleKeyUp(event, freq, "m", 6, totalNumberOfKeys);
+  handleKeyUp(event, freq, ",", 7, totalNumberOfKeys);
+  handleKeyUp(event, freq, ".", 8, totalNumberOfKeys);
+  handleKeyUp(event, freq, "/", 9, totalNumberOfKeys);
+  handleKeyUp(event, freq, "a", 10, totalNumberOfKeys);
+  handleKeyUp(event, freq, "s", 11, totalNumberOfKeys);
+  handleKeyUp(event, freq, "d", 12, totalNumberOfKeys);
+  handleKeyUp(event, freq, "f", 13, totalNumberOfKeys);
+  handleKeyUp(event, freq, "g", 14, totalNumberOfKeys);
+  handleKeyUp(event, freq, "h", 15, totalNumberOfKeys);
+  handleKeyUp(event, freq, "j", 16, totalNumberOfKeys);
+  handleKeyUp(event, freq, "k", 17, totalNumberOfKeys);
+  handleKeyUp(event, freq, "l", 18, totalNumberOfKeys);
+  handleKeyUp(event, freq, ";", 19, totalNumberOfKeys);
+  handleKeyUp(event, freq, "'", 20, totalNumberOfKeys);
+  handleKeyUp(event, freq, "q", 21, totalNumberOfKeys);
+  handleKeyUp(event, freq, "w", 22, totalNumberOfKeys);
+  handleKeyUp(event, freq, "e", 23, totalNumberOfKeys);
+  handleKeyUp(event, freq, "r", 24, totalNumberOfKeys);
+  handleKeyUp(event, freq, "t", 25, totalNumberOfKeys);
+  handleKeyUp(event, freq, "y", 26, totalNumberOfKeys);
+  handleKeyUp(event, freq, "u", 27, totalNumberOfKeys);
+  handleKeyUp(event, freq, "i", 28, totalNumberOfKeys);
+  handleKeyUp(event, freq, "o", 29, totalNumberOfKeys);
+  handleKeyUp(event, freq, "p", 30, totalNumberOfKeys);
+  handleKeyUp(event, freq, "[", 31, totalNumberOfKeys);
+  handleKeyUp(event, freq, "]", 32, totalNumberOfKeys);
 };
 
 let touchedKeys: string[] = [];

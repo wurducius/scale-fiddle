@@ -8,8 +8,15 @@ export const keysDown: Record<number, boolean | undefined> = {};
 
 const handleKeyDownImpl =
   (state: FiddleState) =>
-  (event: KeyboardEvent, freq: string[], key: string, index: number) => {
+  (
+    event: KeyboardEvent,
+    freq: string[],
+    key: string,
+    index: number,
+    totalNumberOfKeys: number
+  ) => {
     if (
+      index <= totalNumberOfKeys &&
       event.key.toLowerCase() === key &&
       !keysDown[index] &&
       document.activeElement === document.body
@@ -24,8 +31,18 @@ const handleKeyDownImpl =
 
 const handleKeyUpImpl =
   (state: FiddleState) =>
-  (event: KeyboardEvent, freq: string[], key: string, index: number) => {
-    if (event.key.toLowerCase() === key && keysDown[index]) {
+  (
+    event: KeyboardEvent,
+    freq: string[],
+    key: string,
+    index: number,
+    totalNumberOfKeys: number
+  ) => {
+    if (
+      index <= totalNumberOfKeys &&
+      event.key.toLowerCase() === key &&
+      keysDown[index]
+    ) {
       // @ts-ignore
       releaseNote(state)(freq[index]);
       // @ts-ignore
@@ -49,15 +66,18 @@ export const mapKeyboardKeys = (state: FiddleState) => (freq: string[]) => {
   const isKeyboardActive =
     isScaleTab && ((small && isKeysSmallTab) || !small) && !isInvalid;
 
+  // @ts-ignore
+  const totalNumberOfKeys = state.tuning.keysUp + state.tuning.keysDown;
+
   document.onkeydown = (event) => {
     if (isKeyboardActive) {
-      keyDownHandlers(event, freq, handleKeyDown);
+      keyDownHandlers(event, freq, handleKeyDown, totalNumberOfKeys);
     }
   };
 
   document.onkeyup = (event) => {
     if (isKeyboardActive) {
-      keyUpHandlers(event, freq, handleKeyUp);
+      keyUpHandlers(event, freq, handleKeyUp, totalNumberOfKeys);
     }
   };
 };
