@@ -10,6 +10,21 @@ export type KeyLabel = "cent" | "freq" | "ratio" | "index" | "name";
 
 export type SynthLayout = "linear" | "iso" | "piano";
 
+export type Overview = {
+  freq: string;
+  cent: string;
+  ratio: string;
+  name: string;
+  isOctave: boolean;
+};
+
+export type KeyMap = {
+  freq: string;
+  name: string;
+  isOctave: boolean;
+  color?: string;
+};
+
 export type Timbre = {
   id: string;
   title: string;
@@ -25,9 +40,10 @@ export type FiddleStateImpl = {
   scales: { name: string; scaleInput: string }[];
   scaleIndex: number;
   periodCent: number;
+  keyMap: KeyMap[];
   scaleInvalid: boolean;
   scaleError: string;
-  overview: { freq: string; name: string; cent: string; ratio: string }[];
+  overview: Overview[];
   tab: number;
   smallTab: number;
   docsTab: number;

@@ -7,7 +7,7 @@ import { getBreakpoint } from "@eofol/eofol";
 export const keysDown: Record<number, boolean | undefined> = {};
 
 const handleKeyDownImpl =
-  (state: FiddleState, freq: string[], totalNumberOfKeys: number) =>
+  (state: FiddleState, totalNumberOfKeys: number) =>
   (event: KeyboardEvent, key: string, index: number) => {
     if (
       index < totalNumberOfKeys &&
@@ -15,15 +15,17 @@ const handleKeyDownImpl =
       !keysDown[index]
     ) {
       // @ts-ignore
-      playTone(state)(freq[index]);
+      const keyVal = state.keyMap[index];
+
+      playTone(state)(keyVal.freq);
       // @ts-ignore
-      flashKeyDownByValue(freq[index]);
+      flashKeyDownByValue(keyVal);
       keysDown[index] = true;
     }
   };
 
 const handleKeyUpImpl =
-  (state: FiddleState, freq: string[], totalNumberOfKeys: number) =>
+  (state: FiddleState, totalNumberOfKeys: number) =>
   (event: KeyboardEvent, key: string, index: number) => {
     if (
       index < totalNumberOfKeys &&
@@ -31,22 +33,21 @@ const handleKeyUpImpl =
       keysDown[index]
     ) {
       // @ts-ignore
-      releaseNote(state)(freq[index]);
-      // @ts-ignore
-      const isOctave = state.overview[index].isOctave;
-      flashKeyUpByValue(freq[index], isOctave);
+      const keyVal = state.keyMap[index];
+      releaseNote(state)(keyVal.freq);
+      flashKeyUpByValue(keyVal);
       keysDown[index] = false;
     }
   };
 
-export const mapKeyboardKeys = (state: FiddleState) => (freq: string[]) => {
+export const mapKeyboardKeys = (state: FiddleState) => {
   const breakpoint = getBreakpoint();
 
   // @ts-ignore
   const totalNumberOfKeys = state.tuning.keysUp + state.tuning.keysDown;
 
-  const handleKeyDown = handleKeyDownImpl(state, freq, totalNumberOfKeys);
-  const handleKeyUp = handleKeyUpImpl(state, freq, totalNumberOfKeys);
+  const handleKeyDown = handleKeyDownImpl(state, totalNumberOfKeys);
+  const handleKeyUp = handleKeyUpImpl(state, totalNumberOfKeys);
 
   // @ts-ignore
   const isScaleTab = state.tab === 0;

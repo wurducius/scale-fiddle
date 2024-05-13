@@ -74,26 +74,15 @@ defineBuiltinElement<FiddleStateImpl>({
       });
     }
 
-    /*
-    if (state.form.edo.open) {
-      const content = document.getElementById("modal-edo");
-      if (content) {
-        content.setAttribute("style", "display: block;");
-      }
-    }
-*/
-
     return () => {
       removeKeyHandlers();
     };
   },
   render: (state, setState) => {
     // @ts-ignore
-    const freq = state.overview.map((item) => item.freq);
-    // @ts-ignore
     const tab = state.tab;
 
-    mapKeyboardKeys(state)(freq);
+    mapKeyboardKeys(state);
 
     return div(undefined, [
       appbar(state, setState),

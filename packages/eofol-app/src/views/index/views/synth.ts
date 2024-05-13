@@ -483,7 +483,8 @@ const pianoKeyboardLayout = (
         onChange: (nextVal) => {
           // @ts-ignore
           setState({
-            ...state, // @ts-ignore
+            ...state,
+            recompute: true, // @ts-ignore
             synth: { ...state.synth, layoutPianoColor: nextVal },
           });
         },
@@ -522,7 +523,8 @@ const isoKeyboardLayout = (
         onChange: (nextVal) => {
           // @ts-ignore
           setState({
-            ...state, // @ts-ignore
+            ...state,
+            recompute: true, // @ts-ignore
             synth: { ...state.synth, layoutIsoUp: nextVal },
           });
         },
@@ -538,7 +540,8 @@ const isoKeyboardLayout = (
         onChange: (nextVal) => {
           // @ts-ignore
           setState({
-            ...state, // @ts-ignore
+            ...state,
+            recompute: true, // @ts-ignore
             synth: { ...state.synth, layoutIsoRight: nextVal },
           });
         },
@@ -565,7 +568,11 @@ const keyboardLayout = (
       ],
       onChange: (nextVal) => {
         // @ts-ignore
-        setState({ ...state, synth: { ...state.synth, layout: nextVal } });
+        setState({
+          ...state,
+          recompute: true, // @ts-ignore
+          synth: { ...state.synth, layout: nextVal },
+        });
       },
     }),
     ...(layout === "iso" ? [isoKeyboardLayout(state, setState)] : []),

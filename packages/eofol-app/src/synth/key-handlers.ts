@@ -1,3 +1,4 @@
+import { KeyMap } from "../types";
 import { flashKeyDownByValue, flashKeyUpByValue } from "./keyboard-flash";
 
 export let mouseDown = false;
@@ -13,40 +14,43 @@ export const registerMouseHandlers = () => {
 };
 
 export const mouseHandlers = (
-  val: string,
-  isOctave: boolean,
+  keyVal: KeyMap,
   playTone: any,
   releaseNote: any
-) => ({
-  // @ts-ignore
-  onmousedown: () => {
+) => {
+  const val = keyVal.freq;
+
+  return {
     // @ts-ignore
-    playTone(val);
-    flashKeyDownByValue(val);
-  },
-  // @ts-ignore
-  onmouseenter: (event) => {
-    event.preventDefault();
-    if (mouseDown) {
+    onmousedown: () => {
       // @ts-ignore
       playTone(val);
-      flashKeyDownByValue(val);
-    }
-  },
-  // @ts-ignore
-  onmouseleave: (event) => {
-    event.preventDefault();
+      flashKeyDownByValue(keyVal);
+    },
     // @ts-ignore
-    releaseNote(val);
-    flashKeyUpByValue(val, isOctave);
-  },
-  // @ts-ignore
-  onmouseup: () => {
+    onmouseenter: (event) => {
+      event.preventDefault();
+      if (mouseDown) {
+        // @ts-ignore
+        playTone(val);
+        flashKeyDownByValue(keyVal);
+      }
+    },
     // @ts-ignore
-    releaseNote(val);
-    flashKeyUpByValue(val, isOctave);
-  },
-});
+    onmouseleave: (event) => {
+      event.preventDefault();
+      // @ts-ignore
+      releaseNote(val);
+      flashKeyUpByValue(keyVal);
+    },
+    // @ts-ignore
+    onmouseup: () => {
+      // @ts-ignore
+      releaseNote(val);
+      flashKeyUpByValue(keyVal);
+    },
+  };
+};
 
 export const keyDownHandlers = (event: KeyboardEvent, handleKeyDown: any) => {
   handleKeyDown(event, "z", 0);
@@ -122,49 +126,67 @@ export const keyUpHandlers = (event: KeyboardEvent, handleKeyUp: any) => {
 
 let touchedKeys: string[] = [];
 
+const getTouchedKeys = () => touchedKeys;
+
+const addTouchedKey = (touchedKey: string) => touchedKeys.push(touchedKey);
+
+const removeTouchedKey = (touchedKey: string) => {
+  touchedKeys = touchedKeys.filter((f) => f != touchedKey);
+};
+
 const handleTouch = (handler: (freq: string) => void) => (e: TouchEvent) => {
   const x = e.changedTouches[0]?.clientX;
   const y = e.changedTouches[0]?.clientY;
   const touchedElement = document.elementFromPoint(x, y);
   if (touchedElement) {
-    const freq = touchedElement.id.substring(4);
-    handler(freq);
+    const touchedElementId = touchedElement.id;
+    if (touchedElementId.startsWith("key-")) {
+      handler(touchedElementId.substring(4));
+    }
   }
 };
 
-export const touchHandlers = (playTone: any, releaseNote: any) => {
+export const touchHandlers = (
+  playTone: any,
+  releaseNote: any,
+  keyMap: KeyMap[]
+) => {
   const touchStartHandler = handleTouch((freq) => {
-    if (!touchedKeys.includes(freq)) {
+    if (!getTouchedKeys().includes(freq)) {
       playTone(freq);
-      flashKeyDownByValue(freq);
-      touchedKeys.push(freq);
+      const keyVal = keyMap.find((keyV) => keyV.freq === freq); // @ts-ignore
+      flashKeyDownByValue(keyVal);
+      addTouchedKey(freq);
     }
   });
 
   document.ontouchstart = touchStartHandler;
 
   const touchEndHandler = handleTouch((freq) => {
-    if (touchedKeys.includes(freq)) {
+    if (getTouchedKeys().includes(freq)) {
       releaseNote(freq);
-      flashKeyUpByValue(freq);
-      touchedKeys = touchedKeys.filter((f) => f != freq);
+      const keyVal = keyMap.find((keyV) => keyV.freq === freq); // @ts-ignore
+      flashKeyUpByValue(keyVal);
+      removeTouchedKey(freq);
     }
   });
 
   document.ontouchend = touchEndHandler;
 
   const touchMoveHandler = handleTouch((freq) => {
-    touchedKeys.forEach((f) => {
+    getTouchedKeys().forEach((f) => {
       if (f != freq) {
         releaseNote(f);
-        flashKeyUpByValue(f);
+        const keyValF = keyMap.find((keyV) => keyV.freq === f); // @ts-ignore
+        flashKeyUpByValue(keyValF);
       }
     });
-    touchedKeys = touchedKeys.filter((f) => f === freq);
-    if (!touchedKeys.includes(freq)) {
+    removeTouchedKey(freq);
+    if (!getTouchedKeys().includes(freq)) {
       playTone(freq);
-      flashKeyDownByValue(freq);
-      touchedKeys.push(freq);
+      const keyVal = keyMap.find((keyV) => keyV.freq === freq); // @ts-ignore
+      flashKeyDownByValue(keyVal);
+      addTouchedKey(freq);
     }
   });
 

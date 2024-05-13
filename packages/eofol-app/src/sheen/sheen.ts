@@ -1,4 +1,4 @@
-import { FiddleStateImpl } from "../types";
+import { FiddleStateImpl, KeyMap, Overview, SynthLayout } from "../types";
 import { mod } from "../util";
 import { parseScala } from "./scala";
 import {
@@ -93,12 +93,44 @@ export const scaleToOverview = (state: FiddleStateImpl) => {
     .filter(Boolean);
 };
 
-export const updateScale = (state: FiddleStateImpl) => ({
-  scaleInput: state.scaleInput,
-  scaleLength: getScaleLength(state.scaleInput),
-  scales: state.scales.map((s, index) =>
-    state.scaleIndex === index ? { ...s, scaleInput: state.scaleInput } : s
-  ),
-  overview: scaleToOverview(state),
-  periodCent: ratioToCent(state.tuning.period),
-});
+export const getMappedKeys = (state: FiddleStateImpl, overview: Overview[]) => {
+  const layout = state.synth.layout;
+  const layoutIsoUp = state.synth.layoutIsoUp;
+  const layoutIsoRight = state.synth.layoutIsoRight;
+  const colors = state.synth.layoutPianoColor.split(" ");
+
+  if (layout === "piano") {
+    return overview.map((f, i) => ({
+      freq: f.freq,
+      name: f.name,
+      isOctave: f.isOctave,
+      color: colors[mod(i - state.tuning.keysDown, state.scaleLength)],
+    }));
+  } else if (layout === "iso") {
+    return overview.map((f, i) => ({
+      freq: f.freq,
+      name: f.name,
+      isOctave: f.isOctave,
+    }));
+  } else {
+    return overview.map((f) => ({
+      freq: f.freq,
+      name: f.name,
+      isOctave: f.isOctave,
+    }));
+  }
+};
+
+export const updateScale = (state: FiddleStateImpl) => {
+  const overview = scaleToOverview(state);
+  return {
+    scaleInput: state.scaleInput,
+    scaleLength: getScaleLength(state.scaleInput),
+    scales: state.scales.map((s, index) =>
+      state.scaleIndex === index ? { ...s, scaleInput: state.scaleInput } : s
+    ),
+    overview,
+    keyMap: getMappedKeys(state, overview),
+    periodCent: ratioToCent(state.tuning.period),
+  };
+};
