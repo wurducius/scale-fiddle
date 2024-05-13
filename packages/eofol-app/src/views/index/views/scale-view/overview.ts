@@ -2,65 +2,83 @@ import { getBreakpoint, getTheme, sx } from "@eofol/eofol";
 import { FiddleState } from "../../../../types";
 import { trimWhitespace } from "../../../../util";
 import { div, bubble, p } from "@eofol/eofol-simple";
+import { EMPTY_LABEL } from "../../../../data";
 
 const getRows = (
   overview: { freq: string; name: string; cent: string; ratio: string }[]
 ) => {
   const theme = getTheme();
 
-  return div(sx({ overflow: "auto", height: "280px" }), [
-    ...overview.map((tone: any, index: number) => {
-      const displayIndex = index.toString();
-      const displayFreq = `${tone.freq} Hz`;
-      const displayCent = `${tone.cent}c`;
+  const isEmpty = overview.length === 0;
 
-      return div(
-        sx({
-          display: "flex",
-          justifyContent: "space-between",
-          color: tone.isOctave ? theme.color.secondary : theme.color.primary,
-        }),
-        [
-          div(
-            sx({ display: "flex", justifyContent: "center", flex: 1 }),
-            p(displayIndex)
-          ),
-          div(
-            sx({
-              display: "flex",
-              justifyContent: "center",
-              flex: 3,
-            }),
-            p(displayFreq)
-          ),
-          div(
-            sx({
-              display: "flex",
-              justifyContent: "center",
-              flex: 3,
-            }),
-            p(displayCent)
-          ),
-          div(
-            sx({
-              display: "flex",
-              justifyContent: "center",
-              flex: 2,
-            }),
-            p(tone.ratio)
-          ),
-          div(
-            sx({
-              display: "flex",
-              justifyContent: "center",
-              flex: 2,
-            }),
-            p(trimWhitespace(tone.name ?? ""))
-          ),
+  return div(
+    sx({ overflow: "auto", height: "280px" }),
+    isEmpty
+      ? div(
+          sx({
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+          }),
+          EMPTY_LABEL
+        )
+      : [
+          ...overview.map((tone: any, index: number) => {
+            const displayIndex = (index + 1).toString();
+            const displayFreq = `${tone.freq} Hz`;
+            const displayCent = `${tone.cent}c`;
+
+            return div(
+              sx({
+                display: "flex",
+                justifyContent: "space-between",
+                color: tone.isOctave
+                  ? theme.color.secondary
+                  : theme.color.primary,
+              }),
+              [
+                div(
+                  sx({ display: "flex", justifyContent: "center", flex: 1 }),
+                  p(displayIndex)
+                ),
+                div(
+                  sx({
+                    display: "flex",
+                    justifyContent: "center",
+                    flex: 3,
+                  }),
+                  p(displayFreq)
+                ),
+                div(
+                  sx({
+                    display: "flex",
+                    justifyContent: "center",
+                    flex: 3,
+                  }),
+                  p(displayCent)
+                ),
+                div(
+                  sx({
+                    display: "flex",
+                    justifyContent: "center",
+                    flex: 2,
+                  }),
+                  p(tone.ratio)
+                ),
+                div(
+                  sx({
+                    display: "flex",
+                    justifyContent: "center",
+                    flex: 2,
+                  }),
+                  p(trimWhitespace(tone.name ?? ""))
+                ),
+              ]
+            );
+          }),
         ]
-      );
-    }),
-  ]);
+  );
 };
 
 export const scaleOverview = (

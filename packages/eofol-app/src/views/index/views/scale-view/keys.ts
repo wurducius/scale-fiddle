@@ -13,7 +13,10 @@ import { trimWhitespace } from "../../../../util";
 import { toFixedCent, toFixedRatio } from "../../../../sheen";
 import { bubble, div } from "@eofol/eofol-simple";
 import { Breakpoint } from "@eofol/eofol-types";
-import { TIMEOUT_ATTACH_TOUCH_HANDLERS_MS } from "../../../../data";
+import {
+  EMPTY_LABEL,
+  TIMEOUT_ATTACH_TOUCH_HANDLERS_MS,
+} from "../../../../data";
 
 const getKeyLabel = (state: FiddleState, i: number) => {
   // @ts-ignore
@@ -115,6 +118,8 @@ export const keys = (state: FiddleState) => {
   // @ts-ignore
   const freq = state.overview.map((item) => item.freq);
 
+  const isEmpty = freq.length === 0;
+
   registerMouseHandlers();
 
   setTimeout(() => {
@@ -135,6 +140,18 @@ export const keys = (state: FiddleState) => {
           margin: "128px auto 0 auto",
         }),
         bubble("Cannot render synth keyboard because scale is invalid.", true)
+      )
+    : isEmpty
+    ? div(
+        sx({
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100%",
+          fontSize: "16px",
+          margin: "128px auto 0 auto",
+        }),
+        EMPTY_LABEL
       )
     : div(
         sx({

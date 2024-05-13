@@ -41,13 +41,6 @@ export const scaleToOverview = (state: FiddleStateImpl) => {
   const normalizer = normalizePeriod(period);
 
   const freq = [];
-  freq[downKeys] = {
-    freq: baseFreq,
-    ratio: 1,
-    name: "base",
-    cent: 0,
-    isOctave: true,
-  };
 
   for (let i = 0; i < upKeys; i++) {
     const f =
@@ -70,7 +63,9 @@ export const scaleToOverview = (state: FiddleStateImpl) => {
   }
 
   if (downKeys > 0) {
-    for (let i = 1; i < downKeys + 2; i++) {
+    const isBaseAlreadyKeyUp = upKeys > 0;
+
+    for (let i = 1; i < downKeys + 1 + (isBaseAlreadyKeyUp ? 1 : 0); i++) {
       const f =
         baseFreq *
         Math.pow(period, -(1 + Math.floor((i - 1) / raw.length))) *
