@@ -884,7 +884,7 @@ const generalFormModal =
                     item.title
                   ),
                   input({
-                    name: "input-form-" + id,
+                    name: `input-form-${id}-${item.id}`,
                     // @ts-ignore
                     value: state.form[formName][item.innerFormName],
                     validation: item.validation,
@@ -915,7 +915,7 @@ const generalFormModal =
         ),
         largeInputField(
           textarea({
-            name: "result-scale",
+            name: `result-scale-${id}`,
             value: resultScale,
             onChange: () => {},
             classname: sx({ height: "300px" }),

@@ -43,6 +43,7 @@ export const optionsTab = (
               p("Frequency"),
               largeInputField(
                 integerInput({
+                  name: "input-precision-frequency",
                   min: 0,
                   max: PRECISION_MAX_DIGITS,
                   value: options.decimalDigitsFreq,
@@ -63,6 +64,7 @@ export const optionsTab = (
               p("Cent"),
               largeInputField(
                 integerInput({
+                  name: "input-precision-cent",
                   min: 0,
                   max: PRECISION_MAX_DIGITS,
                   value: options.decimalDigitsCent,
@@ -83,6 +85,7 @@ export const optionsTab = (
               p("Ratio"),
               largeInputField(
                 integerInput({
+                  name: "input-precision-ratio",
                   min: 0,
                   max: PRECISION_MAX_DIGITS,
                   value: options.decimalDigitsRatio,
@@ -103,6 +106,7 @@ export const optionsTab = (
               p("Frequency on keys"),
               largeInputField(
                 integerInput({
+                  name: "input-precision-frequency-keys",
                   min: 0,
                   max: PRECISION_MAX_DIGITS,
                   value: options.decimalDigitsFreqOnKeys,
@@ -135,6 +139,7 @@ export const optionsTab = (
               p("Start gain"),
               largeInputField(
                 decimalInput({
+                  name: "input-synth-start-gain",
                   min: 0,
                   max: 1,
                   value: options.startGain,
@@ -154,6 +159,7 @@ export const optionsTab = (
               p("Start time"),
               largeInputField(
                 decimalInput({
+                  name: "input-synth-start-time",
                   min: ENVELOPE_CUSTOM_TIME_MIN,
                   max: ENVELOPE_CUSTOM_TIME_MAX,
                   value: options.startTime,
@@ -173,6 +179,7 @@ export const optionsTab = (
               p("End gain"),
               largeInputField(
                 decimalInput({
+                  name: "input-synth-end-gain",
                   min: GAIN_MIN,
                   max: 1,
                   value: options.endGain,
@@ -192,6 +199,7 @@ export const optionsTab = (
               p("End time"),
               largeInputField(
                 decimalInput({
+                  name: "input-synth-end-time",
                   min: ENVELOPE_CUSTOM_TIME_MIN,
                   max: ENVELOPE_CUSTOM_TIME_MAX,
                   value: options.endTime,
