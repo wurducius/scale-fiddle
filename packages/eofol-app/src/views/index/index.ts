@@ -9,7 +9,7 @@ import {
 import { initialState } from "../../data";
 import { updateScale } from "../../sheen";
 import { defaultTheme, initStyles, themes } from "../../styles";
-import { mapKeyboardKeys } from "../../synth";
+import { mapKeyboardKeys, removeKeyHandlers } from "../../synth";
 import { FiddleStateImpl } from "../../types";
 import {
   appbar,
@@ -82,6 +82,10 @@ defineBuiltinElement<FiddleStateImpl>({
         content.setAttribute("style", "display: block;");
       }
     }
+
+    return () => {
+      removeKeyHandlers();
+    };
   },
   render: (state, setState) => {
     // @ts-ignore

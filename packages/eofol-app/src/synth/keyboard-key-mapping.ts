@@ -7,16 +7,10 @@ import { getBreakpoint } from "@eofol/eofol";
 export const keysDown: Record<number, boolean | undefined> = {};
 
 const handleKeyDownImpl =
-  (state: FiddleState) =>
-  (
-    event: KeyboardEvent,
-    freq: string[],
-    key: string,
-    index: number,
-    totalNumberOfKeys: number
-  ) => {
+  (state: FiddleState, totalNumberOfKeys: number) =>
+  (event: KeyboardEvent, freq: string[], key: string, index: number) => {
     if (
-      index <= totalNumberOfKeys &&
+      index < totalNumberOfKeys &&
       event.key.toLowerCase() === key &&
       !keysDown[index] &&
       document.activeElement === document.body
@@ -30,16 +24,10 @@ const handleKeyDownImpl =
   };
 
 const handleKeyUpImpl =
-  (state: FiddleState) =>
-  (
-    event: KeyboardEvent,
-    freq: string[],
-    key: string,
-    index: number,
-    totalNumberOfKeys: number
-  ) => {
+  (state: FiddleState, totalNumberOfKeys: number) =>
+  (event: KeyboardEvent, freq: string[], key: string, index: number) => {
     if (
-      index <= totalNumberOfKeys &&
+      index < totalNumberOfKeys &&
       event.key.toLowerCase() === key &&
       keysDown[index]
     ) {
@@ -53,10 +41,14 @@ const handleKeyUpImpl =
   };
 
 export const mapKeyboardKeys = (state: FiddleState) => (freq: string[]) => {
-  const handleKeyDown = handleKeyDownImpl(state);
-  const handleKeyUp = handleKeyUpImpl(state);
-
   const breakpoint = getBreakpoint();
+
+  // @ts-ignore
+  const totalNumberOfKeys = state.tuning.keysUp + state.tuning.keysDown;
+
+  const handleKeyDown = handleKeyDownImpl(state, totalNumberOfKeys);
+  const handleKeyUp = handleKeyUpImpl(state, totalNumberOfKeys);
+
   // @ts-ignore
   const isScaleTab = state.tab === 0;
   // @ts-ignore
@@ -66,18 +58,15 @@ export const mapKeyboardKeys = (state: FiddleState) => (freq: string[]) => {
   const isKeyboardActive =
     isScaleTab && ((small && isKeysSmallTab) || !small) && !isInvalid;
 
-  // @ts-ignore
-  const totalNumberOfKeys = state.tuning.keysUp + state.tuning.keysDown;
-
   document.onkeydown = (event) => {
     if (isKeyboardActive) {
-      keyDownHandlers(event, freq, handleKeyDown, totalNumberOfKeys);
+      keyDownHandlers(event, freq, handleKeyDown);
     }
   };
 
   document.onkeyup = (event) => {
     if (isKeyboardActive) {
-      keyUpHandlers(event, freq, handleKeyUp, totalNumberOfKeys);
+      keyUpHandlers(event, freq, handleKeyUp);
     }
   };
 };

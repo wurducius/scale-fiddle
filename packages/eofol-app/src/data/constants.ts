@@ -10,3 +10,5 @@ export const WAVEFORM_SERIES_LENGTH = 20;
 export const TOTAL_GAIN_DEFAULT = 1;
 
 export const WAVEFORM_ID_DEFAULT = "distorted-organ";
+
+export const TIMEOUT_ATTACH_TOUCH_HANDLERS_MS = 10;

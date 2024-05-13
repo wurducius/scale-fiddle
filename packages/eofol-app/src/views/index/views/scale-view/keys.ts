@@ -6,12 +6,14 @@ import {
   clearKeyElementMap,
   playTone,
   releaseNote,
+  registerMouseHandlers,
 } from "../../../../synth";
 import { FiddleState, SynthLayout } from "../../../../types";
 import { trimWhitespace } from "../../../../util";
 import { toFixedCent, toFixedRatio } from "../../../../sheen";
 import { bubble, div } from "@eofol/eofol-simple";
 import { Breakpoint } from "@eofol/eofol-types";
+import { TIMEOUT_ATTACH_TOUCH_HANDLERS_MS } from "../../../../data";
 
 const getKeyLabel = (state: FiddleState, i: number) => {
   // @ts-ignore
@@ -113,9 +115,11 @@ export const keys = (state: FiddleState) => {
   // @ts-ignore
   const freq = state.overview.map((item) => item.freq);
 
+  registerMouseHandlers();
+
   setTimeout(() => {
     touchHandlers(playToneImpl, releaseNoteImpl);
-  }, 50);
+  }, TIMEOUT_ATTACH_TOUCH_HANDLERS_MS);
 
   clearKeyElementMap();
 
