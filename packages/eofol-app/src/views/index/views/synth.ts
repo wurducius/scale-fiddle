@@ -644,6 +644,7 @@ export const synthTab = (
                 checkbox({
                   name: "checkbox-organ",
                   value: synth.organ,
+                  size: "xl",
                   onChange: () => {
                     // @ts-ignore
                     setState({
