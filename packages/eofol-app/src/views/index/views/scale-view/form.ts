@@ -1,6 +1,5 @@
 import {
   modal,
-  input,
   textarea,
   bubble,
   div,
@@ -58,6 +57,7 @@ import { FiddleState, FiddleStateImpl } from "../../../../types";
 import {
   decimalInput,
   defineSelectSearchScalePreset,
+  inputCustom,
   largeInputField,
 } from "../../../../ui";
 import {
@@ -256,7 +256,7 @@ const temperModal = (
               }),
               "Commas to temper out, Scala format separated by comma"
             ),
-            input({
+            inputCustom({
               name: "modal-temper-commas", // @ts-ignore
               value: commas,
               onChange: (val) => {
@@ -283,7 +283,7 @@ const temperModal = (
               }),
               "Epsilon comparison tolerance"
             ),
-            input({
+            inputCustom({
               name: "modal-temper-epsilon", // @ts-ignore
               value: epsilon,
               onChange: (val) => {
@@ -379,7 +379,7 @@ const higherModal = (
               }),
               "Generators in Scala format separated by commas"
             ),
-            input({
+            inputCustom({
               // @ts-ignore
               value: state.form.higher.generators,
               name: "input-form-higher-generators",
@@ -405,7 +405,7 @@ const higherModal = (
               }),
               "Steps up, separated by commas"
             ),
-            input({
+            inputCustom({
               // @ts-ignore
               value: state.form.higher.stepsUp,
               name: "input-form-higher-steps-up",
@@ -431,7 +431,7 @@ const higherModal = (
               }),
               "Steps down, separated by commas"
             ),
-            input({
+            inputCustom({
               // @ts-ignore
               value: state.form.higher.stepsDown,
               name: "input-form-higher-steps-down",
@@ -457,7 +457,7 @@ const higherModal = (
               }),
               "Offsets in Scala format, separated by commas"
             ),
-            input({
+            inputCustom({
               // @ts-ignore
               value: state.form.higher.offset,
               name: "input-form-higher-offset",
@@ -662,7 +662,7 @@ const temperedLimitModal = (
               }),
               "Limit primes, separated by comma"
             ),
-            input({
+            inputCustom({
               name: "modal-limit-limit", // @ts-ignore
               value: limit,
               onChange: (val) => {
@@ -689,7 +689,7 @@ const temperedLimitModal = (
               }),
               "Commas to temper out, Scala format separated by comma"
             ),
-            input({
+            inputCustom({
               name: "modal-limit-commas", // @ts-ignore
               value: commas,
               onChange: (val) => {
@@ -716,7 +716,7 @@ const temperedLimitModal = (
               }),
               "Epsilon comparison tolerance"
             ),
-            input({
+            inputCustom({
               name: "modal-limit-epsilon", // @ts-ignore
               value: epsilon,
               onChange: (val) => {
@@ -743,7 +743,7 @@ const temperedLimitModal = (
               }),
               "Steps up, separated by comma"
             ),
-            input({
+            inputCustom({
               name: "modal-limit-up", // @ts-ignore
               value: up,
               onChange: (val) => {
@@ -770,7 +770,7 @@ const temperedLimitModal = (
               }),
               "Steps down, separated by comma"
             ),
-            input({
+            inputCustom({
               name: "modal-limit-down", // @ts-ignore
               value: down,
               onChange: (val) => {
@@ -888,7 +888,7 @@ const generalFormModal =
                     }),
                     item.title
                   ),
-                  input({
+                  inputCustom({
                     name: `input-form-${id}-${item.id}`,
                     // @ts-ignore
                     value: state.form[formName][item.innerFormName],

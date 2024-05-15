@@ -1,5 +1,6 @@
 import {
   div,
+  input,
   numberInput,
   validateIsInteger,
   validateIsNumber,
@@ -8,11 +9,17 @@ import {
   validateIsStrictlyOverMin,
   validateIsUnderMax,
 } from "@eofol/eofol-simple";
-import { NumberInputProps } from "@eofol/eofol-types";
+import { InputProps, NumberInputProps } from "@eofol/eofol-types";
 import { sy } from "@eofol/eofol";
 
+export const inputCustom = (props: InputProps) =>
+  input({ ...props, size: "sm" });
+
+export const numberInputCustom = (props: NumberInputProps) =>
+  numberInput({ ...props, size: "sm" });
+
 export const integerInput = (props: NumberInputProps) =>
-  numberInput({
+  numberInputCustom({
     // @ts-ignore
     validation: [
       validateIsRequired,
@@ -29,7 +36,7 @@ export const integerInput = (props: NumberInputProps) =>
 export const decimalInput = (
   props: NumberInputProps & { minNotIncluded?: boolean }
 ) =>
-  numberInput({
+  numberInputCustom({
     // @ts-ignore
     validation: [
       validateIsRequired,
@@ -47,7 +54,7 @@ export const decimalInput = (
 export const decimalPrecisionInput = (
   props: NumberInputProps & { minNotIncluded?: boolean }
 ) =>
-  numberInput({
+  numberInputCustom({
     // @ts-ignore
     validation: [
       validateIsRequired,

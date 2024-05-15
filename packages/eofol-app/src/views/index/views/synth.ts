@@ -7,7 +7,6 @@ import {
   h1,
   h3,
   h4,
-  input,
   bubble,
 } from "@eofol/eofol-simple";
 import { setTotalGain } from "../../../synth";
@@ -15,6 +14,7 @@ import { FiddleState } from "../../../types";
 import {
   decimalInput,
   decimalPrecisionInput,
+  inputCustom,
   integerInput,
   largeInputField,
   sliderInputCustom,
@@ -477,7 +477,7 @@ const pianoKeyboardLayout = (
   return div(sx({ marginTop: "32px", position: "relative" }), [
     h2("Black/white pattern"),
     largeInputField(
-      input({
+      inputCustom({
         name: "input-synth-layout-piano-color",
         value: color,
         onChange: (nextVal) => {

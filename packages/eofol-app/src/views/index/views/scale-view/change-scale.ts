@@ -1,5 +1,4 @@
 import {
-  input,
   dropdown,
   select,
   button,
@@ -11,7 +10,7 @@ import {
 import { getTheme, sx, cx } from "@eofol/eofol";
 import { DEFAULT_SCALE_INPUT } from "../../../../data";
 import { FiddleState } from "../../../../types";
-import { largeInputField } from "../../../../ui";
+import { inputCustom, largeInputField } from "../../../../ui";
 
 const menuButtonOpensModal =
   (
@@ -51,7 +50,7 @@ export const changeScaleMenu = (
 
   const dropdownItem = menuButtonOpensModal(state, setState);
 
-  const scaleNameInputElement = input({
+  const scaleNameInputElement = inputCustom({
     name: "input-scale-name",
     // @ts-ignore
     value: state.scales[state.scaleIndex].name,
