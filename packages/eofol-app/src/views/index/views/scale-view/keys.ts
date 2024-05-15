@@ -58,8 +58,6 @@ const renderKey = (
 ) => {
   // @ts-ignore
   const val = keyVal.freq;
-  // @ts-ignore
-  const isOctave = keyVal.isOctave;
   const keyLabel = getKeyLabel(state, keyVal, i);
 
   // @ts-ignore
@@ -112,8 +110,6 @@ export const keys = (state: FiddleState) => {
   const layoutIsoUp = state.synth.layoutIsoUp;
   // @ts-ignore
   const layoutIsoRight = state.synth.layoutIsoRight;
-  // @ts-ignore
-  const colors = state.synth.layoutPianoColor;
 
   const playToneImpl = playTone(state);
   const releaseNoteImpl = releaseNote(state);

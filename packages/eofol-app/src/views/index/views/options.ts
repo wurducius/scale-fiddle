@@ -9,7 +9,11 @@ import {
 } from "../../../data";
 import { FiddleState } from "../../../types";
 import { defaultTheme, initStyles, themes } from "../../../styles";
-import { decimalInput, integerInput, largeInputField } from "../../../ui";
+import {
+  decimalPrecisionInput,
+  integerInput,
+  largeInputField,
+} from "../../../ui";
 
 export const optionsTab = (
   state: FiddleState,
@@ -138,13 +142,12 @@ export const optionsTab = (
               div(sx({ height: "64px" }), h2("Synth configuration")),
               p("Start gain"),
               largeInputField(
-                decimalInput({
+                decimalPrecisionInput({
                   name: "input-synth-start-gain",
                   min: 0,
                   max: 1,
                   value: options.startGain,
                   onChange: (nextValue) => {
-                    if (Number(nextValue) < 0 || Number(nextValue) > 1) return;
                     // @ts-ignore
                     setState({
                       ...state,
@@ -158,13 +161,12 @@ export const optionsTab = (
               ),
               p("Start time"),
               largeInputField(
-                decimalInput({
+                decimalPrecisionInput({
                   name: "input-synth-start-time",
                   min: ENVELOPE_CUSTOM_TIME_MIN,
                   max: ENVELOPE_CUSTOM_TIME_MAX,
                   value: options.startTime,
                   onChange: (nextValue) => {
-                    if (Number(nextValue) < 0) return;
                     // @ts-ignore
                     setState({
                       ...state,
@@ -178,13 +180,12 @@ export const optionsTab = (
               ),
               p("End gain"),
               largeInputField(
-                decimalInput({
+                decimalPrecisionInput({
                   name: "input-synth-end-gain",
                   min: GAIN_MIN,
                   max: 1,
                   value: options.endGain,
                   onChange: (nextValue) => {
-                    if (Number(nextValue) < 0 || Number(nextValue) > 1) return;
                     // @ts-ignore
                     setState({
                       ...state,
@@ -198,13 +199,12 @@ export const optionsTab = (
               ),
               p("End time"),
               largeInputField(
-                decimalInput({
+                decimalPrecisionInput({
                   name: "input-synth-end-time",
                   min: ENVELOPE_CUSTOM_TIME_MIN,
                   max: ENVELOPE_CUSTOM_TIME_MAX,
                   value: options.endTime,
                   onChange: (nextValue) => {
-                    if (Number(nextValue) < 0) return;
                     // @ts-ignore
                     setState({
                       ...state,

@@ -7,7 +7,6 @@ import {
   h1,
   h3,
   h4,
-  p,
   input,
   bubble,
 } from "@eofol/eofol-simple";
@@ -15,6 +14,7 @@ import { setTotalGain } from "../../../synth";
 import { FiddleState } from "../../../types";
 import {
   decimalInput,
+  decimalPrecisionInput,
   integerInput,
   largeInputField,
   sliderInputCustom,
@@ -366,7 +366,7 @@ const envelopeCustomMenu = (
         .map((item, index) => [
           h3("Envelope phase #" + (index + 1)),
           h4("Gain"),
-          decimalInput({
+          decimalPrecisionInput({
             min: 0,
             max: 1,
             // @ts-ignore

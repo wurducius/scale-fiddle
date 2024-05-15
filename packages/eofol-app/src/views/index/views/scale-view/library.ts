@@ -48,6 +48,7 @@ export const scaleLibrary = (
       const nextState = {
         ...nextStateScaleInput,
         ...updateScale(nextStateScaleInput),
+        recompute: true,
       };
 
       if (!isError) {

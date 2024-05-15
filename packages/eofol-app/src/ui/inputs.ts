@@ -22,6 +22,7 @@ export const integerInput = (props: NumberInputProps) =>
       props.max && validateIsUnderMax(props.max),
     ].filter(Boolean),
     step: 1,
+    inputMode: "numeric",
     ...props,
   });
 
@@ -38,7 +39,27 @@ export const decimalInput = (
         : validateIsOverMin(props.min ?? 0),
       props.max && validateIsUnderMax(props.max),
     ].filter(Boolean),
+    inputMode: "decimal",
     hideArrows: true,
+    ...props,
+  });
+
+export const decimalPrecisionInput = (
+  props: NumberInputProps & { minNotIncluded?: boolean }
+) =>
+  numberInput({
+    // @ts-ignore
+    validation: [
+      validateIsRequired,
+      validateIsNumber,
+      props.minNotIncluded
+        ? validateIsStrictlyOverMin(props.min ?? 0)
+        : validateIsOverMin(props.min ?? 0),
+      props.max && validateIsUnderMax(props.max),
+    ].filter(Boolean),
+    step: 0.0001,
+    precision: 4,
+    inputMode: "decimal",
     ...props,
   });
 
