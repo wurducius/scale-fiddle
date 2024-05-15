@@ -163,6 +163,7 @@ const stretchModal = (
             value: isInvalid ? "" : stretchResult,
             onChange: (val) => {},
             classname: sx({ height: "256px" }),
+            readonly: true,
           }),
           bubble(
             "Invalid result. Stretched period lesser or equal to 1/1.",
@@ -308,6 +309,7 @@ const temperModal = (
             value: temperResult,
             onChange: (val) => {},
             classname: sx({ height: "256px" }),
+            readonly: true,
           }),
           div(
             sx({
@@ -480,6 +482,7 @@ const higherModal = (
             onChange: () => {},
             value: higherResult,
             classname: sx({ height: "256px" }),
+            readonly: true,
           }),
           sx({ marginTop: "16px", marginBottom: "16px" })
         ),
@@ -552,6 +555,7 @@ const presetModal = (
             classname: sx({
               height: "300px",
             }),
+            readonly: true,
           })
         ),
       ],
@@ -792,6 +796,7 @@ const temperedLimitModal = (
             value: temperResult,
             onChange: (val) => {},
             classname: sx({ height: "256px" }),
+            readonly: true,
           }),
           div(
             sx({
@@ -919,6 +924,7 @@ const generalFormModal =
             value: resultScale,
             onChange: () => {},
             classname: sx({ height: "300px" }),
+            readonly: true,
           }),
           sx({
             margin: "0 auto 0 auto",
