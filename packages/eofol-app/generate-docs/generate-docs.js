@@ -17,7 +17,10 @@ const MARKER_TITLE = "@@TITLE";
 const MARKER_TABLE_OF_CONTENTS = "@@TABLE_OF_CONTENTS";
 const MARKER_ARTICLE = "@@ARTICLE";
 
+const SECTION_PREFIX_LENGTH = 3;
+
 const TABLE_OF_CONTENTS_TITLE = "Table of contents";
+const TABLE_OF_CONTENTS_TITLE_TAG = "h2";
 
 const copyString = (originalString) => (" " + originalString).slice(1);
 
@@ -30,7 +33,7 @@ const capitalize = (str) =>
 const createLink = (title, href) => `<a href="${href}">${title}</a>`;
 
 const createTableOfContentsWrapper = (links) =>
-  `<div><h3>${TABLE_OF_CONTENTS_TITLE}</h3><ul>${links}</ul></div>`;
+  `<div><${TABLE_OF_CONTENTS_TITLE_TAG}>${TABLE_OF_CONTENTS_TITLE}</${TABLE_OF_CONTENTS_TITLE_TAG}><ul>${links}</ul></div>`;
 
 const createTableItem = (item) =>
   `<li class="table-of-contents-item">${item}</li>`;
@@ -49,7 +52,7 @@ const buildPath = path.resolve(process.cwd(), BUILD_DIR);
 const sectionFilenames = fs.readdirSync(sectionsPath);
 
 const sectionPageNames = sectionFilenames.map((sectionFilename) =>
-  sectionFilename.substring(3, sectionFilename.length - 3)
+  sectionFilename.substring(SECTION_PREFIX_LENGTH, sectionFilename.length - 3)
 );
 
 const sectionTitles = sectionPageNames

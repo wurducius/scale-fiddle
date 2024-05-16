@@ -104,7 +104,7 @@ export const appbar = (
         () => {
           // @ts-ignore
           // setState({ ...state, tab: 3 });
-          window.location.assign("/docs/intro.html");
+          window.location.assign("/docs");
         },
         tabIndex === 3
       ),

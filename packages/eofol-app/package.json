@@ -4,7 +4,7 @@
   "description": "Create a reactive app from template with zero configuration!",
   "scripts": {
     "start": "eofol-scripts start",
-    "build": "eofol-scripts build && node ./generate-docs/generate-docs.js",
+    "build": "eofol-scripts build && npm run generate-docs",
     "clean": "eofol-scripts clean",
     "serve": "eofol-scripts serve",
     "generate-docs": "node ./generate-docs/generate-docs.js"

@@ -1,5 +1,11 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
+    <meta name="viewport" content="initial-scale=1" />
+    <meta
+      name="description"
+      content="Documentation for Scale fiddle app - create microtonal musical tunings and try them out practically on a synthetizer"
+    />
     <title>Scale fiddle documentation - @@TITLE</title>
     <style>
       body {
@@ -39,27 +45,64 @@
       a:hover {
         color: #6abcbb;
       }
-      a:visited:not(.a-back) {
+      a:active {
+        color: #5c8080;
+      }
+      a:visited:not(.a-back):not(.a-active):not(:active) {
         color: #5c3197;
       }
-      a:active {
-        color: #316697;
+      a:visited:not(.a-back):not(.a-active):not(:active):hover {
+        color: #8961c0;
+      }
+      a:visited:not(.a-back):not(.a-active):not(:active):active {
+        color: #675285;
+      }
+      .a-active {
+        color: #a725b1;
+      }
+      .a-active:hover {
+        color: #d977e0;
+      }
+      .a-active:active {
+        color: #8c5290;
       }
       .container {
         padding: 24px 48px;
       }
-      .flex {
-        display: flex;
+      @media (max-width: 880px) {
+        .flex {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+      }
+      @media (min-width: 881px) {
+        .flex {
+          display: flex;
+          flex-direction: row;
+        }
       }
       .header-item {
-        width: 256px;
         display: flex;
         align-items: center;
+        width: 180px;
       }
-      .header-title {
-        display: flex;
-        justify-content: center;
-        flex: 1;
+      @media (max-width: 880px) {
+        .header-title {
+          display: flex;
+          justify-content: center;
+          flex: 1;
+          text-align: center;
+          margin-top: 16px;
+        }
+      }
+      @media (min-width: 881px) {
+        .header-title {
+          display: flex;
+          justify-content: center;
+          flex: 1;
+          text-align: center;
+        }
       }
       .table-of-contents {
         width: 256px;
@@ -71,6 +114,38 @@
       .article-container {
         flex: 1;
         padding: 16px 16px;
+      }
+      .footer {
+        height: 128px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        margin-top: 32px;
+        border-top: 1px solid grey;
+      }
+      .no-gutter {
+        margin: 0 0 0 0;
+      }
+
+      @font-face {
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url(/fonts/Roboto-Regular.ttf) format("truetype");
+      }
+
+      ::-webkit-scrollbar {
+        width: 16px;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        height: 56px;
+        border-radius: 8px;
+        border: 4px solid transparent;
+        background-color: hsl(0, 0%, 67%);
+        background-clip: content-box;
       }
     </style>
   </head>
@@ -86,9 +161,51 @@
         <div class="header-item"></div>
       </div>
       <div class="flex">
-        <div class="table-of-contents">@@TABLE_OF_CONTENTS</div>
+        <div class="table-of-contents" id="table-of-contents">
+          @@TABLE_OF_CONTENTS
+        </div>
         <div class="article-container">@@ARTICLE</div>
       </div>
+      <div class="footer">
+        <div>
+          <p class="no-gutter">Scale fiddle docs v0.1</p>
+          <p class="no-gutter">
+            Created by
+            <a
+              target="_blank"
+              href="https://www.facebook.com/groups/microtonalstructuremusictheory"
+              >Microtonal Structure Theory</a
+            >
+          </p>
+          <p class="no-gutter">
+            <a href="mailto:wurducius@gmail.com">Jakub Eliáš</a>
+          </p>
+          <p class="no-gutter">2024 in Czech republic, Prague</p>
+        </div>
+      </div>
     </div>
+    <script>
+      const currentLocation = window.location.href;
+      const isIndex = !currentLocation.includes(".html");
+      const links = [];
+      const linkParents = document.getElementsByClassName(
+        "table-of-contents-item"
+      );
+      for (let i = 0; i < linkParents.length; i++) {
+        const child = linkParents.item(i).children.item(0);
+        links.push(child);
+      }
+      let current;
+      for (let i = 0; i < links.length; i++) {
+        const link = links[i];
+        if (currentLocation.includes(link.href) || (i === 0 && isIndex)) {
+          current = link;
+          break;
+        }
+      }
+      if (current) {
+        current.className = "a-active";
+      }
+    </script>
   </body>
 </html>
