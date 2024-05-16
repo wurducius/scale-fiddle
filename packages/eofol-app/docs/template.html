@@ -1,0 +1,94 @@
+<html>
+  <head>
+    <title>Scale fiddle documentation - @@TITLE</title>
+    <style>
+      body {
+        background-color: #1a202c;
+        color: #edf2f7;
+        font-family: "Roboto", sans-serif;
+        padding: 0 0;
+        margin: 0 0 0 0;
+      }
+      h1 {
+        font-size: 32px;
+      }
+      h2 {
+        font-size: 28px;
+      }
+      h3 {
+        font-size: 24px;
+      }
+      h4 {
+        font-size: 22px;
+      }
+      h5 {
+        font-size: 20px;
+      }
+      h6 {
+        font-size: 18px;
+      }
+      p {
+        font-size: 16px;
+      }
+      a {
+        color: #319795;
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: 700;
+      }
+      a:hover {
+        color: #6abcbb;
+      }
+      a:visited:not(.a-back) {
+        color: #5c3197;
+      }
+      a:active {
+        color: #316697;
+      }
+      .container {
+        padding: 24px 48px;
+      }
+      .flex {
+        display: flex;
+      }
+      .header-item {
+        width: 256px;
+        display: flex;
+        align-items: center;
+      }
+      .header-title {
+        display: flex;
+        justify-content: center;
+        flex: 1;
+      }
+      .table-of-contents {
+        width: 256px;
+        margin-top: 16px;
+      }
+      .table-of-contents-item {
+        padding: 8px 0;
+      }
+      .article-container {
+        flex: 1;
+        padding: 16px 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="flex">
+        <div class="header-item">
+          <a href="/" class="a-back">Back to Scale fiddle</a>
+        </div>
+        <div class="header-title">
+          <h1>Scale fiddle documentation</h1>
+        </div>
+        <div class="header-item"></div>
+      </div>
+      <div class="flex">
+        <div class="table-of-contents">@@TABLE_OF_CONTENTS</div>
+        <div class="article-container">@@ARTICLE</div>
+      </div>
+    </div>
+  </body>
+</html>

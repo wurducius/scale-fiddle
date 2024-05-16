@@ -19,7 +19,6 @@ import {
   scaleTab,
   synthTab,
   optionsTab,
-  docsTab,
   aboutTab,
   analyzeTab,
 } from "./views";
@@ -90,7 +89,6 @@ defineBuiltinElement<FiddleStateImpl>({
         ...(tab === 0 ? scaleTab(state, setState) : []),
         ...(tab === 1 ? synthTab(state, setState) : []),
         ...(tab === 2 ? optionsTab(state, setState) : []),
-        ...(tab === 3 ? docsTab(state, setState) : []),
         ...(tab === 4 ? aboutTab(state, setState) : []),
         ...(tab === 5 ? analyzeTab(state, setState) : []),
       ]),

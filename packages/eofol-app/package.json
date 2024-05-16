@@ -4,9 +4,10 @@
   "description": "Create a reactive app from template with zero configuration!",
   "scripts": {
     "start": "eofol-scripts start",
-    "build": "eofol-scripts build",
+    "build": "eofol-scripts build && node ./generate-docs/generate-docs.js",
     "clean": "eofol-scripts clean",
-    "serve": "eofol-scripts serve"
+    "serve": "eofol-scripts serve",
+    "generate-docs": "node ./generate-docs/generate-docs.js"
   },
   "dependencies": {
     "@eofol/eofol": "file:../../../eofol/packages/eofol",
@@ -14,8 +15,9 @@
   },
   "devDependencies": {
     "@eofol/eofol-scripts": "0.2.22",
-    "@eofol/eofol-types": "0.2.22",
+    "@eofol/eofol-types": "file:../../../eofol/packages/eofol-types",
     "csstype": "3.1.3",
+    "showdown": "2.1.0",
     "typescript": "5.3.3"
   },
   "author": "wurducius@gmail.com",
