@@ -8,7 +8,7 @@ import {
   getLanguage,
   getLanguages,
 } from "@eofol/eofol";
-import { button, notify, a, select, div } from "@eofol/eofol-simple";
+import { button, notify, select, div, linkButton } from "@eofol/eofol-simple";
 import { panic } from "../../../synth";
 import { FiddleState } from "../../../types";
 
@@ -99,15 +99,7 @@ export const appbar = (
         },
         tabIndex === 2
       ),
-      appbarButton(
-        t("docs.name", "Docs"),
-        () => {
-          // @ts-ignore
-          // setState({ ...state, tab: 3 });
-          window.location.assign("/docs");
-        },
-        tabIndex === 3
-      ),
+      linkButton({ link: "/docs", children: t("docs.name", "Docs") }),
       appbarButton(
         t("about.name", "About"),
         () => {
@@ -143,14 +135,13 @@ export const appbar = (
       false,
       true
     ),
-    a({
+    linkButton({
+      scheme: "secondary",
       external: true,
       link: "https://www.facebook.com/groups/microtonalstructuremusictheory",
-      children: appbarButton(
-        t("action.microtonalStructureTheory", "Microtonal Structure Theory"),
-        () => {},
-        false,
-        true
+      children: t(
+        "action.microtonalStructureTheory",
+        "Microtonal Structure Theory"
       ),
     }),
     select({
@@ -160,7 +151,7 @@ export const appbar = (
       },
       value: language,
       name: "select-language",
-      styles: sx({
+      classname: sx({
         height: "36px",
         width: "200px",
         fontSize: theme.typography.text.fontSize,

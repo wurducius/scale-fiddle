@@ -21,7 +21,7 @@ const menuButtonOpensModal =
     const theme = getTheme();
 
     return button({
-      styles: sx({ width: "256px", height: theme.spacing.space5 }),
+      classname: sx({ width: "256px", height: theme.spacing.space5 }),
       children: title,
       onClick: () => {
         if (!notImplemented) {
@@ -163,7 +163,7 @@ export const changeScaleMenu = (
           },
         }),
         button({
-          styles: sx({ marginTop: theme.spacing.space2 }),
+          classname: sx({ marginTop: theme.spacing.space2 }),
           children: "Delete scale",
           // @ts-ignore
           disabled: state.scales.length <= 1,

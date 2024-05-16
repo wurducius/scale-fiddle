@@ -243,7 +243,7 @@ export const waveformCustomMenu = (state: FiddleState, setState: any) => {
       }),
       button({
         children: "Compute optimal scale from timbre",
-        styles: sx({ marginTop: "48px" }),
+        classname: sx({ marginTop: "48px" }),
         onClick: () => {
           const timbre: Timbre = {
             id: "",
@@ -321,7 +321,7 @@ const timbreFromTuningIterationsInput = (state: FiddleState, setState: any) => {
 
 const timbreFromTuningButton = (state: FiddleState, setState: any) => {
   return button({
-    styles: sx({ marginTop: "48px" }),
+    classname: sx({ marginTop: "48px" }),
     children: "Compute optimal timbre from tuning",
     onClick: () => {
       // @ts-ignore
