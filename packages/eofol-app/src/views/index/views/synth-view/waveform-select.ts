@@ -51,52 +51,56 @@ const setCustomWaveform = (customCoefficients: [number, number][]) => {
 };
 
 export const waveformTypeSelect = (state: FiddleState, setState: any) => {
-  return select({
-    name: "select-waveform-type",
-    // @ts-ignore
-    value: state.synth.waveformType,
-    options: waveformTypeOptions,
-    onChange: (nextVal) => {
-      if (nextVal === "preset") {
-        // @ts-ignore
-        setWaveformPreset(state.synth.waveformPreset);
-      } else if (nextVal === "custom") {
-        // @ts-ignore
-        setCustomWaveform(state.synth.customCoefficients);
-      }
-
+  return largeInputField(
+    select({
+      name: "select-waveform-type",
       // @ts-ignore
-      setState({
-        ...state,
-        synth: {
+      value: state.synth.waveformType,
+      options: waveformTypeOptions,
+      onChange: (nextVal) => {
+        if (nextVal === "preset") {
           // @ts-ignore
-          ...state.synth,
-          waveformType: nextVal,
-        },
-      });
-    },
-  });
+          setWaveformPreset(state.synth.waveformPreset);
+        } else if (nextVal === "custom") {
+          // @ts-ignore
+          setCustomWaveform(state.synth.customCoefficients);
+        }
+
+        // @ts-ignore
+        setState({
+          ...state,
+          synth: {
+            // @ts-ignore
+            ...state.synth,
+            waveformType: nextVal,
+          },
+        });
+      },
+    })
+  );
 };
 
 export const waveformPresetSelect = (state: FiddleState, setState: any) =>
-  select({
-    name: "select-waveform-preset",
-    // @ts-ignore
-    value: state.synth.waveformPreset,
-    options: timbrePresets,
-    onChange: (nextVal) => {
+  largeInputField(
+    select({
+      name: "select-waveform-preset",
       // @ts-ignore
-      setState({
-        ...state,
-        synth: {
-          // @ts-ignore
-          ...state.synth,
-          waveformPreset: nextVal,
-        },
-      });
-      setWaveformPreset(nextVal);
-    },
-  });
+      value: state.synth.waveformPreset,
+      options: timbrePresets,
+      onChange: (nextVal) => {
+        // @ts-ignore
+        setState({
+          ...state,
+          synth: {
+            // @ts-ignore
+            ...state.synth,
+            waveformPreset: nextVal,
+          },
+        });
+        setWaveformPreset(nextVal);
+      },
+    })
+  );
 
 export const waveformCustomMenu = (state: FiddleState, setState: any) => {
   // @ts-ignore

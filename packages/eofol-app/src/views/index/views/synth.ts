@@ -35,14 +35,16 @@ const envelopeCurveSelect = (
 ) => {
   return div(undefined, [
     h3("Curve"),
-    select({
-      name: "select-envelope-curve-" + namePostfix,
-      options: envelopeCurveOptions,
-      onChange: (nextVal) => {
-        setter(nextVal);
-      },
-      value,
-    }),
+    largeInputField(
+      select({
+        name: "select-envelope-curve-" + namePostfix,
+        options: envelopeCurveOptions,
+        onChange: (nextVal) => {
+          setter(nextVal);
+        },
+        value,
+      })
+    ),
   ]);
 };
 
@@ -305,12 +307,14 @@ const envelopePresetMenu = (
 
   return [
     div(sx({ marginTop: theme.spacing.space4 }), [
-      select({
-        value: "",
-        name: "select-envelope-preset",
-        onChange: (nextVal) => {},
-        options: [],
-      }),
+      largeInputField(
+        select({
+          value: "",
+          name: "select-envelope-preset",
+          onChange: (nextVal) => {},
+          options: [],
+        })
+      ),
     ]),
   ];
 };
@@ -414,25 +418,27 @@ const envelopeCustomMenu = (
           ]),
           div(sx({ marginTop: "32px" }), [
             h4("Curve"),
-            select({
-              name: "select-envelope-custom-curve-" + index, // @ts-ignore
-              value: state.synth.customEnvelopeCurve[index],
-              onChange: (nextVal) => {
-                // @ts-ignore
-                setState({
-                  ...state,
-                  synth: {
-                    // @ts-ignore
-                    ...state.synth, // @ts-ignore
-                    customEnvelopeCurve: state.synth.customEnvelopeCurve.map(
+            largeInputField(
+              select({
+                name: "select-envelope-custom-curve-" + index, // @ts-ignore
+                value: state.synth.customEnvelopeCurve[index],
+                onChange: (nextVal) => {
+                  // @ts-ignore
+                  setState({
+                    ...state,
+                    synth: {
                       // @ts-ignore
-                      (item, i) => (i === index ? nextVal : item)
-                    ),
-                  },
-                });
-              },
-              options: envelopeCurveOptions,
-            }),
+                      ...state.synth, // @ts-ignore
+                      customEnvelopeCurve: state.synth.customEnvelopeCurve.map(
+                        // @ts-ignore
+                        (item, i) => (i === index ? nextVal : item)
+                      ),
+                    },
+                  });
+                },
+                options: envelopeCurveOptions,
+              })
+            ),
           ]),
         ])
         .flat()
@@ -558,23 +564,25 @@ const keyboardLayout = (
   const layout = state.synth.layout;
 
   return div(undefined, [
-    select({
-      name: "select-synth-layout-type", // @ts-ignore
-      value: layout,
-      options: [
-        { id: "linear", title: "Linear" },
-        { id: "iso", title: "Isomorphic" },
-        { id: "piano", title: "Piano layers" },
-      ],
-      onChange: (nextVal) => {
-        // @ts-ignore
-        setState({
-          ...state,
-          recompute: true, // @ts-ignore
-          synth: { ...state.synth, layout: nextVal },
-        });
-      },
-    }),
+    largeInputField(
+      select({
+        name: "select-synth-layout-type", // @ts-ignore
+        value: layout,
+        options: [
+          { id: "linear", title: "Linear" },
+          { id: "iso", title: "Isomorphic" },
+          { id: "piano", title: "Piano layers" },
+        ],
+        onChange: (nextVal) => {
+          // @ts-ignore
+          setState({
+            ...state,
+            recompute: true, // @ts-ignore
+            synth: { ...state.synth, layout: nextVal },
+          });
+        },
+      })
+    ),
     ...(layout === "iso" ? [isoKeyboardLayout(state, setState)] : []),
     ...(layout === "piano" ? [pianoKeyboardLayout(state, setState)] : []),
   ]);
@@ -657,32 +665,53 @@ export const synthTab = (
                 keyboardLayout(state, setState),
               ]
             ),
-            div(sx({ margin: "32px 64px 0 64px" }), [
-              h1("Timbre"),
-              waveformTypeSelect(state, setState),
-              div(
-                sx({ marginTop: "48px" }),
-                waveformValueMenu(state, setState)
-              ),
-            ]),
+            div(
+              sx({
+                margin: "32px 64px 0 64px",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }),
+              [
+                h1("Timbre"),
+                waveformTypeSelect(state, setState),
+                div(
+                  sx({ marginTop: "48px" }),
+                  waveformValueMenu(state, setState)
+                ),
+              ]
+            ),
           ]
         ),
       ]
     ),
-    div(sx({ marginTop: theme.spacing.space8 }), h1("Envelope")),
-    select({
-      name: "select-envelope-type",
-      value: synth.envelopeType,
-      options: envelopeTypeOptions,
-      onChange: (nextVal) => {
-        //@ts-ignore
-        setState({
-          ...state,
-          synth: { ...synth, envelopeType: nextVal },
-        });
-      },
-    }),
-    envelopeMenu(state, setState),
+    div(
+      sx({
+        margin: "64px auto 0 auto",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }),
+      [
+        h1("Envelope"),
+        largeInputField(
+          select({
+            name: "select-envelope-type",
+            value: synth.envelopeType,
+            options: envelopeTypeOptions,
+            onChange: (nextVal) => {
+              //@ts-ignore
+              setState({
+                ...state,
+                synth: { ...synth, envelopeType: nextVal },
+              });
+            },
+          })
+        ),
+        envelopeMenu(state, setState),
+      ]
+    ),
     div(sx({ height: theme.spacing.space4 })),
   ];
 };

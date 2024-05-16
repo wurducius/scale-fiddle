@@ -61,7 +61,6 @@ defineBuiltinElement<FiddleStateImpl>({
     } else {
       // @ts-ignore
       const fullStateToSave = mergeDeep(initialState, state); // @ts-ignore
-      console.log(fullStateToSave);
       saveLocalStorage(SCALE_FIDDLE_LOCAL_STORAGE_NAME, fullStateToSave);
     }
 

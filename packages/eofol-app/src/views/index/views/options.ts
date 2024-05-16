@@ -237,20 +237,22 @@ export const optionsTab = (
             }),
             [
               h2("Key labels"),
-              select({
-                name: "select-key-labels",
-                options: keyLabelOptions,
-                // @ts-ignore
-                value: state.options.keyLabel,
-                onChange: (nextVal) => {
+              largeInputField(
+                select({
+                  name: "select-key-labels",
+                  options: keyLabelOptions,
                   // @ts-ignore
-                  setState({
-                    ...state,
+                  value: state.options.keyLabel,
+                  onChange: (nextVal) => {
                     // @ts-ignore
-                    options: { ...state.options, keyLabel: nextVal },
-                  });
-                },
-              }),
+                    setState({
+                      ...state,
+                      // @ts-ignore
+                      options: { ...state.options, keyLabel: nextVal },
+                    });
+                  },
+                })
+              ),
             ]
           ),
           div(
@@ -263,28 +265,31 @@ export const optionsTab = (
             }),
             [
               h2("Theme"),
-              select({
-                name: "select-theme",
-                options: themes,
-                // @ts-ignore
-                value: state.options.theme,
-                onChange: (nextVal) => {
-                  const nextTheme = (
-                    themes.find((theme) => theme.id === nextVal) ?? defaultTheme
-                  ).theme;
-
-                  setTheme(nextTheme);
-                  const themeImpl = getTheme();
-                  initStyles(themeImpl);
-
+              largeInputField(
+                select({
+                  name: "select-theme",
+                  options: themes,
                   // @ts-ignore
-                  setState({
-                    ...state,
+                  value: state.options.theme,
+                  onChange: (nextVal) => {
+                    const nextTheme = (
+                      themes.find((theme) => theme.id === nextVal) ??
+                      defaultTheme
+                    ).theme;
+
+                    setTheme(nextTheme);
+                    const themeImpl = getTheme();
+                    initStyles(themeImpl);
+
                     // @ts-ignore
-                    options: { ...state.options, theme: nextVal },
-                  });
-                },
-              }),
+                    setState({
+                      ...state,
+                      // @ts-ignore
+                      options: { ...state.options, theme: nextVal },
+                    });
+                  },
+                })
+              ),
             ]
           ),
         ]
