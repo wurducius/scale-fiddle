@@ -27,6 +27,7 @@ export const sliderInputCustom = (
       createElement(labelTag ?? "p", undefined, label),
       div(cx(large && sx({ width: "500px" })), [
         sliderInput({
+          size: "sm",
           scheme: isPrimary ? "primary" : "secondary",
           name: "input-slider-" + label,
           value,
