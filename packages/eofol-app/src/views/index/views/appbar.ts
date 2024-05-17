@@ -100,7 +100,7 @@ export const appbar = (
         },
         tabIndex === 2
       ),
-      linkButton({ link: "/docs", children: t("docs.name", "Docs") }),
+      linkButton({ link: "./docs", children: t("docs.name", "Docs") }),
       appbarButton(
         t("about.name", "About"),
         () => {

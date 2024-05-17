@@ -60,7 +60,7 @@ const sectionTitles = sectionPageNames
   .map(capitalize);
 
 const linkElements = sectionTitles.map((title, i) =>
-  createLink(title, "/docs/" + sectionPageNames[i] + ".html")
+  createLink(title, "./" + sectionPageNames[i] + ".html")
 );
 
 const tableOfContentsHTML = createTableOfContentsWrapper(
