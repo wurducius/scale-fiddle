@@ -221,8 +221,8 @@ const stretchModal = (
     },
     undefined,
     sx({
-      backgroundColor: theme.color.backgroundModal,
-      border: `2px solid ${theme.color.primary}`,
+      backgroundColor: theme.color.background.card,
+      border: `2px solid ${theme.color.primary.base}`,
     })
   );
 };
@@ -344,8 +344,8 @@ const temperModal = (
     },
     undefined,
     sx({
-      backgroundColor: theme.color.backgroundModal,
-      border: `2px solid ${theme.color.primary}`,
+      backgroundColor: theme.color.background.card,
+      border: `2px solid ${theme.color.primary.base}`,
     })
   );
 };
@@ -524,8 +524,8 @@ const higherModal = (
     },
     undefined,
     sx({
-      backgroundColor: theme.color.backgroundModal,
-      border: `2px solid ${theme.color.primary}`,
+      backgroundColor: theme.color.background.card,
+      border: `2px solid ${theme.color.primary.base}`,
     })
   );
 };
@@ -608,8 +608,8 @@ const presetModal = (
     },
     undefined,
     sx({
-      backgroundColor: theme.color.backgroundModal,
-      border: `2px solid ${theme.color.primary}`,
+      backgroundColor: theme.color.background.card,
+      border: `2px solid ${theme.color.primary.base}`,
     })
   );
 };
@@ -838,8 +838,8 @@ const temperedLimitModal = (
     },
     undefined,
     sx({
-      backgroundColor: theme.color.backgroundModal,
-      border: `2px solid ${theme.color.primary}`,
+      backgroundColor: theme.color.background.card,
+      border: `2px solid ${theme.color.primary.base}`,
     })
   );
 };
@@ -966,8 +966,8 @@ const generalFormModal =
       },
       undefined,
       sx({
-        backgroundColor: theme.color.backgroundModal,
-        border: `2px solid ${theme.color.primary}`,
+        backgroundColor: theme.color.background.card,
+        border: `2px solid ${theme.color.primary.base}`,
       })
     );
   };

@@ -20,44 +20,44 @@ const commonTheme = {
 
 const cyanTheme = mergeDeep(commonTheme, {
   color: {
-    primary: "#03dac6",
-    primaryLighter: "#35E1D1",
-    primaryDarker: "#02AE9E",
-
-    secondary: "#86b1ff",
-    secondaryDarker: "#6B8DCC",
-    secondaryLighter: "#9EC0FF",
-
-    secondaryDark: "#6B8DCC",
-
+    primary: {
+      base: "#03dac6",
+      light: "#35E1D1",
+      dark: "#02AE9E",
+    },
+    secondary: {
+      base: "#86b1ff",
+      dark: "#6B8DCC",
+      light: "#9EC0FF",
+    },
+    background: {
+      base: "#121212",
+      elevation: "#333333",
+      card: "#2d3748",
+    },
     font: "#03dac6",
-
-    background: "#121212",
-    backgroundElevation: "#333333",
-    backgroundModal: "#2d3748",
-
     error: "#fc8181",
   },
 });
 
 const fuchsiaTheme = mergeDeep(commonTheme, {
   color: {
-    primary: "fuchsia",
-    primaryLighter: "hsl(300, 100%, 65%)",
-    primaryDarker: "hsl(300, 100%, 25%)",
-
-    secondary: "hsl(180, 100%, 50%)",
-    secondaryDarker: "hsl(180, 100%, 35%)",
-    secondaryLighter: "hsl(180, 100%, 65%)",
-
-    secondaryDark: "darkcyan",
-
+    primary: {
+      base: "fuchsia",
+      light: "hsl(300, 100%, 65%)",
+      dark: "hsl(300, 100%, 25%)",
+    },
+    secondary: {
+      base: "hsl(180, 100%, 50%)",
+      dark: "hsl(180, 100%, 35%)",
+      light: "hsl(180, 100%, 65%)",
+    },
+    background: {
+      base: "#121212",
+      elevation: "#333333",
+      card: "#2d3748",
+    },
     font: "fuchsia",
-
-    background: "#121212",
-    backgroundElevation: "#333333",
-    backgroundModal: "#2d3748",
-
     error: "#fc8181",
   },
 });

@@ -45,7 +45,9 @@ export const sliderInputCustom = (
         createElement(
           "h3",
           sx({
-            color: isPrimary ? theme.color.primary : theme.color.secondary,
+            color: isPrimary
+              ? theme.color.primary.base
+              : theme.color.secondary.base,
           }),
           getDisplayValue(value),
           {

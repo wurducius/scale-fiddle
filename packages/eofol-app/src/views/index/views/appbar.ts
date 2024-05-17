@@ -201,7 +201,7 @@ export const appbar = (
       height: getAppbarHeight(largex, middle, small),
       alignItems: !breakpoint.md ? "normal" : "center",
       justifyContent: !breakpoint.md ? "center" : "inherit",
-      border: `1px solid ${theme.color.primary}`,
+      border: `1px solid ${theme.color.primary.base}`,
       padding: `0 ${theme.spacing.space2}`,
       flexDirection: !large ? "column" : "row",
     }),

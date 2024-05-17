@@ -38,7 +38,7 @@ const pSecondary = (title: string) => {
   return p(
     title,
     sx({
-      color: theme.color.secondary,
+      color: theme.color.secondary.base,
     })
   );
 };

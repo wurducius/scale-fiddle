@@ -34,8 +34,8 @@ const getRows = (
                 display: "flex",
                 justifyContent: "space-between",
                 color: tone.isOctave
-                  ? theme.color.secondary
-                  : theme.color.primary,
+                  ? theme.color.secondary.base
+                  : theme.color.primary.base,
               }),
               [
                 div(
@@ -116,22 +116,22 @@ export const scaleOverview = (
         breakpoint.md && !breakpoint.sm
           ? theme.typography.tableSmall.fontSize
           : theme.typography.text.fontSize,
-      border: `1px solid ${theme.color.secondary}`,
+      border: `1px solid ${theme.color.secondary.base}`,
     }),
     [
       div(
         sx({
           display: "flex",
           justifyContent: "space-between",
-          borderBottom: `2px solid ${theme.color.primary}`,
+          borderBottom: `2px solid ${theme.color.primary.base}`,
           marginRight: "18px",
         }),
         [
-          div(sx({ color: theme.color.secondary, flex: 1 }), "Index"),
-          div(sx({ color: theme.color.secondary, flex: 3 }), `Frequency`),
-          div(sx({ color: theme.color.secondary, flex: 3 }), "Cents"),
-          div(sx({ color: theme.color.secondary, flex: 2 }), "Ratio"),
-          div(sx({ color: theme.color.secondary, flex: 2 }), "Name"),
+          div(sx({ color: theme.color.secondary.base, flex: 1 }), "Index"),
+          div(sx({ color: theme.color.secondary.base, flex: 3 }), `Frequency`),
+          div(sx({ color: theme.color.secondary.base, flex: 3 }), "Cents"),
+          div(sx({ color: theme.color.secondary.base, flex: 2 }), "Ratio"),
+          div(sx({ color: theme.color.secondary.base, flex: 2 }), "Name"),
         ]
       ),
       outputElement,
