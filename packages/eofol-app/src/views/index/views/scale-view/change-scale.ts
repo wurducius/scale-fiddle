@@ -21,7 +21,10 @@ const menuButtonOpensModal =
     const theme = getTheme();
 
     return button({
-      classname: sx({ width: "256px", height: theme.spacing.space5 }),
+      classname: sx({
+        width: "256px",
+        minHeight: theme.spacing.space6,
+      }),
       children: title,
       onClick: () => {
         if (!notImplemented) {

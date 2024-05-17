@@ -143,6 +143,8 @@ export async function tuningToTimbre(
     real: [0, ...waveform],
     imag: [0, ...waveform.map((waveformComponent) => 0)],
     errorDelta: initialCost - normedCost,
+    resultCost: normedCost,
+    initialCost,
   };
 
   return timbre;

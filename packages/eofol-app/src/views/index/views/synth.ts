@@ -593,7 +593,7 @@ export const synthTab = (
   setState: undefined | ((nextState: FiddleState) => void)
 ) => {
   const theme = getTheme();
-  const breakpoint = getBreakpoint();
+
   // @ts-ignore
   const synth = state.synth;
 

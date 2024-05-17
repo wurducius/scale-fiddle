@@ -322,6 +322,7 @@ const timbreFromTuningIterationsInput = (state: FiddleState, setState: any) => {
 const timbreFromTuningButton = (state: FiddleState, setState: any) => {
   return button({
     classname: sx({ marginTop: "48px" }),
+    size: "lg",
     children: "Compute optimal timbre from tuning",
     onClick: () => {
       // @ts-ignore
@@ -401,6 +402,12 @@ const timbreFromTuningButton = (state: FiddleState, setState: any) => {
           .then((result) => {
             // @ts-ignore
             const resultDelta = result.errorDelta ?? 0;
+            const initialCost = result.initialCost ?? 0;
+            const resultCost = result.resultCost ?? 0;
+            const percentImproved = (
+              100 *
+              (1 - resultCost / initialCost)
+            ).toFixed(1);
 
             if (overlayElement) {
               overlayElement.className =
@@ -408,9 +415,9 @@ const timbreFromTuningButton = (state: FiddleState, setState: any) => {
             }
 
             notify({
-              title: `Finished computing optimal timbre with reduced error by ${resultDelta.toFixed(
-                1
-              )}.${
+              title: `Finished computing optimal timbre with ${
+                resultDelta < 0 ? "increased" : "reduced"
+              } error by ${percentImproved}%.${
                 resultDelta < 0
                   ? " Because the error was actually increased, you might want to try to compute an optimal timbre again."
                   : ""

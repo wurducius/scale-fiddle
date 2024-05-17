@@ -11,6 +11,7 @@ import {
 import { button, notify, select, div, linkButton } from "@eofol/eofol-simple";
 import { panic } from "../../../synth";
 import { FiddleState } from "../../../types";
+import { largeInputField } from "../../../ui";
 
 export const appbarButton = (
   label: string,
@@ -144,21 +145,21 @@ export const appbar = (
         "Microtonal Structure Theory"
       ),
     }),
-    select({
-      options: languages,
-      onChange: (nextVal) => {
-        setLanguage(nextVal);
-      },
-      value: language,
-      name: "select-language",
-      classname: sx({
-        height: "36px",
-        width: "200px",
-        fontSize: theme.typography.text.fontSize,
-        margin: "0 0 0 0",
-        padding: "2px 4px 2px 4px",
-      }),
-    }),
+    largeInputField(
+      select({
+        options: languages,
+        onChange: (nextVal) => {
+          setLanguage(nextVal);
+        },
+        value: language,
+        name: "select-language",
+        classname: sx({
+          fontSize: theme.typography.text.fontSize,
+          margin: "0 0 0 0",
+          padding: "2px 4px 2px 4px",
+        }),
+      })
+    ),
   ];
 
   const bottomRowSecond = [

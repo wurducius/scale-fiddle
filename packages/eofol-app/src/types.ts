@@ -31,6 +31,8 @@ export type Timbre = {
   real: number[];
   imag: number[];
   errorDelta?: number;
+  initialCost?: number;
+  resultCost?: number;
 };
 
 export type FiddleStateImpl = {
