@@ -4,8 +4,13 @@
     <meta name="viewport" content="initial-scale=1" />
     <meta
       name="description"
-      content="Documentation for Scale fiddle app - create microtonal musical tunings and try them out practically on a synthetizer"
+      content="Documentation for Scale fiddle app, chapter @@TITLE - create microtonal musical tunings and try them out practically on a synthetizer"
     />
+    <meta
+      name="keywords"
+      content="Scale Fiddle, microtonal, scale, tuning, synthetizer, scala"
+    />
+    <meta name="author" content="Jakub Eli&#225;&#353;" />
     <title>Scale fiddle documentation - @@TITLE</title>
     <style>
       body {
@@ -75,19 +80,11 @@
           flex-direction: column;
           align-items: center;
         }
-      }
-      @media (min-width: 881px) {
-        .flex {
+        .flex-center {
           display: flex;
-          flex-direction: row;
+          flex-direction: column;
+          align-items: center;
         }
-      }
-      .header-item {
-        display: flex;
-        align-items: center;
-        width: 180px;
-      }
-      @media (max-width: 880px) {
         .header-title {
           display: flex;
           justify-content: center;
@@ -97,12 +94,25 @@
         }
       }
       @media (min-width: 881px) {
+        .flex {
+          display: flex;
+          flex-direction: row;
+        }
+        .flex-center {
+          display: flex;
+          flex-direction: column;
+        }
         .header-title {
           display: flex;
           justify-content: center;
           flex: 1;
           text-align: center;
         }
+      }
+      .header-item {
+        display: flex;
+        align-items: center;
+        width: 180px;
       }
       .table-of-contents {
         width: 256px;
@@ -136,6 +146,10 @@
         src: url(/Roboto-Regular.ttf) format("truetype");
       }
 
+      html {
+        scroll-behavior: smooth;
+      }
+
       ::-webkit-scrollbar {
         width: 16px;
       }
@@ -150,13 +164,13 @@
     </style>
   </head>
   <body>
-    <div class="container">
+    <div class="container" id="article-top">
       <div class="flex">
         <div class="header-item">
           <a href="../" class="a-back">Back to Scale fiddle</a>
         </div>
         <div class="header-title">
-          <h1>Scale fiddle documentation</h1>
+          <h1>Scale Fiddle documentation - @@TITLE</h1>
         </div>
         <div class="header-item"></div>
       </div>
@@ -164,25 +178,15 @@
         <div class="table-of-contents" id="table-of-contents">
           @@TABLE_OF_CONTENTS
         </div>
-        <div class="article-container">@@ARTICLE</div>
-      </div>
-      <div class="footer">
-        <div>
-          <p class="no-gutter">Scale fiddle docs v0.1</p>
-          <p class="no-gutter">
-            Created by
-            <a
-              target="_blank"
-              href="https://www.facebook.com/groups/microtonalstructuremusictheory"
-              >Microtonal Structure Theory</a
-            >
-          </p>
-          <p class="no-gutter">
-            <a href="mailto:wurducius@gmail.com">Jakub Eli&#225;&#353;</a>
-          </p>
-          <p class="no-gutter">2024 in Czech republic, Prague</p>
+          <div class="flex-center article-container">
+            @@ARTICLE_TABLE_OF_CONTENTS
+            <div>            
+              @@ARTICLE
+             </div>
+          </div>
         </div>
       </div>
+      @@FOOTER
     </div>
     <script>
       const currentLocation = window.location.href;
@@ -192,8 +196,7 @@
         "table-of-contents-item"
       );
       for (let i = 0; i < linkParents.length; i++) {
-        const child = linkParents.item(i).children.item(0);
-        links.push(child);
+        links.push(linkParents.item(i).children.item(0));
       }
       let current;
       for (let i = 0; i < links.length; i++) {
