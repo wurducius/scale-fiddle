@@ -34,9 +34,16 @@ const MARKER_TABLE_OF_CONTENTS = "@@TABLE_OF_CONTENTS";
 const MARKER_ARTICLE = "@@ARTICLE";
 const MARKER_ARTICLE_TABLE_OF_CONTENTS = "@@ARTICLE_TABLE_OF_CONTENTS";
 const MARKER_FOOTER = "@@FOOTER";
+const MARKER_PAGES_TABLE_OF_CONTENTS_WIDTH = "@@PAGES_TABLE_OF_CONTENTS_WIDTH";
+
+const PAGES_TABLE_OF_CONTENTS_WIDTH_PX = "256px";
 
 const BACK_TO_TOP_LINK_TITLE = "(Top)";
 const ID_ARTICLE_TOP = "article-top";
+
+const CLASSNAME_PAGES_TABLE_OF_CONTENTS_ITEM = "pages-table-of-contents-item";
+const CLASSNAME_ARTICLE_TABLE_OF_CONTENTS_ITEM =
+  "article-table-of-contents-item";
 
 // ----------------------------------------------
 
@@ -72,13 +79,13 @@ const capitalize = (str) =>
     .map((letter, i) => (i === 0 ? letter.toUpperCase() : letter))
     .join("");
 
-const createLink = (title, href) => `<a href="${href}">${title}</a>`;
+const createLink = (title, href, clazz) =>
+  `<a href="${href}"${clazz ? ` class="${clazz}"` : ""}>${title}</a>`;
 
-const createTableOfContentsWrapper = (links, tableOfContentsTitle) =>
-  `<div><${TABLE_OF_CONTENTS_TITLE_TAG}>${tableOfContentsTitle}</${TABLE_OF_CONTENTS_TITLE_TAG}><ul>${links}</ul></div>`;
+const createTableOfContentsWrapper = (links, tableOfContentsTitle, listTag) =>
+  `<div><${TABLE_OF_CONTENTS_TITLE_TAG}>${tableOfContentsTitle}</${TABLE_OF_CONTENTS_TITLE_TAG}><${listTag}>${links}</${listTag}></div>`;
 
-const createTableItem = (item) =>
-  `<li class="table-of-contents-item">${item}</li>`;
+const createTableItem = (item, clazz) => `<li class="${clazz}">${item}</li>`;
 
 const convertToHashLink = (str) =>
   str
@@ -146,11 +153,18 @@ const linkElements = sectionTitles.map((title, i) =>
 );
 
 let tableOfContentsHTML = "";
+let pagesTableOfContentsWidthPx = "0px";
 if (CONFIG.INJECT_PAGES_TABLE_OF_CONTENTS) {
   tableOfContentsHTML = createTableOfContentsWrapper(
-    linkElements.map(createTableItem).join(""),
-    TABLE_OF_CONTENTS_TITLE
+    linkElements
+      .map((item) =>
+        createTableItem(item, CLASSNAME_PAGES_TABLE_OF_CONTENTS_ITEM)
+      )
+      .join(""),
+    TABLE_OF_CONTENTS_TITLE,
+    "ul"
   );
+  pagesTableOfContentsWidthPx = PAGES_TABLE_OF_CONTENTS_WIDTH_PX;
 }
 
 const templateHTML = fs.readFileSync(templatePath);
@@ -199,9 +213,15 @@ sectionFilenames.forEach((sectionFilename, i) => {
     }
     articleTableOfContents = createTableOfContentsWrapper(
       headings
-        .map((item) => createTableItem(createLink(item.title, item.link)))
+        .map((item) =>
+          createTableItem(
+            createLink(item.title, item.link, "a-unstyled"),
+            CLASSNAME_ARTICLE_TABLE_OF_CONTENTS_ITEM
+          )
+        )
         .join(""),
-      ARTICLE_TABLE_OF_CONTENTS_TITLE
+      ARTICLE_TABLE_OF_CONTENTS_TITLE,
+      "ol"
     );
   }
 
@@ -211,7 +231,11 @@ sectionFilenames.forEach((sectionFilename, i) => {
     .replaceAll(MARKER_TABLE_OF_CONTENTS, tableOfContentsHTML)
     .replaceAll(MARKER_ARTICLE_TABLE_OF_CONTENTS, articleTableOfContents)
     .replaceAll(MARKER_ARTICLE, articleHTML)
-    .replaceAll(MARKER_FOOTER, footerHTML);
+    .replaceAll(MARKER_FOOTER, footerHTML)
+    .replaceAll(
+      MARKER_PAGES_TABLE_OF_CONTENTS_WIDTH,
+      pagesTableOfContentsWidthPx
+    );
   fs.writeFileSync(
     path.resolve(buildDocsPath, sectionPageNames[i] + ".html"),
     resultHTML
