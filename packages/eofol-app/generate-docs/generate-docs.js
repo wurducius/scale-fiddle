@@ -7,7 +7,7 @@ const fs = require("fs");
 
 const showdown = require("showdown");
 
-const CONFIG = {
+const CONFIG_INITIAL = {
   INJECT_PAGES_TABLE_OF_CONTENTS: true,
   INJECT_ARTICLE_TABLE_OF_CONTENTS: true,
   ARTICLE_TABLE_OF_CONTENTS_ADD_TOP_LINK: true,
@@ -69,6 +69,22 @@ const LOG_MSG_END = "FINISHED";
 const LOG_MSG_CLEAN = "CLEAN";
 const LOG_MSG_GENERATING_PAGE = "GENERATING PAGE:";
 
+const CLI_HELP = "--help";
+const CLI_SHORTHAND_HELP = "-h";
+
+const CLI_ARGS = [
+  {
+    name: "LOGLEVEL",
+    cli: "--loglevel",
+    shorthand: "-l",
+    type: "number",
+    min: 0,
+    max: 3,
+  },
+];
+
+const HELP_RESPONSE = "Scale fiddle generate docs HELP - @TODO";
+
 // ----------------------------------------------
 
 const copyString = (originalString) => (" " + originalString).slice(1);
@@ -110,6 +126,45 @@ function prettyTime(ms) {
 // ----------------------------------------------
 // --------------  GENERATE DOCS  ---------------
 // ----------------------------------------------
+
+const args = process.argv.slice(2);
+
+if (args.includes(CLI_HELP) || args.includes(CLI_SHORTHAND_HELP)) {
+  console.log(HELP_RESPONSE);
+  process.exit();
+}
+
+const CONFIG_ARGS = {};
+
+args.forEach((arg) => {
+  const split = arg.split("=");
+  CLI_ARGS.forEach((cliArg) => {
+    if (split[0] === cliArg.cli || split[0] === cliArg.shorthand) {
+      let val = undefined;
+      if (cliArg.type === "number") {
+        const parsed = Number(split[1]);
+        if (
+          Number.isFinite(parsed) &&
+          Number.isInteger(parsed) &&
+          !Number.isNaN(parsed) &&
+          (cliArg.min === undefined || parsed >= cliArg.min) &&
+          (cliArg.max === undefined || parsed <= cliArg.max)
+        ) {
+          val = parsed;
+        }
+      } else if (cliArg.type === "boolean") {
+        val = split[1] === "true";
+      } else {
+        val = split[1];
+      }
+      if (val !== undefined) {
+        CONFIG_ARGS[cliArg.name] = val;
+      }
+    }
+  });
+});
+
+const CONFIG = { ...CONFIG_INITIAL, ...CONFIG_ARGS };
 
 logImpl(1, "", true)(LOG_SCRIPT_TITLE);
 main(LOG_MSG_START);
