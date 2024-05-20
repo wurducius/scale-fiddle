@@ -1,7 +1,7 @@
 {
   "name": "@eofol/eofol-app",
   "version": "0.2.21",
-  "description": "Create a reactive app from template with zero configuration!",
+  "description": "Scale fiddle allows you to create microtonal musical tunings and try them out practically on a synthetizer",
   "scripts": {
     "start": "eofol-scripts start",
     "build": "eofol-scripts build && npm run generate-docs",
@@ -10,12 +10,12 @@
     "generate-docs": "node ./generate-docs/generate-docs.js"
   },
   "dependencies": {
-    "@eofol/eofol": "file:../../../eofol/packages/eofol",
-    "@eofol/eofol-simple": "file:../../../eofol/packages/eofol-simple"
+    "@eofol/eofol": "0.2.23",
+    "@eofol/eofol-simple": "0.2.23"
   },
   "devDependencies": {
-    "@eofol/eofol-scripts": "0.2.22",
-    "@eofol/eofol-types": "file:../../../eofol/packages/eofol-types",
+    "@eofol/eofol-scripts": "0.2.23",
+    "@eofol/eofol-types": "0.2.23",
     "csstype": "3.1.3",
     "showdown": "2.1.0",
     "typescript": "5.3.3"
