@@ -21,7 +21,7 @@ export const scaleTuning = (
   return div(
     sx({ margin: `${theme.spacing.space2} ${theme.spacing.space4}` }),
     [
-      h3("Tuning", undefined, true),
+      h3("Tuning", undefined, undefined, undefined, true),
       div(sx({ marginTop: theme.spacing.space1 })),
       flex({ alignItems: "center", justifyContent: "space-between" }, [
         p("Base frequency Hz"),
