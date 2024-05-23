@@ -16,3 +16,5 @@ export const TIMEOUT_ATTACH_TOUCH_HANDLERS_MS = 10;
 export const SCALE_FIDDLE_LOCAL_STORAGE_NAME = "scale-fiddle-data";
 
 export const EMPTY_LABEL = "Empty";
+
+export const MATH_DECIMAL_PRECISION = 20;

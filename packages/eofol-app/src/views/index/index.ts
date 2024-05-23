@@ -23,6 +23,7 @@ import {
   analyzeTab,
 } from "./views";
 import { div } from "@eofol/eofol-simple";
+import { initDecimal } from "../../math";
 
 /*
 initTranslation([
@@ -30,6 +31,8 @@ initTranslation([
   { title: "Čeština", id: "cs" },
 ]);
 */
+
+initDecimal();
 
 const savedStore = loadLocalStorage(SCALE_FIDDLE_LOCAL_STORAGE_NAME);
 

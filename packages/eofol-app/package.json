@@ -7,17 +7,18 @@
     "build": "eofol-scripts build && npm run generate-docs",
     "clean": "eofol-scripts clean",
     "serve": "eofol-scripts serve",
-    "generate-docs": "node ./generate-docs/generate-docs.js"
+    "generate-docs": "eofol-wiki"
   },
   "dependencies": {
-    "@eofol/eofol": "0.2.23",
-    "@eofol/eofol-simple": "0.2.23"
+    "@eofol/eofol": "file:../../../eofol/packages/eofol",
+    "@eofol/eofol-simple": "file:../../../eofol/packages/eofol-simple",
+    "decimal.js-light": "2.5.1"
   },
   "devDependencies": {
     "@eofol/eofol-scripts": "0.2.23",
     "@eofol/eofol-types": "0.2.23",
+    "@eofol/eofol-wiki": "file:../../../eofol/packages/eofol-wiki",
     "csstype": "3.1.3",
-    "showdown": "2.1.0",
     "typescript": "5.3.3"
   },
   "author": "wurducius@gmail.com",
