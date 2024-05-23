@@ -24,6 +24,7 @@ import {
 } from "./views";
 import { div } from "@eofol/eofol-simple";
 import { initDecimal } from "../../math";
+import { getSearchParamState } from "../../util";
 
 /*
 initTranslation([
@@ -46,18 +47,25 @@ setTheme(initialTheme);
 const theme = getTheme();
 initStyles(theme);
 
+const initialSearchState = getSearchParamState();
+const mergedInitialState = mergeDeep(initialState, initialSearchState);
+
 defineBuiltinElement<FiddleStateImpl>({
   tagName: "fiddle-keyboard",
   initialState: {
-    ...initialState,
-    ...updateScale(initialState),
+    ...mergedInitialState,
+    ...updateScale(mergedInitialState),
   },
   effect: (state, setState) => {
     // @ts-ignore
     if (state.init) {
       const storedState = loadLocalStorage(SCALE_FIDDLE_LOCAL_STORAGE_NAME);
       const storedStateImpl = storedState ?? state;
-      const storedFullState = mergeDeep(initialState, storedStateImpl);
+      const storedFullState = mergeDeep(
+        initialState,
+        storedStateImpl,
+        initialSearchState
+      );
       // @ts-ignore
       setState({ ...storedFullState, init: false });
     } else {

@@ -1,5 +1,5 @@
-import { FiddleStateImpl, KeyMap, Overview, SynthLayout } from "../types";
-import { mod } from "../util";
+import { FiddleStateImpl, Overview } from "../types";
+import { mod, setURLSearchParams } from "../util";
 import { parseScala } from "./scala";
 import {
   ratioToCent,
@@ -122,7 +122,9 @@ export const getMappedKeys = (state: FiddleStateImpl, overview: Overview[]) => {
 };
 
 export const updateScale = (state: FiddleStateImpl) => {
+  setURLSearchParams(state);
   const overview = scaleToOverview(state);
+
   return {
     scaleInput: state.scaleInput,
     scaleLength: getScaleLength(state.scaleInput),
